@@ -1,0 +1,9 @@
+{
+  "http": {
+    "port": 1337
+  },
+  "cloud": {
+    "url": "http://localhost:3000",
+    "platformUrl": "http://localhost:8081"
+  }
+}
