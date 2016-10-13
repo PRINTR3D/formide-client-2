@@ -4,5 +4,10 @@
   "description": "Client software that connects 3D printers to Formide Cloud Platform",
   "main": "app.js",
   "author": "Chris ter Beke <chris@printr.com>",
-  "license": "GPL-2.0"
+  "license": "GPL-2.0",
+  "dependencies": {
+    "co": "^4.6.0",
+    "getmac": "^1.2.1",
+    "socket.io-client": "^1.5.0"
+  }
 }

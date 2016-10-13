@@ -3,7 +3,7 @@
     "port": 1337
   },
   "cloud": {
-    "url": "http://localhost:3000",
-    "platformUrl": "http://localhost:8081"
+    "URL": "http://localhost:3000",
+    "platformURL": "http://localhost:8081"
   }
 }

@@ -7,8 +7,10 @@
 
 // Load configuration
 const env = process.env.NODE_ENV || 'production';
+var config;
+
 try {
-    const config = require(`./config/${env}.json`);
+    config = require(`./config/${env}.json`);
 }
 catch (e) {
     console.error(`No config found for environment ${env}, exiting application...`)
@@ -19,11 +21,9 @@ catch (e) {
 require('./src/lib/logo');
 
 // Check if needed directories exist
-const checkDirectories = require('./src/lib/checkDirectories')();
+const checkDirectories = require('./src/lib/checkDirectories');
 checkDirectories();
 
-// Load client
+// Create new Client instance
 const Client = require('./src/core/client');
 const client = new Client(config);
-
-console.log(client.getConfig());

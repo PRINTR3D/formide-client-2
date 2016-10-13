@@ -5,14 +5,28 @@
  *	Copyright (c) 2015, All rights reserved, http://printr.nl
  */
 
+// modules
+const Http  = require('../http');
+const Cloud = require('../cloud');
+
 class Client {
 
-    config = {};
-
+    /**
+     * New Client
+     * @param config
+     */
     constructor (config) {
+        //noinspection JSUnresolvedVariable
         this.config = config;
+
+        this.cloud = new Cloud(config);
+        // this.http = new Http(config.http);
     }
 
+    /**
+     * Get client configuration
+     * @returns {{}}
+     */
     getConfig() {
         return this.config;
     }
