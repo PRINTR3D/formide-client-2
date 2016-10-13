@@ -1,0 +1,11 @@
+# Dependencies
+yarn.lock
+node_modules
+bower_dependencies
+npm-debug.log
+
+# Environment
+.env
+
+# IDE
+.idea
