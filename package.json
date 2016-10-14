@@ -8,6 +8,7 @@
   "dependencies": {
     "co": "^4.6.0",
     "getmac": "^1.2.1",
+    "request": "^2.75.0",
     "socket.io-client": "^1.5.0"
   }
 }

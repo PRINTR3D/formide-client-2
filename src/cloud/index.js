@@ -8,8 +8,8 @@
 const assert = require('assert');
 const co     = require('co');
 const socket = require('./socket');
-// const proxy  = require('./proxy');
-// const queue  = require('./addToQueue');
+const proxy  = require('./proxy');
+const queue  = require('./addToQueue');
 const getNetworkInfo = require('../lib/getNetworkInfo');
 
 class Cloud {
@@ -72,9 +72,12 @@ class Cloud {
             }).then(null, console.error);
         });
 
-        this.cloud.on('http', function () {
+        this.cloud.on('http', function (data) {
+            proxy(self.cloud, data, function () {
 
+            });
         });
+
         this.cloud.on('addToQueue', function () {
 
         });

@@ -7,10 +7,12 @@
 
 // Load configuration
 const env = process.env.NODE_ENV || 'production';
+var Globals = require('./src/core/globals');
 var config;
 
 try {
     config = require(`./config/${env}.json`);
+    Globals.config = config; // add config to Globals
 }
 catch (e) {
     console.error(`No config found for environment ${env}, exiting application...`)
