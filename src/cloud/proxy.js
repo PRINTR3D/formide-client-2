@@ -13,7 +13,7 @@ const Globals = require('../core/globals');
  * Process proxy call from Formide Cloud
  * @param socket
  * @param data
- * @param callbackconst getCallbackData = require('./getCallbackData');
+ * @param callback
  */
 function proxy(socket, data, callback) {
     assert(socket, 'socket not passed');
