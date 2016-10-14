@@ -54,6 +54,7 @@ class Cloud {
                 const internalIP = yield getNetworkInfo.getInternalIP();
                 const MAC = yield getNetworkInfo.getMAC();
 
+                // emit authentication data
                 self.cloud.emit('authenticate', {
                     type: 'client',
                     ip: publicIP,
@@ -65,15 +66,16 @@ class Cloud {
                 }, function (response) {
                     if (response.success) {
                         Globals.log(`Cloud connected`, 1, 'info');
-                        // events.onAny(forwardEvents);
                     }
                     else {
                         Globals.log(`Cloud not connected: ${response.message}`, 1, 'warn');
+                        Globals.log(`MAC address is ${MAC}`, 2, 'info');
                     }
                 });
             }).then(null, console.error);
         });
 
+        // HTTP proxy calls are handled by the proxy function
         this.cloud.on('http', function (data) {
             Globals.log(`Cloud HTTP call: ${data.url}`, 2);
             proxy(self.cloud, data, function () {
@@ -81,9 +83,10 @@ class Cloud {
             });
         });
 
+        // Adding to queue from Formide Cloud
         this.cloud.on('addToQueue', function (data) {
             Globals.log(`Cloud addToQueue: ${data.gcode}`, 1);
-            addToQueue(self.cloud, events, db, data, function () {
+            addToQueue(events, db, data, function () {
 
             });
         });

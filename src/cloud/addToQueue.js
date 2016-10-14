@@ -19,7 +19,7 @@ const Globals  = require('../core/globals');
  * @param data
  * @param callback
  */
-function addToQueue(socket, events, db, data, callback) {
+function addToQueue(events, db, data, callback) {
     const hash = crypto.randomBytes(16).toString('hex');
 
     db.QueueItem
