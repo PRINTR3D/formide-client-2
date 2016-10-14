@@ -5,11 +5,12 @@
  *	Copyright (c) 2015, All rights reserved, http://printr.nl
  */
 
-const assert = require('assert');
-const co     = require('co');
-const socket = require('./socket');
-const proxy  = require('./proxy');
-const queue  = require('./addToQueue');
+const assert         = require('assert');
+const co             = require('co');
+const Globals        = require('../core/globals');
+const socket         = require('./socket');
+const proxy          = require('./proxy');
+const addToQueue     = require('./addToQueue');
 const getNetworkInfo = require('../lib/getNetworkInfo');
 
 class Cloud {
@@ -73,13 +74,15 @@ class Cloud {
         });
 
         this.cloud.on('http', function (data) {
+            Globals.log(`Cloud HTTP call: ${data.url}`, 2);
             proxy(self.cloud, data, function () {
 
             });
         });
 
-        this.cloud.on('addToQueue', function () {
-            queue(self.cloud, data, function () {
+        this.cloud.on('addToQueue', function (data) {
+            Globals.log(`Cloud addToQueue: ${data.gcode}`, 1);
+            addToQueue(self.cloud, data, function () {
 
             });
         });

@@ -36,9 +36,14 @@ function proxy(socket, data, callback) {
     else
         options.form = data.data;
 
+    // Do a local HTTP request to get the data and respond back via socket
+    // TODO: internal call structure instead of HTTP?
     request(options, function (error, response, body) {
         if (error)
             return callback(error);
+
+        socket.emit('http', getCallbackData(data._callbackId, error, response));
+
         return callback(null, body);
     });
 }
@@ -50,6 +55,24 @@ function proxy(socket, data, callback) {
  */
 function authenticate(data, callback) {
 
+}
+
+/**
+ * Process data to correct structure before sending back to Formide
+ * This is according to the documented Formide Cloud comm protocol
+ * @param callbackId
+ * @param err
+ * @param result
+ */
+function getCallbackData(callbackId, err, result) {
+    const data = { _callbackId: callbackId };
+
+    if (err)
+        data.error = { message: err.message };
+    else
+        data.result = result;
+
+    return data;
 }
 
 module.exports = proxy;

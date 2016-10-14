@@ -5,9 +5,15 @@
  *	Copyright (c) 2015, All rights reserved, http://printr.nl
  */
 
+// Globals
+var Globals = require('./src/core/globals');
+
+// Load logger
+const logger = require('./src/lib/logger');
+Globals.log = logger;
+
 // Load configuration
 const env = process.env.NODE_ENV || 'production';
-var Globals = require('./src/core/globals');
 var config;
 
 try {
@@ -15,7 +21,7 @@ try {
     Globals.config = config; // add config to Globals
 }
 catch (e) {
-    console.error(`No config found for environment ${env}, exiting application...`)
+    Globals.log(`No config found for environment ${env}, exiting application...`, 1, 'error')
     process.exit(1);
 }
 

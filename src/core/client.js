@@ -6,8 +6,9 @@
  */
 
 // modules
-const Http  = require('../http');
-const Cloud = require('../cloud');
+const Http    = require('../http');
+const Cloud   = require('../cloud');
+const Globals = require('./globals');
 
 class Client {
 
@@ -21,6 +22,8 @@ class Client {
 
         this.cloud = new Cloud(config);
         // this.http = new Http(config.http);
+
+        Globals.log('Initiated new Client', 1, 'info');
     }
 
     /**

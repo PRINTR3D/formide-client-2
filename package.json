@@ -6,8 +6,10 @@
   "author": "Chris ter Beke <chris@printr.com>",
   "license": "GPL-2.0",
   "dependencies": {
+    "cli-color": "^1.1.0",
     "co": "^4.6.0",
     "getmac": "^1.2.1",
+    "moment": "^2.15.1",
     "request": "^2.75.0",
     "socket.io-client": "^1.5.0"
   }
