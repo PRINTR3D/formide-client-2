@@ -33,7 +33,7 @@ class Http {
 
         // listen to port stated in app.port config (usually port 1337)
         this.httpServer.listen(config.http.api, function() {
-            Globals.log(`HTTP server running on port ${self.httpServer.address().port}`, 1, 'info');
+            Globals.log(`HTTP API running on port ${self.httpServer.address().port}`, 1, 'info');
         });
 
         // TODO: endpoint access logging with morgan

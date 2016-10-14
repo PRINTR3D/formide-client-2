@@ -12,6 +12,7 @@ const Cloud   = require('../cloud');
 const DB      = require('../db');
 const Drivers = require('../drivers');
 const Slicer  = require('../slicer');
+const UI      = require('../ui');
 
 const Globals = require('./globals');
 const Events  = require('./events');
@@ -33,6 +34,7 @@ class Client {
         this.cloud   = new Cloud(config, this.events, this.db);
         this.http    = new Http(config,  this.events, this.db);
         this.ws      = new Ws(config,    this.events, this.http);
+        this.ui      = new UI(config);
         this.drivers = new Drivers();
         this.slicer  = new Slicer();
 
