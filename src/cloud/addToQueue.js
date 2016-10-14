@@ -15,7 +15,8 @@ const Globals  = require('../core/globals');
 
 /**
  * Add an item to the print queue from Formide Cloud
- * @param socket
+ * @param events
+ * @param db
  * @param data
  * @param callback
  */

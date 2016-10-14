@@ -28,7 +28,8 @@ class DB {
         });
 
         const models = {
-            QueueItem: require('./models/queueItem')
+            AccessToken: require('./models/accessToken'),
+            QueueItem:   require('./models/queueItem')
         };
 
         return models;

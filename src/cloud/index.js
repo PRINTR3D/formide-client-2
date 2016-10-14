@@ -12,6 +12,7 @@ const socket          = require('./socket');
 const proxy           = require('./proxy');
 const addToQueue      = require('./addToQueue');
 const getCallbackData = require('./getCallbackData');
+const getNetworkInfo  = require('../lib/getNetworkInfo');
 
 class Cloud {
 
@@ -78,7 +79,7 @@ class Cloud {
         // HTTP proxy calls are handled by the proxy function
         this.cloud.on('http', function (data) {
             Globals.log(`Cloud HTTP call: ${data.url}`, 2);
-            proxy(self.cloud, data, function (err, response) {
+            proxy(self.cloud, db, data, function (err, response) {
                 self.cloud.emit('http', getCallbackData(data._callbackId, error, response));
             });
         });
