@@ -13,7 +13,7 @@ const Globals = require('../core/globals');
  * Process proxy call from Formide Cloud
  * @param socket
  * @param data
- * @param callback
+ * @param callbackconst getCallbackData = require('./getCallbackData');
  */
 function proxy(socket, data, callback) {
     assert(socket, 'socket not passed');
@@ -37,14 +37,11 @@ function proxy(socket, data, callback) {
         options.form = data.data;
 
     // Do a local HTTP request to get the data and respond back via socket
-    // TODO: internal call structure instead of HTTP?
     request(options, function (error, response, body) {
         if (error)
             return callback(error);
 
-        socket.emit('http', getCallbackData(data._callbackId, error, response));
-
-        return callback(null, body);
+        return callback(null, response);
     });
 }
 
@@ -55,24 +52,6 @@ function proxy(socket, data, callback) {
  */
 function authenticate(data, callback) {
 
-}
-
-/**
- * Process data to correct structure before sending back to Formide
- * This is according to the documented Formide Cloud comm protocol
- * @param callbackId
- * @param err
- * @param result
- */
-function getCallbackData(callbackId, err, result) {
-    const data = { _callbackId: callbackId };
-
-    if (err)
-        data.error = { message: err.message };
-    else
-        data.result = result;
-
-    return data;
 }
 
 module.exports = proxy;

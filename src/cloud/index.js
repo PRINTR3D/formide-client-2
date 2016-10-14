@@ -5,13 +5,13 @@
  *	Copyright (c) 2015, All rights reserved, http://printr.nl
  */
 
-const assert         = require('assert');
-const co             = require('co');
-const Globals        = require('../core/globals');
-const socket         = require('./socket');
-const proxy          = require('./proxy');
-const addToQueue     = require('./addToQueue');
-const getNetworkInfo = require('../lib/getNetworkInfo');
+const assert          = require('assert');
+const co              = require('co');
+const Globals         = require('../core/globals');
+const socket          = require('./socket');
+const proxy           = require('./proxy');
+const addToQueue      = require('./addToQueue');
+const getCallbackData = require('./getCallbackData');
 
 class Cloud {
 
@@ -78,24 +78,21 @@ class Cloud {
         // HTTP proxy calls are handled by the proxy function
         this.cloud.on('http', function (data) {
             Globals.log(`Cloud HTTP call: ${data.url}`, 2);
-            proxy(self.cloud, data, function () {
-
+            proxy(self.cloud, data, function (err, response) {
+                self.cloud.emit('http', getCallbackData(data._callbackId, error, response));
             });
         });
 
         // Adding to queue from Formide Cloud
         this.cloud.on('addToQueue', function (data) {
             Globals.log(`Cloud addToQueue: ${data.gcode}`, 1);
-            addToQueue(events, db, data, function () {
-
+            addToQueue(events, db, data, function (err, response) {
+                self.cloud.emit('addToQueue', getCallbackData(data._callbackId, error, response));
             });
         });
 
         // on disconnect
         this.cloud.on('disconnect', function (data) {
-            // turn off event forwarding
-            // events.offAny(forwardEvents);
-
             // try reconnecting when server did not ban client
             if (data !== 'io server disconnect') {
                 Globals.log('Cloud disconnected, trying to reconnect...', 1, 'info');
