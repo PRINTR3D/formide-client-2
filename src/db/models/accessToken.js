@@ -6,12 +6,39 @@
  */
 
 const mongoose = require('mongoose');
+const crypto   = require('crypto');
 
 const schema = mongoose.Schema({
+
+    createdBy: {
+        type: mongoose.Schema.Types.ObjectId
+    },
+
+    token: {
+        type: String,
+        unique: true
+    },
+
+    permissions: [{
+        type: String
+    }],
+
+    sessionOrigin: {
+        type: String,
+        enum: ['cloud', 'local'],
+        default: 'local'
+    }
 
 }, {
     timestamps: true,
     versionKey: false
+});
+
+// generate random token before creating document
+schema.pre('save', function(next) {
+    if (this.isNew && !this.token)
+        this.token = crypto.randomBytes(32).toString('hex');
+    return next();
 });
 
 // duplicate _id to id
