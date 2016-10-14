@@ -13,7 +13,6 @@ const Globals = require('../core/globals');
  * Process proxy call from Formide Cloud
  * @param socket
  * @param data
- * @param port
  * @param callback
  */
 function proxy(socket, data, callback) {

@@ -79,7 +79,9 @@ class Cloud {
         });
 
         this.cloud.on('addToQueue', function () {
+            queue(self.cloud, data, function () {
 
+            });
         });
 
         // on disconnect
