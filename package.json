@@ -16,6 +16,7 @@
     "express-bearer-token": "^2.1.0",
     "express-session": "^1.14.1",
     "getmac": "^1.2.1",
+    "katana-slicer": "printr3d/katana-slicer-npm#v1.2.3",
     "moment": "^2.15.1",
     "mongoose": "^4.6.3",
     "nodejs-websocket": "^1.7.0",
