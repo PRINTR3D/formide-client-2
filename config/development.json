@@ -5,5 +5,8 @@
   "cloud": {
     "URL": "http://localhost:3000",
     "platformURL": "http://localhost:8081"
+  },
+  "db": {
+    "connectionString": "mongodb://localhost/formide-client"
   }
 }

@@ -6,6 +6,7 @@
  */
 
 // Globals
+global.MONGO_ID_FIELD = '_id';
 var Globals = require('./src/core/globals');
 
 // Load logger

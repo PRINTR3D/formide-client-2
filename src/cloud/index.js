@@ -19,12 +19,13 @@ class Cloud {
      * Create new Cloud
      * @param config
      */
-    constructor(config, events) {
+    constructor(config, events, db) {
         assert(config, 'config not passed');
         assert(config.cloud, 'config.cloud not passed');
         assert(config.cloud.URL, 'config.cloud.URL not passed');
         assert(config.cloud.platformURL, 'config.cloud.platformURL not passed');
         assert(events, 'events not passed');
+        assert(db, 'db not passed');
 
         this.URL = config.cloud.URL;
         this.platformURL = config.cloud.platformURL;
@@ -37,11 +38,9 @@ class Cloud {
         const self = this;
 
         // forward all events to cloud
-        function forwardEvents(data) {
+        events.onAny(function (data) {
             self.cloud.emit(this.event, data);
-        }
-
-        events.onAny(forwardEvents);
+        });
 
         // socket events
         this.cloud.on('ping', function (data) {
@@ -84,7 +83,7 @@ class Cloud {
 
         this.cloud.on('addToQueue', function (data) {
             Globals.log(`Cloud addToQueue: ${data.gcode}`, 1);
-            addToQueue(self.cloud, data, function () {
+            addToQueue(self.cloud, db, data, function () {
 
             });
         });

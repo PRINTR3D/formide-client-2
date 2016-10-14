@@ -8,6 +8,7 @@
 // modules
 const Http    = require('../http');
 const Cloud   = require('../cloud');
+const DB      = require('../db');
 const Globals = require('./globals');
 const Events  = require('./events');
 
@@ -24,8 +25,9 @@ class Client {
         //noinspection JSUnresolvedVariable
         this.events = Events;
 
-        this.cloud = new Cloud(config, this.events);
-        // this.http = new Http(config.http);
+        this.db    = new DB(config, this.events);
+        this.cloud = new Cloud(config, this.events, this.db);
+        this.http  = new Http(config, this.events, this.db);
 
         Globals.log('Initiated new Client', 1, 'info');
     }
