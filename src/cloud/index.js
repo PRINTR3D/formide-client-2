@@ -12,7 +12,7 @@ const socket          = require('./socket');
 const proxy           = require('./proxy');
 const addToQueue      = require('./addToQueue');
 const getCallbackData = require('./getCallbackData');
-const getNetworkInfo  = require('../lib/getNetworkInfo');
+const getNetworkInfo  = require('../utils/getNetworkInfo');
 
 class Cloud {
 

@@ -10,7 +10,7 @@ global.MONGO_ID_FIELD = '_id';
 var Globals = require('./src/core/globals');
 
 // Load logger
-const logger = require('./src/lib/logger');
+const logger = require('./src/utils/logger');
 Globals.log = logger;
 
 // Load configuration
@@ -27,10 +27,10 @@ catch (e) {
 }
 
 // Log Formide logo when starting application
-require('./src/lib/logo');
+require('./src/utils/logo');
 
 // Check if needed directories exist
-const checkDirectories = require('./src/lib/checkDirectories');
+const checkDirectories = require('./src/utils/checkDirectories');
 checkDirectories();
 
 // Create new Client instance
