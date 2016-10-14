@@ -83,7 +83,7 @@ class Cloud {
 
         this.cloud.on('addToQueue', function (data) {
             Globals.log(`Cloud addToQueue: ${data.gcode}`, 1);
-            addToQueue(self.cloud, db, data, function () {
+            addToQueue(self.cloud, events, db, data, function () {
 
             });
         });

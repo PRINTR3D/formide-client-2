@@ -5,8 +5,9 @@
  *	Copyright (c) 2015, All rights reserved, http://printr.nl
  */
 
-const fs   = require('fs');
-const path = require('path');
+const fs      = require('fs');
+const path    = require('path');
+const Globals = require('../core/globals');
 
 // storage directories
 const storageDir = path.join(getHomeDirectory(), 'formide');
@@ -14,6 +15,10 @@ const logsDir    = path.join(storageDir, './logs');
 const filesDir   = path.join(storageDir, './modelfiles');
 const gcodeDir   = path.join(storageDir, './gcode');
 const imagesDir  = path.join(storageDir, './images');
+
+Globals.paths = {
+    storageDir, logsDir, filesDir, gcodeDir, imagesDir
+};
 
 /**
  * This function checks if all directories that formide-client needs are available.

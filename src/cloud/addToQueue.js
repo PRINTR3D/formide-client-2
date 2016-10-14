@@ -5,9 +5,13 @@
  *	Copyright (c) 2015, All rights reserved, http://printr.nl
  */
 
-const assert = require('assert');
-const crypto = require('crypto');
-const Globals = require('../core/globals');
+const fs       = require('fs');
+const path     = require('path');
+const assert   = require('assert');
+const crypto   = require('crypto');
+const request  = require('request');
+const Throttle = require('throttle');
+const Globals  = require('../core/globals');
 
 /**
  * Add an item to the print queue from Formide Cloud
@@ -15,7 +19,7 @@ const Globals = require('../core/globals');
  * @param data
  * @param callback
  */
-function addToQueue(socket, db, data, callback) {
+function addToQueue(socket, events, db, data, callback) {
     const hash = crypto.randomBytes(16).toString('hex');
 
     db.QueueItem
@@ -32,7 +36,34 @@ function addToQueue(socket, db, data, callback) {
                 queueItem: queueItem
             });
 
-            // TODO: more stuff like downloading the actual gcode
+            const gcodeStoragePath = path.join(Globals.paths.gcodeDir, hash);
+            const writeStream = fs.createWriteStream(gcodeStoragePath);
+
+            // Throttle G-code download to 10MBps to prevent clogging network connection
+            const throttle = new Throttle(10000000);
+
+            request
+                .get(`${Globals.config.cloud.URL}/files/download/gcode?hash=${data.gcode}`, { strictSSL: false })
+                .on('error', function (err) {
+                    Globals.log(`${data.printJob.name} has failed to download`, 1, 'error');
+                    events.emit('queueItem.downloadError', {
+                        title: `${data.printJob.name} has failed to download`,
+                        message: err.message
+                    });
+                })
+                .pipe(throttle)
+                .pipe(writeStream)
+                .on('finish', function () {
+                    Globals.log(`${data.printJob.name} has finished downloading`, 2, 'info');
+
+                    queueItem.status = 'queued';
+                    queueItem.save(function () {
+                        events.emit('queueItem.downloaded', {
+                            title: `${data.printJob.name} has finished downloading`,
+                            message: 'The gcode was downloaded and is now ready to be printed'
+                        });
+                    });
+                });
         })
         .catch(function (err) {
             Globals.log(`DB error: ${err.message}`, 1, 'error');
