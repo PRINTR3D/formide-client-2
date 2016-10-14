@@ -1,0 +1,9 @@
+{
+  "http": {
+    "port": 1337
+  },
+  "cloud": {
+    "URL": "https://api.formide.com",
+    "platformURL": "https://platform.formide.com"
+  }
+}

@@ -6,6 +6,7 @@
  */
 
 const socketClient = require('socket.io-client');
+const Globals = require('../core/globals');
 
 /**
  * Create new socket connection to Formide Cloud
@@ -23,19 +24,19 @@ function cloudSocket(url) {
     });
 
     conn.on('error', function (err) {
-        console.error('Cloud socket error: ', err.message);
+        Globals.log(`Cloud socket error: ${err.message}`, 1, 'error');
     });
 
     conn.on('connection_error', function (err) {
-        console.error('Cloud connection error: ', err.message);
+        Globals.log(`Cloud connection error: ${err.message}`, 1, 'error');
     });
 
     conn.on('connect_timeout', function (err) {
-        console.error('Cloud connection timeout: ', err.message);
+        Globals.log(`Cloud connection timeout: ${err.message}`, 1, 'warn');
     });
 
     conn.on('reconnect_failed', function (err) {
-        console.error('Cloud reconnect error: ', err.message);
+        Globals.log(`Cloud reconnect error: ${err.message}`, 1, 'error');
     });
 
     return conn;

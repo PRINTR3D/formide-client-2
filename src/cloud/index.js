@@ -24,7 +24,7 @@ class Cloud {
         assert(config.cloud, 'config.cloud not passed');
         assert(config.cloud.URL, 'config.cloud.URL not passed');
         assert(config.cloud.platformURL, 'config.cloud.platformURL not passed');
-        // assert(events, 'events not passed');
+        assert(events, 'events not passed');
 
         this.URL = config.cloud.URL;
         this.platformURL = config.cloud.platformURL;
@@ -40,6 +40,8 @@ class Cloud {
         function forwardEvents(data) {
             self.cloud.emit(this.event, data);
         }
+
+        events.onAny(forwardEvents);
 
         // socket events
         this.cloud.on('ping', function (data) {
@@ -63,11 +65,11 @@ class Cloud {
                     port: config.http.port
                 }, function (response) {
                     if (response.success) {
-                        console.log('Cloud connected');
-                        events.onAny(forwardEvents);
+                        Globals.log(`Cloud connected`, 1, 'info');
+                        // events.onAny(forwardEvents);
                     }
                     else {
-                        console.log('Cloud not connected:', response.message);
+                        Globals.log(`Cloud not connected: ${response.message}`, 1, 'warn');
                     }
                 });
             }).then(null, console.error);
@@ -88,13 +90,15 @@ class Cloud {
         });
 
         // on disconnect
-        this.cloud.on('disconnect', function () {
+        this.cloud.on('disconnect', function (data) {
             // turn off event forwarding
-            events.offAny(forwardEvents);
+            // events.offAny(forwardEvents);
 
-            // try reconnecting
-            console.info('Cloud disconnected, trying to reconnect...');
-            this.cloud.io.reconnect();
+            // try reconnecting when server did not ban client
+            if (data !== 'io server disconnect') {
+                Globals.log('Cloud disconnected, trying to reconnect...', 1, 'info');
+                self.cloud.io.reconnect();
+            }
         });
     }
 }
