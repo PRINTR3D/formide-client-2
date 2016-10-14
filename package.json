@@ -12,7 +12,9 @@
     "getmac": "^1.2.1",
     "moment": "^2.15.1",
     "mongoose": "^4.6.3",
+    "nodejs-websocket": "^1.7.0",
     "request": "^2.75.0",
+    "socket.io": "^1.5.0",
     "socket.io-client": "^1.5.0",
     "throttle": "^1.0.3"
   }
