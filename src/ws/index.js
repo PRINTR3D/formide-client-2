@@ -62,7 +62,7 @@ class Ws {
             });
 
             conn.on('error', function (err) {
-
+                // TODO
             });
         });
 

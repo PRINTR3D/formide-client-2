@@ -13,7 +13,8 @@ const clc = require('cli-color');
 const colorMap = {
     info: clc.blue,
     warn: clc.yellow,
-    error: clc.red.bold
+    error: clc.red.bold,
+    log: clc.white
 }
 
 /**
@@ -26,9 +27,11 @@ function log(message, level, type) {
     assert(message, 'message is required to log something');
     level = level || 1;
     type = type || 'log';
+
     const human_timestamp = moment().format('HH:mm:ss.SSS');
+
     if (level <= LEVEL)
-        console.log(clc.white.italic(human_timestamp) + " " + colorMap[type](message));
+        console.log(clc.white(human_timestamp) + " " + colorMap[type](message));
 }
 
 module.exports = log;

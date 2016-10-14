@@ -1,6 +1,7 @@
 {
   "http": {
-    "port": 1337
+    "api": 1337,
+    "ui": "8080"
   },
   "cloud": {
     "URL": "http://localhost:3000",
