@@ -15,6 +15,7 @@
     "express": "^4.14.0",
     "express-bearer-token": "^2.1.0",
     "express-session": "^1.14.1",
+    "formide-drivers": "printr3d/formide-drivers-npm#v6.3.3",
     "getmac": "^1.2.1",
     "katana-slicer": "printr3d/katana-slicer-npm#v1.2.3",
     "moment": "^2.15.1",

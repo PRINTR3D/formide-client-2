@@ -13,8 +13,9 @@ class Slicer {
 
         try {
             this.katana = require('katana-slicer');
+            this.version = require('katana-slicer/package').version;
             this.reference = require('katana-slicer/reference');
-            Globals.log(`Loaded Katana v${this.reference.version}`, 1, 'info');
+            Globals.log(`Loaded Katana v${this.version}`, 1, 'info');
         }
         catch (e) {
             console.log(e);
