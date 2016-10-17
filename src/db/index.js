@@ -28,8 +28,14 @@ class DB {
         });
 
         const models = {
-            AccessToken: require('./models/accessToken'),
-            QueueItem:   require('./models/queueItem')
+            AccessToken:  require('./models/accessToken'),
+            File:         require('./models/file'),
+            Material:     require('./models/material'),
+            Printer:      require('./models/printer'),
+            PrintJob:     require('./models/printJob'),
+            QueueItem:    require('./models/queueItem'),
+            SliceProfile: require('./models/sliceProfile'),
+            User:         require('./models/user')
         };
 
         return models;
