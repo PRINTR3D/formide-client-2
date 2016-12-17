@@ -7,16 +7,16 @@
 
 const assert   = require('assert');
 const mongoose = require('mongoose');
-const Globals  = require('../core/globals');
+const Globals  = require('../globals');
 
 class DB {
 
-    constructor(config, events) {
-        assert(config, 'config not passed');
-        assert(config.db, 'config.db not passed');
-        assert(config.db.connectionString, 'config.db.connectionString not passed');
+    constructor(client) {
+        assert(client.config, 'config not passed');
+        assert(client.config.db, 'config.db not passed');
+        assert(client.config.db.connectionString, 'config.db.connectionString not passed');
 
-        mongoose.connect(config.db.connectionString);
+        mongoose.connect(client.config.db.connectionString);
 
         const db = mongoose.connection;
         db.on('error', function (err) {

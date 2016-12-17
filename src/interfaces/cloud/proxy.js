@@ -8,7 +8,7 @@
 const assert  = require('assert');
 const request = require('request');
 const co      = require('co');
-const Globals = require('../core/globals');
+const Globals = require('../../core/globals');
 
 /**
  * Process proxy call from Formide Cloud

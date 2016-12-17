@@ -6,7 +6,7 @@
  */
 
 const socketClient = require('socket.io-client');
-const Globals = require('../core/globals');
+const Globals = require('../../core/globals');
 
 /**
  * Create new socket connection to Formide Cloud

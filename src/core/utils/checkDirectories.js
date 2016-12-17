@@ -7,7 +7,7 @@
 
 const fs      = require('fs');
 const path    = require('path');
-const Globals = require('../core/globals');
+const Globals = require('../globals');
 
 // storage directories
 const storageDir = path.join(getHomeDirectory(), 'formide');

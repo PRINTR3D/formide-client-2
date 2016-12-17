@@ -7,12 +7,11 @@
 
 const assert          = require('assert');
 const co              = require('co');
-const Globals         = require('../core/globals');
+const Globals         = require('../../core/globals');
 const socket          = require('./socket');
 const proxy           = require('./proxy');
 const addToQueue      = require('./addToQueue');
 const getCallbackData = require('./getCallbackData');
-const getNetworkInfo  = require('../utils/getNetworkInfo');
 
 class Cloud {
 
@@ -20,26 +19,26 @@ class Cloud {
      * Create new Cloud
      * @param config
      */
-    constructor(config, events, db) {
-        assert(config, 'config not passed');
-        assert(config.cloud, 'config.cloud not passed');
-        assert(config.cloud.URL, 'config.cloud.URL not passed');
-        assert(config.cloud.platformURL, 'config.cloud.platformURL not passed');
-        assert(events, 'events not passed');
-        assert(db, 'db not passed');
+    constructor(client) {
+        assert(client.config, 'config not passed');
+        assert(client.config.cloud, 'config.cloud not passed');
+        assert(client.config.cloud.URL, 'config.cloud.URL not passed');
+        assert(client.config.cloud.platformURL, 'config.cloud.platformURL not passed');
+        assert(client.events, 'events not passed');
+        assert(client.db, 'db not passed');
 
-        this.URL = config.cloud.URL;
-        this.platformURL = config.cloud.platformURL;
+        this.URL = client.config.cloud.URL;
+        this.platformURL = client.config.cloud.platformURL;
 
         // socket connections
-        this.cloud = socket.cloud(config.cloud.URL);
-        this.local = socket.local(config.http.port);
+        this.cloud = socket.cloud(client.config.cloud.URL);
+        this.local = socket.local(client.config.http.port);
 
         // prevent .bind waterfall
         const self = this;
 
         // forward all events to cloud
-        events.onAny(function (data) {
+        client.events.onAny(function (data) {
             self.cloud.emit(this.event, data);
         });
 
@@ -51,9 +50,9 @@ class Cloud {
         // on connect
         this.cloud.on('connect', function () {
             co(function*() {
-                const publicIP = yield getNetworkInfo.getPublicIP();
-                const internalIP = yield getNetworkInfo.getInternalIP();
-                const MAC = yield getNetworkInfo.getMAC();
+                const publicIP = yield client.network.getPublicIP();
+                const internalIP = yield client.network.getInternalIP();
+                const MAC = yield client.network.getMAC();
 
                 // emit authentication data
                 self.cloud.emit('authenticate', {
@@ -63,7 +62,7 @@ class Cloud {
                     mac: MAC,
                     version: require('../../package.json').version,
                     environment: process.env.NODE_ENV,
-                    port: config.http.port
+                    port: client.config.http.port
                 }, function (response) {
                     if (response.success) {
                         Globals.log(`Cloud connected`, 1, 'info');
@@ -79,7 +78,7 @@ class Cloud {
         // HTTP proxy calls are handled by the proxy function
         this.cloud.on('http', function (data) {
             Globals.log(`Cloud HTTP call: ${data.url}`, 2);
-            proxy(self.cloud, db, data, function (err, response) {
+            proxy(self.cloud, client.db, data, function (err, response) {
                 self.cloud.emit('http', getCallbackData(data._callbackId, error, response));
             });
         });
@@ -87,7 +86,7 @@ class Cloud {
         // Adding to queue from Formide Cloud
         this.cloud.on('addToQueue', function (data) {
             Globals.log(`Cloud addToQueue: ${data.gcode}`, 1);
-            addToQueue(events, db, data, function (err, response) {
+            addToQueue(client.events, client.db, data, function (err, response) {
                 self.cloud.emit('addToQueue', getCallbackData(data._callbackId, error, response));
             });
         });

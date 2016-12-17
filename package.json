@@ -19,7 +19,7 @@
     "getmac": "^1.2.1",
     "katana-slicer": "printr3d/katana-slicer-npm#v1.2.3",
     "katana-tools": "printr3d/katana-tools",
-    "moment": "^2.15.1",
+    "moment": "^2.17.1",
     "mongoose": "^4.6.3",
     "nodejs-websocket": "^1.7.0",
     "request": "^2.75.0",

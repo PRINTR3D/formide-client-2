@@ -11,7 +11,7 @@ const assert   = require('assert');
 const crypto   = require('crypto');
 const request  = require('request');
 const Throttle = require('throttle');
-const Globals  = require('../core/globals');
+const Globals  = require('../../core/globals');
 
 /**
  * Add an item to the print queue from Formide Cloud

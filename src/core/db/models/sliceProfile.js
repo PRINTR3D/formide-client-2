@@ -6,7 +6,7 @@
  */
 
 const mongoose           = require('mongoose');
-const updateSliceProfile = require('../../slicer/updateSliceProfile');
+const updateSliceProfile = require('../../../slicer/updateSliceProfile');
 
 const schema = mongoose.Schema({
 

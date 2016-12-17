@@ -14,14 +14,14 @@ const cookieParser 			= require('cookie-parser');
 const cors 					= require('cors');
 const bodyParser 			= require('body-parser');
 const bearerToken 			= require('express-bearer-token');
-const Globals               = require('../core/globals');
+const Globals               = require('../../core/globals');
 
 /**
  * Http server setup
  */
 class Http {
 
-    constructor(config, events) {
+    constructor(client) {
 
         const self = this;
 
@@ -32,7 +32,7 @@ class Http {
         this.httpServer = require('http').Server(this.app);
 
         // listen to port stated in app.port config (usually port 1337)
-        this.httpServer.listen(config.http.api, function() {
+        this.httpServer.listen(client.config.http.api, function() {
             Globals.log(`HTTP API running on port ${self.httpServer.address().port}`, 1, 'info');
         });
 
@@ -77,6 +77,9 @@ class Http {
             res.unauthorized = require('./responses/unauthorized').bind({ req: req, res: res });
             next();
         });
+
+        // routes
+        this.app.use('/api/printer', require('./routes/printer')(client));
 
         return {
             app: this.app,

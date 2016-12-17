@@ -5,8 +5,8 @@
  *	Copyright (c) 2015, All rights reserved, http://printr.nl
  */
 
-const version = require('../../package.json').version;
-const Globals = require('../core/globals');
+const version = require('../../../package.json').version;
+const Globals = require('../globals');
 
 Globals.log("                                        ");
 Globals.log("                   ?                    ");

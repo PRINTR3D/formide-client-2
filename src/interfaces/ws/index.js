@@ -7,14 +7,14 @@
 
 const io      = require('socket.io');
 const ws      = require('nodejs-websocket');
-const Globals = require('../core/globals');
+const Globals = require('../../core/globals');
 
 class Ws {
 
-    constructor(config, events, http, db) {
+    constructor(client) {
         const self = this;
 
-        this.db = db;
+        this.db = client.db;
 
         // Emit all system events to connected native UI socket connections
         // These are not compatible with socket.io, hence the separate websocket library
@@ -48,7 +48,7 @@ class Ws {
                                 }
                             }));
 
-                            events.onAny(forwardEvents);
+                            client.events.onAny(forwardEvents);
                         });
                 }
                 catch (e) {
@@ -57,7 +57,7 @@ class Ws {
             });
 
             conn.on('close', function () {
-                events.offAny(forwardEvents);
+                client.events.offAny(forwardEvents);
                 Globals.log(`Native UI socket disconnected`, 2, 'info');
             });
 
@@ -66,7 +66,7 @@ class Ws {
             });
         });
 
-        const socketIO = io.listen(http.server);
+        const socketIO = io.listen(client.http.server);
 
         // Emit all system events to connected socket.io clients
         socketIO.on('connection', function (socket) {
@@ -87,7 +87,7 @@ class Ws {
                         return socket.disconnect();
                     }
 
-                    events.onAny(forwardSocketEvents);
+                    client.events.onAny(forwardSocketEvents);
 
                     // respond to client
                     callback({
@@ -102,7 +102,7 @@ class Ws {
             });
 
             socket.on('disconnect', function () {
-                events.offAny(forwardSocketEvents);
+                client.events.offAny(forwardSocketEvents);
                 Globals.log(`Local socket disconnected`, 2, 'info');
             });
         });
