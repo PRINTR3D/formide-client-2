@@ -12,9 +12,7 @@ class DB {
 
   // TODO: figure out best database to use
   constructor (client) {
-    assert(client.config, '[db] - Config not passed')
-    assert(client.config.db, '[db] - Config.db not passed')
-    assert(client.config.db.connectionString, '[db] - Config.db.connectionString not passed')
+    assert(client.config.db.connectionString, '[db] - client.config.db.connectionString not passed')
 
     mongoose.connect(client.config.db.connectionString)
 

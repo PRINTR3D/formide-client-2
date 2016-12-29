@@ -1,44 +1,43 @@
-'use strict';
+'use strict'
 
 /*
- *	This code was created for Printr B.V. It is open source under the formide-client package.
- *	Copyright (c) 2015, All rights reserved, http://printr.nl
+ * This code was created for Printr B.V. It is open source under the formide-client package.
+ * Copyright (c) 2015, All rights reserved, http://printr.nl
  */
 
-const assert = require('assert');
+const assert = require('assert')
 
 class Slicer {
 
-    constructor(client) {
-        assert(client, '[slicer] - Client not passed');
+  constructor (client) {
+    assert(client, '[slicer] - client not passed')
 
-        // TODO: use same threading setup as drivers?
-        try {
-            this.katana = require('katana-slicer');
-            this._version = require('katana-slicer/package').version;
-            this._reference = require('katana-slicer/reference');
-            client.log(`[slicer] - Loaded Katana v${this._version}`, 1, 'info');
-        }
-        catch (e) {
-            client.log(`[slicer] - Cannot load Katana binary: ${e.message}`, 1, 'warn');
-        }
+    // TODO: use same threading setup as drivers?
+    try {
+      this.katana = require('katana-slicer')
+      this._version = require('katana-slicer/package.json').version
+      this._reference = require('katana-slicer/reference.json')
+      client.log(`[slicer] - Loaded Katana v${this._version}`, 1, 'info')
+    } catch (e) {
+      client.log(`[slicer] - Cannot load Katana binary: ${e.message}`, 1, 'warn')
     }
+  }
 
-    slice() {
+  slice () {
 
-    }
+  }
 
-    createSliceRequest() {
+  createSliceRequest () {
 
-    }
+  }
 
-    /**
-     * Get reference file for Katana slice engine
-     * @returns {*}
-     */
-    getReferenceFile() {
-        return this._reference;
-    }
+  /**
+   * Get reference file for Katana slice engine
+   * @returns {*}
+   */
+  getReferenceFile () {
+    return this._reference
+  }
 }
 
-module.exports = Slicer;
+module.exports = Slicer

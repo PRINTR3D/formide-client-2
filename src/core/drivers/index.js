@@ -58,6 +58,13 @@ class Drivers {
   }
 
   /**
+   * Return the version of drivers binary installed
+   */
+  getVersion () {
+    return require('formide-drivers/package.json').version
+  }
+
+  /**
    * Handler for when printer was connected
    * @param port
    * @param data

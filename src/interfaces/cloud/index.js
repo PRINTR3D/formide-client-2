@@ -20,7 +20,7 @@ class Cloud {
    */
   constructor (client) {
     assert(client, '[cloud] - client not passed')
-    assert(client.config.http.port, '[cloud] - client.config.http.port not passed')
+    assert(client.config.http.api, '[cloud] - client.config.http.api not passed')
     assert(client.config.cloud.URL, '[cloud] - client.config.cloud.URL not passed')
     assert(client.config.cloud.platformURL, '[cloud] - client.config.cloud.platformURL not passed')
     assert(client.events, '[cloud] - client.events not passed')
@@ -33,7 +33,7 @@ class Cloud {
 
     // socket connections
     this.cloud = socket.cloud(client, client.config.cloud.URL)
-    this.local = socket.local(client, client.config.http.port)
+    this.local = socket.local(client, client.config.http.api)
 
     // prevent .bind waterfall
     const self = this
