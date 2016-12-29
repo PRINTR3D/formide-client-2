@@ -7,7 +7,8 @@
 
 const MAX_ALLOWED_PRINTERS = 4
 const assert = require('assert')
-const FdmPrinter = require('./fmdPrinter')
+const FdmPrinter = require('./printers/fmdPrinter')
+// const VirtualPrinter = require('./printers/VirtualPrinter')
 const Driver = require('./comm')
 
 class Drivers {
