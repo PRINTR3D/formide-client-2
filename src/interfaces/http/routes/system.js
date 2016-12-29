@@ -14,11 +14,13 @@ module.exports = function (client) {
    */
   router.get('/info', function (req, res) {
     const driverVersion = client.drivers.getVersion()
+    const slicerVersion = client.slicer.getVersion()
     const uptime = process.uptime()
 
     return res.ok({
       versions: {
-        driver: driverVersion
+        driver: driverVersion,
+        slicer: slicerVersion
       },
       uptime
     })

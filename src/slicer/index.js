@@ -23,6 +23,10 @@ class Slicer {
     }
   }
 
+  getVersion () {
+    return this._version
+  }
+
   slice () {
 
   }

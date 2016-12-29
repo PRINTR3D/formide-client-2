@@ -23,6 +23,7 @@ class Drivers {
     const self = this
 
     try {
+      this._version = require('formide-drivers/package.json').version
       this.drivers = new Driver(client)
       this.drivers.on(function (err, event) {
         if (err) {
@@ -62,7 +63,7 @@ class Drivers {
    * Return the version of drivers binary installed
    */
   getVersion () {
-    return require('formide-drivers/package.json').version
+    return this._version
   }
 
   /**
