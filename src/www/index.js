@@ -5,24 +5,29 @@
  *	Copyright (c) 2015, All rights reserved, http://printr.nl
  */
 
+const assert = require('assert');
 const express = require('express');
-const Globals = require('../core/globals');
 
 class UI {
 
-    constructor(config) {
+    constructor(client) {
+        assert(client.log, '[ui] - Client.log not passed');
+        assert(client.config, '[ui] - Client.config not passed');
+        assert(client.config.http, '[ui] - Client.config.http not passed');
+        assert(client.config.http.www, '[ui] - Client.config.http.www not passed');
+
         const self = this;
 
         this.app = express();
         this.server = require('http').Server(this.app);
-        this.server.listen(config.http.ui, function () {
-            Globals.log(`UI running on port ${self.server.address().port}`, 1, 'info');
+        this.server.listen(client.config.http.www, function () {
+            client.log(`[ui] - Running on port ${self.server.address().port}`, 1, 'info');
         });
 
         // basic app environment info
         this.app.get('/api/env', function(req, res) {
             const pkg = require('../../package.json');
-            return res.json({
+            return res.ok({
                 environment: process.env.NODE_ENV,
                 name:        pkg.name,
                 version:     pkg.version,
@@ -32,12 +37,12 @@ class UI {
 
         // public assets
         this.app.get('/public/*', function(req, res) {
-            return res.sendfile(req.params[0], { root: FormideClient.appRoot + '/public' });
+            return res.sendFile(req.params[0], { root: './public' });
         });
 
         // angular app
         this.app.get('/*', function(req, res) {
-            return res.sendfile('index.html', { root: __dirname });
+            return res.sendFile('index.html', { root: './public' });
         });
 
         return {

@@ -1,8 +1,8 @@
-'use strict';
+'use strict'
 
 /*
- *	This code was created for Printr B.V. It is open source under the formide-client package.
- *	Copyright (c) 2015, All rights reserved, http://printr.nl
+ * This code was created for Printr B.V. It is open source under the formide-client package.
+ * Copyright (c) 2015, All rights reserved, http://printr.nl
  */
 
 /**
@@ -12,15 +12,16 @@
  * @param err
  * @param result
  */
-function getCallbackData(callbackId, err, result) {
-    const data = { _callbackId: callbackId };
+function getCallbackData (callbackId, err, result) {
+  const data = { _callbackId: callbackId }
 
-    if (err)
-        data.error = { message: err.message };
-    else
-        data.result = result;
+  if (err) {
+    data.error = { message: err.message }
+  } else {
+    data.result = result
+  }
 
-    return data;
+  return data
 }
 
-module.exports = getCallbackData;
+module.exports = getCallbackData

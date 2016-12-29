@@ -1,44 +1,45 @@
-'use strict';
+'use strict'
 
 /*
- *	This code was created for Printr B.V. It is open source under the formide-client package.
- *	Copyright (c) 2015, All rights reserved, http://printr.nl
+ * This code was created for Printr B.V. It is open source under the formide-client package.
+ * Copyright (c) 2015, All rights reserved, http://printr.nl
  */
 
-const version = require('../../../package.json').version;
-const Globals = require('../globals');
+function logLogo (config) {
+  console.log('                                        ')
+  console.log('                   ?                    ')
+  console.log('                 ????                   ')
+  console.log('               7??????                  ')
+  console.log('              ??  ?? ??                 ')
+  console.log('            ++    +   ?+                ')
+  console.log('          ++      +    I+               ')
+  console.log('          +      ++     7+              ')
+  console.log('         7+      +?      ++             ')
+  console.log('         ++      +      ++ +            ')
+  console.log('         +       +      +   +           ')
+  console.log('        ++      ++   7+++    +          ')
+  console.log('        +       +++++  ++     +         ')
+  console.log('       ?+      +?+      +     ++        ')
+  console.log('       +?    ++   +     ++    7+        ')
+  console.log('       +    ++   ++++++  +     +        ')
+  console.log('      ++  ++ +++++   + ++++    ++       ')
+  console.log('      ++++       ++++    I++   ?+       ')
+  console.log('     +=            =        ==  =       ')
+  console.log('      ==           =         =  ==      ')
+  console.log('       ==         ==         ====       ')
+  console.log('        ==       ====        ==         ')
+  console.log('         ==    ==   I==     ==          ')
+  console.log('          =====        ==I7=7           ')
+  console.log('           ================             ')
+  console.log('                                        ')
+  console.log(`Starting Formide client...`)
+  console.log('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
+  console.log(`Version:     ${config.version}`)
+  console.log(`Environment: ${config.env}`)
+  console.log(`API port:    ${config.http.api}`)
+  console.log(`UI port:     ${config.http.www}`)
+  console.log('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
+  console.log(' ')
+}
 
-Globals.log("                                        ");
-Globals.log("                   ?                    ");
-Globals.log("                 ????                   ");
-Globals.log("               7??????                  ");
-Globals.log("              ??  ?? ??                 ");
-Globals.log("            ++    +   ?+                ");
-Globals.log("          ++      +    I+               ");
-Globals.log("          +      ++     7+              ");
-Globals.log("         7+      +?      ++             ");
-Globals.log("         ++      +      ++ +            ");
-Globals.log("         +       +      +   +           ");
-Globals.log("        ++      ++   7+++    +          ");
-Globals.log("        +       +++++  ++     +         ");
-Globals.log("       ?+      +?+      +     ++        ");
-Globals.log("       +?    ++   +     ++    7+        ");
-Globals.log("       +    ++   ++++++  +     +        ");
-Globals.log("      ++  ++ +++++   + ++++    ++       ");
-Globals.log("      ++++       ++++    I++   ?+       ");
-Globals.log("     +=            =        ==  =       ");
-Globals.log("      ==           =         =  ==      ");
-Globals.log("       ==         ==         ====       ");
-Globals.log("        ==       ====        ==         ");
-Globals.log("         ==    ==   I==     ==          ");
-Globals.log("          =====        ==I7=7           ");
-Globals.log("           ================             ");
-Globals.log("                                        ");
-Globals.log(`Starting Formide client...`);
-Globals.log("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-Globals.log(`Version:     ${version}`);
-Globals.log(`Environment: ${process.env.NODE_ENV}`);
-Globals.log(`API port:    ${Globals.config.http.api}`);
-Globals.log(`UI port:     ${Globals.config.http.ui}`);
-Globals.log("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-Globals.log(" ");
+module.exports = logLogo

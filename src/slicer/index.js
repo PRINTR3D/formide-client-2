@@ -5,21 +5,22 @@
  *	Copyright (c) 2015, All rights reserved, http://printr.nl
  */
 
-const Globals = require('../core/globals');
+const assert = require('assert');
 
 class Slicer {
 
-    constructor() {
+    constructor(client) {
+        assert(client, '[slicer] - Client not passed');
 
+        // TODO: use same threading setup as drivers?
         try {
             this.katana = require('katana-slicer');
-            this.version = require('katana-slicer/package').version;
-            this.reference = require('katana-slicer/reference');
-            Globals.log(`Loaded Katana v${this.version}`, 1, 'info');
+            this._version = require('katana-slicer/package').version;
+            this._reference = require('katana-slicer/reference');
+            client.log(`[slicer] - Loaded Katana v${this._version}`, 1, 'info');
         }
         catch (e) {
-            console.log(e);
-            Globals.log('Cannot load Katana binary, try re-installing katana-slicer', 1, 'warn');
+            client.log(`[slicer] - Cannot load Katana binary: ${e.message}`, 1, 'warn');
         }
     }
 
@@ -36,7 +37,7 @@ class Slicer {
      * @returns {*}
      */
     getReferenceFile() {
-        return this.reference;
+        return this._reference;
     }
 }
 

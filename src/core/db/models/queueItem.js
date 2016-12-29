@@ -21,4 +21,14 @@ schema.virtual('id').get(function() {
 
 schema.set('toJSON', { virtuals: true });
 
+/**
+ * Set all items that are currently printing for port back to queued.
+ * This is used when a printer is disconnected while it was printing.
+ * @param port
+ * @param callback
+ */
+schema.statics.setQueuedForPort = function (port, callback) {
+    this.update({ port: port, status: 'printing' }, callback);
+}
+
 module.exports = mongoose.model('QueueItem', schema);

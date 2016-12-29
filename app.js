@@ -1,40 +1,44 @@
-'use strict';
+'use strict'
 
 /*
- *	This code was created for Printr B.V. It is open source under the formide-client package.
- *	Copyright (c) 2015, All rights reserved, http://printr.nl
+ * This code was created for Printr B.V. It is open source under the formide-client package.
+ * Copyright (c) 2015, All rights reserved, http://printr.nl
  */
 
 // Globals
-global.MONGO_ID_FIELD = '_id';
-var Globals = require('./src/core/globals');
+global.MONGO_ID_FIELD = '_id'
+
+// Load version
+const version = require('./package.json').version
 
 // Load logger
-const logger = require('./src/core/utils/logger');
-Globals.log = logger;
+const log = require('./src/core/utils/logger')
 
 // Load configuration
-const env = process.env.NODE_ENV || 'production';
-var config;
+const env = process.env.NODE_ENV || 'production'
+var config
 
 try {
-    config = require(`./config/${env}.json`);
-    Globals.config = config; // add config to Globals
+  config = require(`./config/${env}.json`)
+} catch (e) {
+  log(`[root] - No config found for environment ${env}, exiting application...`, 1, 'error')
+  process.exit(1)
 }
-catch (e) {
-    Globals.log(`No config found for environment ${env}, exiting application...`, 1, 'error')
-    process.exit(1);
-}
-
-// Log Formide logo when starting application
-require('./src/core/utils/logo');
 
 // Check if needed directories exist
-const checkDirectories = require('./src/core/utils/checkDirectories');
-checkDirectories();
+const directories = require('./src/core/utils/checkDirectories')
+directories.checkDirectories()
+
+// finish config
+config.env = env
+config.version = version
+config.paths = directories.getPaths()
+
+// Log Formide logo when starting application
+require('./src/core/utils/logo')(config)
 
 // Create new Client instance
-const Client = require('./src/core/client');
-const client = new Client(config);
+const Client = require('./src/core/client')
+const client = new Client(config)
 
-module.exports = { client };
+module.exports = { client, config }

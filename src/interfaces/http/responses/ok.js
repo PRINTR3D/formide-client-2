@@ -1,19 +1,16 @@
-'use strict';
+'use strict'
 
 /*
- *	This code was created for Printr B.V. It is open source under the formide-client package.
- *	Copyright (c) 2015, All rights reserved, http://printr.nl
+ * This code was created for Printr B.V. It is open source under the formide-client package.
+ * Copyright (c) 2015, All rights reserved, http://printr.nl
  */
 
-module.exports = function ok(data) {
+module.exports = function ok (data) {
+  var res = this.res
+  var statusCode = 200
 
-	var req = this.req;
-	var res = this.res;
-	var statusCode = 200;
-	var statusName = "OK";
-	
-	// Set status code
-	res.status(statusCode);
-	
-	return res.json(data);
-};
+  // Set status code
+  res.status(statusCode)
+
+  return res.json(data)
+}
