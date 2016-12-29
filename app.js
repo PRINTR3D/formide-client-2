@@ -26,7 +26,7 @@ try {
 }
 
 // Check if needed directories exist
-const directories = require('./src/core/utils/checkDirectories')
+const directories = require('./src/core/utils/directories')
 directories.checkDirectories()
 
 // finish config
