@@ -22,7 +22,7 @@ class Drivers {
     const self = this
 
     try {
-      this.drivers = new Driver()
+      this.drivers = new Driver(client)
       this.drivers.on(function (err, event) {
         if (err) {
           client.log(err, 1, 'warn')
