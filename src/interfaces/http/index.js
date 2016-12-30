@@ -3,7 +3,7 @@
 * @Date:   2016-12-18T17:21:23+01:00
 * @Filename: index.js
 * @Last modified by:   chris
-* @Last modified time: 2016-12-30T14:35:03+01:00
+* @Last modified time: 2016-12-30T14:55:18+01:00
 * @Copyright: Copyright (c) 2016, All rights reserved, http://printr.nl
 */
 
@@ -74,19 +74,21 @@ class Http {
 
     // use response handlers
     this.app.use(function (req, res, next) {
-      res.ok = require('./responses/ok').bind({ req: req, res: res })
-      res.badRequest = require('./responses/badRequest').bind({ req: req, res: res })
-      res.conflict = require('./responses/conflict').bind({ req: req, res: res })
-      res.forbidden = require('./responses/forbidden').bind({ req: req, res: res })
-      res.notFound = require('./responses/notFound').bind({ req: req, res: res })
-      res.serverError = require('./responses/serverError').bind({ req: req, res: res })
-      res.unauthorized = require('./responses/unauthorized').bind({ req: req, res: res })
+      res.ok = require('./responses/ok').bind({ req, res })
+      res.badRequest = require('./responses/badRequest').bind({ req, res })
+      res.conflict = require('./responses/conflict').bind({ req, res })
+      res.forbidden = require('./responses/forbidden').bind({ req, res })
+      res.notFound = require('./responses/notFound').bind({ req, res })
+      res.serverError = require('./responses/serverError').bind({ req, res })
+      res.unauthorized = require('./responses/unauthorized').bind({ req, res })
+      res.notImplemented = require('./responses/notImplemented').bind({ req, res })
       next()
     })
 
     // routes
     this.app.use('/api/system', require('./routes/system')(client))
     this.app.use('/api/printer', require('./routes/printer')(client))
+    this.app.use('/api/update', require('./routes/update')(client))
 
     return {
       app: this.app,

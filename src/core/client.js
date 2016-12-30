@@ -3,11 +3,14 @@
 * @Date:   2016-12-18T17:20:55+01:00
 * @Filename: client.js
 * @Last modified by:   chris
-* @Last modified time: 2016-12-30T14:40:11+01:00
+* @Last modified time: 2016-12-30T14:59:34+01:00
 * @Copyright: Copyright (c) 2016, All rights reserved, http://printr.nl
 */
 
 'use strict'
+
+// packages
+const assert = require('assert')
 
 // core modules
 const Events = require('./events')
@@ -31,10 +34,17 @@ class Client {
    * @param config
    */
   constructor (config) {
-    // utils
+    assert(config, '[core] - config not passed')
+    assert(config.version, '[core] - config.version not passed')
+
+    // system
+    this.version = config.version
+    this.system = {}
+
     try {
       const OS_IMPLEMENTATION = process.env.OS_IMPLEMENTATION || 'raspberry_pi'
-      this.network = require(`../implementations/${OS_IMPLEMENTATION}/network`)
+      this.system.network = require(`../implementations/${OS_IMPLEMENTATION}/network`)
+      this.system.ota = require(`../implementations/${OS_IMPLEMENTATION}/ota`)
     } catch (e) {
       log(`[core] - No native client implementation found: ${e.message}`, 1, 'warn')
     }
