@@ -3,7 +3,7 @@
 * @Date:   2016-12-18T17:20:55+01:00
 * @Filename: client.js
 * @Last modified by:   chris
-* @Last modified time: 2016-12-30T14:33:04+01:00
+* @Last modified time: 2016-12-30T14:40:11+01:00
 * @Copyright: Copyright (c) 2016, All rights reserved, http://printr.nl
 */
 
@@ -33,7 +33,7 @@ class Client {
   constructor (config) {
     // utils
     try {
-      const OS_IMPLEMENTATION = process.env.OS_IMPLEMENTATION || 'the_element'
+      const OS_IMPLEMENTATION = process.env.OS_IMPLEMENTATION || 'raspberry_pi'
       this.network = require(`../implementations/${OS_IMPLEMENTATION}/network`)
     } catch (e) {
       log(`[core] - No native client implementation found: ${e.message}`, 1, 'warn')
