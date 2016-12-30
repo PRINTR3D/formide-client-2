@@ -5,6 +5,9 @@
   "main": "app.js",
   "author": "Chris ter Beke <chris@printr.com>",
   "license": "GPL-2.0",
+  "scripts": {
+    "docs": "./node_modules/.bin/apidoc -i ./src/interfaces/http/ -o ./docs/"
+  },
   "dependencies": {
     "body-parser": "^1.15.2",
     "cli-color": "^1.1.0",

@@ -26,8 +26,9 @@ module.exports = function (client) {
    * @apiVersion 1.0.0
    */
   router.get('/:port', function (req, res) {
-    client.drivers.getStatusByPort('/dev/tty.USB0', function (err, status) {
-      if (err) return res.serverError(err)
+    client.drivers.getStatusByPort(req.params.port, function (err, status) {
+      if (err && err.name === 'PrinterNotConnectedError') return res.notFound(err.message)
+      else if (err) return res.serverError(err)
       return res.ok(status)
     })
   })

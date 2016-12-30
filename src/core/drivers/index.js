@@ -8,8 +8,9 @@
 const MAX_ALLOWED_PRINTERS = 4
 const assert = require('assert')
 const FdmPrinter = require('./printers/fmdPrinter')
-// const VirtualPrinter = require('./printers/VirtualPrinter')
+const VirtualPrinter = require('./printers/virtualPrinter')
 const Driver = require('./comm')
+const PrinterNotConnectedError = require('./printerNotConnectedError')
 
 class Drivers {
 
@@ -20,6 +21,7 @@ class Drivers {
   constructor (client) {
     assert(client.log, '[drivers] - client.log is not found in passed instance of client')
 
+    this._client = client
     const self = this
 
     try {
@@ -54,6 +56,10 @@ class Drivers {
 
     // all connected printers will be stored in this named array
     this.printers = {}
+
+    // add a virtual printer for testing
+    const virtualPrinter = new VirtualPrinter(this._client)
+    this.printers[virtualPrinter.getPort()] = virtualPrinter
 
     // TODO: GPIO
     // TODO: Reset queue items
@@ -140,11 +146,10 @@ class Drivers {
    * @param callback
    */
   getStatus (callback) {
-    return callback(null, [{
-      progress: 10,
-      status: 'printing',
-      port: '/dev/tty.USB0'
-    }])
+    const self = this
+    return callback(null, Object.keys(this.printers).map(function (port) {
+      return self.printers[port].getStatus()
+    }))
   }
 
   /**
@@ -154,11 +159,9 @@ class Drivers {
    * @returns {*}
    */
   getStatusByPort (port, callback) {
-    return callback(null, {
-      progress: 10,
-      status: 'printing',
-      port
-    })
+    const printer = this.printers[port]
+    if (!printer) return callback(new PrinterNotConnectedError(port))
+    return callback(null, this.printers[port].getStatus())
   }
 }
 
