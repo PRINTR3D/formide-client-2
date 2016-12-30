@@ -1,9 +1,13 @@
-'use strict'
+/**
+* @Author: chris
+* @Date:   2016-12-17T13:16:34+01:00
+* @Filename: logger.js
+* @Last modified by:   chris
+* @Last modified time: 2016-12-30T14:34:12+01:00
+* @Copyright: Copyright (c) 2016, All rights reserved, http://printr.nl
+*/
 
-/*
- * This code was created for Printr B.V. It is open source under the formide-client package.
- * Copyright (c) 2015, All rights reserved, http://printr.nl
- */
+'use strict'
 
 const LEVEL = process.env.CLIENT_LOG_LEVEL || 1
 const assert = require('assert')

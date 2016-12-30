@@ -1,3 +1,12 @@
+/**
+* @Author: chris
+* @Date:   2016-12-18T17:09:26+01:00
+* @Filename: thread.js
+* @Last modified by:   chris
+* @Last modified time: 2016-12-30T14:33:37+01:00
+* @Copyright: Copyright (c) 2016, All rights reserved, http://printr.nl
+*/
+
 'use strict'
 
 /**

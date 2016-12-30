@@ -1,3 +1,12 @@
+/**
+* @Author: chris
+* @Date:   2016-12-18T00:07:29+01:00
+* @Filename: printer.js
+* @Last modified by:   chris
+* @Last modified time: 2016-12-30T14:35:12+01:00
+* @Copyright: Copyright (c) 2016, All rights reserved, http://printr.nl
+*/
+
 'use strict'
 
 const assert = require('assert')
@@ -9,8 +18,17 @@ module.exports = function (client) {
   /**
    * @api {GET} /api/printer Get status of all connected printers
    * @apiGroup Printer
-   * @apiDescription Get the status of all printers that are currently connected to the device.
    * @apiVersion 1.0.0
+   * @apiDescription Get the status of all printers that are currently connected to the device.
+   * @apiSuccessExample {json} 200 success
+   *  [
+   *    {
+   *      "port": "/dev/virt0",
+   *      "type": "VIRTUAL",
+   *      "status": "offline",
+   *      "progress": 0
+   *    }
+   *  ]
    */
   router.get('/', function (req, res) {
     client.drivers.getStatus(function (err, status) {
@@ -22,8 +40,16 @@ module.exports = function (client) {
   /**
    * @api {GET} /api/printer/:port Get status of printer on selected port
    * @apiGroup Printer
-   * @apiDescription Get the status of the printer that's connected to the port given in the URI parameter
    * @apiVersion 1.0.0
+   * @apiDescription Get the status of the printer that's connected to the port given in the URI parameter
+   * @apiParam {String} port Select one of the ports where a printer is connected to. %2F should be used to encode forward slashes.
+   * @apiSuccessExample {json} 200 success
+   *  {
+   *    "port": "/dev/virt0",
+   *    "type": "VIRTUAL",
+   *    "status": "offline",
+   *    "progress": 0
+   *  }
    */
   router.get('/:port', function (req, res) {
     client.drivers.getStatusByPort(req.params.port, function (err, status) {
