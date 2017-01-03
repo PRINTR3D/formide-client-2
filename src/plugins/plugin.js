@@ -3,7 +3,7 @@
 * @Date:   2017-01-01T13:03:05+01:00
 * @Filename: plugin.js
 * @Last modified by:   chris
-* @Last modified time: 2017-01-03T11:49:09+01:00
+* @Last modified time: 2017-01-03T11:59:09+01:00
 * @Copyright: Copyright (c) 2016, All rights reserved, http://printr.nl
 */
 
@@ -11,7 +11,6 @@
 
 const fs = require('fs')
 const path = require('path')
-// const jsop = require('jsop')
 
 class Plugin {
 
@@ -31,6 +30,15 @@ class Plugin {
         client.log(`[${this.getName()}] - Error loading settings from file: ${e.message}`, 1, 'error')
         this._settings = false
       }
+    }
+  }
+
+  getJSON () {
+    return {
+      name: this.getName(),
+      version: this.getVersion(),
+      settings: this.getSettings(),
+      settingsForm: this.getSettingsForm()
     }
   }
 

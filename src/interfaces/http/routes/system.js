@@ -3,7 +3,7 @@
 * @Date:   2016-12-18T00:07:15+01:00
 * @Filename: system.js
 * @Last modified by:   chris
-* @Last modified time: 2016-12-30T14:35:16+01:00
+* @Last modified time: 2017-01-03T12:03:13+01:00
 * @Copyright: Copyright (c) 2016, All rights reserved, http://printr.nl
 */
 
@@ -33,6 +33,21 @@ module.exports = function (client) {
       },
       uptime
     })
+  })
+
+  /**
+   * @api {GET} /api/system/plugins Plugin information
+   * @apiGroup System
+   * @apiVersion 2.0.0
+   * @apiDescription Get a list of installed plugins and information about them
+   */
+  router.get('/plugins', function (req, res) {
+    let response = {}
+    for (let i in client.plugins) {
+      response[i] = client.plugins[i].getJSON()
+    }
+
+    return res.ok(response)
   })
 
   return router
