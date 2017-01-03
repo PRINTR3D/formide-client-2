@@ -3,7 +3,7 @@
 * @Date:   2016-12-18T00:07:15+01:00
 * @Filename: system.js
 * @Last modified by:   chris
-* @Last modified time: 2017-01-03T13:42:57+01:00
+* @Last modified time: 2017-01-03T14:52:15+01:00
 * @Copyright: Copyright (c) 2016, All rights reserved, http://printr.nl
 */
 
@@ -50,9 +50,25 @@ module.exports = function (client) {
     return res.ok(response)
   })
 
-  router.get('/plugins/:pluginName/reload', function (req, res) {
+  router.put('/plugins', function (req, res) {
+
+  })
+
+  router.post('/plugins/:pluginName/disable', function (req, res) {
+
+  })
+
+  router.post('/plugins/:pluginName/enable', function (req, res) {
+
+  })
+
+  router.post('/plugins/:pluginName/reload', function (req, res) {
     client.plugins.reloadPlugin(req.params.pluginName)
     return res.ok({ message: `Reloaded plugin ${req.params.pluginName}` })
+  })
+
+  router.delete('/plugins/:pluginName', function (req, res) {
+
   })
 
   return router
