@@ -3,7 +3,7 @@
 * @Date:   2016-12-18T17:20:55+01:00
 * @Filename: client.js
 * @Last modified by:   chris
-* @Last modified time: 2017-01-03T13:25:15+01:00
+* @Last modified time: 2017-01-03T13:25:46+01:00
 * @Copyright: Copyright (c) 2016, All rights reserved, http://printr.nl
 */
 
@@ -70,7 +70,6 @@ class Client {
 
     // plugins
     this.plugins = new PluginHandler(this)
-
     this.log('[core] - Loaded plugins', 1, 'info')
 
     return this
