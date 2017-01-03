@@ -3,7 +3,7 @@
 * @Date:   2016-12-18T17:21:23+01:00
 * @Filename: index.js
 * @Last modified by:   chris
-* @Last modified time: 2016-12-30T14:55:18+01:00
+* @Last modified time: 2017-01-03T11:25:30+01:00
 * @Copyright: Copyright (c) 2016, All rights reserved, http://printr.nl
 */
 
@@ -31,6 +31,9 @@ class Http {
 
     // link to self to prevent .bind waterfall
     const self = this
+
+    // client needed in loadPluginRoutes
+    this._client = client
 
     // setup express app
     this.app = express()
@@ -89,10 +92,39 @@ class Http {
     this.app.use('/api/system', require('./routes/system')(client))
     this.app.use('/api/printer', require('./routes/printer')(client))
     this.app.use('/api/update', require('./routes/update')(client))
+  }
 
-    return {
-      app: this.app,
-      server: this.httpServer
+  loadPluginRoutes () {
+    for (var i in this._client.plugins) {
+      const plugin = this._client.plugins[i]
+      const pluginRootRouter = express.Router()
+      this.app.use(`/plugins/${plugin.getName()}`, plugin.getApiRoot(pluginRootRouter))
+
+      if (typeof plugin.getApi === 'function') {
+        const pluginApiRouter = express.Router()
+        this.app.use(`/plugins/${plugin.getName()}/api`, plugin.getApi(pluginApiRouter))
+      }
+
+      if (typeof plugin.getSettingsForm === 'function') {
+        // get current settings
+        pluginRootRouter.get('/settings', function (req, res) {
+          return res.ok(plugin.getSettings())
+        })
+
+        // save settings
+        pluginRootRouter.post('/settings', function (req, res) {
+          // TODO: check body input
+          plugin.setSettings(req.body, function (err) {
+            if (err) return res.serverError(err)
+            return res.ok({ success: true })
+          })
+        })
+
+        // get settings form
+        pluginRootRouter.get('/settings/form', function (req, res) {
+          return res.ok(plugin.getSettingsForm())
+        })
+      }
     }
   }
 }

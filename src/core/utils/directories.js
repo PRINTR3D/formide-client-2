@@ -3,7 +3,7 @@
 * @Date:   2016-12-17T13:52:17+01:00
 * @Filename: directories.js
 * @Last modified by:   chris
-* @Last modified time: 2016-12-30T14:34:08+01:00
+* @Last modified time: 2017-01-03T10:54:42+01:00
 * @Copyright: Copyright (c) 2016, All rights reserved, http://printr.nl
 */
 
@@ -18,12 +18,13 @@ const logsDir = path.join(storageDir, './logs')
 const filesDir = path.join(storageDir, './modelfiles')
 const gcodeDir = path.join(storageDir, './gcode')
 const imagesDir = path.join(storageDir, './images')
+const settingsDir = path.join(storageDir, './settings')
 
 /**
  * Return an object containing the used system paths
  */
 function getPaths () {
-  return { storageDir, logsDir, filesDir, gcodeDir, imagesDir }
+  return { storageDir, logsDir, filesDir, gcodeDir, imagesDir, settingsDir }
 }
 
 /**
@@ -36,6 +37,7 @@ function checkDirectories () {
   createWhenNotExisting(filesDir)
   createWhenNotExisting(gcodeDir)
   createWhenNotExisting(imagesDir)
+  createWhenNotExisting(settingsDir)
 }
 
 /**
