@@ -3,7 +3,7 @@
 * @Date:   2017-01-03T12:04:39+01:00
 * @Filename: pluginHandler.js
 * @Last modified by:   chris
-* @Last modified time: 2017-01-03T13:24:24+01:00
+* @Last modified time: 2017-01-03T14:19:58+01:00
 * @Copyright: Copyright (c) 2016, All rights reserved, http://printr.nl
 */
 
@@ -12,12 +12,16 @@
 // expose global Plugin class
 global.Plugin = require('./Plugin')
 
+// packages
 const fs = require('fs')
+const decache = require('decache')
 
 class PluginHandler {
   constructor (client) {
     this._client = client
     this._plugins = {}
+
+    this._pluginDir = `${__dirname}/bundled` // TODO: change this
 
     // load all available plugins on boot
     this.loadPlugins()
@@ -54,13 +58,16 @@ class PluginHandler {
     this._client.http.loadPluginRoutes(plugin)
   }
 
-  unloadPlugin () {
-    // TODO
+  unloadPlugin (pluginName) {
+    const pluginPath = `${this._pluginDir}/${pluginName}`
+    decache(pluginPath)
+    delete this._plugins[pluginName]
   }
 
-  reloadPlugin () {
-    this.unloadPlugin()
-    this.loadPlugin()
+  reloadPlugin (pluginName) {
+    this.unloadPlugin(pluginName)
+    const pluginPath = `${this._pluginDir}/${pluginName}`
+    this.loadPlugin(pluginPath)
   }
 
   installPlugin () {

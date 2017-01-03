@@ -3,7 +3,7 @@
 * @Date:   2017-01-01T18:29:32+01:00
 * @Filename: webhookModel.js
 * @Last modified by:   chris
-* @Last modified time: 2017-01-01T18:34:04+01:00
+* @Last modified time: 2017-01-03T14:22:23+01:00
 * @Copyright: Copyright (c) 2016, All rights reserved, http://printr.nl
 */
 
@@ -39,4 +39,8 @@ schema.virtual('id').get(function () {
 
 schema.set('toJSON', { virtuals: true })
 
-module.exports = mongoose.model('Webhook', schema)
+if (mongoose.models.Webhook) {
+  module.exports = mongoose.model('Webhook')
+} else {
+  module.exports = mongoose.model('Webhook', schema)
+}
