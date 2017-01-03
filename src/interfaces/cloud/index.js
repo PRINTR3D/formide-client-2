@@ -3,7 +3,7 @@
 * @Date:   2016-12-17T14:11:12+01:00
 * @Filename: index.js
 * @Last modified by:   chris
-* @Last modified time: 2016-12-30T14:55:58+01:00
+* @Last modified time: 2017-01-03T11:36:33+01:00
 * @Copyright: Copyright (c) 2016, All rights reserved, http://printr.nl
 */
 
@@ -65,7 +65,7 @@ class Cloud {
           ip: publicIP,
           ip_internal: internalIP,
           mac: MAC,
-          version: require('../../package.json').version,
+          version: client.version,
           environment: process.env.NODE_ENV,
           port: client.config.http.port
         }, function (response) {
