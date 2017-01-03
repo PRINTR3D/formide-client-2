@@ -3,7 +3,7 @@
 * @Date:   2016-12-18T17:21:23+01:00
 * @Filename: index.js
 * @Last modified by:   chris
-* @Last modified time: 2017-01-03T11:25:30+01:00
+* @Last modified time: 2017-01-03T13:23:07+01:00
 * @Copyright: Copyright (c) 2016, All rights reserved, http://printr.nl
 */
 
@@ -94,37 +94,34 @@ class Http {
     this.app.use('/api/update', require('./routes/update')(client))
   }
 
-  loadPluginRoutes () {
-    for (var i in this._client.plugins) {
-      const plugin = this._client.plugins[i]
-      const pluginRootRouter = express.Router()
-      this.app.use(`/plugins/${plugin.getName()}`, plugin.getApiRoot(pluginRootRouter))
+  loadPluginRoutes (plugin) {
+    const pluginRootRouter = express.Router()
+    this.app.use(`/plugins/${plugin.getName()}`, plugin.getApiRoot(pluginRootRouter))
 
-      if (typeof plugin.getApi === 'function') {
-        const pluginApiRouter = express.Router()
-        this.app.use(`/plugins/${plugin.getName()}/api`, plugin.getApi(pluginApiRouter))
-      }
+    if (typeof plugin.getApi === 'function') {
+      const pluginApiRouter = express.Router()
+      this.app.use(`/plugins/${plugin.getName()}/api`, plugin.getApi(pluginApiRouter))
+    }
 
-      if (typeof plugin.getSettingsForm === 'function') {
-        // get current settings
-        pluginRootRouter.get('/settings', function (req, res) {
-          return res.ok(plugin.getSettings())
+    if (typeof plugin.getSettingsForm === 'function') {
+      // get current settings
+      pluginRootRouter.get('/settings', function (req, res) {
+        return res.ok(plugin.getSettings())
+      })
+
+      // save settings
+      pluginRootRouter.post('/settings', function (req, res) {
+        // TODO: check body input
+        plugin.setSettings(req.body, function (err) {
+          if (err) return res.serverError(err)
+          return res.ok({ success: true })
         })
+      })
 
-        // save settings
-        pluginRootRouter.post('/settings', function (req, res) {
-          // TODO: check body input
-          plugin.setSettings(req.body, function (err) {
-            if (err) return res.serverError(err)
-            return res.ok({ success: true })
-          })
-        })
-
-        // get settings form
-        pluginRootRouter.get('/settings/form', function (req, res) {
-          return res.ok(plugin.getSettingsForm())
-        })
-      }
+      // get settings form
+      pluginRootRouter.get('/settings/form', function (req, res) {
+        return res.ok(plugin.getSettingsForm())
+      })
     }
   }
 }

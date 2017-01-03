@@ -3,7 +3,7 @@
 * @Date:   2016-12-18T17:20:55+01:00
 * @Filename: client.js
 * @Last modified by:   chris
-* @Last modified time: 2017-01-01T13:27:44+01:00
+* @Last modified time: 2017-01-03T13:25:15+01:00
 * @Copyright: Copyright (c) 2016, All rights reserved, http://printr.nl
 */
 
@@ -11,7 +11,6 @@
 
 // packages
 const assert = require('assert')
-const fs = require('fs')
 
 // core modules
 const Events = require('./events')
@@ -22,6 +21,7 @@ const log = require('./utils/logger')
 // other modules
 const Slicer = require('../slicer')
 const Www = require('../www')
+const PluginHandler = require('../plugins/pluginHandler')
 
 // interfaces
 const Http = require('../interfaces/http')
@@ -69,20 +69,7 @@ class Client {
     this.log('[core] - Initiated new Client', 1, 'info')
 
     // plugins
-    this.plugins = {}
-    const pluginDir = `${__dirname}/../plugins`
-    const pluginList = fs.readdirSync(pluginDir).filter((item) => {
-      return fs.statSync(`${pluginDir}/${item}`).isDirectory()
-    })
-
-    for (var i = 0; i < pluginList.length; i++) {
-      const Plugin = require(`${pluginDir}/${pluginList[i]}`)
-      const plugin = new Plugin(this)
-      this.plugins[plugin.getName()] = plugin
-    }
-
-    // load plugin APIs
-    this.http.loadPluginRoutes()
+    this.plugins = new PluginHandler(this)
 
     this.log('[core] - Loaded plugins', 1, 'info')
 

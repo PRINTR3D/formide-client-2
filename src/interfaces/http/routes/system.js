@@ -3,7 +3,7 @@
 * @Date:   2016-12-18T00:07:15+01:00
 * @Filename: system.js
 * @Last modified by:   chris
-* @Last modified time: 2017-01-03T12:03:13+01:00
+* @Last modified time: 2017-01-03T13:24:57+01:00
 * @Copyright: Copyright (c) 2016, All rights reserved, http://printr.nl
 */
 
@@ -43,10 +43,10 @@ module.exports = function (client) {
    */
   router.get('/plugins', function (req, res) {
     let response = {}
-    for (let i in client.plugins) {
-      response[i] = client.plugins[i].getJSON()
+    const plugins = client.plugins.getPlugins()
+    for (let i in plugins) {
+      response[i] = client.plugins.getPlugin(i).getJSON()
     }
-
     return res.ok(response)
   })
 
