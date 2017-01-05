@@ -3,7 +3,7 @@
 * @Date:   2017-01-05T01:24:19+01:00
 * @Filename: api.js
 * @Last modified by:   chris
-* @Last modified time: 2017-01-05T02:09:10+01:00
+* @Last modified time: 2017-01-05T20:14:21+01:00
 * @Copyright: Copyright (c) 2016, All rights reserved, http://printr.nl
 */
 
@@ -21,7 +21,7 @@ module.exports = function api (plugin, router) {
 
   // set control mode
   router.post('/mode', function (req, res) {
-    if (req.body.mode) return res.badRequest('mode is a required parameter') // TODO: use univeral middleware
+    req.checkParams(['mode'])
     plugin.setControlMode(req.body.mode, function (err, response) {
       if (err) return res.notImplemented(err.message)
       if (!response) return res.notFound('Control mode could not be changed')

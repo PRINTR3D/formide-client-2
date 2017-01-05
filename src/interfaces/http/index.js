@@ -3,7 +3,7 @@
 * @Date:   2016-12-18T17:21:23+01:00
 * @Filename: index.js
 * @Last modified by:   chris
-* @Last modified time: 2017-01-03T13:23:07+01:00
+* @Last modified time: 2017-01-05T15:31:46+01:00
 * @Copyright: Copyright (c) 2016, All rights reserved, http://printr.nl
 */
 
@@ -20,6 +20,7 @@ const cookieParser = require('cookie-parser')
 const cors = require('cors')
 const bodyParser = require('body-parser')
 const bearerToken = require('express-bearer-token')
+const checkParams = require('./middleware/checkParams')
 
 /**
  * Http server setup
@@ -87,6 +88,9 @@ class Http {
       res.notImplemented = require('./responses/notImplemented').bind({ req, res })
       next()
     })
+
+    // check params middleware
+    this.app.use(checkParams)
 
     // routes
     this.app.use('/api/system', require('./routes/system')(client))
