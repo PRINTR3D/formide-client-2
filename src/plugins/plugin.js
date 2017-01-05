@@ -3,23 +3,21 @@
 * @Date:   2017-01-01T13:03:05+01:00
 * @Filename: plugin.js
 * @Last modified by:   chris
-* @Last modified time: 2017-01-03T11:59:09+01:00
+* @Last modified time: 2017-01-05T01:21:03+01:00
 * @Copyright: Copyright (c) 2016, All rights reserved, http://printr.nl
 */
 
 'use strict'
 
 const fs = require('fs')
-const path = require('path')
 
 class Plugin {
 
-  constructor (client, name, options) {
+  constructor (client, pkg) {
     // TODO: asserts
     this._client = client
-    this._name = name.toLowerCase()
-    this._version = options.version
-    this._nativeUI = options.nativeUI
+    this._name = pkg.name.toLowerCase()
+    this._version = pkg.version
 
     // when plugin exposes settings, initalize a settings file
     if (typeof this.getSettingsForm === 'function') {
@@ -50,14 +48,14 @@ class Plugin {
     return this._version
   }
 
-  getNativeUI () {
-    // TODO: better resolve
-    return path.resolve(__dirname, this._name, this._nativeUI)
-  }
+  // getNativeUI () {
+  //   // TODO: better resolve
+  //   return path.resolve(__dirname, this._name, this._nativeUI)
+  // }
 
   getApiRoot (router) {
     router.get('/', function (req, res) {
-      res.ok({ name: this.getName(), version: this.getVersion(), nativeUI: this.getNativeUI() })
+      res.ok({ name: this.getName(), version: this.getVersion() })
     }.bind(this))
 
     return router

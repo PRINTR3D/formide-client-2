@@ -3,7 +3,7 @@
 * @Date:   2017-01-01T13:02:11+01:00
 * @Filename: webhook.js
 * @Last modified by:   chris
-* @Last modified time: 2017-01-03T13:21:29+01:00
+* @Last modified time: 2017-01-05T01:22:39+01:00
 * @Copyright: Copyright (c) 2016, All rights reserved, http://printr.nl
 */
 
@@ -11,18 +11,15 @@
 
 // modules
 const Plugin = global.Plugin
-const WebhookModel = require('./webhookModel')
+const pkg = require('./package.json')
 const api = require('./api')
 const settingsForm = require('./settings')
-const pkg = require('./package.json')
+const WebhookModel = require('./webhookModel')
 
 class Webhook extends Plugin {
 
   constructor (client) {
-    super(client, pkg.name, {
-      version: pkg.version
-    })
-
+    super(client, pkg)
     this.webhooks = WebhookModel
   }
 

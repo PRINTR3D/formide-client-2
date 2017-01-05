@@ -1,0 +1,9 @@
+{
+  "name": "com.printr.gpio-control-mode",
+  "version": "1.0.0",
+  "description": "Switch printer control to an external USB port using GPIO switches",
+  "main": "index.js",
+  "dependencies": {
+    "onoff": "^1.1.1"
+  }
+}
