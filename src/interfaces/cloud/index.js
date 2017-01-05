@@ -3,7 +3,7 @@
 * @Date:   2016-12-17T14:11:12+01:00
 * @Filename: index.js
 * @Last modified by:   chris
-* @Last modified time: 2017-01-03T11:36:33+01:00
+* @Last modified time: 2017-01-05T12:19:01+01:00
 * @Copyright: Copyright (c) 2016, All rights reserved, http://printr.nl
 */
 
@@ -55,9 +55,9 @@ class Cloud {
     // on connect
     this.cloud.on('connect', function () {
       co(function*() {
-        const publicIP = yield client.system.network.getPublicIP()
-        const internalIP = yield client.system.network.getInternalIP()
-        const MAC = yield client.system.network.getMAC()
+        const publicIP = yield client.system.network.publicIp()
+        const internalIP = yield client.system.network.ip()
+        const MAC = yield client.system.network.mac()
 
         // emit authentication data
         self.cloud.emit('authenticate', {

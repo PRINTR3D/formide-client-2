@@ -3,7 +3,7 @@
 * @Date:   2016-12-17T14:02:23+01:00
 * @Filename: network.js
 * @Last modified by:   chris
-* @Last modified time: 2016-12-30T14:34:26+01:00
+* @Last modified time: 2017-01-05T12:16:45+01:00
 * @Copyright: Copyright (c) 2016, All rights reserved, http://printr.nl
 */
 
@@ -17,7 +17,7 @@ const getMac = require('getmac')
  * Get public IP address
  * @returns {Promise}
  */
-function getPublicIP () {
+function publicIp () {
   return new Promise(function (resolve, reject) {
     http.get('http://bot.whatismyipaddress.com', function (res) {
       res.setEncoding('utf8')
@@ -35,7 +35,7 @@ function getPublicIP () {
  * Get internal IP address
  * @returns {Promise}
  */
-function getInternalIP () {
+function ip () {
   return new Promise(function (resolve, reject) {
     const client = net.connect({
       port: 80,
@@ -54,7 +54,7 @@ function getInternalIP () {
  * Get MAC address
  * @returns {Promise}
  */
-function getMAC () {
+function mac () {
   return new Promise(function (resolve, reject) {
     getMac.getMac(function (err, macAddress) {
       if (err) return reject(err)
@@ -64,7 +64,7 @@ function getMAC () {
 }
 
 module.exports = {
-  getPublicIP,
-  getInternalIP,
-  getMAC
+  ip,
+  publicIp,
+  mac
 }
