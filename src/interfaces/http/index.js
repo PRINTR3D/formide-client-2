@@ -3,7 +3,7 @@
 * @Date:   2016-12-18T17:21:23+01:00
 * @Filename: index.js
 * @Last modified by:   chris
-* @Last modified time: 2017-01-05T15:31:46+01:00
+* @Last modified time: 2017-01-06T11:18:50+01:00
 * @Copyright: Copyright (c) 2016, All rights reserved, http://printr.nl
 */
 
@@ -61,14 +61,18 @@ class Http {
     // use session middleware
     this.app.use(sessionMiddleware)
 
-    // TODO: use passport middleware
-    // this.app.use(passport.initialize());
-    // this.app.use(passport.session());
+    // passport authentication
+    this.passport = require('./passport')(client)
+    this.app.use(this.passport.initialize())
+    this.app.use(this.passport.session())
 
     // use bearer token middleware
     this.app.use(bearerToken({
       queryKey: 'access_token'
     }))
+
+    // check auth middleware (can be used in routes using http.checkAuth.{token/user/admin})
+    this.checkAuth = require('./middleware/checkAuth')(client)
 
     // use cors middleware
     this.app.use(cors({
@@ -93,9 +97,11 @@ class Http {
     this.app.use(checkParams)
 
     // routes
-    this.app.use('/api/system', require('./routes/system')(client))
-    this.app.use('/api/printer', require('./routes/printer')(client))
-    this.app.use('/api/update', require('./routes/update')(client))
+    this.app.use('/api/system', require('./routes/system')(client, this))
+    this.app.use('/api/printer', require('./routes/printer')(client, this))
+    this.app.use('/api/update', require('./routes/update')(client, this))
+
+    return this
   }
 
   loadPluginRoutes (plugin) {

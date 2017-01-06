@@ -3,7 +3,7 @@
 * @Date:   2016-12-18T00:07:29+01:00
 * @Filename: printer.js
 * @Last modified by:   chris
-* @Last modified time: 2016-12-30T14:35:12+01:00
+* @Last modified time: 2017-01-06T11:20:18+01:00
 * @Copyright: Copyright (c) 2016, All rights reserved, http://printr.nl
 */
 
@@ -12,8 +12,9 @@
 const assert = require('assert')
 const router = require('express').Router()
 
-module.exports = function (client) {
+module.exports = function (client, http) {
   assert(client, '[http] - client not passed in printer router')
+  assert(http, '[http] - http not passed in printer router')
 
   /**
    * @api {GET} /api/printer Get status of all connected printers
@@ -30,7 +31,7 @@ module.exports = function (client) {
    *    }
    *  ]
    */
-  router.get('/', function (req, res) {
+  router.get('/', http.checkAuth.user, function (req, res) {
     client.drivers.getStatus(function (err, status) {
       if (err) return res.serverError(err)
       return res.ok(status)
@@ -51,7 +52,7 @@ module.exports = function (client) {
    *    "progress": 0
    *  }
    */
-  router.get('/:port', function (req, res) {
+  router.get('/:port', http.checkAuth.user, function (req, res) {
     client.drivers.getStatusByPort(req.params.port, function (err, status) {
       if (err && err.name === 'PrinterNotConnectedError') return res.notFound(err.message)
       else if (err) return res.serverError(err)

@@ -3,7 +3,7 @@
 * @Date:   2017-01-01T18:40:34+01:00
 * @Filename: api.js
 * @Last modified by:   chris
-* @Last modified time: 2017-01-03T11:22:28+01:00
+* @Last modified time: 2017-01-06T11:28:26+01:00
 * @Copyright: Copyright (c) 2016, All rights reserved, http://printr.nl
 */
 
@@ -11,7 +11,7 @@
 
 module.exports = function api (plugin, router) {
   // do search
-  router.get('/search', function (req, res) {
+  router.get('/search', plugin._client.http.checkAuth.user, function (req, res) {
     if (plugin._settings.api.enableSearch) {
       res.ok('search enabled')
     } else {

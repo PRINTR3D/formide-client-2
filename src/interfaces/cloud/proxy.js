@@ -3,7 +3,7 @@
 * @Date:   2016-12-17T13:55:08+01:00
 * @Filename: proxy.js
 * @Last modified by:   chris
-* @Last modified time: 2016-12-30T14:34:52+01:00
+* @Last modified time: 2017-01-06T10:15:25+01:00
 * @Copyright: Copyright (c) 2016, All rights reserved, http://printr.nl
 */
 
@@ -43,7 +43,7 @@ function proxy (client, data, callback) {
       options.form = data.data
     }
 
-        // Do a local HTTP request to get the data and respond back via socket
+    // Do a local HTTP request to get the data and respond back via socket
     request(options, function (error, response) {
       if (error) {
         return callback(error)
