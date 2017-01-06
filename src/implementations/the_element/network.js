@@ -3,7 +3,7 @@
 * @Date:   2017-01-05T11:32:27+01:00
 * @Filename: network.js
 * @Last modified by:   chris
-* @Last modified time: 2017-01-05T12:17:57+01:00
+* @Last modified time: 2017-01-06T23:33:32+01:00
 * @Copyright: Copyright (c) 2016, All rights reserved, http://printr.nl
 */
 
@@ -21,7 +21,7 @@ const service = 'sudo fiw'
  */
 function getSsids (stdout) {
   const essids = stdout.split('\n').filter(a => a)
-  let result = {}
+  let result = []
 
   for (const essid of essids) {
     // HACK: NAT-160: removing weird entries
@@ -30,7 +30,7 @@ function getSsids (stdout) {
     // HACK: NAT-124: removing weird ping
     if (essid.startsWith('PING ')) break
 
-    result[essid] = { ssid: essid }
+    result.push({ ssid: essid })
   }
 
   return result

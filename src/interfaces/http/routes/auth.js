@@ -3,7 +3,7 @@
 * @Date:   2017-01-06T18:47:41+01:00
 * @Filename: auth.js
 * @Last modified by:   chris
-* @Last modified time: 2017-01-06T21:49:53+01:00
+* @Last modified time: 2017-01-06T23:11:13+01:00
 * @Copyright: Copyright (c) 2016, All rights reserved, http://printr.nl
 */
 
@@ -88,53 +88,81 @@ module.exports = function (client, http) {
   })
 
   /**
-	 * @api {GET} /api/auth/users Get users
-	 * @apiGroup Auth
-	 * @apiDescription Get a list of users
-	 * @apiVersion 1.0.0
-	 */
+   * @api {GET} /api/auth/users Get users
+   * @apiGroup Auth
+   * @apiDescription Get a list of users
+   * @apiVersion 1.0.0
+   */
   router.get('/users', http.checkAuth.admin, function (req, res) {
-
+    client.db.User.find().then(function (users) {
+      return res.ok(users)
+    }).catch(res.serverError)
   })
 
   /**
-	 * @api {GET} /api/auth/users/:id Get single user
-	 * @apiGroup Auth
-	 * @apiDescription Get a single user by ID
-	 * @apiVersion 1.0.0
-	 */
+   * @api {GET} /api/auth/users/:id Get single user
+   * @apiGroup Auth
+   * @apiDescription Get a single user by ID
+   * @apiVersion 1.0.0
+   */
   router.get('/users/:id', http.checkAuth.admin, function (req, res) {
-
+    client.db.User.findOne({ [global.MONGO_ID_FIELD]: req.params.id }).then(function (user) {
+      return res.ok(user)
+    }).catch(res.serverError)
   })
 
   /**
-	 * @api {POST} /api/auth/users Create user
-	 * @apiGroup Auth
-	 * @apiDescription Create a new user
-	 * @apiVersion 1.0.0
-	 */
+   * @api {POST} /api/auth/users Create user
+   * @apiGroup Auth
+   * @apiDescription Create a new user
+   * @apiVersion 1.0.0
+   */
   router.post('/users', http.checkAuth.admin, function (req, res) {
-
+    client.db.User.create({
+      email: req.body.email,
+      password: req.body.password,
+      isAdmin: req.body.isAdmin
+    }).then(function (newUser) {
+      return res.ok({
+        message: 'User created',
+        user: newUser
+      })
+    }).catch(res.serverError)
   })
 
   /**
-	 * @api {PUT} /api/auth/users/:id Update user
-	 * @apiGroup Auth
-	 * @apiDescription Update user settings
-	 * @apiVersion 1.0.0
-	 */
+   * @api {PUT} /api/auth/users/:id Update user
+   * @apiGroup Auth
+   * @apiDescription Update user settings
+   * @apiVersion 1.0.0
+   */
   router.put('/users/:id', http.checkAuth.admin, function (req, res) {
-
+    client.db.User.findOneAndUpdate({ [global.MONGO_ID_FIELD]: req.params.id }, {
+      email: req.body.email,
+      password: req.body.password,
+      isAdmin: req.body.isAdmin
+    }, {
+      new: true
+    }).then(function (updatedUser) {
+      return res.ok({
+        message: 'User updated',
+        user: updatedUser
+      })
+    }).catch(res.serverError)
   })
 
   /**
-	 * @api {DELETE} /api/auth/users/:id Delete user
-	 * @apiGroup Auth
-	 * @apiDescription Delete a user from the database
-	 * @apiVersion 1.0.0
-	 */
+   * @api {DELETE} /api/auth/users/:id Delete user
+   * @apiGroup Auth
+   * @apiDescription Delete a user from the database
+   * @apiVersion 1.0.0
+   */
   router.delete('/users/:id', http.checkAuth.admin, function (req, res) {
-
+    client.db.user.destroy({ [global.MONGO_ID_FIELD]: req.params.id }).then(function () {
+      return res.ok({
+        message: 'User removed'
+      })
+    }).catch(res.serverError)
   })
 
   return router

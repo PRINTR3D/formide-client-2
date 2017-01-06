@@ -3,7 +3,7 @@
 * @Date:   2017-01-06T14:32:18+01:00
 * @Filename: app.js
 * @Last modified by:   chris
-* @Last modified time: 2017-01-06T20:12:20+01:00
+* @Last modified time: 2017-01-06T22:27:37+01:00
 * @Copyright: Copyright (c) 2016, All rights reserved, http://printr.nl
 */
 
@@ -33,19 +33,23 @@ new Vue({
       this.page = page
     },
     login: function () {
-      this.loggingIn = true
-      this.$http.post('/api/auth/login', this.loginForm).then(function success (response) {
-        this.loggingIn = false
-        this.accessToken = response.data.access_token
-        this.goToPage('networks')
-      }, function error (errorResponse) {
-        this.loggingIn = false
-        if (errorResponse.status === 401) {
-          this.loginError = 'Incorrect credentials, please try again'
-        } else {
-          this.loginError = errorResponse.data.message
-        }
-      })
+      if (this.loginForm.email === '' || this.loginForm.password === '') {
+        this.loginError = 'Please enter an email address and password'
+      } else {
+        this.loggingIn = true
+        this.$http.post('/api/auth/login', this.loginForm).then(function success (response) {
+          this.loggingIn = false
+          this.accessToken = response.data.access_token
+          this.goToPage('networks')
+        }, function error (errorResponse) {
+          this.loggingIn = false
+          if (errorResponse.status === 401) {
+            this.loginError = 'Incorrect credentials, please try again'
+          } else {
+            this.loginError = errorResponse.data.message
+          }
+        })
+      }
     },
     connect: function () {
       if (this.connectForm.ssid === '') {
