@@ -3,7 +3,7 @@
 * @Date:   2017-01-06T18:47:41+01:00
 * @Filename: auth.js
 * @Last modified by:   chris
-* @Last modified time: 2017-01-06T21:49:14+01:00
+* @Last modified time: 2017-01-06T21:49:53+01:00
 * @Copyright: Copyright (c) 2016, All rights reserved, http://printr.nl
 */
 
@@ -66,7 +66,7 @@ module.exports = function (client, http) {
    * @apiGroup Auth
    * @apiDescription Generate an access token manually with the asked permissions. Useful for development purposes. Only admins can create tokens this way.
    * @apiVersion 1.0.0
-   * @apiParam {Boolean|false} isAdmin Add admin rights to token or not.
+   * @apiParam {Boolean} isAdmin Add admin rights to token or not.
    */
   router.post('/tokens', http.checkAuth.admin, function (req, res) {
     client.db.AccessToken.create({
