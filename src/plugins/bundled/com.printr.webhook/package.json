@@ -1,6 +1,0 @@
-{
-  "name": "com.printr.webhook",
-  "version": "1.0.0",
-  "description": "Webhook pugin for Formide client",
-  "main": "index.js"
-}
