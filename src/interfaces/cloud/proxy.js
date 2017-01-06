@@ -3,7 +3,7 @@
 * @Date:   2016-12-17T13:55:08+01:00
 * @Filename: proxy.js
 * @Last modified by:   chris
-* @Last modified time: 2017-01-06T11:42:11+01:00
+* @Last modified time: 2017-01-06T19:24:50+01:00
 * @Copyright: Copyright (c) 2016, All rights reserved, http://printr.nl
 */
 
@@ -26,12 +26,16 @@ function proxy (client, data, callback) {
   assert(data, '[cloud / proxy] - data not passed')
   assert(data.url, '[cloud / proxy] - data.url not passed')
 
-  authenticate(client.db, function (err, accessToken) {
-    if (err) { return callback(err) }
+  // add isAdmin to incoming proxy data if not found
+  // TODO: add correct isAdmin to cloud proxy server
+  data.isAdmin = data.isAdmin || false
+
+  authenticate(client.db, data.isAdmin, function (err, accessToken) {
+    if (err) return callback(err)
 
     var options = {
       method: data.method,
-      uri: `http://127.0.0.1:${client.config.http.port}/${data.url}`,
+      uri: `http://127.0.0.1:${client.config.http.api}/${data.url}`,
       auth: {
         bearer: accessToken
       }
@@ -44,11 +48,8 @@ function proxy (client, data, callback) {
     }
 
     // Do a local HTTP request to get the data and respond back via socket
-    request(options, function (error, response) {
-      if (error) {
-        return callback(error)
-      }
-
+    request(options, function (err, response) {
+      if (err) return callback(err)
       return callback(null, response)
     })
   })
@@ -59,14 +60,14 @@ function proxy (client, data, callback) {
  * @param db
  * @param callback
  */
-function authenticate (db, callback) {
-  co(function*() {
+function authenticate (db, isAdmin, callback) {
+  co(function* () {
     let accessToken = yield db.AccessToken.findOne({ sessionOrigin: 'cloud' })
 
     if (!accessToken) {
       accessToken = yield db.AccessToken.create({
         sessionOrigin: 'cloud',
-        permissions: ['owner', 'admin'] // TODO: better permissions via cloud
+        isAdmin
       })
     }
 

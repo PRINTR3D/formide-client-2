@@ -3,7 +3,7 @@
 * @Date:   2016-12-18T17:11:52+01:00
 * @Filename: index.js
 * @Last modified by:   chris
-* @Last modified time: 2016-12-30T14:33:19+01:00
+* @Last modified time: 2017-01-06T19:59:32+01:00
 * @Copyright: Copyright (c) 2016, All rights reserved, http://printr.nl
 */
 
@@ -39,6 +39,28 @@ class DB {
       SliceProfile: require('./models/sliceProfile'),
       User: require('./models/user')
     }
+
+    // TMP
+    const bcrypt = require('bcrypt')
+
+    bcrypt.genSalt(10, function (err, salt) {
+      if (err) console.log(err)
+      bcrypt.hash('admin', salt, function (err, hash) {
+        if (err) console.log(err)
+        models.User.findOneAndUpdate({
+          email: 'admin@local'
+        }, {
+          email: 'admin@local',
+          password: hash,
+          isAdmin: true
+        }, {
+          upsert: true,
+          new: true
+        }).then(function (user) {
+          console.log('user created', user)
+        })
+      })
+    })
 
     return models
   }

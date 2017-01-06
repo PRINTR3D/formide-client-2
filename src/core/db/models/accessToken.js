@@ -1,3 +1,12 @@
+/**
+* @Author: chris
+* @Date:   2016-12-17T13:16:34+01:00
+* @Filename: accessToken.js
+* @Last modified by:   chris
+* @Last modified time: 2017-01-06T19:19:11+01:00
+* @Copyright: Copyright (c) 2016, All rights reserved, http://printr.nl
+*/
+
 'use strict'
 
 /*
@@ -19,9 +28,10 @@ const schema = mongoose.Schema({
     unique: true
   },
 
-  permissions: [{
-    type: String
-  }],
+  isAdmin: {
+    type: Boolean,
+    default: false
+  },
 
   sessionOrigin: {
     type: String,

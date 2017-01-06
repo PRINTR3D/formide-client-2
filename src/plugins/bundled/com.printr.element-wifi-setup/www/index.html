@@ -3,7 +3,7 @@
 @Date:   2017-01-06T14:32:08+01:00
 @Filename: index.html
 @Last modified by:   chris
-@Last modified time: 2017-01-06T18:58:19+01:00
+@Last modified time: 2017-01-06T20:20:07+01:00
 @Copyright: Copyright (c) 2016, All rights reserved, http://printr.nl
 -->
 
@@ -27,9 +27,23 @@
           <h1>Welcome</h1>
           <p>To set up your Element's Wi-Fi network and connect it to your Formide account, please follow these steps.</p>
           <hr />
-          <a @click="goToPage('networks')" class="button">Start Wi-Fi setup</a>
+          <a @click="goToPage('login')" class="button">Start Wi-Fi setup</a>
           <br/><br/>
           <p><a href="/">Go to local dashboard</a></p>
+        </div>
+
+        <div id="login" v-if="page === 'login'">
+            <h1>Login</h1>
+            <p>
+              You need to login with your Element credentials before you can change the Wi-Fi settings.
+              If you haven't created your own account yet, you can use the default credentials 'admin', 'admin@local'.
+            </p>
+            <form>
+              <input type="text" name="email" placeholder="Enter your email..." v-model="loginForm.email" />
+              <input type="password" name="password" placeholder="Enter your password..." v-model="loginForm.password" />
+              <a @click="login()" class="button">Login</a>
+              <p class="warning">{{ loginError }}</p>
+            </form>
         </div>
 
         <div id="networks" v-if="page === 'networks'">
@@ -43,19 +57,18 @@
 
               <div v-if="connecting">
                 <span class="spinner"></span>
-                <small>Connecting to {{ networkSelect.ssid }}...</small>
+                <small>Connecting to {{ connectForm.ssid }}...</small>
               </div>
 
               <div v-if="networks.length > 0 && !connecting">
-                <select v-if="networks.length > 0" v-model="networkSelect.ssid">
+                <select v-if="networks.length > 0" v-model="connectForm.ssid">
                   <option value="" disabled selected>Select your network...</option>
                   <option v-for="network in networks" v-bind:value="network.ssid">
                     {{ network.ssid }}
                   </option>
                 </select>
-                <input type="password" name="password" placeholder="Enter your password..." v-model="networkSelect.password" />
+                <input type="password" name="password" placeholder="Enter your password..." v-model="connectForm.password" />
                 <a @click="connect()" class="button">Connect</a>
-
                 <p class="warning">{{ connectError }}</p>
 
                 <hr />
@@ -67,12 +80,12 @@
 
                 <div v-if="showAdvanced">
                   <br />
-                  <input type="text" name="key_mgmt" placeholder="key_mgmt" v-model="networkSelect.key_mgmt">
-                  <input type="text" name="eap" placeholder="eap" v-model="networkSelect.eap">
-                  <input type="text" name="identity" placeholder="identity" v-model="networkSelect.identity">
-                  <input type="text" name="anonymous_identity" placeholder="anonymous_identity" v-model="networkSelect.anonymous_identity">
-                  <input type="text" name="phase1" placeholder="phase1 security" v-model="networkSelect.phase1">
-                  <input type="text" name="phase2" placeholder="phase2 security" v-model="networkSelect.phase2">
+                  <input type="text" name="key_mgmt" placeholder="key_mgmt" v-model="connectForm.key_mgmt">
+                  <input type="text" name="eap" placeholder="eap" v-model="connectForm.eap">
+                  <input type="text" name="identity" placeholder="identity" v-model="connectForm.identity">
+                  <input type="text" name="anonymous_identity" placeholder="anonymous_identity" v-model="connectForm.anonymous_identity">
+                  <input type="text" name="phase1" placeholder="phase1 security" v-model="connectForm.phase1">
+                  <input type="text" name="phase2" placeholder="phase2 security" v-model="connectForm.phase2">
                 </div>
               </div>
 
@@ -82,7 +95,7 @@
         <div id="success" v-if="page === 'success'">
             <h1>Successfully connected</h1>
             <p>
-              Your Element is now connected to <i>{{ networkSelect.ssid }}</i>.
+              Your Element is now connected to <i>{{ connectForm.ssid }}</i>.
             </p>
             <p>
               You can access your Element via your local network on <i><a v-bind:href="ip">{{ ip }}</a></i>
@@ -91,7 +104,7 @@
             <br/>
             <a class="button" v-bind:href="ip">Go to Element login</a>
             <br/><br/>
-            <p class="warning">Please connect to <i>{{ networkSelect.ssid }}</i> before continuing.</p>
+            <p class="warning">Please connect to <i>{{ connectForm.ssid }}</i> before continuing.</p>
         </div>
       </div>
 

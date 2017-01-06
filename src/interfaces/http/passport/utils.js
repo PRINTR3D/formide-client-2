@@ -3,7 +3,7 @@
 * @Date:   2017-01-06T10:26:16+01:00
 * @Filename: utils.js
 * @Last modified by:   chris
-* @Last modified time: 2017-01-06T10:30:30+01:00
+* @Last modified time: 2017-01-06T20:00:59+01:00
 * @Copyright: Copyright (c) 2016, All rights reserved, http://printr.nl
 */
 
@@ -12,11 +12,7 @@
 module.exports = function (client) {
   return {
     serializeUser (user, done) {
-      if (user.hasOwnProperty('id')) {
-        return done(null, user.id)
-      } else {
-        return done(new Error('User does not contain property id'))
-      }
+      return done(null, user[global.MONGO_ID_FIELD])
     },
 
     deserializeUser (userId, done) {
