@@ -3,7 +3,7 @@
 @Date:   2017-01-06T14:32:08+01:00
 @Filename: index.html
 @Last modified by:   chris
-@Last modified time: 2017-01-06T18:39:30+01:00
+@Last modified time: 2017-01-06T18:58:19+01:00
 @Copyright: Copyright (c) 2016, All rights reserved, http://printr.nl
 -->
 
@@ -27,7 +27,9 @@
           <h1>Welcome</h1>
           <p>To set up your Element's Wi-Fi network and connect it to your Formide account, please follow these steps.</p>
           <hr />
-          <a @click="goToPage('networks')" class="button">Select a network</a>
+          <a @click="goToPage('networks')" class="button">Start Wi-Fi setup</a>
+          <br/><br/>
+          <p><a href="/">Go to local dashboard</a></p>
         </div>
 
         <div id="networks" v-if="page === 'networks'">
