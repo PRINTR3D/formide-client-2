@@ -3,7 +3,7 @@
 * @Date:   2017-01-05T01:17:19+01:00
 * @Filename: index.js
 * @Last modified by:   chris
-* @Last modified time: 2017-01-05T02:03:36+01:00
+* @Last modified time: 2017-01-06T13:59:43+01:00
 * @Copyright: Copyright (c) 2016, All rights reserved, http://printr.nl
 */
 
@@ -17,7 +17,6 @@ class GpioControl extends Plugin {
 
   constructor (client) {
     super(client, pkg)
-    this._client = client
     try {
       this._gpio = require('./gpio')
     } catch (e) {

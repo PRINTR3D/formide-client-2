@@ -3,13 +3,14 @@
 * @Date:   2016-12-18T17:19:51+01:00
 * @Filename: index.js
 * @Last modified by:   chris
-* @Last modified time: 2016-12-30T14:36:12+01:00
+* @Last modified time: 2017-01-06T17:06:02+01:00
 * @Copyright: Copyright (c) 2016, All rights reserved, http://printr.nl
 */
 
 'use strict'
 
 const assert = require('assert')
+const path = require('path')
 const express = require('express')
 
 class UI {
@@ -40,12 +41,12 @@ class UI {
 
     // public assets
     this.app.get('/public/*', function (req, res) {
-      return res.sendFile(req.params[0], { root: './public' })
+      return res.sendFile(req.params[0], { root: path.join(__dirname, 'public') })
     })
 
     // angular app
     this.app.get('/*', function (req, res) {
-      return res.sendFile('index.html', { root: './public' })
+      return res.sendFile(path.join(__dirname, 'index.html'))
     })
 
     return {
