@@ -3,7 +3,7 @@
 * @Date:   2016-12-17T14:17:52+01:00
 * @Filename: index.js
 * @Last modified by:   chris
-* @Last modified time: 2016-12-30T14:32:14+01:00
+* @Last modified time: 2017-01-06T11:40:45+01:00
 * @Copyright: Copyright (c) 2016, All rights reserved, http://printr.nl
 */
 
@@ -16,8 +16,7 @@ class Ws {
 
   constructor (client) {
     const self = this
-
-    this.db = client.db
+    this._client = client
 
     // Emit all system events to connected native UI socket connections
     // These are not compatible with socket.io, hence the separate websocket library
@@ -111,7 +110,7 @@ class Ws {
   }
 
   authenticate (token, callback) {
-    this.db.AccessToken.findOne({ token }, callback)
+    this._client.db.AccessToken.findOne({ token }, callback)
   }
 }
 

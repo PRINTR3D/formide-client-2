@@ -3,7 +3,7 @@
 * @Date:   2016-12-17T13:55:08+01:00
 * @Filename: proxy.js
 * @Last modified by:   chris
-* @Last modified time: 2017-01-06T10:15:25+01:00
+* @Last modified time: 2017-01-06T11:42:11+01:00
 * @Copyright: Copyright (c) 2016, All rights reserved, http://printr.nl
 */
 
@@ -66,7 +66,7 @@ function authenticate (db, callback) {
     if (!accessToken) {
       accessToken = yield db.AccessToken.create({
         sessionOrigin: 'cloud',
-        permissions: ['owner', 'admin']
+        permissions: ['owner', 'admin'] // TODO: better permissions via cloud
       })
     }
 
