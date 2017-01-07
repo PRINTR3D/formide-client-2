@@ -3,7 +3,7 @@
 * @Date:   2016-12-17T14:11:12+01:00
 * @Filename: index.js
 * @Last modified by:   chris
-* @Last modified time: 2017-01-05T12:19:01+01:00
+* @Last modified time: 2017-01-07T16:09:26+01:00
 * @Copyright: Copyright (c) 2016, All rights reserved, http://printr.nl
 */
 
@@ -70,10 +70,10 @@ class Cloud {
           port: client.config.http.port
         }, function (response) {
           if (response.success) {
-            client.log(`[cloud] - Cloud connected`, 1, 'info')
+            client.log(`Cloud connected`, 'info')
           } else {
-            client.log(`[cloud] - Cloud not connected: ${response.message}`, 1, 'warn')
-            client.log(`[cloud] - MAC address is ${MAC}`, 2, 'info')
+            client.log(`Cloud not connected: ${response.message}`, 'warn')
+            client.log(`MAC address is ${MAC}`, 'info')
           }
         })
       }).then(null, console.error)
@@ -81,7 +81,7 @@ class Cloud {
 
     // HTTP proxy calls are handled by the proxy function
     this.cloud.on('http', function (data) {
-      client.log(`[cloud] - Cloud HTTP call: ${data.url}`, 2)
+      client.log(`Cloud HTTP call: ${data.url}`, 'debug')
       proxy(client, data, function (err, response) {
         self.cloud.emit('http', getCallbackData(data._callbackId, err, response))
       })
@@ -89,7 +89,7 @@ class Cloud {
 
     // Adding to queue from Formide Cloud
     this.cloud.on('addToQueue', function (data) {
-      client.log(`[cloud] - Cloud addToQueue: ${data.gcode}`, 1)
+      client.log(`Cloud addToQueue: ${data.gcode}`, 'debug')
       addToQueue(client, data, function (err, response) {
         self.cloud.emit('addToQueue', getCallbackData(data._callbackId, err, response))
       })
@@ -98,7 +98,7 @@ class Cloud {
     // on disconnect try reconnecting when server did not ban client
     this.cloud.on('disconnect', function (data) {
       if (data !== 'io server disconnect') {
-        client.log('[cloud] - Cloud disconnected, trying to reconnect...', 1, 'info')
+        client.log('Cloud disconnected, trying to reconnect...', 'warning')
         self.cloud.io.reconnect()
       }
     })

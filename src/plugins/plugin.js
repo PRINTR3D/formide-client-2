@@ -3,7 +3,7 @@
 * @Date:   2017-01-01T13:03:05+01:00
 * @Filename: plugin.js
 * @Last modified by:   chris
-* @Last modified time: 2017-01-05T01:21:03+01:00
+* @Last modified time: 2017-01-07T16:14:31+01:00
 * @Copyright: Copyright (c) 2016, All rights reserved, http://printr.nl
 */
 
@@ -25,7 +25,7 @@ class Plugin {
       try {
         this._settings = JSON.parse(fs.readFileSync(this._settingsFile))
       } catch (e) {
-        client.log(`[${this.getName()}] - Error loading settings from file: ${e.message}`, 1, 'error')
+        client.log(`${this.getName()}: Error loading settings from file: ${e.message}`, 'warn')
         this._settings = false
       }
     }
@@ -62,7 +62,6 @@ class Plugin {
   }
 
   getApi (router) {
-    this._client.log(`[Plugin ${this.getName()}] - No HTTP API exposed`, 3, 'info')
     return router
   }
 

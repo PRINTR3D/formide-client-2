@@ -3,7 +3,7 @@
 * @Date:   2016-12-18T17:09:26+01:00
 * @Filename: thread.js
 * @Last modified by:   chris
-* @Last modified time: 2016-12-30T14:33:37+01:00
+* @Last modified time: 2017-01-07T16:04:49+01:00
 * @Copyright: Copyright (c) 2016, All rights reserved, http://printr.nl
 */
 
@@ -23,7 +23,7 @@ let driver = false
 try {
   driver = require('formide-drivers')
 } catch (e) {
-  log(e.message, 1, 'error')
+  log(e.message, 'error')
 }
 
 if (driver) {

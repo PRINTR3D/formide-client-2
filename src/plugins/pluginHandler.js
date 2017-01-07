@@ -3,7 +3,7 @@
 * @Date:   2017-01-03T12:04:39+01:00
 * @Filename: pluginHandler.js
 * @Last modified by:   chris
-* @Last modified time: 2017-01-06T14:03:49+01:00
+* @Last modified time: 2017-01-07T16:13:33+01:00
 * @Copyright: Copyright (c) 2016, All rights reserved, http://printr.nl
 */
 
@@ -56,7 +56,7 @@ class PluginHandler {
     const plugin = new Plugin(this._client)
     this._plugins[plugin.getName()] = plugin
     this._client.http.loadPluginRoutes(plugin)
-    this._client.log(`[plugins] - ${plugin.getName()} loaded`, 1, 'info')
+    this._client.log(`Plugin ${plugin.getName()} loaded`, 'info')
   }
 
   unloadPlugin (pluginName) {

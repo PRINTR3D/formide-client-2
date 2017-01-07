@@ -3,7 +3,7 @@
 * @Date:   2016-12-17T14:17:52+01:00
 * @Filename: index.js
 * @Last modified by:   chris
-* @Last modified time: 2017-01-06T11:40:45+01:00
+* @Last modified time: 2017-01-07T16:13:10+01:00
 * @Copyright: Copyright (c) 2016, All rights reserved, http://printr.nl
 */
 
@@ -38,7 +38,7 @@ class Ws {
           if (data.channel === 'authenticate') {
             self.authenticate(data.data.accessToken, function (err, accessToken) {
               if (err) {
-                client.log(`[ws] - Native UI socket error: ${err.message}`, 1, 'error')
+                client.log(`Native UI socket error: ${err.message}`, 'error')
               }
 
               conn.sendText(JSON.stringify({
@@ -54,17 +54,17 @@ class Ws {
             })
           }
         } catch (e) {
-          client.log(`[ws] - Native UI socket error: ${e.message}`, 1, 'error')
+          client.log(`Native UI socket error: ${e.message}`, 'error')
         }
       })
 
       conn.on('close', function () {
         client.events.offAny(forwardEvents)
-        client.log(`[ws] - Native UI socket disconnected`, 2, 'info')
+        client.log(`Native UI socket disconnected`, 'info')
       })
 
       conn.on('error', function (err) {
-        client.log(`[ws] - Native UI socket error: ${err.message}`, 1, 'error')
+        client.log(`Native UI socket error: ${err.message}`, 'error')
       })
     })
 
@@ -99,12 +99,12 @@ class Ws {
       })
 
       socket.on('error', function (err) {
-        client.log(`[ws] - Local socket.io error: ${err.message}`, 1, 'error')
+        client.log(`Local socket.io error: ${err.message}`, 'error')
       })
 
       socket.on('disconnect', function () {
         client.events.offAny(forwardSocketEvents)
-        client.log(`[ws] - Local socket.io disconnected`, 2, 'info')
+        client.log(`Local socket.io disconnected`, 'info')
       })
     })
   }

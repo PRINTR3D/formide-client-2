@@ -3,7 +3,7 @@
 * @Date:   2016-12-18T17:10:55+01:00
 * @Filename: comm.js
 * @Last modified by:   chris
-* @Last modified time: 2016-12-30T14:33:46+01:00
+* @Last modified time: 2017-01-07T16:02:42+01:00
 * @Copyright: Copyright (c) 2016, All rights reserved, http://printr.nl
 */
 
@@ -27,13 +27,13 @@ function comm (client) {
 
   // handle driver process exit
   driver.on('exit', function (code, signal) {
-    client.log(`[drivers] - Process exiting because driver fork crashed, ${code}, ${signal}`, 1, 'error')
+    client.log(`Drive process crashed, ${code}, ${signal}`, 'critical')
     process.exit(code)
   })
 
   // handle driver process error
   driver.on('error', function (err) {
-    client.log(err, 1, 'warn')
+    client.log(err.message, 'error')
   })
 
   // hold callbacks in here
@@ -48,9 +48,9 @@ function comm (client) {
       if (!message.type) {
         callback(new Error('Driver message has incorrect format'))
       } else if (message.type === 'started') {
-        client.log('[drivers] - Formide driver started successfully in separate thread', 1, 'info')
+        client.log('Driver started successfully in separate thread', 'info')
       } else if (message.type === 'error' && message.data) {
-        client.log(`[drivers] - Driver error: ${message.data}`, 1, 'warn')
+        client.log(`Driver error: ${message.data}`, 'error')
       } else if (message.type === 'event' && message.data) {
         callback(null, message.data)
       } else if (message.type === 'callback' && message.callbackId) {

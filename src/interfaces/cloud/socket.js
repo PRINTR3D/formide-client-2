@@ -3,7 +3,7 @@
 * @Date:   2016-12-17T13:54:59+01:00
 * @Filename: socket.js
 * @Last modified by:   chris
-* @Last modified time: 2016-12-30T14:34:56+01:00
+* @Last modified time: 2017-01-07T16:10:03+01:00
 * @Copyright: Copyright (c) 2016, All rights reserved, http://printr.nl
 */
 
@@ -27,19 +27,19 @@ function cloudSocket (client, url) {
   })
 
   conn.on('error', function (err) {
-    client.log(`Cloud socket error: ${err.message}`, 1, 'error')
+    client.log(`Cloud socket error: ${err.message}`, 'error')
   })
 
   conn.on('connection_error', function (err) {
-    client.log(`Cloud connection error: ${err.message}`, 1, 'error')
+    client.log(`Cloud connection error: ${err.message}`, 'warning')
   })
 
   conn.on('connect_timeout', function (err) {
-    client.log(`Cloud connection timeout: ${err.message}`, 1, 'warn')
+    client.log(`Cloud connection timeout: ${err.message}`, 'warning')
   })
 
   conn.on('reconnect_failed', function (err) {
-    client.log(`Cloud reconnect error: ${err.message}`, 1, 'error')
+    client.log(`Cloud reconnect error: ${err.message}`, 'warning')
   })
 
   return conn

@@ -3,7 +3,7 @@
 * @Date:   2016-12-17T13:55:16+01:00
 * @Filename: addToQueue.js
 * @Last modified by:   chris
-* @Last modified time: 2016-12-30T14:34:37+01:00
+* @Last modified time: 2017-01-07T16:06:58+01:00
 * @Copyright: Copyright (c) 2016, All rights reserved, http://printr.nl
 */
 
@@ -50,7 +50,7 @@ function addToQueue (client, data, callback) {
           request
                 .get(`${client.config.cloud.URL}/files/download/gcode?hash=${data.gcode}`, { strictSSL: false })
                 .on('error', function (err) {
-                  client.log(`[cloud / addToQueue] - ${data.printJob.name} has failed to download`, 1, 'error')
+                  client.log(`${data.printJob.name} has failed to download`, 'warn')
                   client.events.emit('queueItem.downloadError', {
                     title: `${data.printJob.name} has failed to download`,
                     message: err.message
@@ -59,7 +59,7 @@ function addToQueue (client, data, callback) {
                 .pipe(throttle)
                 .pipe(writeStream)
                 .on('finish', function () {
-                  client.log(`[cloud / addToQueue] - ${data.printJob.name} has finished downloading`, 2, 'info')
+                  client.log(`${data.printJob.name} has finished downloading`, 'info')
 
                   queueItem.status = 'queued'
                   queueItem.save(function () {
@@ -71,7 +71,7 @@ function addToQueue (client, data, callback) {
                 })
         })
         .catch(function (err) {
-          client.log(`[cloud / addToQueue] - ${err.message}`, 1, 'error')
+          client.log(`${err.message}`, 'error')
           return callback(err)
         })
 }

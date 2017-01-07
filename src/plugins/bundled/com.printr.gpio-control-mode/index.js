@@ -3,7 +3,7 @@
 * @Date:   2017-01-05T01:17:19+01:00
 * @Filename: index.js
 * @Last modified by:   chris
-* @Last modified time: 2017-01-06T13:59:43+01:00
+* @Last modified time: 2017-01-07T16:15:15+01:00
 * @Copyright: Copyright (c) 2016, All rights reserved, http://printr.nl
 */
 
@@ -20,7 +20,7 @@ class GpioControl extends Plugin {
     try {
       this._gpio = require('./gpio')
     } catch (e) {
-      client.log('[com.printr.gpio-control-mode] - Could not load gpio on this system', 1, 'warn')
+      client.log('com.printr.gpio-control-mode: Could not load GPIO on this system', 'warning')
     }
   }
 

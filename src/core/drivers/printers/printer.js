@@ -3,7 +3,7 @@
 * @Date:   2016-12-18T02:07:08+01:00
 * @Filename: printer.js
 * @Last modified by:   chris
-* @Last modified time: 2016-12-30T14:33:56+01:00
+* @Last modified time: 2017-01-07T16:01:47+01:00
 * @Copyright: Copyright (c) 2016, All rights reserved, http://printr.nl
 */
 
@@ -29,10 +29,7 @@ class Printer {
     // we ask for the printer status every 2 seconds and store it
     this._statusInterval = setInterval(function () {
       self._drivers.getPrinterInfo(self._port, function (err, status) {
-        if (err) {
-          return self._client.log(`[drivers] - Error getting printer info: - ${err.message}`)
-        }
-
+        if (err) return self._client.log(`Coult not get printer info: - ${err.message}`, 'warn')
         self._status = status
       })
     }, PRINTER_STATUS_INTERVAL)

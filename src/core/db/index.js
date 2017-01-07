@@ -3,7 +3,7 @@
 * @Date:   2016-12-18T17:11:52+01:00
 * @Filename: index.js
 * @Last modified by:   chris
-* @Last modified time: 2017-01-06T19:59:32+01:00
+* @Last modified time: 2017-01-07T15:57:27+01:00
 * @Copyright: Copyright (c) 2016, All rights reserved, http://printr.nl
 */
 
@@ -16,17 +16,17 @@ class DB {
 
   // TODO: figure out best database to use
   constructor (client) {
-    assert(client.config.db.connectionString, '[db] - client.config.db.connectionString not passed')
+    assert(client.config.db.connectionString, 'client.config.db.connectionString not passed')
 
     mongoose.connect(client.config.db.connectionString)
 
     const db = mongoose.connection
     db.on('error', function (err) {
-      client.log(`[db] - Error connecting to MongoDB: ${err.message}`, 1, 'error')
+      client.log(`Error connecting to MongoDB: ${err.message}`, 'error')
       process.exit(1)
     })
     db.on('open', function () {
-      client.log('[db] - Connected to MongoDB', 1, 'info')
+      client.log('Connected to MongoDB', 'info')
     })
 
     const models = {

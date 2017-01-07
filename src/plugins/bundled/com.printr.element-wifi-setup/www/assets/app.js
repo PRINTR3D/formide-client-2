@@ -3,7 +3,7 @@
 * @Date:   2017-01-06T14:32:18+01:00
 * @Filename: app.js
 * @Last modified by:   chris
-* @Last modified time: 2017-01-06T22:27:37+01:00
+* @Last modified time: 2017-01-07T16:32:37+01:00
 * @Copyright: Copyright (c) 2016, All rights reserved, http://printr.nl
 */
 
@@ -12,6 +12,7 @@ new Vue({
   data: {
     page: 'welcome',
     networks: [],
+    networkTry: 1,
     connectForm: {
       ssid: '',
       password: ''
@@ -76,10 +77,24 @@ new Vue({
     }
   },
   mounted () {
-    this.$http.get('/api/network/list').then(function success (response) {
-      this.networks = response.data
-    }, function error (errorResponse) {
-      console.log('errorResponse', errorResponse)
-    })
+    var networkInterval = setInterval(function () {
+      this.$http.get('/api/network/list').then(function success (response) {
+        if (this.networkTry === 3) {
+          clearInterval(networkInterval)
+        }
+        if (response.data.length > 0) {
+          clearInterval(networkInterval)
+          this.networks = response.data
+        } else {
+          this.networkTry++
+        }
+      }, function error (errorResponse) {
+        if (this.networkTry === 3) {
+          clearInterval(networkInterval)
+        }
+        console.log('errorResponse', errorResponse)
+        this.networkTry++
+      })
+    }.bind(this), 5000)
   }
 })

@@ -3,7 +3,7 @@
 * @Date:   2016-12-18T17:21:23+01:00
 * @Filename: index.js
 * @Last modified by:   chris
-* @Last modified time: 2017-01-07T01:45:40+01:00
+* @Last modified time: 2017-01-07T16:10:49+01:00
 * @Copyright: Copyright (c) 2016, All rights reserved, http://printr.nl
 */
 
@@ -44,10 +44,10 @@ class Http {
 
     // listen to port stated in app.port config (usually port 1337)
     this.httpServer.listen(client.config.http.api, function () {
-      client.log(`[http] - API running on port ${self.httpServer.address().port}`, 1, 'info')
+      client.log(`API running on port ${self.httpServer.address().port}`, 'info')
     })
 
-    // TODO: endpoint request logging
+    // TODO: endpoint request logging for debugging
 
     // use json body parser for json post requests
     this.app.use(bodyParser.json({ limit: '500mb' }))

@@ -3,7 +3,7 @@
 * @Date:   2017-01-06T23:33:55+01:00
 * @Filename: network.js
 * @Last modified by:   chris
-* @Last modified time: 2017-01-07T00:18:06+01:00
+* @Last modified time: 2017-01-07T15:09:44+01:00
 * @Copyright: Copyright (c) 2016, All rights reserved, http://printr.nl
 */
 
@@ -18,7 +18,7 @@ const exec = require('child_process').exec
 const http = require('http')
 const commands = {
   scan: '/System/Library/PrivateFrameworks/Apple80211.framework/Versions/A/Resources/airport scan',
-  connect: 'networksetup -setairportnetwork {IFACE} {SSID} {PASSWORD}',
+  connect: 'networksetup -setairportnetwork {IFACE} "{SSID}" "{PASSWORD}"',
   currentNetwork: 'networksetup -getairportnetwork {IFACE}',
   ip: 'ipconfig getifaddr {IFACE}',
   mac: 'networksetup -getmacaddress Wi-Fi'

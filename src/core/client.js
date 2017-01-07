@@ -3,7 +3,7 @@
 * @Date:   2016-12-18T17:20:55+01:00
 * @Filename: client.js
 * @Last modified by:   chris
-* @Last modified time: 2017-01-07T01:51:35+01:00
+* @Last modified time: 2017-01-07T16:09:23+01:00
 * @Copyright: Copyright (c) 2016, All rights reserved, http://printr.nl
 */
 
@@ -47,7 +47,7 @@ class Client {
       this.system.network = require(`../implementations/${OS_IMPLEMENTATION}/network`)
       this.system.ota = require(`../implementations/${OS_IMPLEMENTATION}/ota`)
     } catch (e) {
-      log(`[core] - No native client implementation found: ${e.message}`, 1, 'warn')
+      log(`No native client implementation found: ${e.message}`, 'warning')
     }
 
     // utils
@@ -70,11 +70,11 @@ class Client {
     this.ws = new Ws(this)
     this.www = new Www(this)
 
-    this.log('[core] - Initiated new Client', 1, 'info')
+    this.log('Initiated new Client', 'info')
 
     // plugins
     this.plugins = new PluginHandler(this)
-    this.log('[core] - Loaded plugins', 1, 'info')
+    this.log('Loaded plugins', 'info')
 
     return this
   }

@@ -3,7 +3,7 @@
 * @Date:   2016-12-18T17:19:51+01:00
 * @Filename: index.js
 * @Last modified by:   chris
-* @Last modified time: 2017-01-06T17:06:02+01:00
+* @Last modified time: 2017-01-07T16:16:12+01:00
 * @Copyright: Copyright (c) 2016, All rights reserved, http://printr.nl
 */
 
@@ -26,7 +26,7 @@ class UI {
     this.app = express()
     this.server = require('http').Server(this.app)
     this.server.listen(client.config.http.www, function () {
-      client.log(`[ui] - Running on port ${self.server.address().port}`, 1, 'info')
+      client.log(`www running on port ${self.server.address().port}`, 'info')
     })
 
     // basic app environment info

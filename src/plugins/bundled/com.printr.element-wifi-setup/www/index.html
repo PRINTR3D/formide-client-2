@@ -3,7 +3,7 @@
 @Date:   2017-01-06T14:32:08+01:00
 @Filename: index.html
 @Last modified by:   chris
-@Last modified time: 2017-01-07T00:37:32+01:00
+@Last modified time: 2017-01-07T16:32:32+01:00
 @Copyright: Copyright (c) 2016, All rights reserved, http://printr.nl
 -->
 
@@ -52,7 +52,7 @@
           <form>
               <div v-if="networks.length === 0">
                 <span class="spinner"></span>
-                <small>Searching for networks...</small>
+                <small>Searching for networks... (try {{ networkTry }})</small>
               </div>
 
               <div v-if="connecting">

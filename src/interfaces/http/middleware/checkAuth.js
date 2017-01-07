@@ -3,7 +3,7 @@
 * @Date:   2017-01-06T10:22:09+01:00
 * @Filename: checkAuth.js
 * @Last modified by:   chris
-* @Last modified time: 2017-01-06T20:20:02+01:00
+* @Last modified time: 2017-01-07T16:12:16+01:00
 * @Copyright: Copyright (c) 2016, All rights reserved, http://printr.nl
 */
 
@@ -55,6 +55,6 @@ module.exports = function (client) {
 }
 
 function returnUnauthorized (client, res, reason) {
-  client.log(reason, 3, 'warn')
+  client.log(`unauthorized: ${reason}`, 'debug')
   return res.unauthorized(reason)
 }
