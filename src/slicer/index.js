@@ -3,18 +3,21 @@
 * @Date:   2016-12-18T17:23:12+01:00
 * @Filename: index.js
 * @Last modified by:   chris
-* @Last modified time: 2016-12-30T14:32:44+01:00
+* @Last modified time: 2017-01-07T02:09:15+01:00
 * @Copyright: Copyright (c) 2016, All rights reserved, http://printr.nl
 */
 
 'use strict'
 
 const assert = require('assert')
+const co = require('co')
 
 class Slicer {
 
   constructor (client) {
     assert(client, '[slicer] - client not passed')
+
+    this._client = client
 
     // TODO: use same threading setup as drivers?
     try {
@@ -31,8 +34,12 @@ class Slicer {
     return this._version
   }
 
-  slice () {
-
+  slice (callback) {
+    co(function* () {
+      const spaceLeft = yield this._client.utils.diskSpace.hasSpaceLeft()
+      console.log(spaceLeft)
+      callback(null, true)
+    }.bind(this)).then(null, callback)
   }
 
   createSliceRequest () {

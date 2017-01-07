@@ -3,7 +3,7 @@
 * @Date:   2016-12-18T17:21:23+01:00
 * @Filename: index.js
 * @Last modified by:   chris
-* @Last modified time: 2017-01-06T19:03:53+01:00
+* @Last modified time: 2017-01-07T01:45:40+01:00
 * @Copyright: Copyright (c) 2016, All rights reserved, http://printr.nl
 */
 
@@ -102,6 +102,7 @@ class Http {
     this.app.use('/api/update', require('./routes/update')(client, this))
     this.app.use('/api/auth', require('./routes/auth')(client, this))
     this.app.use('/api/printer', require('./routes/printer')(client, this))
+    this.app.use('/api/slicer', require('./routes/slicer')(client, this))
 
     // redirect root URL to local dashboard
     this.app.get('/', function (req, res) {

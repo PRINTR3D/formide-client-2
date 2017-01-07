@@ -3,7 +3,7 @@
 * @Date:   2016-12-18T17:20:55+01:00
 * @Filename: client.js
 * @Last modified by:   chris
-* @Last modified time: 2017-01-03T13:25:46+01:00
+* @Last modified time: 2017-01-07T01:51:35+01:00
 * @Copyright: Copyright (c) 2016, All rights reserved, http://printr.nl
 */
 
@@ -49,6 +49,10 @@ class Client {
     } catch (e) {
       log(`[core] - No native client implementation found: ${e.message}`, 1, 'warn')
     }
+
+    // utils
+    this.utils = {}
+    this.utils.diskSpace = require('./utils/diskSpace')(this)
 
     // core
     this.log = log
