@@ -3,7 +3,7 @@
 * @Date:   2016-12-18T17:21:23+01:00
 * @Filename: index.js
 * @Last modified by:   chris
-* @Last modified time: 2017-01-07T16:10:49+01:00
+* @Last modified time: 2017-01-07T17:58:42+01:00
 * @Copyright: Copyright (c) 2016, All rights reserved, http://printr.nl
 */
 
@@ -103,6 +103,12 @@ class Http {
     this.app.use('/api/auth', require('./routes/auth')(client, this))
     this.app.use('/api/printer', require('./routes/printer')(client, this))
     this.app.use('/api/slicer', require('./routes/slicer')(client, this))
+    this.app.use('/api/db/files', require('./routes/db/file')(client, this))
+    this.app.use('/api/db/materials', require('./routes/db/material')(client, this))
+    this.app.use('/api/db/printers', require('./routes/db/printer')(client, this))
+    this.app.use('/api/db/printjobs', require('./routes/db/printjob')(client, this))
+    this.app.use('/api/db/queue', require('./routes/db/queue')(client, this))
+    this.app.use('/api/db/sliceprofiles', require('./routes/db/sliceprofile')(client, this))
 
     // redirect root URL to local dashboard
     this.app.get('/', function (req, res) {

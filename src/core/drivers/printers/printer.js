@@ -3,7 +3,7 @@
 * @Date:   2016-12-18T02:07:08+01:00
 * @Filename: printer.js
 * @Last modified by:   chris
-* @Last modified time: 2017-01-07T16:01:47+01:00
+* @Last modified time: 2017-01-08T00:22:29+01:00
 * @Copyright: Copyright (c) 2016, All rights reserved, http://printr.nl
 */
 
@@ -11,6 +11,8 @@
 
 const PRINTER_STATUS_INTERVAL = 2000
 const assert = require('assert')
+const Handlebars = require('handlebars')
+const async = require('async')
 
 class Printer {
 
@@ -25,6 +27,7 @@ class Printer {
     this._port = port
     this._drivers = drivers
     this._status = null
+    this._commands = {}
 
     // we ask for the printer status every 2 seconds and store it
     this._statusInterval = setInterval(function () {
@@ -94,6 +97,45 @@ class Printer {
 
   stopStatusInterval () {
     clearInterval(this._statusInterval)
+  }
+
+  getCommands () {
+    return this._commands
+  }
+
+  addCommand (name, commands) {
+    this._commands[name] = commands
+    return this._commands[name]
+  }
+
+  createCommand (command, parameters, callback) {
+    if (this._commands.hasOwnProperty(command)) {
+      let commandList = []
+      for (let i in this._commands[command]) {
+        const template = Handlebars.compile(this._commands[command][i])
+        const gcode = template(parameters)
+        commandList.push(gcode)
+      }
+      return callback(null, commandList)
+    } else {
+      return callback(new Error('This command is not implemented for this printer'))
+    }
+  }
+
+  runCommand (command, parameters, callback) {
+    const self = this
+    this.createCommand(command, parameters, function (err, commandList) {
+      if (err) return callback(err)
+      // TODO: check if parallel works correctly with real drivers
+      async.parallel(commandList.map(function (command) {
+        return function (printerCallback) {
+          self._drivers.sendGcode(command, self._port, printerCallback)
+        }
+      }), function (err, results) {
+        if (err) return callback(err)
+        return callback(null, results)
+      })
+    })
   }
 }
 

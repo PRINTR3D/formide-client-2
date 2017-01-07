@@ -3,7 +3,7 @@
 * @Date:   2016-12-17T13:16:34+01:00
 * @Filename: logger.js
 * @Last modified by:   chris
-* @Last modified time: 2017-01-07T16:49:19+01:00
+* @Last modified time: 2017-01-07T20:01:25+01:00
 * @Copyright: Copyright (c) 2016, All rights reserved, http://printr.nl
 */
 
@@ -16,11 +16,11 @@ const clc = require('cli-color')
 const logLevels = [
   {
     type: 'critical',
-    color: clc.red.bold
+    color: clc.redBright.bold
   },
   {
     type: 'error',
-    color: clc.orange
+    color: clc.red
   },
   {
     type: 'warning',

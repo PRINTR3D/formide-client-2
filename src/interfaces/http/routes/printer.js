@@ -3,7 +3,7 @@
 * @Date:   2016-12-18T00:07:29+01:00
 * @Filename: printer.js
 * @Last modified by:   chris
-* @Last modified time: 2017-01-06T11:20:18+01:00
+* @Last modified time: 2017-01-07T23:26:01+01:00
 * @Copyright: Copyright (c) 2016, All rights reserved, http://printr.nl
 */
 
@@ -31,7 +31,7 @@ module.exports = function (client, http) {
    *    }
    *  ]
    */
-  router.get('/', http.checkAuth.user, function (req, res) {
+  router.get('/', function (req, res) {
     client.drivers.getStatus(function (err, status) {
       if (err) return res.serverError(err)
       return res.ok(status)
@@ -52,11 +52,41 @@ module.exports = function (client, http) {
    *    "progress": 0
    *  }
    */
-  router.get('/:port', http.checkAuth.user, function (req, res) {
+  router.get('/:port', function (req, res) {
     client.drivers.getStatusByPort(req.params.port, function (err, status) {
       if (err && err.name === 'PrinterNotConnectedError') return res.notFound(err.message)
       else if (err) return res.serverError(err)
       return res.ok(status)
+    })
+  })
+
+  router.get('/:port/commands', function (req, res) {
+    client.drivers.getPrinter(req.params.port, function (err, printer) {
+      if (err && err.name === 'PrinterNotConnectedError') return res.notFound(err.message)
+      else if (err) return res.serverError(err)
+      return res.ok(printer.getCommands())
+    })
+  })
+
+  router.get('/:port/commands/:command/mock', function (req, res) {
+    client.drivers.getPrinter(req.params.port, function (err, printer) {
+      if (err && err.name === 'PrinterNotConnectedError') return res.notFound(err.message)
+      else if (err) return res.serverError(err)
+      printer.createCommand(req.params.command, req.query, function (err, command) {
+        if (err) return res.serverError(err)
+        return res.ok(command)
+      })
+    })
+  })
+
+  router.get('/:port/commands/:command', function (req, res) {
+    client.drivers.getPrinter(req.params.port, function (err, printer) {
+      if (err && err.name === 'PrinterNotConnectedError') return res.notFound(err.message)
+      else if (err) return res.serverError(err)
+      printer.runCommand(req.params.command, req.query, function (err, response) {
+        if (err) return res.serverError(err)
+        return res.ok(response)
+      })
     })
   })
 

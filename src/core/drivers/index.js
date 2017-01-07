@@ -3,7 +3,7 @@
 * @Date:   2016-12-18T17:08:09+01:00
 * @Filename: index.js
 * @Last modified by:   chris
-* @Last modified time: 2017-01-07T16:04:29+01:00
+* @Last modified time: 2017-01-07T22:14:29+01:00
 * @Copyright: Copyright (c) 2016, All rights reserved, http://printr.nl
 */
 
@@ -11,9 +11,8 @@
 
 const MAX_ALLOWED_PRINTERS = 4
 const assert = require('assert')
-const FdmPrinter = require('./printers/fmdPrinter')
-const VirtualPrinter = require('./printers/virtualPrinter')
-const Driver = require('./comm')
+const FdmPrinter = require('./printers/fmdPrinter') // we ship an FDM printer spec by default
+const Driver = require('./comm') // we ship FDM drivers by default
 const PrinterNotConnectedError = require('./printerNotConnectedError')
 
 class Drivers {
@@ -39,7 +38,8 @@ class Drivers {
 
         if (event) {
           if (event.type === 'printerConnected') {
-            self.printerConnected(event.port)
+            const newPrinter = new FdmPrinter(self._client, self.drivers, event.port)
+            self.printerConnected(event.port, newPrinter)
           } else if (event.type === 'printerDisconnected') {
             self.printerDisconnected(event.port)
           } else if (event.type === 'printerOnline') {
@@ -62,11 +62,6 @@ class Drivers {
     // all connected printers will be stored in this named array
     this.printers = {}
 
-    // add a virtual printer for testing
-    const virtualPrinter = new VirtualPrinter(this._client)
-    this.printers[virtualPrinter.getPort()] = virtualPrinter
-
-    // TODO: GPIO
     // TODO: Reset queue items
   }
 
@@ -82,17 +77,18 @@ class Drivers {
    * @param port
    * @param data
    */
-  printerConnected (port, data) {
+  printerConnected (newPrinter) {
     if (Object.keys(this.printers).length >= MAX_ALLOWED_PRINTERS) {
       return this._client.events.emit('notification', {
         level: 'warning',
         title: 'Maximum printers allowed reached',
         body: `You have already connected ${MAX_ALLOWED_PRINTERS} to this device, you cannot add another one.`
       })
+    } else {
+      this.printers[newPrinter.getPort()] = newPrinter
+      this._client.logger.log(`New printer connected on port ${newPrinter.getPort()}`, 'info')
+      // TODO: system event
     }
-
-    // TODO: figure out how to select correct printer type, for now only FDM supported
-    this.printers[port] = new FdmPrinter(this._client, this.drivers, port)
   }
 
   /**
@@ -144,6 +140,12 @@ class Drivers {
    */
   printerEvent (port, event) {
 
+  }
+
+  getPrinter (port, callback) {
+    const printer = this.printers[port]
+    if (!printer) return callback(new PrinterNotConnectedError(port))
+    return callback(null, this.printers[port])
   }
 
   /**

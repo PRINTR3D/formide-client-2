@@ -9,6 +9,7 @@
     "docs": "./node_modules/.bin/apidoc -i ./src/interfaces/http/ -o ./docs/"
   },
   "dependencies": {
+    "async": "^2.1.4",
     "bcrypt": "^1.0.2",
     "body-parser": "^1.15.2",
     "cli-color": "^1.1.0",
@@ -23,6 +24,7 @@
     "express-session": "^1.14.1",
     "formide-drivers": "printr3d/formide-drivers-npm#v6.3.3",
     "getmac": "^1.2.1",
+    "handlebars": "^4.0.6",
     "katana-slicer": "printr3d/katana-slicer-npm#v1.2.3",
     "katana-tools": "printr3d/katana-tools",
     "moment": "^2.17.1",
