@@ -16,7 +16,7 @@ const express = require('express')
 class UI {
 
   constructor (client) {
-    assert(client.log, '[ui] - client.log not passed')
+    assert(client.logger.log, '[ui] - client.logger.log not passed')
     assert(client.config, '[ui] - client.config not passed')
     assert(client.config.http, '[ui] - client.config.http not passed')
     assert(client.config.http.www, '[ui] - client.config.http.www not passed')
@@ -26,7 +26,7 @@ class UI {
     this.app = express()
     this.server = require('http').Server(this.app)
     this.server.listen(client.config.http.www, function () {
-      client.log(`www running on port ${self.server.address().port}`, 'info')
+      client.logger.log(`www running on port ${self.server.address().port}`, 'info')
     })
 
     // basic app environment info

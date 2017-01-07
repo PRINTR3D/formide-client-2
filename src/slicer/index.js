@@ -24,9 +24,9 @@ class Slicer {
       this.katana = require('katana-slicer')
       this._version = require('katana-slicer/package.json').version
       this._reference = require('katana-slicer/reference.json')
-      client.log(`Loaded Katana v${this._version}`, 'info')
+      client.logger.log(`Loaded Katana v${this._version}`, 'info')
     } catch (e) {
-      client.log(`Cannot load Katana binary: ${e.message}`, 'error')
+      client.logger.log(`Cannot load Katana binary: ${e.message}`, 'error')
     }
   }
 
@@ -111,7 +111,7 @@ class Slicer {
               })
             }
           } catch (e) {
-            this._client.log(`Error parsing slicer response: ${e.message}`, 'error')
+            this._client.logger.log(`Error parsing slicer response: ${e.message}`, 'error')
           }
         })
       })

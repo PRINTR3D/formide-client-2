@@ -29,7 +29,7 @@ class Printer {
     // we ask for the printer status every 2 seconds and store it
     this._statusInterval = setInterval(function () {
       self._drivers.getPrinterInfo(self._port, function (err, status) {
-        if (err) return self._client.log(`Coult not get printer info: - ${err.message}`, 'warn')
+        if (err) return self._client.logger.log(`Coult not get printer info: - ${err.message}`, 'warn')
         self._status = status
       })
     }, PRINTER_STATUS_INTERVAL)

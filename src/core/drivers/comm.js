@@ -27,13 +27,13 @@ function comm (client) {
 
   // handle driver process exit
   driver.on('exit', function (code, signal) {
-    client.log(`Drive process crashed, ${code}, ${signal}`, 'critical')
+    client.logger.log(`Drive process crashed, ${code}, ${signal}`, 'critical')
     process.exit(code)
   })
 
   // handle driver process error
   driver.on('error', function (err) {
-    client.log(err.message, 'error')
+    client.logger.log(err.message, 'error')
   })
 
   // hold callbacks in here
@@ -48,9 +48,9 @@ function comm (client) {
       if (!message.type) {
         callback(new Error('Driver message has incorrect format'))
       } else if (message.type === 'started') {
-        client.log('Driver started successfully in separate thread', 'info')
+        client.logger.log('Driver started successfully in separate thread', 'info')
       } else if (message.type === 'error' && message.data) {
-        client.log(`Driver error: ${message.data}`, 'error')
+        client.logger.log(`Driver error: ${message.data}`, 'error')
       } else if (message.type === 'event' && message.data) {
         callback(null, message.data)
       } else if (message.type === 'callback' && message.callbackId) {

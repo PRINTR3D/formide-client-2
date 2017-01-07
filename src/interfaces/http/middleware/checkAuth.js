@@ -55,6 +55,6 @@ module.exports = function (client) {
 }
 
 function returnUnauthorized (client, res, reason) {
-  client.log(`unauthorized: ${reason}`, 'debug')
+  client.logger.log(`unauthorized: ${reason}`, 'debug')
   return res.unauthorized(reason)
 }

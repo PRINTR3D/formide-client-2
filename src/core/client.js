@@ -3,7 +3,7 @@
 * @Date:   2016-12-18T17:20:55+01:00
 * @Filename: client.js
 * @Last modified by:   chris
-* @Last modified time: 2017-01-07T16:09:23+01:00
+* @Last modified time: 2017-01-07T16:50:45+01:00
 * @Copyright: Copyright (c) 2016, All rights reserved, http://printr.nl
 */
 
@@ -16,7 +16,7 @@ const assert = require('assert')
 const Events = require('./events')
 const DB = require('./db')
 const Drivers = require('./drivers')
-const log = require('./utils/logger')
+const Logger = require('./utils/logger')
 
 // other modules
 const Slicer = require('../slicer')
@@ -38,6 +38,10 @@ class Client {
     assert(config, '[core] - config not passed')
     assert(config.version, '[core] - config.version not passed')
 
+    // config & logging
+    this.config = config
+    this.logger = new Logger(this)
+
     // system
     this.version = config.version
     this.system = {}
@@ -47,7 +51,7 @@ class Client {
       this.system.network = require(`../implementations/${OS_IMPLEMENTATION}/network`)
       this.system.ota = require(`../implementations/${OS_IMPLEMENTATION}/ota`)
     } catch (e) {
-      log(`No native client implementation found: ${e.message}`, 'warning')
+      this.logger.log(`No native client implementation found: ${e.message}`, 'warning')
     }
 
     // utils
@@ -55,8 +59,6 @@ class Client {
     this.utils.diskSpace = require('./utils/diskSpace')(this)
 
     // core
-    this.log = log
-    this.config = config
     this.events = Events
     this.db = new DB(this)
     this.drivers = new Drivers(this)
@@ -70,11 +72,11 @@ class Client {
     this.ws = new Ws(this)
     this.www = new Www(this)
 
-    this.log('Initiated new Client', 'info')
+    this.logger.log('Initiated new Client', 'info')
 
     // plugins
     this.plugins = new PluginHandler(this)
-    this.log('Loaded plugins', 'info')
+    this.logger.log('Loaded plugins', 'info')
 
     return this
   }

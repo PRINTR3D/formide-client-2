@@ -3,7 +3,7 @@
 * @Date:   2016-12-18T00:07:15+01:00
 * @Filename: system.js
 * @Last modified by:   chris
-* @Last modified time: 2017-01-06T16:37:07+01:00
+* @Last modified time: 2017-01-07T16:54:08+01:00
 * @Copyright: Copyright (c) 2016, All rights reserved, http://printr.nl
 */
 
@@ -12,8 +12,9 @@
 const assert = require('assert')
 const router = require('express').Router()
 
-module.exports = function (client) {
+module.exports = function (client, http) {
   assert(client, '[http] - client not passed in system router')
+  assert(client, '[http] - http not passed in system router')
 
   /**
    * @api {GET} /api/system/info System information
@@ -33,6 +34,18 @@ module.exports = function (client) {
       },
       uptime
     })
+  })
+
+  /**
+   * @api {POST} /api/system/loglevel Change log level
+   * @apiGroup System
+   * @apiVersion 2.0.0
+   * @apiDescription Change the log level so you can receive more or less logs via the socket log channels
+   */
+  router.post('/loglevel', http.checkAuth.admin, function (req, res) {
+    if (!req.body.logLevel) return res.badRequest('logLevel is a required parameter')
+    client.config.log.level = req.body.logLevel
+    return res.ok({ message: 'Log level updated' })
   })
 
   /**

@@ -29,7 +29,7 @@ class Cloud {
     assert(client.config.cloud.platformURL, '[cloud] - client.config.cloud.platformURL not passed')
     assert(client.events, '[cloud] - client.events not passed')
     assert(client.db, '[cloud] - client.db not passed')
-    assert(client.log, '[cloud] - client.log not passed')
+    assert(client.logger.log, '[cloud] - client.logger.log not passed')
 
     // set URLs
     this.URL = client.config.cloud.URL
@@ -70,10 +70,10 @@ class Cloud {
           port: client.config.http.port
         }, function (response) {
           if (response.success) {
-            client.log(`Cloud connected`, 'info')
+            client.logger.log(`Cloud connected`, 'info')
           } else {
-            client.log(`Cloud not connected: ${response.message}`, 'warn')
-            client.log(`MAC address is ${MAC}`, 'info')
+            client.logger.log(`Cloud not connected: ${response.message}`, 'warn')
+            client.logger.log(`MAC address is ${MAC}`, 'info')
           }
         })
       }).then(null, console.error)
@@ -81,7 +81,7 @@ class Cloud {
 
     // HTTP proxy calls are handled by the proxy function
     this.cloud.on('http', function (data) {
-      client.log(`Cloud HTTP call: ${data.url}`, 'debug')
+      client.logger.log(`Cloud HTTP call: ${data.url}`, 'debug')
       proxy(client, data, function (err, response) {
         self.cloud.emit('http', getCallbackData(data._callbackId, err, response))
       })
@@ -89,7 +89,7 @@ class Cloud {
 
     // Adding to queue from Formide Cloud
     this.cloud.on('addToQueue', function (data) {
-      client.log(`Cloud addToQueue: ${data.gcode}`, 'debug')
+      client.logger.log(`Cloud addToQueue: ${data.gcode}`, 'debug')
       addToQueue(client, data, function (err, response) {
         self.cloud.emit('addToQueue', getCallbackData(data._callbackId, err, response))
       })
@@ -98,7 +98,7 @@ class Cloud {
     // on disconnect try reconnecting when server did not ban client
     this.cloud.on('disconnect', function (data) {
       if (data !== 'io server disconnect') {
-        client.log('Cloud disconnected, trying to reconnect...', 'warning')
+        client.logger.log('Cloud disconnected, trying to reconnect...', 'warning')
         self.cloud.io.reconnect()
       }
     })

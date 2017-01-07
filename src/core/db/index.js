@@ -22,11 +22,11 @@ class DB {
 
     const db = mongoose.connection
     db.on('error', function (err) {
-      client.log(`Error connecting to MongoDB: ${err.message}`, 'error')
+      client.logger.log(`Error connecting to MongoDB: ${err.message}`, 'error')
       process.exit(1)
     })
     db.on('open', function () {
-      client.log('Connected to MongoDB', 'info')
+      client.logger.log('Connected to MongoDB', 'info')
     })
 
     const models = {

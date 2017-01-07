@@ -56,7 +56,7 @@ class PluginHandler {
     const plugin = new Plugin(this._client)
     this._plugins[plugin.getName()] = plugin
     this._client.http.loadPluginRoutes(plugin)
-    this._client.log(`Plugin ${plugin.getName()} loaded`, 'info')
+    this._client.logger.log(`Plugin ${plugin.getName()} loaded`, 'info')
   }
 
   unloadPlugin (pluginName) {

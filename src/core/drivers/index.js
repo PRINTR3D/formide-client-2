@@ -23,7 +23,7 @@ class Drivers {
    * @param client - Instance of Client
    */
   constructor (client) {
-    assert(client.log, 'client.log is not found in passed instance of client')
+    assert(client.logger.log, 'client.logger.log is not found in passed instance of client')
 
     this._client = client
     const self = this
@@ -33,7 +33,7 @@ class Drivers {
       this.drivers = new Driver(client)
       this.drivers.on(function (err, event) {
         if (err) {
-          client.log(err.message, 'error')
+          client.logger.log(err.message, 'error')
           console.log(err)
         }
 
@@ -56,7 +56,7 @@ class Drivers {
         }
       })
     } catch (e) {
-      client.log(`Cannot load drivers binary, try re-installing formide-drivers: ${e.message}`, 'error')
+      client.logger.log(`Cannot load drivers binary, try re-installing formide-drivers: ${e.message}`, 'error')
     }
 
     // all connected printers will be stored in this named array
@@ -104,10 +104,10 @@ class Drivers {
     if (this.printers[port] !== undefined) {
       this._client.db.QueueItem.setQueuedForPort(port, function (err) {
         if (err) {
-          return this._client.log(`Error updating queue: ${err.message}`, 'warn')
+          return this._client.logger.log(`Error updating queue: ${err.message}`, 'warn')
         }
 
-        this._client.log(`Printer ${port} disconnected`, 'info')
+        this._client.logger.log(`Printer ${port} disconnected`, 'info')
         this._client.events.emit('printer.disconnected', { port, message: `Printer disconnected from ${port}` })
 
         // clear status interval before removing printer from printer list

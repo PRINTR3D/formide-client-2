@@ -44,7 +44,7 @@ class Http {
 
     // listen to port stated in app.port config (usually port 1337)
     this.httpServer.listen(client.config.http.api, function () {
-      client.log(`API running on port ${self.httpServer.address().port}`, 'info')
+      client.logger.log(`API running on port ${self.httpServer.address().port}`, 'info')
     })
 
     // TODO: endpoint request logging for debugging

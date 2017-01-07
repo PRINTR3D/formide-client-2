@@ -3,7 +3,7 @@
 * @Date:   2016-12-17T13:52:00+01:00
 * @Filename: app.js
 * @Last modified by:   chris
-* @Last modified time: 2016-12-30T14:36:04+01:00
+* @Last modified time: 2017-01-07T16:42:57+01:00
 * @Copyright: Copyright (c) 2016, All rights reserved, http://printr.nl
 */
 
@@ -15,9 +15,6 @@ global.MONGO_ID_FIELD = '_id'
 // Load version
 const version = require('./package.json').version
 
-// Load logger
-const log = require('./src/core/utils/logger')
-
 // Load configuration
 const env = process.env.NODE_ENV || 'production'
 var config
@@ -25,7 +22,7 @@ var config
 try {
   config = require(`./config/${env}.json`)
 } catch (e) {
-  log(`[root] - No config found for environment ${env}, exiting application...`, 1, 'error')
+  console.log(`No config found for environment ${env}, exiting application...`)
   process.exit(1)
 }
 

@@ -50,7 +50,7 @@ function addToQueue (client, data, callback) {
           request
                 .get(`${client.config.cloud.URL}/files/download/gcode?hash=${data.gcode}`, { strictSSL: false })
                 .on('error', function (err) {
-                  client.log(`${data.printJob.name} has failed to download`, 'warn')
+                  client.logger.log(`${data.printJob.name} has failed to download`, 'warn')
                   client.events.emit('queueItem.downloadError', {
                     title: `${data.printJob.name} has failed to download`,
                     message: err.message
@@ -59,7 +59,7 @@ function addToQueue (client, data, callback) {
                 .pipe(throttle)
                 .pipe(writeStream)
                 .on('finish', function () {
-                  client.log(`${data.printJob.name} has finished downloading`, 'info')
+                  client.logger.log(`${data.printJob.name} has finished downloading`, 'info')
 
                   queueItem.status = 'queued'
                   queueItem.save(function () {
@@ -71,7 +71,7 @@ function addToQueue (client, data, callback) {
                 })
         })
         .catch(function (err) {
-          client.log(`${err.message}`, 'error')
+          client.logger.log(`${err.message}`, 'error')
           return callback(err)
         })
 }

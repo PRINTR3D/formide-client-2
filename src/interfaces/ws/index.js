@@ -38,7 +38,7 @@ class Ws {
           if (data.channel === 'authenticate') {
             self.authenticate(data.data.accessToken, function (err, accessToken) {
               if (err) {
-                client.log(`Native UI socket error: ${err.message}`, 'error')
+                client.logger.log(`Native UI socket error: ${err.message}`, 'error')
               }
 
               conn.sendText(JSON.stringify({
@@ -54,17 +54,17 @@ class Ws {
             })
           }
         } catch (e) {
-          client.log(`Native UI socket error: ${e.message}`, 'error')
+          client.logger.log(`Native UI socket error: ${e.message}`, 'error')
         }
       })
 
       conn.on('close', function () {
         client.events.offAny(forwardEvents)
-        client.log(`Native UI socket disconnected`, 'info')
+        client.logger.log(`Native UI socket disconnected`, 'info')
       })
 
       conn.on('error', function (err) {
-        client.log(`Native UI socket error: ${err.message}`, 'error')
+        client.logger.log(`Native UI socket error: ${err.message}`, 'error')
       })
     })
 
@@ -99,12 +99,12 @@ class Ws {
       })
 
       socket.on('error', function (err) {
-        client.log(`Local socket.io error: ${err.message}`, 'error')
+        client.logger.log(`Local socket.io error: ${err.message}`, 'error')
       })
 
       socket.on('disconnect', function () {
         client.events.offAny(forwardSocketEvents)
-        client.log(`Local socket.io disconnected`, 'info')
+        client.logger.log(`Local socket.io disconnected`, 'info')
       })
     })
   }

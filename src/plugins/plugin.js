@@ -25,7 +25,7 @@ class Plugin {
       try {
         this._settings = JSON.parse(fs.readFileSync(this._settingsFile))
       } catch (e) {
-        client.log(`${this.getName()}: Error loading settings from file: ${e.message}`, 'warn')
+        client.logger.log(`${this.getName()}: Error loading settings from file: ${e.message}`, 'warn')
         this._settings = false
       }
     }
