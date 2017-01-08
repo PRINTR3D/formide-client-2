@@ -3,7 +3,7 @@
 * @Date:   2016-12-18T17:08:09+01:00
 * @Filename: index.js
 * @Last modified by:   chris
-* @Last modified time: 2017-01-08T01:46:31+01:00
+* @Last modified time: 2017-01-08T11:52:17+01:00
 * @Copyright: Copyright (c) 2016, All rights reserved, http://printr.nl
 */
 
@@ -29,8 +29,8 @@ class Drivers {
 
     try {
       this._version = require('formide-drivers/package.json').version
-      this.drivers = new Driver(client)
-      this.drivers.on(function (err, event) {
+      this._drivers = new Driver(client)
+      this._drivers.on(function (err, event) {
         if (err) {
           client.logger.log(err.message, 'error')
           console.log(err)
@@ -38,7 +38,7 @@ class Drivers {
 
         if (event) {
           if (event.type === 'printerConnected') {
-            const newPrinter = new FdmPrinter(self._client, self.drivers, event.port)
+            const newPrinter = new FdmPrinter(self._client, event.port, self.drivers)
             self.printerConnected(event.port, newPrinter)
           } else if (event.type === 'printerDisconnected') {
             self.printerDisconnected(event.port)
@@ -70,6 +70,10 @@ class Drivers {
    */
   getVersion () {
     return this._version
+  }
+
+  getDefaultDrivers () {
+    return this._drivers
   }
 
   /**

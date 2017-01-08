@@ -3,7 +3,7 @@
 * @Date:   2016-12-18T17:07:53+01:00
 * @Filename: fmdPrinter.js
 * @Last modified by:   chris
-* @Last modified time: 2017-01-08T01:28:03+01:00
+* @Last modified time: 2017-01-08T11:58:04+01:00
 * @Copyright: Copyright (c) 2016, All rights reserved, http://printr.nl
 */
 
@@ -13,8 +13,8 @@ const Printer = require('./printer')
 
 class FdmPrinter extends Printer {
 
-  constructor (client, drivers, port) {
-    super(client, drivers, port)
+  constructor (client, port, drivers) {
+    super(client, port, drivers)
     this._type = 'FDM'
 
     // register FDM printer commands
@@ -47,9 +47,7 @@ class FdmPrinter extends Printer {
   }
 
   sendCommand (command, callback) {
-    this._driver.sendGcode(command, this._port, function (err, response) {
-      if (callback) return callback(err, response)
-    })
+    this._driver.sendGcode(command, this._port, callback)
   }
 
   sendTuneCommand (command, callback) {

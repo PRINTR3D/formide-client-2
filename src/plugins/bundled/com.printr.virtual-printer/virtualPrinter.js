@@ -3,7 +3,7 @@
 * @Date:   2016-12-29T01:57:12+01:00
 * @Filename: virtualPrinter.js
 * @Last modified by:   chris
-* @Last modified time: 2017-01-08T01:50:21+01:00
+* @Last modified time: 2017-01-08T11:57:39+01:00
 */
 
 'use strict'
@@ -15,9 +15,8 @@ class VirtualPrinter extends Printer {
 
   constructor (client, port) {
     const virtualDriver = new VirtualDriver(port)
-    super(client, virtualDriver, port)
+    super(client, port, virtualDriver)
     this._type = 'VIRTUAL'
-    this._drivers = virtualDriver
 
     // register virtual printer commands
     this.addCommandTemplate('home', ['G28'])
@@ -44,7 +43,7 @@ class VirtualPrinter extends Printer {
   }
 
   sendCommand (command, callback) {
-    this._drivers.sendGcode(command, this._port, callback)
+    this._driver.sendGcode(command, this._port, callback)
   }
 }
 

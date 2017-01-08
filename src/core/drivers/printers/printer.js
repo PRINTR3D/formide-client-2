@@ -3,7 +3,7 @@
 * @Date:   2016-12-18T02:07:08+01:00
 * @Filename: printer.js
 * @Last modified by:   chris
-* @Last modified time: 2017-01-08T01:53:28+01:00
+* @Last modified time: 2017-01-08T11:56:58+01:00
 * @Copyright: Copyright (c) 2016, All rights reserved, http://printr.nl
 */
 
@@ -16,22 +16,21 @@ const async = require('async')
 
 class Printer {
 
-  constructor (client, driver, port) {
+  constructor (client, port, driver) {
     assert(client, '[drivers] - No instance of `client` passed in Printer')
-    assert(driver, '[drivers] - No instance of `driver` passed in Printer')
     assert(port, '[drivers] - No port passed in Printer')
 
     const self = this
 
     this._client = client
     this._port = port
-    this._driver = driver
+    this._driver = driver || client.drivers.getDefaultDrivers()
     this._status = null
     this._commandTemplates = {}
 
     // we ask for the printer status every 2 seconds and store it
     this._statusInterval = setInterval(function () {
-      self._drivers.getPrinterInfo(self._port, function (err, status) {
+      self._driver.getPrinterInfo(self._port, function (err, status) {
         if (err) return self._client.logger.log(`Coult not get printer info: - ${err.message}`, 'warn')
         self._status = status
       })
@@ -73,6 +72,10 @@ class Printer {
 
   clearQueue () {
 
+  }
+
+  sendCommand () {
+    console.error('Printer.sendCommand must be implemented!')
   }
 
   startPrintFromFile () {
