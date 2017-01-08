@@ -1,0 +1,16 @@
+{
+  "http": {
+    "api": 1337,
+    "www": "8080"
+  },
+  "cloud": {
+    "URL": "http://localhost:3000",
+    "platformURL": "http://localhost:8081"
+  },
+  "db": {
+    "connectionString": "mongodb://localhost/formide-client"
+  },
+  "log": {
+    "level": 5
+  }
+}

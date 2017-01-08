@@ -3,14 +3,11 @@
 * @Date:   2017-01-03T12:04:39+01:00
 * @Filename: pluginHandler.js
 * @Last modified by:   chris
-* @Last modified time: 2017-01-07T16:13:33+01:00
+* @Last modified time: 2017-01-08T01:49:50+01:00
 * @Copyright: Copyright (c) 2016, All rights reserved, http://printr.nl
 */
 
 'use strict'
-
-// expose global Plugin class
-global.Plugin = require('./Plugin')
 
 // packages
 const fs = require('fs')

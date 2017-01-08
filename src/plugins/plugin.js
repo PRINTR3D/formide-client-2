@@ -3,7 +3,7 @@
 * @Date:   2017-01-01T13:03:05+01:00
 * @Filename: plugin.js
 * @Last modified by:   chris
-* @Last modified time: 2017-01-07T16:14:31+01:00
+* @Last modified time: 2017-01-08T01:52:24+01:00
 * @Copyright: Copyright (c) 2016, All rights reserved, http://printr.nl
 */
 

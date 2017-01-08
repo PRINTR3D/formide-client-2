@@ -3,7 +3,7 @@
 * @Date:   2016-12-17T13:52:00+01:00
 * @Filename: app.js
 * @Last modified by:   chris
-* @Last modified time: 2017-01-07T16:42:57+01:00
+* @Last modified time: 2017-01-08T01:53:17+01:00
 * @Copyright: Copyright (c) 2016, All rights reserved, http://printr.nl
 */
 
@@ -11,6 +11,8 @@
 
 // Globals
 global.MONGO_ID_FIELD = '_id'
+global.Plugin = require('./src/plugins/plugin')
+global.Printer = require('./src/core/drivers/printers/printer')
 
 // Load version
 const version = require('./package.json').version

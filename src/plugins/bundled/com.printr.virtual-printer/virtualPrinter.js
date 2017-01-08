@@ -3,14 +3,12 @@
 * @Date:   2016-12-29T01:57:12+01:00
 * @Filename: virtualPrinter.js
 * @Last modified by:   chris
-* @Last modified time: 2017-01-08T01:28:55+01:00
+* @Last modified time: 2017-01-08T01:50:21+01:00
 */
 
 'use strict'
 
-const path = require('path')
-const rootDir = path.dirname(require.main.filename)
-const Printer = require(path.join(rootDir, 'src/core/drivers/printers/printer')) // TODO: make this easier
+const Printer = global.Printer
 const VirtualDriver = require('./virtualDriver')
 
 class VirtualPrinter extends Printer {

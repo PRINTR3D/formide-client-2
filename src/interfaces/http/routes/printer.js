@@ -3,7 +3,7 @@
 * @Date:   2016-12-18T00:07:29+01:00
 * @Filename: printer.js
 * @Last modified by:   chris
-* @Last modified time: 2017-01-08T01:28:24+01:00
+* @Last modified time: 2017-01-08T01:31:21+01:00
 * @Copyright: Copyright (c) 2016, All rights reserved, http://printr.nl
 */
 
@@ -72,14 +72,14 @@ module.exports = function (client, http) {
     client.drivers.getPrinter(req.params.port, function (err, printer) {
       if (err && err.name === 'PrinterNotConnectedError') return res.notFound(err.message)
       else if (err) return res.serverError(err)
-      printer.createCommandTemplate(req.params.command, req.query, function (err, command) {
+      printer.createCommandFromTemplate(req.params.command, req.query, function (err, command) {
         if (err) return res.serverError(err)
         return res.ok(command)
       })
     })
   })
 
-  router.get('/:port/commands/:command', function (req, res) {
+  router.get('/:port/commands/:command', http.checkAuth.user, function (req, res) {
     client.drivers.getPrinter(req.params.port, function (err, printer) {
       if (err && err.name === 'PrinterNotConnectedError') return res.notFound(err.message)
       else if (err) return res.serverError(err)
