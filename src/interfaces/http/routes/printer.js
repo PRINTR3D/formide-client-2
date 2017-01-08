@@ -3,7 +3,7 @@
 * @Date:   2016-12-18T00:07:29+01:00
 * @Filename: printer.js
 * @Last modified by:   chris
-* @Last modified time: 2017-01-07T23:26:01+01:00
+* @Last modified time: 2017-01-08T01:28:24+01:00
 * @Copyright: Copyright (c) 2016, All rights reserved, http://printr.nl
 */
 
@@ -64,7 +64,7 @@ module.exports = function (client, http) {
     client.drivers.getPrinter(req.params.port, function (err, printer) {
       if (err && err.name === 'PrinterNotConnectedError') return res.notFound(err.message)
       else if (err) return res.serverError(err)
-      return res.ok(printer.getCommands())
+      return res.ok(printer.getCommandTemplates())
     })
   })
 
@@ -72,7 +72,7 @@ module.exports = function (client, http) {
     client.drivers.getPrinter(req.params.port, function (err, printer) {
       if (err && err.name === 'PrinterNotConnectedError') return res.notFound(err.message)
       else if (err) return res.serverError(err)
-      printer.createCommand(req.params.command, req.query, function (err, command) {
+      printer.createCommandTemplate(req.params.command, req.query, function (err, command) {
         if (err) return res.serverError(err)
         return res.ok(command)
       })
@@ -83,7 +83,7 @@ module.exports = function (client, http) {
     client.drivers.getPrinter(req.params.port, function (err, printer) {
       if (err && err.name === 'PrinterNotConnectedError') return res.notFound(err.message)
       else if (err) return res.serverError(err)
-      printer.runCommand(req.params.command, req.query, function (err, response) {
+      printer.runCommandTemplate(req.params.command, req.query, function (err, response) {
         if (err) return res.serverError(err)
         return res.ok(response)
       })

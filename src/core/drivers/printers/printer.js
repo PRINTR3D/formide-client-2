@@ -3,7 +3,7 @@
 * @Date:   2016-12-18T02:07:08+01:00
 * @Filename: printer.js
 * @Last modified by:   chris
-* @Last modified time: 2017-01-08T00:22:29+01:00
+* @Last modified time: 2017-01-08T01:29:07+01:00
 * @Copyright: Copyright (c) 2016, All rights reserved, http://printr.nl
 */
 
@@ -16,18 +16,18 @@ const async = require('async')
 
 class Printer {
 
-  constructor (client, drivers, port) {
+  constructor (client, driver, port) {
     assert(client, '[drivers] - No instance of `client` passed in Printer')
-    assert(drivers, '[drivers] - No instance of `drivers` passed in Printer')
+    assert(driver, '[drivers] - No instance of `driver` passed in Printer')
     assert(port, '[drivers] - No port passed in Printer')
 
     const self = this
 
     this._client = client
     this._port = port
-    this._drivers = drivers
+    this._driver = driver
     this._status = null
-    this._commands = {}
+    this._commandTemplates = {}
 
     // we ask for the printer status every 2 seconds and store it
     this._statusInterval = setInterval(function () {
@@ -99,20 +99,20 @@ class Printer {
     clearInterval(this._statusInterval)
   }
 
-  getCommands () {
-    return this._commands
+  getCommandTemplates () {
+    return this._commandTemplates
   }
 
-  addCommand (name, commands) {
-    this._commands[name] = commands
-    return this._commands[name]
+  addCommandTemplate (name, commands) {
+    this._commandTemplates[name] = commands
+    return this._commandTemplates[name]
   }
 
-  createCommand (command, parameters, callback) {
-    if (this._commands.hasOwnProperty(command)) {
+  createCommandFromTemplate (command, parameters, callback) {
+    if (this._commandTemplates.hasOwnProperty(command)) {
       let commandList = []
-      for (let i in this._commands[command]) {
-        const template = Handlebars.compile(this._commands[command][i])
+      for (let i in this._commandTemplates[command]) {
+        const template = Handlebars.compile(this._commandTemplates[command][i])
         const gcode = template(parameters)
         commandList.push(gcode)
       }
@@ -122,14 +122,14 @@ class Printer {
     }
   }
 
-  runCommand (command, parameters, callback) {
+  runCommandTemplate (command, parameters, callback) {
     const self = this
-    this.createCommand(command, parameters, function (err, commandList) {
+    this.createCommandFromTemplate(command, parameters, function (err, commandList) {
       if (err) return callback(err)
       // TODO: check if parallel works correctly with real drivers
       async.parallel(commandList.map(function (command) {
         return function (printerCallback) {
-          self._drivers.sendGcode(command, self._port, printerCallback)
+          self.sendCommand(command, printerCallback)
         }
       }), function (err, results) {
         if (err) return callback(err)

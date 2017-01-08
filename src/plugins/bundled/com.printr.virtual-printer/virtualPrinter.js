@@ -3,7 +3,7 @@
 * @Date:   2016-12-29T01:57:12+01:00
 * @Filename: virtualPrinter.js
 * @Last modified by:   chris
-* @Last modified time: 2017-01-07T22:22:14+01:00
+* @Last modified time: 2017-01-08T01:28:55+01:00
 */
 
 'use strict'
@@ -22,27 +22,31 @@ class VirtualPrinter extends Printer {
     this._drivers = virtualDriver
 
     // register virtual printer commands
-    this.addCommand('home', ['G28'])
-    this.addCommand('home_x', ['G28 X'])
-    this.addCommand('home_y', ['G28 Y'])
-    this.addCommand('home_z', ['G28 Z'])
-    this.addCommand('jog', ['G91', 'G21', 'G1 {{axis}} {{dist}}'])
-    this.addCommand('extrude', ['T{{extnr}}', 'G91', 'G21', 'G1 F300 E{{dist}}'])
-    this.addCommand('retract', ['T{{extnr}}', 'G91', 'G21', 'G1 F300 E-{{dist}}'])
-    this.addCommand('lcd_message', ['M117                     {{msg}}']) // spaces are on purpose!
-    this.addCommand('temp_bed', ['M140 S{{temp}}'])
-    this.addCommand('temp_extruder', ['T{{extnr}}', 'M104 S{{temp}}'])
-    this.addCommand('power_on', ['M80'])
-    this.addCommand('power_off', ['M81'])
-    this.addCommand('stop_all', ['M112'])
-    this.addCommand('reset', ['M999'])
-    this.addCommand('fan_on', ['M106'])
-    this.addCommand('fan_off', ['M107'])
-    this.addCommand('gcode', ['{{gcode}}'])
+    this.addCommandTemplate('home', ['G28'])
+    this.addCommandTemplate('home_x', ['G28 X'])
+    this.addCommandTemplate('home_y', ['G28 Y'])
+    this.addCommandTemplate('home_z', ['G28 Z'])
+    this.addCommandTemplate('jog', ['G91', 'G21', 'G1 {{axis}} {{dist}}'])
+    this.addCommandTemplate('extrude', ['T{{extnr}}', 'G91', 'G21', 'G1 F300 E{{dist}}'])
+    this.addCommandTemplate('retract', ['T{{extnr}}', 'G91', 'G21', 'G1 F300 E-{{dist}}'])
+    this.addCommandTemplate('lcd_message', ['M117                     {{msg}}']) // spaces are on purpose!
+    this.addCommandTemplate('temp_bed', ['M140 S{{temp}}'])
+    this.addCommandTemplate('temp_extruder', ['T{{extnr}}', 'M104 S{{temp}}'])
+    this.addCommandTemplate('power_on', ['M80'])
+    this.addCommandTemplate('power_off', ['M81'])
+    this.addCommandTemplate('stop_all', ['M112'])
+    this.addCommandTemplate('reset', ['M999'])
+    this.addCommandTemplate('fan_on', ['M106'])
+    this.addCommandTemplate('fan_off', ['M107'])
+    this.addCommandTemplate('gcode', ['{{gcode}}'])
   }
 
   setStatus (status) {
     return this._drivers.setStatus(status)
+  }
+
+  sendCommand (command, callback) {
+    this._drivers.sendGcode(command, this._port, callback)
   }
 }
 
