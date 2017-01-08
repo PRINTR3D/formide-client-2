@@ -3,7 +3,7 @@
 * @Date:   2016-12-18T17:08:09+01:00
 * @Filename: index.js
 * @Last modified by:   chris
-* @Last modified time: 2017-01-08T11:52:17+01:00
+* @Last modified time: 2017-01-08T15:20:33+01:00
 * @Copyright: Copyright (c) 2016, All rights reserved, http://printr.nl
 */
 
@@ -150,6 +150,12 @@ class Drivers {
     const printer = this.printers[port]
     if (!printer) return callback(new PrinterNotConnectedError(port))
     return callback(null, this.printers[port])
+  }
+
+  getPrinterSync (port) {
+    const printer = this.printers[port]
+    if (!printer) return new PrinterNotConnectedError(port)
+    return printer
   }
 
   /**

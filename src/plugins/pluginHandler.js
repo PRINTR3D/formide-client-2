@@ -3,7 +3,7 @@
 * @Date:   2017-01-03T12:04:39+01:00
 * @Filename: pluginHandler.js
 * @Last modified by:   chris
-* @Last modified time: 2017-01-08T01:49:50+01:00
+* @Last modified time: 2017-01-08T15:21:42+01:00
 * @Copyright: Copyright (c) 2016, All rights reserved, http://printr.nl
 */
 
@@ -18,10 +18,9 @@ class PluginHandler {
     this._client = client
     this._plugins = {}
 
-    this._pluginDir = `${__dirname}/bundled` // TODO: change this
-
     // load all available plugins on boot
-    this.loadPlugins()
+    this.loadPlugins(`${__dirname}/bundled`) // bundled plugins
+    this.loadPlugins(client.config.paths.pluginDir) // user installed plugins
   }
 
   getPlugins () {
@@ -36,8 +35,7 @@ class PluginHandler {
     }
   }
 
-  loadPlugins () {
-    const pluginDir = `${__dirname}/bundled`
+  loadPlugins (pluginDir) {
     const pluginList = fs.readdirSync(pluginDir).filter((item) => {
       return fs.statSync(`${pluginDir}/${item}`).isDirectory()
     })
