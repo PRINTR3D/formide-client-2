@@ -3,7 +3,7 @@
 * @Date:   2016-12-18T17:23:12+01:00
 * @Filename: index.js
 * @Last modified by:   chris
-* @Last modified time: 2017-01-09T17:46:33+01:00
+* @Last modified time: 2017-01-09T17:54:41+01:00
 * @Copyright: Copyright (c) 2016, All rights reserved, http://printr.nl
 */
 
@@ -21,10 +21,10 @@ class Slicer {
 
     // TODO: use same threading setup as drivers?
     try {
-      // this.katana = require('katana-slicer')
+      this.katana = require('katana-slicer')
       this._version = require('katana-slicer/package.json').version
       this._reference = require('katana-slicer/reference.json')
-      // client.logger.log(`Loaded Katana v${this._version}`, 'info')
+      client.logger.log(`Loaded Katana v${this._version}`, 'info')
     } catch (e) {
       client.logger.log(`Cannot load Katana binary: ${e.message}`, 'error')
     }

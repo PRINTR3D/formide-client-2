@@ -3,7 +3,7 @@
 * @Date:   2016-12-18T17:20:55+01:00
 * @Filename: client.js
 * @Last modified by:   chris
-* @Last modified time: 2017-01-09T17:29:31+01:00
+* @Last modified time: 2017-01-09T17:55:03+01:00
 * @Copyright: Copyright (c) 2016, All rights reserved, http://printr.nl
 */
 
@@ -61,10 +61,14 @@ class Client {
     // core
     this.events = Events
     this.db = new DB(this)
+    console.time('drivers')
     this.drivers = new Drivers(this)
+    console.timeEnd('drivers')
 
     // other
+    console.time('slicer')
     this.slicer = new Slicer(this)
+    console.timeEnd('slicer')
 
     // interfaces
     this.cloud = new Cloud(this)
