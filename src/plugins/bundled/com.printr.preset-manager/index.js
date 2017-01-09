@@ -3,7 +3,7 @@
 * @Date:   2017-01-08T15:43:33+01:00
 * @Filename: index.js
 * @Last modified by:   chris
-* @Last modified time: 2017-01-08T20:16:57+01:00
+* @Last modified time: 2017-01-10T00:53:11+01:00
 * @Copyright: Copyright (c) 2016, All rights reserved, http://printr.nl
 */
 
@@ -19,7 +19,9 @@ class PresetManager extends Plugin {
   }
 
   getApi (router) {
-    require('./api/materials')(router, this._client.db)
+    require('./resourceApi')(router, this._client.db, 'Material')
+    require('./resourceApi')(router, this._client.db, 'Printer')
+    require('./resourceApi')(router, this._client.db, 'SliceProfile')
     return router
   }
 
