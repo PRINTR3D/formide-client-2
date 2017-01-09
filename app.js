@@ -3,13 +3,15 @@
 * @Date:   2016-12-17T13:52:00+01:00
 * @Filename: app.js
 * @Last modified by:   chris
-* @Last modified time: 2017-01-09T17:52:25+01:00
+* @Last modified time: 2017-01-10T00:12:05+01:00
 * @Copyright: Copyright (c) 2016, All rights reserved, http://printr.nl
 */
 
 'use strict'
 
-console.time('boot')
+const debug = require('debug')('app:boot')
+
+debug('booting...')
 
 // Globals
 global.MONGO_ID_FIELD = '_id'
@@ -46,6 +48,6 @@ require('./src/core/utils/logo')(config)
 const Client = require('./src/core/client')
 const client = new Client(config)
 
-console.timeEnd('boot')
+debug('finished booting')
 
 module.exports = { client, config }

@@ -3,12 +3,13 @@
 * @Date:   2016-12-18T17:23:12+01:00
 * @Filename: index.js
 * @Last modified by:   chris
-* @Last modified time: 2017-01-09T17:56:50+01:00
+* @Last modified time: 2017-01-10T00:18:45+01:00
 * @Copyright: Copyright (c) 2016, All rights reserved, http://printr.nl
 */
 
 'use strict'
 
+const debug = require('debug')('app:slicer')
 const assert = require('assert')
 const co = require('co')
 
@@ -21,12 +22,12 @@ class Slicer {
 
     // TODO: use same threading setup as drivers?
     try {
-      console.time('slicer')
+      debug('slicer loading...')
       this.katana = require('katana-slicer')
       this._version = require('katana-slicer/package.json').version
       this._reference = require('katana-slicer/reference.json')
       client.logger.log(`Loaded Katana v${this._version}`, 'info')
-      console.timeEnd('slicer')
+      debug('slicer loaded')
     } catch (e) {
       client.logger.log(`Cannot load Katana binary: ${e.message}`, 'error')
     }

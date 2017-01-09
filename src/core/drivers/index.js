@@ -3,13 +3,14 @@
 * @Date:   2016-12-18T17:08:09+01:00
 * @Filename: index.js
 * @Last modified by:   chris
-* @Last modified time: 2017-01-09T17:56:27+01:00
+* @Last modified time: 2017-01-10T00:17:50+01:00
 * @Copyright: Copyright (c) 2016, All rights reserved, http://printr.nl
 */
 
 'use strict'
 
 const MAX_ALLOWED_PRINTERS = 4
+const debug = require('debug')('app:driver')
 const assert = require('assert')
 const FdmPrinter = require('./printers/fmdPrinter') // we ship an FDM printer spec by default
 const Driver = require('./comm') // we ship FDM drivers by default
@@ -28,10 +29,11 @@ class Drivers {
     const self = this
 
     try {
-      console.time('drivers')
+      debug('forking drivers...')
       this._version = require('formide-drivers/package.json').version
       this._drivers = new Driver(client)
-      console.timeEnd('drivers')
+      debug('drivers loaded')
+
       this._drivers.on(function (err, event) {
         if (err) {
           client.logger.log(err.message, 'error')
@@ -93,7 +95,9 @@ class Drivers {
     } else {
       this.printers[newPrinter.getPort()] = newPrinter
       this._client.logger.log(`New printer connected on port ${newPrinter.getPort()}`, 'info')
-      // TODO: system event
+      this._client.events.emit('printer.connected', {
+        port: newPrinter.getPort()
+      })
     }
   }
 
