@@ -8,7 +8,7 @@
     "platformURL": "https://platform.formide.com"
   },
   "db": {
-    "connectionString": "mongodb://localhost/formide-client"
+    "connectionString": "mongodb://127.0.0.1/formide-client"
   },
   "log": {
     "level": 5
