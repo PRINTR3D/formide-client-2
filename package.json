@@ -8,7 +8,8 @@
   "scripts": {
     "docs": "./node_modules/.bin/apidoc -i ./src/interfaces/http/ -o ./docs/",
     "test": "NODE_ENV=test mocha --harmony test/**/*.test.js",
-    "dev": "OS_IMPLEMENTATION=mac_os nodemon app"
+    "dev:mac": "OS_IMPLEMENTATION=mac_os nodemon app",
+    "debug:mac": "OS_IMPLEMENTATION=mac_os DEBUG=app:* node app"
   },
   "dependencies": {
     "async": "^2.1.4",

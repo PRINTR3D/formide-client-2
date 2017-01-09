@@ -3,7 +3,7 @@
 * @Date:   2016-12-17T13:52:00+01:00
 * @Filename: app.js
 * @Last modified by:   chris
-* @Last modified time: 2017-01-10T00:12:05+01:00
+* @Last modified time: 2017-01-10T00:24:34+01:00
 * @Copyright: Copyright (c) 2016, All rights reserved, http://printr.nl
 */
 
@@ -48,6 +48,6 @@ require('./src/core/utils/logo')(config)
 const Client = require('./src/core/client')
 const client = new Client(config)
 
-debug('finished booting')
+debug('finished booting', process.uptime())
 
 module.exports = { client, config }
