@@ -3,7 +3,7 @@
 * @Date:   2016-12-18T17:11:52+01:00
 * @Filename: index.js
 * @Last modified by:   chris
-* @Last modified time: 2017-01-09T18:26:25+01:00
+* @Last modified time: 2017-01-09T18:28:19+01:00
 * @Copyright: Copyright (c) 2016, All rights reserved, http://printr.nl
 */
 
@@ -19,17 +19,17 @@ class DB {
     assert(client.config.db.connectionString, 'client.config.db.connectionString not passed')
 
     console.time('db')
-    // mongoose.connect(client.config.db.connectionString)
-    // const db = mongoose.connection
-    //
-    // db.on('error', function (err) {
-    //   client.logger.log(`Error connecting to MongoDB: ${err.message}`, 'error')
-    //   process.exit(1)
-    // })
-    // db.on('open', function () {
-    //   console.timeEnd('db')
-    //   client.logger.log('Connected to MongoDB', 'info')
-    // })
+    mongoose.connect(client.config.db.connectionString)
+    const db = mongoose.connection
+
+    db.on('error', function (err) {
+      client.logger.log(`Error connecting to MongoDB: ${err.message}`, 'error')
+      process.exit(1)
+    })
+    db.on('open', function () {
+      console.timeEnd('db')
+      client.logger.log('Connected to MongoDB', 'info')
+    })
 
     const models = {
       AccessToken: require('./models/accessToken'),
