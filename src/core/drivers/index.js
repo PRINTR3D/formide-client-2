@@ -3,7 +3,7 @@
 * @Date:   2016-12-18T17:08:09+01:00
 * @Filename: index.js
 * @Last modified by:   chris
-* @Last modified time: 2017-01-09T17:38:59+01:00
+* @Last modified time: 2017-01-09T17:43:29+01:00
 * @Copyright: Copyright (c) 2016, All rights reserved, http://printr.nl
 */
 
@@ -25,39 +25,39 @@ class Drivers {
     assert(client.logger.log, 'client.logger.log is not found in passed instance of client')
 
     this._client = client
-    const self = this
+    // const self = this
 
-    try {
-      this._version = require('formide-drivers/package.json').version
-      this._drivers = new Driver(client)
-      this._drivers.on(function (err, event) {
-        if (err) {
-          client.logger.log(err.message, 'error')
-          console.log(err)
-        }
-
-        if (event) {
-          if (event.type === 'printerConnected') {
-            const newPrinter = new FdmPrinter(self._client, event.port)
-            self.printerConnected(newPrinter)
-          } else if (event.type === 'printerDisconnected') {
-            self.printerDisconnected(event.port)
-          } else if (event.type === 'printerOnline') {
-            self.printerOnline(event.port)
-          } else if (event.type === 'printFinished' || event.type === 'printerFinished') {
-            self.printFinished(event.port, event.printjobID)
-          } else if (event.type === 'printerInfo') {
-            self.printerEvent('info', event)
-          } else if (event.type === 'printerWarning') {
-            self.printerEvent('warning', event)
-          } else if (event.type === 'printerError') {
-            self.printerEvent('error', event)
-          }
-        }
-      })
-    } catch (e) {
-      client.logger.log(`Cannot load drivers binary, try re-installing formide-drivers: ${e.message}`, 'error')
-    }
+    // try {
+    //   this._version = require('formide-drivers/package.json').version
+    //   this._drivers = new Driver(client)
+    //   this._drivers.on(function (err, event) {
+    //     if (err) {
+    //       client.logger.log(err.message, 'error')
+    //       console.log(err)
+    //     }
+    //
+    //     if (event) {
+    //       if (event.type === 'printerConnected') {
+    //         const newPrinter = new FdmPrinter(self._client, event.port)
+    //         self.printerConnected(newPrinter)
+    //       } else if (event.type === 'printerDisconnected') {
+    //         self.printerDisconnected(event.port)
+    //       } else if (event.type === 'printerOnline') {
+    //         self.printerOnline(event.port)
+    //       } else if (event.type === 'printFinished' || event.type === 'printerFinished') {
+    //         self.printFinished(event.port, event.printjobID)
+    //       } else if (event.type === 'printerInfo') {
+    //         self.printerEvent('info', event)
+    //       } else if (event.type === 'printerWarning') {
+    //         self.printerEvent('warning', event)
+    //       } else if (event.type === 'printerError') {
+    //         self.printerEvent('error', event)
+    //       }
+    //     }
+    //   })
+    // } catch (e) {
+    //   client.logger.log(`Cannot load drivers binary, try re-installing formide-drivers: ${e.message}`, 'error')
+    // }
 
     // all connected printers will be stored in this named array
     this.printers = {}
