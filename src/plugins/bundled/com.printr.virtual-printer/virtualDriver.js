@@ -3,7 +3,7 @@
 * @Date:   2017-01-07T21:51:31+01:00
 * @Filename: virtualDriver.js
 * @Last modified by:   chris
-* @Last modified time: 2017-01-09T23:17:50+01:00
+* @Last modified time: 2017-01-09T23:30:28+01:00
 * @Copyright: Copyright (c) 2016, All rights reserved, http://printr.nl
 */
 
@@ -17,14 +17,14 @@ class VirtualDriver {
     this._status = 'offline'
   }
 
-  // getPrinterInfo (port, callback) {
-  //   return callback(null, {
-  //     port: port,
-  //     type: 'VIRTUAL',
-  //     status: this._status,
-  //     progress: this._progress
-  //   })
-  // }
+  getPrinterInfo (port, callback) {
+    return callback(null, {
+      port: port,
+      type: 'VIRTUAL',
+      status: this._status,
+      progress: this._progress
+    })
+  }
 
   setStatus (status) {
     this._status = status
