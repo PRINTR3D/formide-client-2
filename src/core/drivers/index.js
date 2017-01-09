@@ -3,7 +3,7 @@
 * @Date:   2016-12-18T17:08:09+01:00
 * @Filename: index.js
 * @Last modified by:   chris
-* @Last modified time: 2017-01-09T17:30:38+01:00
+* @Last modified time: 2017-01-09T17:34:28+01:00
 * @Copyright: Copyright (c) 2016, All rights reserved, http://printr.nl
 */
 
@@ -38,7 +38,7 @@ class Drivers {
 
         if (event) {
           if (event.type === 'printerConnected') {
-            const newPrinter = new FdmPrinter(self._client, event.port, self._drivers)
+            const newPrinter = new FdmPrinter(self._client, event.port)
             self.printerConnected(event.port, newPrinter)
           } else if (event.type === 'printerDisconnected') {
             self.printerDisconnected(event.port)
