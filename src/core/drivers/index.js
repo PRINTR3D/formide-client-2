@@ -3,7 +3,7 @@
 * @Date:   2016-12-18T17:08:09+01:00
 * @Filename: index.js
 * @Last modified by:   chris
-* @Last modified time: 2017-01-09T17:54:33+01:00
+* @Last modified time: 2017-01-09T17:56:27+01:00
 * @Copyright: Copyright (c) 2016, All rights reserved, http://printr.nl
 */
 
@@ -28,8 +28,10 @@ class Drivers {
     const self = this
 
     try {
+      console.time('drivers')
       this._version = require('formide-drivers/package.json').version
       this._drivers = new Driver(client)
+      console.timeEnd('drivers')
       this._drivers.on(function (err, event) {
         if (err) {
           client.logger.log(err.message, 'error')
