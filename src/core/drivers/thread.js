@@ -3,7 +3,7 @@
 * @Date:   2016-12-18T17:09:26+01:00
 * @Filename: thread.js
 * @Last modified by:   chris
-* @Last modified time: 2017-01-07T16:43:16+01:00
+* @Last modified time: 2017-01-09T18:00:49+01:00
 * @Copyright: Copyright (c) 2016, All rights reserved, http://printr.nl
 */
 
@@ -17,6 +17,8 @@
 
 let driver = false
 
+console.time('driverFork')
+
 try {
   driver = require('formide-drivers')
 } catch (e) {
@@ -28,6 +30,7 @@ if (driver) {
     if (err) {
       process.send({type: 'error', data: err})
     } else if (started) {
+      console.timeEnd('driverFork')
       process.send({type: 'started', data: started})
     } else if (event) {
       process.send({type: 'event', data: event}) // every time an event comes from the drivers we pass it to the main thread
