@@ -3,7 +3,7 @@
 * @Date:   2016-12-18T17:07:53+01:00
 * @Filename: fmdPrinter.js
 * @Last modified by:   chris
-* @Last modified time: 2017-01-08T11:58:04+01:00
+* @Last modified time: 2017-01-09T17:30:17+01:00
 * @Copyright: Copyright (c) 2016, All rights reserved, http://printr.nl
 */
 
@@ -13,8 +13,8 @@ const Printer = require('./printer')
 
 class FdmPrinter extends Printer {
 
-  constructor (client, port, drivers) {
-    super(client, port, drivers)
+  constructor (client, port, driver) {
+    super(client, port, driver)
     this._type = 'FDM'
 
     // register FDM printer commands

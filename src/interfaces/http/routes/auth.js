@@ -3,7 +3,7 @@
 * @Date:   2017-01-06T18:47:41+01:00
 * @Filename: auth.js
 * @Last modified by:   chris
-* @Last modified time: 2017-01-06T23:11:13+01:00
+* @Last modified time: 2017-01-08T19:37:56+01:00
 * @Copyright: Copyright (c) 2016, All rights reserved, http://printr.nl
 */
 

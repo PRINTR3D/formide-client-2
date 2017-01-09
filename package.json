@@ -29,15 +29,17 @@
     "handlebars": "^4.0.6",
     "katana-slicer": "printr3d/katana-slicer-npm#v1.2.3",
     "katana-tools": "printr3d/katana-tools",
+    "lowdb": "^0.14.0",
     "moment": "^2.17.1",
-    "mongoose": "^4.6.3",
+    "mongoose": "^4.7.6",
     "nodejs-websocket": "^1.7.0",
     "passport": "^0.3.2",
     "passport-local": "^1.0.0",
     "request": "^2.75.0",
     "socket.io": "^1.5.0",
     "socket.io-client": "^1.5.0",
-    "throttle": "^1.0.3"
+    "throttle": "^1.0.3",
+    "underscore-db": "^0.12.2"
   },
   "devDependencies": {
     "mocha": "^3.2.0",

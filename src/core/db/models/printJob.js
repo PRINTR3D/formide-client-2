@@ -1,3 +1,12 @@
+/**
+* @Author: chris
+* @Date:   2016-12-17T13:16:34+01:00
+* @Filename: printJob.js
+* @Last modified by:   chris
+* @Last modified time: 2017-01-08T20:00:39+01:00
+* @Copyright: Copyright (c) 2016, All rights reserved, http://printr.nl
+*/
+
 'use strict';
 
 /*
@@ -79,6 +88,10 @@ const schema = mongoose.Schema({
     sliceProfile: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'SliceProfile'
+    },
+
+    customProperties: {
+      type: Object
     }
 
 }, {

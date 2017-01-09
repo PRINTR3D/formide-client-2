@@ -3,7 +3,7 @@
 * @Date:   2017-01-01T13:03:05+01:00
 * @Filename: plugin.js
 * @Last modified by:   chris
-* @Last modified time: 2017-01-08T01:52:24+01:00
+* @Last modified time: 2017-01-08T16:22:02+01:00
 * @Copyright: Copyright (c) 2016, All rights reserved, http://printr.nl
 */
 
@@ -35,8 +35,7 @@ class Plugin {
     return {
       name: this.getName(),
       version: this.getVersion(),
-      settings: this.getSettings(),
-      settingsForm: this.getSettingsForm()
+      settings: this.getSettings()
     }
   }
 
@@ -47,11 +46,6 @@ class Plugin {
   getVersion () {
     return this._version
   }
-
-  // getNativeUI () {
-  //   // TODO: better resolve
-  //   return path.resolve(__dirname, this._name, this._nativeUI)
-  // }
 
   getApiRoot (router) {
     router.get('/', function (req, res) {

@@ -3,7 +3,7 @@
 * @Date:   2016-12-17T13:52:17+01:00
 * @Filename: directories.js
 * @Last modified by:   chris
-* @Last modified time: 2017-01-08T15:18:02+01:00
+* @Last modified time: 2017-01-08T17:10:39+01:00
 * @Copyright: Copyright (c) 2016, All rights reserved, http://printr.nl
 */
 
@@ -14,6 +14,7 @@ const path = require('path')
 
 // storage directories
 const storageDir = path.join(getHomeDirectory(), 'formide')
+const dbDir = path.join(storageDir, './db')
 const logsDir = path.join(storageDir, './logs')
 const filesDir = path.join(storageDir, './modelfiles')
 const gcodeDir = path.join(storageDir, './gcode')
@@ -25,7 +26,7 @@ const pluginDir = path.join(storageDir, './pugins')
  * Return an object containing the used system paths
  */
 function getPaths () {
-  return { storageDir, logsDir, filesDir, gcodeDir, imagesDir, settingsDir, pluginDir }
+  return { storageDir, dbDir, logsDir, filesDir, gcodeDir, imagesDir, settingsDir, pluginDir }
 }
 
 /**
@@ -34,6 +35,7 @@ function getPaths () {
  */
 function checkDirectories () {
   createWhenNotExisting(storageDir)
+  createWhenNotExisting(dbDir)
   createWhenNotExisting(logsDir)
   createWhenNotExisting(filesDir)
   createWhenNotExisting(gcodeDir)

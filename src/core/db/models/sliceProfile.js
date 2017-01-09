@@ -1,3 +1,12 @@
+/**
+* @Author: chris
+* @Date:   2016-12-17T14:12:11+01:00
+* @Filename: sliceProfile.js
+* @Last modified by:   chris
+* @Last modified time: 2017-01-08T19:59:59+01:00
+* @Copyright: Copyright (c) 2016, All rights reserved, http://printr.nl
+*/
+
 'use strict';
 
 /*
@@ -23,11 +32,8 @@ const schema = mongoose.Schema({
         required: true
     },
 
-    // preset or not
-    preset: {
-        type: Boolean,
-        default: false,
-        select: false
+    customProperties: {
+      type: Object
     },
 
     // we keep track of sliceprofiles versions to deal with slicer updates

@@ -3,7 +3,7 @@
 * @Date:   2016-12-17T13:16:34+01:00
 * @Filename: accessToken.js
 * @Last modified by:   chris
-* @Last modified time: 2017-01-06T19:19:11+01:00
+* @Last modified time: 2017-01-08T20:00:53+01:00
 * @Copyright: Copyright (c) 2016, All rights reserved, http://printr.nl
 */
 
@@ -37,6 +37,10 @@ const schema = mongoose.Schema({
     type: String,
     enum: ['cloud', 'local'],
     default: 'local'
+  },
+
+  customProperties: {
+    type: Object
   }
 
 }, {

@@ -1,3 +1,12 @@
+/**
+* @Author: chris
+* @Date:   2016-12-17T13:16:34+01:00
+* @Filename: printer.js
+* @Last modified by:   chris
+* @Last modified time: 2017-01-08T19:59:49+01:00
+* @Copyright: Copyright (c) 2016, All rights reserved, http://printr.nl
+*/
+
 'use strict';
 
 /*
@@ -113,6 +122,10 @@ const schema = mongoose.Schema({
     // user that updated the printer last
     updatedBy: {
         type: mongoose.Schema.Types.ObjectId
+    },
+
+    customProperties: {
+      type: Object
     }
 
 }, {

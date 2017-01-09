@@ -3,7 +3,7 @@
 * @Date:   2016-12-17T13:16:34+01:00
 * @Filename: user.js
 * @Last modified by:   chris
-* @Last modified time: 2017-01-06T20:09:17+01:00
+* @Last modified time: 2017-01-08T20:00:11+01:00
 * @Copyright: Copyright (c) 2016, All rights reserved, http://printr.nl
 */
 
@@ -39,6 +39,10 @@ const schema = mongoose.Schema({
   isAdmin: {
     type: Boolean,
     default: false
+  },
+
+  customProperties: {
+    type: Object
   }
 
 }, {
@@ -54,13 +58,13 @@ schema.virtual('id').get(function () {
 schema.set('toJSON', { virtuals: true })
 
 schema.statics.authenticate = function (email, password, next) {
-  this.findOne({ email }).select('+password').then(function (user) {
+  this.findOne({ email }, '+password').exec().then(function (user) {
     if (!user || !user.password) return next(null, false)
     bcrypt.compare(password, user.password, function (err, isMatch) {
       if (err) return next(err)
       return next(null, isMatch ? user : false)
     })
-  }).catch(next)
+  }, next)
 }
 
 /**

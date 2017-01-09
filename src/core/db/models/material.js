@@ -1,3 +1,12 @@
+/**
+* @Author: chris
+* @Date:   2016-12-17T13:16:34+01:00
+* @Filename: material.js
+* @Last modified by:   chris
+* @Last modified time: 2017-01-08T19:59:09+01:00
+* @Copyright: Copyright (c) 2016, All rights reserved, http://printr.nl
+*/
+
 'use strict';
 
 /*
@@ -58,11 +67,8 @@ const schema = mongoose.Schema({
         default: 100
     },
 
-    // preset or not
-    preset: {
-        type: Boolean,
-        default: false,
-        select: false
+    customProperties: {
+      type: Object
     },
 
     // user that created material entry
