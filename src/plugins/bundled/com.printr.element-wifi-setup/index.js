@@ -3,17 +3,16 @@
 * @Date:   2017-01-06T13:58:19+01:00
 * @Filename: index.js
 * @Last modified by:   chris
-* @Last modified time: 2017-01-06T14:53:09+01:00
+* @Last modified time: 2017-01-10T20:20:01+01:00
 * @Copyright: Copyright (c) 2016, All rights reserved, http://printr.nl
 */
 
 'use strict'
 
 const path = require('path')
-const Plugin = global.Plugin
 const pkg = require('./package.json')
 
-class WifiSetup extends Plugin {
+class WifiSetup extends global.Plugin {
 
   constructor (client) {
     super(client, pkg)

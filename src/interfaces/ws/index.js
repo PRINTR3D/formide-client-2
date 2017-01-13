@@ -3,7 +3,7 @@
 * @Date:   2016-12-17T14:17:52+01:00
 * @Filename: index.js
 * @Last modified by:   chris
-* @Last modified time: 2017-01-07T16:13:10+01:00
+* @Last modified time: 2017-01-10T23:17:30+01:00
 * @Copyright: Copyright (c) 2016, All rights reserved, http://printr.nl
 */
 
@@ -68,33 +68,37 @@ class Ws {
       })
     })
 
-    const socketIO = io.listen(client.http.server)
+    const socketIO = io.listen(client.http.httpServer)
 
     // Emit all system events to connected socket.io clients
     socketIO.on('connection', function (socket) {
-      function forwardSocketEvents (data) {
-        socket.emit(this.event, data)
+      function forwardSocketEvents (eventName, eventData) {
+        socket.emit(eventName, eventData)
       }
 
       socket.on('authenticate', function (data, callback) {
         self.authenticate(data.accessToken, function (err, accessToken) {
           if (err) {
-            callback({ success: false, message: err.message })
+            if (typeof callback === 'function') callback({ success: false, message: err.message })
             return socket.disconnect()
           }
 
           if (!accessToken) {
-            callback({ success: false, message: 'Access token not found. Please provide a valid access token.' })
+            if (typeof callback === 'function') callback({ success: false, message: 'Access token not found. Please provide a valid access token.' })
             return socket.disconnect()
           }
 
           client.events.onAny(forwardSocketEvents)
 
+          client.logger.log(`Local socket.io connected`, 'info')
+
           // respond to client
-          callback({
-            success: true,
-            message: 'Authentication successful'
-          })
+          if (typeof callback === 'function') {
+            callback({
+              success: true,
+              message: 'Authentication successful'
+            })
+          }
         })
       })
 

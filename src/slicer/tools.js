@@ -3,13 +3,13 @@
 * @Date:   2016-12-17T13:16:34+01:00
 * @Filename: tools.js
 * @Last modified by:   chris
-* @Last modified time: 2016-12-30T14:35:52+01:00
+* @Last modified time: 2017-01-13T16:21:04+01:00
 * @Copyright: Copyright (c) 2016, All rights reserved, http://printr.nl
 */
 
 'use strict'
 
-const katanaTools = require('katana-tools')
+const katanaTools = require('katana-slicer').tools
 
 /**
  * This module takes formide-tools and makes Promised based functions from it

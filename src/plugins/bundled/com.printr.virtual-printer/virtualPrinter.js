@@ -3,12 +3,11 @@
 * @Date:   2016-12-29T01:57:12+01:00
 * @Filename: virtualPrinter.js
 * @Last modified by:   chris
-* @Last modified time: 2017-01-09T23:24:39+01:00
+* @Last modified time: 2017-01-11T17:01:50+01:00
 */
 
 'use strict'
 
-const Printer = global.Printer
 const VirtualDriver = require('./virtualDriver')
 
 class VirtualPrinter extends Printer {
@@ -38,8 +37,12 @@ class VirtualPrinter extends Printer {
     this.addCommandTemplate('gcode', ['{{gcode}}'])
   }
 
+  askStatus (callback) {
+    return this._driver.getStatus(this._port, callback)
+  }
+
   setStatus (status) {
-    return this._drivers.setStatus(status)
+    return this._driver.setStatus(status)
   }
 
   sendCommand (command, callback) {

@@ -1,0 +1,41 @@
+<!--
+@Author: chris
+@Date:   2017-01-06T14:32:08+01:00
+@Filename: index.html
+@Last modified by:   chris
+@Last modified time: 2017-01-10T21:41:03+01:00
+@Copyright: Copyright (c) 2016, All rights reserved, http://printr.nl
+-->
+
+<!doctype html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Formide - Plugin Manager</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Formide - Plugin Manager">
+    <meta name="author" content="Printr">
+    <link rel="stylesheet" href="/plugins/com.printr.plugin-manager/www/assets/style.css">
+  </head>
+  <body>
+
+    <main role="main" id="app">
+
+      <nav>
+        <ul>
+          <li v-for="plugin in plugins" v-if="plugin.hasWeb" @click="goToPage(plugin.name)">{{ plugin.name }}</li>
+        </ul>
+      </nav>
+
+      <div v-for="plugin in plugins" v-if="plugin.name === page">
+        <iframe :src="'/plugins/' + plugin.name + '/www'"></iframe>
+      </div>
+
+    </main>
+
+    <script src="/plugins/com.printr.plugin-manager/www/assets/vue.js"></script>
+    <script src="/plugins/com.printr.plugin-manager/www/assets/vue-resource.min.js"></script>
+    <script src="/plugins/com.printr.plugin-manager/www/assets/app.js"></script>
+  </body>
+</html>

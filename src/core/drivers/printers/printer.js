@@ -3,7 +3,7 @@
 * @Date:   2016-12-18T02:07:08+01:00
 * @Filename: printer.js
 * @Last modified by:   chris
-* @Last modified time: 2017-01-09T23:18:39+01:00
+* @Last modified time: 2017-01-10T23:16:22+01:00
 * @Copyright: Copyright (c) 2016, All rights reserved, http://printr.nl
 */
 
@@ -30,15 +30,17 @@ class Printer {
 
     // we ask for the printer status every 2 seconds and store it
     this._statusInterval = setInterval(function () {
-      if (typeof self._driver.getPrinterInfo === 'function') {
-        self._driver.getPrinterInfo(self._port, function (err, status) {
-          if (err) return self._client.logger.log(`Could not get printer info: - ${err.message}`, 'warning')
-          self._status = status
-        })
-      } else {
-        self._client.logger.log(`this.driver.getPrinterInfo not implemented for this printer`, 'debug')
-      }
+      self.askStatus(function (err, status) {
+        if (err) return self._client.logger.log(`Could not get printer info: - ${err.message}`, 'warning')
+        self._status = status
+        self._client.events.emit('printer.status', status)
+      })
     }, PRINTER_STATUS_INTERVAL)
+  }
+
+  askStatus (callback) {
+    this._client.logger.log(`Printer.askStatus not implemented for this printer`, 'critical')
+    return callback(new Error('Not implemented'))
   }
 
   /**
@@ -79,7 +81,7 @@ class Printer {
   }
 
   sendCommand () {
-    console.error('Printer.sendCommand must be implemented!')
+    this._client.logger.log(`Printer.sendCommand not implemented for this printer`, 'critical')
   }
 
   startPrintFromFile () {

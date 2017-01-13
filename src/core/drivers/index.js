@@ -3,7 +3,7 @@
 * @Date:   2016-12-18T17:08:09+01:00
 * @Filename: index.js
 * @Last modified by:   chris
-* @Last modified time: 2017-01-10T00:25:58+01:00
+* @Last modified time: 2017-01-13T16:23:44+01:00
 * @Copyright: Copyright (c) 2016, All rights reserved, http://printr.nl
 */
 
@@ -121,7 +121,7 @@ class Drivers {
 
         // remove entry from printers list
         delete this.printers[port]
-      })
+      }.bind(this))
     }
   }
 

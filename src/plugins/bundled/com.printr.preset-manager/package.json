@@ -3,5 +3,7 @@
   "version": "1.0.0",
   "description": "Plugin to manage presets for printers, materials and slice profiles",
   "main": "index.js",
-  "dependencies": {}
+  "dependencies": {
+    "qs": "^6.3.0"
+  }
 }

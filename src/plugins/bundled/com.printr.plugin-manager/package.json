@@ -1,0 +1,6 @@
+{
+  "name": "com.printr.plugin-manager",
+  "version": "1.0.0",
+  "description": "Manage installed plugins and their settings",
+  "main": "index.js"
+}

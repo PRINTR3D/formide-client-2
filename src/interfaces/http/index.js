@@ -3,7 +3,7 @@
 * @Date:   2016-12-18T17:21:23+01:00
 * @Filename: index.js
 * @Last modified by:   chris
-* @Last modified time: 2017-01-07T17:58:42+01:00
+* @Last modified time: 2017-01-10T21:42:26+01:00
 * @Copyright: Copyright (c) 2016, All rights reserved, http://printr.nl
 */
 
@@ -125,6 +125,12 @@ class Http {
     if (typeof plugin.getApi === 'function') {
       const pluginApiRouter = express.Router()
       this.app.use(`/plugins/${plugin.getName()}/api`, plugin.getApi(pluginApiRouter))
+    }
+
+    if (typeof plugin.getWebRoot === 'function') {
+      this.app.use(`/plugins/${plugin.getName()}/www*`, function (req, res) {
+        res.sendFile(req.params[0] || 'index.html', { root: plugin.getWebRoot() })
+      })
     }
 
     if (typeof plugin.getSettingsForm === 'function') {

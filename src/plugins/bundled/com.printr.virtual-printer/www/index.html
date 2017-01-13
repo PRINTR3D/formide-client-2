@@ -1,0 +1,60 @@
+<!--
+@Author: chris
+@Date:   2017-01-10T21:42:49+01:00
+@Filename: index.html
+@Last modified by:   chris
+@Last modified time: 2017-01-10T23:21:27+01:00
+@Copyright: Copyright (c) 2016, All rights reserved, http://printr.nl
+-->
+
+<!doctype html>
+<html>
+  <head>
+    <title>Virtual Printer Plugin - Printr</title>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+    </style>
+  </head>
+  <body>
+    <p id="printerStatus"></p>
+
+    <form id="statusForm">
+      <input type="text" name="port" /><br/>
+      <input type="text" name="status" /><br/>
+      <input type="number" name="progress" /><br/>
+      <input type="text" name="type" /><br/>
+    </form>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+    <script>
+      var socket = io()
+
+      $.ajax({
+        type: 'POST',
+        url: '/api/auth/login',
+        data: {
+          email: 'admin@local',
+          password: 'admin'
+        },
+        dataType: 'json',
+        success: function (data) {
+          socket.emit('authenticate', {
+            type: 'user',
+            accessToken: data.access_token
+          }, function (response) {
+            console.log('auth response', response)
+          })
+        }
+      })
+
+      socket.on('printer.status', function (printerStatus) {
+        for(key in printerStatus) {
+          if(printerStatus.hasOwnProperty(key)) {
+            $('#statusForm input[name='+key+']').val(printerStatus[key])
+          }
+        }
+      })
+    </script>
+  </body>
+</html>
