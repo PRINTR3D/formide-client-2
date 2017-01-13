@@ -3,7 +3,7 @@
 @Date:   2017-01-06T14:32:08+01:00
 @Filename: index.html
 @Last modified by:   chris
-@Last modified time: 2017-01-10T21:41:03+01:00
+@Last modified time: 2017-01-13T16:35:49+01:00
 @Copyright: Copyright (c) 2016, All rights reserved, http://printr.nl
 -->
 
@@ -24,7 +24,7 @@
 
       <nav>
         <ul>
-          <li v-for="plugin in plugins" v-if="plugin.hasWeb" @click="goToPage(plugin.name)">{{ plugin.name }}</li>
+          <li v-for="plugin in plugins" v-if="plugin.www" @click="goToPage(plugin.name)">{{ plugin.name }}</li>
         </ul>
       </nav>
 
