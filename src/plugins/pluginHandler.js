@@ -3,7 +3,7 @@
 * @Date:   2017-01-03T12:04:39+01:00
 * @Filename: pluginHandler.js
 * @Last modified by:   chris
-* @Last modified time: 2017-01-11T22:55:21+01:00
+* @Last modified time: 2017-01-13T17:05:42+01:00
 * @Copyright: Copyright (c) 2016, All rights reserved, http://printr.nl
 */
 
@@ -49,16 +49,14 @@ class PluginHandler {
   }
 
   loadPlugin (pluginPath) {
-
     vm.runInNewContext()
-
 
     const Plugin = SandboxedModule.require(pluginPath, {
       globals: {
-        Plugin: require('./Plugin'),
+        Plugin: require('./plugin'),
         Client: this._client,
         Printer: require('../core/drivers/printers/printer'),
-        MONGO_ID_FIELD
+        MONGO_ID_FIELD: global.MONGO_ID_FIELD
       }
     })
     const plugin = new Plugin(this._client)
