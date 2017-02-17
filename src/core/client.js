@@ -45,6 +45,7 @@ class Client {
     // system
     this.version = config.version
     this.system = {}
+    this.env = process.env.NODE_ENV
 
     try {
       const OS_IMPLEMENTATION = process.env.OS_IMPLEMENTATION || 'raspberry_pi'

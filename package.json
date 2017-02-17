@@ -8,8 +8,8 @@
   "scripts": {
     "docs": "./node_modules/.bin/apidoc -i ./src/interfaces/http/ -o ./docs/",
     "test": "NODE_ENV=test mocha --harmony test/**/*.test.js",
-    "dev:mac": "OS_IMPLEMENTATION=mac_os nodemon app",
-    "debug:mac": "OS_IMPLEMENTATION=mac_os DEBUG=app:*,plugin:* node app"
+    "dev:mac": "OS_IMPLEMENTATION=mac_os NODE_ENV=development nodemon app",
+    "debug:mac": "OS_IMPLEMENTATION=mac_os NODE_ENV=development DEBUG=app:*,plugin:* node app"
   },
   "dependencies": {
     "async": "^2.1.4",
@@ -26,10 +26,10 @@
     "express": "^4.14.0",
     "express-bearer-token": "^2.1.0",
     "express-session": "^1.14.1",
-    "formide-drivers": "printr3d/formide-drivers-npm#v6.3.3",
+    "formide-drivers": "PRINTR3D/formide-drivers-npm#v6.5.0",
     "getmac": "^1.2.1",
     "handlebars": "^4.0.6",
-    "katana-slicer": "printr3d/katana-slicer-npm#v1.3.0-alpha.1",
+    "katana-slicer": "PRINTR3D/katana-slicer-npm#v1.4.0-alpha.4",
     "moment": "^2.17.1",
     "mongoose": "4.7.2",
     "nodejs-websocket": "^1.7.0",

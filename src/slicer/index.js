@@ -1,12 +1,3 @@
-/**
-* @Author: chris
-* @Date:   2016-12-18T17:23:12+01:00
-* @Filename: index.js
-* @Last modified by:   chris
-* @Last modified time: 2017-01-13T16:21:16+01:00
-* @Copyright: Copyright (c) 2016, All rights reserved, http://printr.nl
-*/
-
 'use strict'
 
 const debug = require('debug')('app:slicer')
@@ -23,9 +14,9 @@ class Slicer {
     // TODO: use same threading setup as drivers?
     try {
       debug('slicer loading...')
-      this.katana = require('katana-slicer').katana
+      this.katana = require('katana-slicer').engine
       this._version = require('katana-slicer/package').version
-      this._reference = require('katana-slicer/reference')
+      this._reference = require('katana-slicer').reference
       client.logger.log(`Loaded Katana v${this._version}`, 'info')
       debug('slicer loaded')
     } catch (e) {
@@ -48,9 +39,10 @@ class Slicer {
 
     co(function* () {
       yield this._client.utils.diskSpace.hasSpaceLeft() // if no space left, error callback will be fired
+      
       const files = yield this._client.db.File.find({ [global.MONGO_ID_FIELD]: options.files })
       const fileNames = files.map(function (file) { return file.name }).join(' + ')
-      const responseId = ''
+      const responseId = '' // TODO
       const printJob = this._client.db.PrintJob.create({
         name: options.name || fileNames,
         files: options.files,
@@ -75,49 +67,53 @@ class Slicer {
       })
 
       // build request for slicing engine
-      const sliceData = JSON.stringify({ type: 'slice', data: sliceRequest })
-      const referenceData = JSON.stringify(this._reference)
-
-      this.katana.slice(sliceData, referenceData, function (response) {
-        co(function* () {
-          try {
-            const responseData = JSON.parse(response)
-
-            if (responseData.status === 200) {
-              const updatedPrintJob = yield this._client.db.PrintJob.findOneAndUpdate({
-                responseId: responseData.data.responseId
-              }, {
-                gcode: responseData.data.hash,
-                sliceResponse: responseData.data,
-                sliceFinished: true
-              })
-
-              responseData.data.printJob = updatedPrintJob.id
-              this._client.event.emit('slicer.finished', {
-                title: 'Slicing finished',
-                message: `Finished slicing ${updatedPrintJob.name}`
-              })
-            } else {
-              const updatedPrintJob = yield this._client.db.PrintJob.findOneAndUpdate({
-                responseId: responseData.data.responseId
-              }, {
-                sliceResponse: responseData.data,
-                sliceFinished: false
-              })
-
-              responseData.data.printJob = updatedPrintJob.id
-              this._client.event.emit('slicer.failed', {
-                title: 'Slicing failed',
-                message: `There was an issue slicing ${updatedPrintJob.name}: ${responseData.data.msg}`,
-                status: responseData.status,
-                data: responseData.data
-              })
-            }
-          } catch (e) {
-            this._client.logger.log(`Error parsing slicer response: ${e.message}`, 'error')
-          }
-        })
-      })
+      try {
+	      const sliceData = JSON.stringify({type: 'slice', data: sliceRequest})
+	      const referenceData = JSON.stringify(this._reference)
+	
+	      this.katana.slice(sliceData, referenceData, function (response) {
+		      co(function*() {
+			      try {
+				      const responseData = JSON.parse(response)
+				
+				      if (responseData.status === 200) {
+					      const updatedPrintJob = yield this._client.db.PrintJob.findOneAndUpdate({
+						      responseId: responseData.data.responseId
+					      }, {
+						      gcode: responseData.data.hash,
+						      sliceResponse: responseData.data,
+						      sliceFinished: true
+					      })
+					
+					      responseData.data.printJob = updatedPrintJob.id
+					      this._client.event.emit('slicer.finished', {
+						      title: 'Slicing finished',
+						      message: `Finished slicing ${updatedPrintJob.name}`
+					      })
+				      } else {
+					      const updatedPrintJob = yield this._client.db.PrintJob.findOneAndUpdate({
+						      responseId: responseData.data.responseId
+					      }, {
+						      sliceResponse: responseData.data,
+						      sliceFinished: true
+					      })
+					
+					      responseData.data.printJob = updatedPrintJob.id
+					      this._client.event.emit('slicer.failed', {
+						      title: 'Slicing failed',
+						      message: `There was an issue slicing ${updatedPrintJob.name}: ${responseData.data.msg}`,
+						      status: responseData.status,
+						      data: responseData.data
+					      })
+				      }
+			      } catch (e) {
+				      this._client.logger.log(`Error parsing slicer response: ${e.message}`, 'error')
+			      }
+		      })
+	      })
+      } catch (e) {
+	      return callback(e)
+      }
     }.bind(this)).then(null, callback)
   }
 

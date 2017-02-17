@@ -31,7 +31,7 @@ class UI {
 
     // basic app environment info
     this.app.get('/api/env', function (req, res) {
-      return res.ok({
+      return res.send({
         environment: client.env,
         name: 'formide-client',
         version: client.version,
