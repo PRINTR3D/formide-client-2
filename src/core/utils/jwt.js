@@ -29,7 +29,7 @@ function verify (token) {
 		const user = JWT.verify(token, SECRET)
 		return user
 	} catch (e) {
-		console.warn('Could not verify JWT', e, token)
+		// console.warn('Could not verify JWT', e, token)
 		return false
 	}
 }
