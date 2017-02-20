@@ -46,7 +46,7 @@ class UI {
 
     // angular app
     this.app.get('/*', function (req, res) {
-      return res.sendFile(path.join(__dirname, 'index.html'))
+      return res.sendFile(path.join(__dirname, 'public/index.html'))
     })
 
     return {

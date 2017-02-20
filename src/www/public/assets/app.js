@@ -1,3 +1,5 @@
+var apiRootURI = 'http://localhost:1337'
+
 new Vue({
   el: '#app',
   data: {
@@ -29,7 +31,7 @@ new Vue({
         this.loginError = 'Please enter an email address and password'
       } else {
         this.loggingIn = true
-        this.$http.post('/api/auth/login', this.loginForm).then(function success (response) {
+        this.$http.post(apiRootURI + '/api/auth/login', this.loginForm).then(function success (response) {
           this.loggingIn = false
           this.accessToken = response.data.access_token
           this.goToPage('networks')
@@ -48,7 +50,7 @@ new Vue({
         this.connectError = 'Please select a network'
       } else {
         this.connecting = true
-        this.$http.post('/api/network/connect', this.connectForm, {
+        this.$http.post(apiRootURI + '/api/network/connect', this.connectForm, {
           headers: {
             'Authorization': 'Bearer ' + this.accessToken
           }
@@ -69,7 +71,7 @@ new Vue({
   },
   mounted () {
     var networkInterval = setInterval(function () {
-      this.$http.get('/api/network/list').then(function success (response) {
+      this.$http.get(apiRootURI + '/api/network/list').then(function success (response) {
         if (this.networkTry === 3) {
           clearInterval(networkInterval)
         }
