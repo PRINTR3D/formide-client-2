@@ -28,7 +28,7 @@ class Ws {
           const data = JSON.parse(message)
 
           if (data.channel === 'authenticate') {
-            self.authenticate(data.data.accessToken, function (err, accessToken) {
+            self.authenticate(data.data.token, function (err, user) {
               if (err) {
                 client.logger.log(`Native UI socket error: ${err.message}`, 'error')
               }
@@ -38,7 +38,8 @@ class Ws {
                 data: {
                   success: true,
                   message: 'Authentication successful',
-                  notification: false
+                  notification: false,
+	                user: user
                 }
               }))
 
@@ -69,26 +70,26 @@ class Ws {
       }
 
       socket.on('authenticate', function (data, callback) {
-        self.authenticate(data.accessToken, function (err, accessToken) {
+        self.authenticate(data.token, function (err, user) {
           if (err) {
             if (typeof callback === 'function') callback({ success: false, message: err.message })
             return socket.disconnect()
           }
 
-          if (!accessToken) {
-            if (typeof callback === 'function') callback({ success: false, message: 'Access token not found. Please provide a valid access token.' })
+          if (!user) {
+            if (typeof callback === 'function') callback({ success: false, message: 'Token not found. Please provide a valid token.' })
             return socket.disconnect()
           }
 
           client.events.onAny(forwardSocketEvents)
-
           client.logger.log(`Local socket.io connected`, 'info')
 
           // respond to client
           if (typeof callback === 'function') {
             callback({
               success: true,
-              message: 'Authentication successful'
+              message: 'Authentication successful',
+              user: user
             })
           }
         })
@@ -116,12 +117,9 @@ class Ws {
     if (!token) return callback(null, false)
 	
 	  // find user and set session
-	  this._client.auth.find(token.id, 'id').then((user) => {
-		  if (!user) return callback(null, false)
-		  return callback(null, true)
-	  }).catch((err) => {
-      return callback(err)
-	  })
+    const user = this._client.auth.find(token.id, 'id')
+    if (!user) return callback(null, false)
+    return callback(null, user)
   }
 }
 
