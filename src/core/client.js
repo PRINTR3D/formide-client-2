@@ -14,12 +14,10 @@ const assert = require('assert')
 
 // core modules
 const Events = require('./events')
-const DB = require('./db')
 const Drivers = require('./drivers')
 const Logger = require('./utils/logger')
 
 // other modules
-const Slicer = require('../slicer')
 const Www = require('../www')
 const PluginHandler = require('../plugins/pluginHandler')
 
@@ -61,11 +59,7 @@ class Client {
 
     // core
     this.events = Events
-    this.db = new DB(this)
     this.drivers = new Drivers(this)
-
-    // other
-    this.slicer = new Slicer(this)
 
     // interfaces
     this.cloud = new Cloud(this)

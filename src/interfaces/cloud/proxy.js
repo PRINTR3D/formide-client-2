@@ -1,12 +1,3 @@
-/**
-* @Author: chris
-* @Date:   2016-12-17T13:55:08+01:00
-* @Filename: proxy.js
-* @Last modified by:   chris
-* @Last modified time: 2017-01-06T19:24:50+01:00
-* @Copyright: Copyright (c) 2016, All rights reserved, http://printr.nl
-*/
-
 'use strict'
 
 const assert = require('assert')

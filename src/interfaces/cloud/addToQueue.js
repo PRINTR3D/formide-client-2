@@ -1,12 +1,3 @@
-/**
-* @Author: chris
-* @Date:   2016-12-17T13:55:16+01:00
-* @Filename: addToQueue.js
-* @Last modified by:   chris
-* @Last modified time: 2017-01-07T16:06:58+01:00
-* @Copyright: Copyright (c) 2016, All rights reserved, http://printr.nl
-*/
-
 'use strict'
 
 const fs = require('fs')

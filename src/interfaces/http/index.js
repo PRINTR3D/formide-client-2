@@ -1,12 +1,3 @@
-/**
-* @Author: chris
-* @Date:   2016-12-18T17:21:23+01:00
-* @Filename: index.js
-* @Last modified by:   chris
-* @Last modified time: 2017-01-10T21:42:26+01:00
-* @Copyright: Copyright (c) 2016, All rights reserved, http://printr.nl
-*/
-
 'use strict'
 
 // modules
@@ -21,6 +12,7 @@ const cors = require('cors')
 const bodyParser = require('body-parser')
 const bearerToken = require('express-bearer-token')
 const checkParams = require('./middleware/checkParams')
+const morgan = require('morgan')
 
 /**
  * Http server setup
@@ -47,7 +39,8 @@ class Http {
       client.logger.log(`API running on port ${self.httpServer.address().port}`, 'info')
     })
 
-    // TODO: endpoint request logging for debugging
+    // request logging
+	  this.app.use(morgan(':remote-addr - :method :url [:response-time ms]'))
 
     // use json body parser for json post requests
     this.app.use(bodyParser.json({ limit: '500mb' }))
@@ -62,9 +55,9 @@ class Http {
     this.app.use(sessionMiddleware)
 
     // passport authentication
-    this.passport = require('./passport')(client)
-    this.app.use(this.passport.initialize())
-    this.app.use(this.passport.session())
+    // this.passport = require('./passport')(client)
+    // this.app.use(this.passport.initialize())
+    // this.app.use(this.passport.session())
 
     // use bearer token middleware
     this.app.use(bearerToken({
@@ -97,18 +90,12 @@ class Http {
     this.app.use(checkParams)
 
     // api routes
-    this.app.use('/api/system', require('./routes/system')(client, this))
+	  this.app.use('/api/auth', require('./routes/auth')(client, this))
     this.app.use('/api/network', require('./routes/network')(client, this))
-    this.app.use('/api/update', require('./routes/update')(client, this))
-    this.app.use('/api/auth', require('./routes/auth')(client, this))
     this.app.use('/api/printer', require('./routes/printer')(client, this))
-    this.app.use('/api/slicer', require('./routes/slicer')(client, this))
-    this.app.use('/api/db/files', require('./routes/db/file')(client, this))
-    this.app.use('/api/db/materials', require('./routes/db/material')(client, this))
-    this.app.use('/api/db/printers', require('./routes/db/printer')(client, this))
-    this.app.use('/api/db/printjobs', require('./routes/db/printjob')(client, this))
-    this.app.use('/api/db/queue', require('./routes/db/queue')(client, this))
-    this.app.use('/api/db/sliceprofiles', require('./routes/db/sliceprofile')(client, this))
+    this.app.use('/api/storage', require('./routes/storage')(client, this))
+	  this.app.use('/api/system', require('./routes/system')(client, this))
+	  this.app.use('/api/update', require('./routes/update')(client, this))
 
     // redirect root URL to local dashboard
     this.app.get('/', function (req, res) {

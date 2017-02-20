@@ -1,12 +1,3 @@
-/**
-* @Author: chris
-* @Date:   2016-12-17T14:11:12+01:00
-* @Filename: index.js
-* @Last modified by:   chris
-* @Last modified time: 2017-01-07T19:59:29+01:00
-* @Copyright: Copyright (c) 2016, All rights reserved, http://printr.nl
-*/
-
 'use strict'
 
 const assert = require('assert')
@@ -28,7 +19,7 @@ class Cloud {
     assert(client.config.cloud.URL, '[cloud] - client.config.cloud.URL not passed')
     assert(client.config.cloud.platformURL, '[cloud] - client.config.cloud.platformURL not passed')
     assert(client.events, '[cloud] - client.events not passed')
-    assert(client.db, '[cloud] - client.db not passed')
+    // assert(client.db, '[cloud] - client.db not passed')
     assert(client.logger.log, '[cloud] - client.logger.log not passed')
 
     // set URLs

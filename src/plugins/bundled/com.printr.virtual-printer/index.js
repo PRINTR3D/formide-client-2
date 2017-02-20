@@ -16,6 +16,7 @@ const VirtualPrinter = require('./virtualPrinter')
 class VirtualPrinterPlugin extends Plugin {
   constructor (client) {
     super(client, pkg)
+    this._client = client
     this.startVirtualPrinter()
   }
 

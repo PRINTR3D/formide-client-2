@@ -6,12 +6,5 @@ const router = require('express').Router()
 
 module.exports = function (client, http) {
 	
-	router.post('/login', function (req, res) {
-		console.log(req.body)
-		return res.ok({
-			success: true
-		})
-	})
-	
 	return router
 }

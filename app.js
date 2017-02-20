@@ -1,12 +1,3 @@
-/**
-* @Author: chris
-* @Date:   2016-12-17T13:52:00+01:00
-* @Filename: app.js
-* @Last modified by:   chris
-* @Last modified time: 2017-01-11T16:57:01+01:00
-* @Copyright: Copyright (c) 2016, All rights reserved, http://printr.nl
-*/
-
 'use strict'
 
 const debug = require('debug')('app:boot')
@@ -14,7 +5,6 @@ const debug = require('debug')('app:boot')
 debug('booting...')
 
 // Globals
-global.MONGO_ID_FIELD = '_id'
 // global.Plugin = require('./src/plugins/plugin')
 // global.Printer = require('./src/core/drivers/printers/printer')
 
