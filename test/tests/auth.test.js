@@ -38,6 +38,27 @@ module.exports = (client) => {
 			}).then(null, done)
 		})
 		
+		it('should update a user by id', (done) => {
+			co(function*() {
+				const user = yield client.auth.createUser('test', 'password')
+				expect(user.username).to.equal('test')
+				const updatedUser = yield client.auth.updateUser(user.id, 'test2', 'password')
+				expect(updatedUser.username).to.equal('test2')
+				yield client.auth.resetUsers()
+				done()
+			}).then(null, done)
+		})
+		
+		it('should remove a user by id', (done) => {
+			co(function*() {
+				const user = yield client.auth.createUser('test', 'password')
+				const removeUser = yield client.auth.removeUser(user.id)
+				expect(removeUser).to.equal(true)
+				yield client.auth.resetUsers()
+				done()
+			}).then(null, done)
+		})
+		
 	})
 	
 }

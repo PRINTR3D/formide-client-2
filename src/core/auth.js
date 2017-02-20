@@ -25,8 +25,11 @@ class Auth {
 	 * @param username
 	 * @returns {*|T|{}}
 	 */
-	find (username) {
-		return this.store.find(user => user.username === username)
+	find (value, field) {
+		field = field || 'username'
+		const user = this.store.find(user => user[field] === value)
+		if (user) return user
+		return false
 	}
 	
 	/**
@@ -68,22 +71,62 @@ class Auth {
 				self.store.push(newUser)
 				fs.writeFileSync(self.path, JSON.stringify(self.store))
 				
-				// return user without password
+				// return new user without password
 				return resolve({ id: newUser.id, username: newUser.username })
 			})
 		})
 	}
 	
+	/**
+	 * Update user username and password by id
+	 * @param id
+	 * @param username
+	 * @param password
+	 * @returns {Promise}
+	 */
 	updateUser (id, username, password) {
-	
+		const self = this
+		return new Promise((resolve, reject) => {
+			const user = self.find(id, 'id')
+			if (!user) return resolve(false)
+			
+			bcrypt.hash(password, 10, function (err, hash) {
+				if (err) return reject(err)
+				
+				// update existing user by array index
+				const updatedUser = { id: user.id, username: username, password: hash }
+				const index = self.store.indexOf(user)
+				self.store[index] = updatedUser
+				fs.writeFileSync(self.path, JSON.stringify(self.store))
+				
+				// return updated user without password
+				return resolve({ id: updatedUser.id, username: username })
+			})
+		})
 	}
 	
+	/**
+	 * Remove user by id
+	 * @param id
+	 * @returns {Promise}
+	 */
 	removeUser (id) {
-	
+		const self = this
+		return new Promise((resolve, reject) => {
+			const user = self.find(id, 'id')
+			if (!user) return resolve(false)
+			
+			const index = self.store.indexOf(user)
+			delete self.store[index]
+			
+			fs.writeFileSync(self.path, JSON.stringify(self.store))
+			return resolve(true)
+		})
 	}
 	
 	resetUsers () {
-		fs.writeFileSync(this.path, JSON.stringify([])) // write empty array
+		this.store = []
+		fs.writeFileSync(this.path, JSON.stringify(this.store)) // write empty array
 		return this.createUser(defaultUser.username, defaultUser.password) // create default admin user
 	}
 }
