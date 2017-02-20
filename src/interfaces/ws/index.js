@@ -104,9 +104,14 @@ class Ws {
       })
     })
   }
-
+	
+	/**
+   * Authenticate websocket using JWT tokens
+	 * @param token
+	 * @param callback
+	 * @returns {*}
+	 */
   authenticate (token, callback) {
-    // verify jwt token
     token = jwt.verify(token)
     if (!token) return callback(null, false)
 	
