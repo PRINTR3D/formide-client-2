@@ -1,12 +1,3 @@
-/**
-* @Author: chris
-* @Date:   2016-12-17T14:17:52+01:00
-* @Filename: index.js
-* @Last modified by:   chris
-* @Last modified time: 2017-01-10T23:17:30+01:00
-* @Copyright: Copyright (c) 2016, All rights reserved, http://printr.nl
-*/
-
 'use strict'
 
 const io = require('socket.io')
@@ -114,7 +105,8 @@ class Ws {
   }
 
   authenticate (token, callback) {
-    this._client.db.AccessToken.findOne({ token }, callback)
+    callback(null, true) // TODO: authenticate
+    // this._client.db.AccessToken.findOne({ token }, callback)
   }
 }
 

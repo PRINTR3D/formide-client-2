@@ -7,6 +7,7 @@ const proxy = require('./proxy')
 const addToQueue = require('./addToQueue')
 const getCallbackData = require('./getCallbackData')
 
+// TODO: rewrite to separate package without client dependency
 class Cloud {
 
   /**
