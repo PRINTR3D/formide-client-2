@@ -18,6 +18,13 @@ class VirtualPrinterPlugin extends Plugin {
   }
 
   getApi (router) {
+    
+    /**
+     * @api {get} /plugins/com.printr.virtual-printer/api/status VirtualPrinter:status
+     * @apiGroup VirtualPrinter
+     * @apiDescription Get status of virtual printer
+     * @apiVersion 2.0.0
+     */
     router.get('/status', function (req, res) {
       this.virtualPrinter.setStatus(req.query.status)
       return res.ok({ message: `Status changed to ${req.query.status}` })
