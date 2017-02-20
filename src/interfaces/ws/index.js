@@ -2,6 +2,7 @@
 
 const io = require('socket.io')
 const ws = require('nodejs-websocket')
+const jwt = require('../../core/utils/jwt')
 
 class Ws {
 
@@ -105,8 +106,17 @@ class Ws {
   }
 
   authenticate (token, callback) {
-    callback(null, true) // TODO: authenticate
-    // this._client.db.AccessToken.findOne({ token }, callback)
+    // verify jwt token
+    token = jwt.verify(token)
+    if (!token) return callback(null, false)
+	
+	  // find user and set session
+	  this._client.auth.find(token.id, 'id').then((user) => {
+		  if (!user) return callback(null, false)
+		  return callback(null, true)
+	  }).catch((err) => {
+      return callback(err)
+	  })
   }
 }
 
