@@ -3,6 +3,13 @@
 const client = require('../app')
 
 // manually load tests to prevent wrong order and inject client instance
-require('./tests/auth.test')(client)
-// require('./tests/printerCommandTemplate.test')(client)
+
+// core
+require('./tests/core/auth.test')(client)
+require('./tests/core/drivers/printerCommandTemplate.test')(client)
+
+// routes
 require('./tests/routes/auth.test')(client)
+
+// plugins
+require('./tests/plugins/com.printr.virtual-printer.test')(client)

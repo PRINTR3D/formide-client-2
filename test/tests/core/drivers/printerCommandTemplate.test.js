@@ -8,7 +8,7 @@ module.exports = (client) => {
 	describe('Printer command templates', () => {
 		
 		// test setup
-		const Printer = require('../../src/core/drivers/printers/printer')
+		const Printer = require('../../../../src/core/drivers/printers/printer')
 		const printer = new Printer(client, '/dev/null')
 		
 		describe('Add template', () => {

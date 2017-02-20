@@ -11,7 +11,7 @@ function checkParams (requiredParams, type) {
     type = type || 'body'
     for (var i = 0; i < requiredParams.length; i++) {
       if (!req[type].hasOwnProperty(requiredParams[i])) {
-        return res.badRequest(`${requiredParams[i]} is a required ${type} parameter`)
+        return res.badRequest(`Missing ${type} parameter: ${requiredParams[i]}`)
       }
     }
 	  return next()
