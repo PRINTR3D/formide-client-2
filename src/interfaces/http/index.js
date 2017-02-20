@@ -40,7 +40,9 @@ class Http {
     })
 
     // request logging
-    if (client.config.http.hasOwnProperty('requestLogging') && client.config.http.requestLogging !== false) {
+    if (client.config.http.hasOwnProperty('requestLogging') && client.config.http.requestLogging === false) {
+      client.logger.log('disabled request logging', 'info')
+    } else {
 	    this.app.use(morgan(':remote-addr - :method :url [:response-time ms]'))
     }
 
