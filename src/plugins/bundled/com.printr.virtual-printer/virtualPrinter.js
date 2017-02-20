@@ -1,11 +1,3 @@
-/**
-* @Author: chris
-* @Date:   2016-12-29T01:57:12+01:00
-* @Filename: virtualPrinter.js
-* @Last modified by:   chris
-* @Last modified time: 2017-01-11T17:01:50+01:00
-*/
-
 'use strict'
 
 const VirtualDriver = require('./virtualDriver')

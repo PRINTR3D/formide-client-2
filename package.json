@@ -9,7 +9,7 @@
   "author": "Chris ter Beke <chris@printr.com>",
   "license": "GPL-2.0",
   "scripts": {
-    "docs": "./node_modules/.bin/apidoc -i ./src -o ./docs/",
+    "docs": "./node_modules/.bin/apidoc -i ./src -e node_modules -o ./docs/",
     "test": "NODE_ENV=test mocha --harmony test/index.test.js",
     "dev:mac": "OS_IMPLEMENTATION=mac_os NODE_ENV=development nodemon app",
     "debug:mac": "OS_IMPLEMENTATION=mac_os NODE_ENV=development DEBUG=app:*,plugin:* node app"
