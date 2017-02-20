@@ -16,7 +16,12 @@ module.exports = function api (plugin, router) {
     })
   })
 
-  // set control mode
+  /**
+   * @api {post} /plugins/com.printr.gpio-control-mode/api/mode Set GPIO mode
+   * @apiGroup GPIO
+   * @apiDescription Set the GPIO control mode to switch between integration and host
+   * @apiVersion 2.0.0
+   */
   router.post('/mode', function (req, res) {
     req.checkParams(['mode'])
     plugin.setControlMode(req.body.mode, function (err, response) {
@@ -26,7 +31,12 @@ module.exports = function api (plugin, router) {
     })
   })
 
-  // enable control mode switching events over web sockets
+  /**
+   * @api {post} /plugins/com.printr.gpio-control-mode/api/enable Enable GPIO control
+   * @apiGroup GPIO
+   * @apiDescription Enable the GPIO control mode to receive USB plug events over WS
+   * @apiVersion 2.0.0
+   */
   router.post('/enable', function (req, res) {
     plugin.enableControlMode(function (err) {
       if (err) return res.notImplemented(err.message)
