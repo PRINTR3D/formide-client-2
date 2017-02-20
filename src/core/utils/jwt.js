@@ -9,7 +9,10 @@ const EXPIRY = 60 * 60 * 24 * 31 // 1 month
  * @param user
  */
 function sign (user) {
-	return JWT.sign(user, SECRET, {
+	return JWT.sign({
+		id: user.id,
+		username: user.username
+	}, SECRET, {
 		noTimestamp: true,
 		expiresIn: EXPIRY,
 		subject: 'login'
@@ -23,7 +26,8 @@ function sign (user) {
  */
 function verify (token) {
 	try {
-		return JWT.verify(token, SECRET)
+		const user = JWT.verify(token, SECRET)
+		return user
 	} catch (e) {
 		console.warn('Could not verify JWT', e, token)
 		return false

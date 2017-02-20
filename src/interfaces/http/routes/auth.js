@@ -26,5 +26,18 @@ module.exports = function (client, http) {
 		}).then(null, res.serverError)
 	})
 	
+	/**
+	 * @api {get} /api/auth/validate Auth:validate
+	 * @apiGroup Auth
+	 * @apiDescription Validate JWT token
+	 * @apiVersion 1.0.0
+	 */
+	router.get('/validate', http.checkAuth.jwt, function (req, res) {
+		return res.ok({
+			valid: true,
+			user: req.user
+		})
+	})
+	
 	return router
 }

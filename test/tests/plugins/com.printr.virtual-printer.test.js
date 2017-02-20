@@ -19,7 +19,7 @@ module.exports = (client) => {
 				})
 			})
 			
-			it('should throw a 400 when the username parameter is missing', (done) => {
+			it('should throw a 400 when the status parameter is missing', (done) => {
 				chai.request(client.http.app).get('/plugins/com.printr.virtual-printer/api/status').send({}).end((req, res) => {
 					expect(res.status).to.equal(400)
 					done()

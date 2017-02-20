@@ -11,7 +11,7 @@ module.exports = function (client) {
 	 * @param next
 	 * @returns {*}
 	 */
-  function jwt (req, res, next) {
+  function jwtMiddleware (req, res, next) {
 	  const authHeader = req.get('Authorization')
 	  if (!authHeader) return res.unauthorized('No Bearer token found')
 	
@@ -29,17 +29,13 @@ module.exports = function (client) {
 	  if (!token) return res.unauthorized('Could not validate Bearer')
     
     // find user and set session
-    client.auth.find(token.id, 'id').then((user) => {
-	    if (!user) return res.unauthorized('Could not find user')
-      req.authenticated = true
-      req.user = user
-      return next()
-    }).catch((err) => {
-	    return res.unauthorized(`Auth error: ${err.message}`)
-    })
+		const user = client.auth.find(token.id, 'id')
+		req.authenticated = true
+		req.user = user
+		return next()
   }
 
   return {
-    jwt
+    jwt: jwtMiddleware
   }
 }

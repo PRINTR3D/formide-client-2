@@ -1,12 +1,15 @@
 'use strict'
 
+const jwt = require('../../../src/core/utils/jwt')
 const chai = require('chai')
 const expect = chai.expect
 const chaiHttp = require('chai-http')
 chai.use(chaiHttp)
 
 module.exports = (client) => {
+	
 	describe('Auth', () => {
+		
 		describe('POST /api/auth/login', () => {
 			
 			it('should generate a JWT token for a valid user', (done) => {
@@ -39,5 +42,23 @@ module.exports = (client) => {
 				})
 			})
 		})
+		
+		describe('GET /api/auth/validate', () => {
+			
+			it('should validate a valid JWT token', (done) => {
+				const user = client.auth.find('admin@local')
+				const token = jwt.sign(user)
+				
+				chai.request(client.http.app).get('/api/auth/validate').set('Authorization', `Bearer ${token}`).end((req, res) => {
+					expect(res.status).to.equal(200)
+					expect(res.body.valid).to.equal(true)
+					expect(res.body.user.id).to.equal(user.id)
+					done()
+				})
+			})
+			
+		})
+		
 	})
+	
 }
