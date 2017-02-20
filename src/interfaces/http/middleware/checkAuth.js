@@ -3,6 +3,7 @@
 module.exports = function (client) {
   function token (req, res, next) {
     if (req.token) {
+      // TODO: not use DB
       client.db.AccessToken.findOne({ token: req.token }).then(function (accessToken) {
         if (accessToken) {
           req.accessToken = accessToken

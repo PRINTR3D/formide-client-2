@@ -51,6 +51,7 @@ class Client {
     // core
     this.events = Events
     this.drivers = new Drivers(this)
+    this.storage = require('./storage')
 
     // interfaces
     this.cloud = new Cloud(this)

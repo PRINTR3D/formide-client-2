@@ -13,7 +13,7 @@ class PluginHandler {
 
     // load all available plugins on boot
     this.loadPlugins(`${__dirname}/bundled`) // bundled plugins
-    this.loadPlugins(client.config.paths.pluginDir) // user installed plugins
+    // this.loadPlugins(client.config.paths.pluginDir) // user installed plugins
   }
 
   getPlugins () {

@@ -1,16 +1,13 @@
-/**
-* @Author: chris
-* @Date:   2017-01-05T01:24:19+01:00
-* @Filename: api.js
-* @Last modified by:   chris
-* @Last modified time: 2017-01-05T20:14:21+01:00
-* @Copyright: Copyright (c) 2016, All rights reserved, http://printr.nl
-*/
-
 'use strict'
 
 module.exports = function api (plugin, router) {
-  // get current control mode
+
+  /**
+   * @api {get} /plugins/com.printr.gpio-control-mode/api/mode Get GPIO mode
+   * @apiGroup GPIO
+   * @apiDescription Get current GPIO control mode
+   * @apiVersion 2.0.0
+   */
   router.get('/mode', function (req, res) {
     plugin.getControlMode(function (err, mode) {
       if (err) return res.notImplemented(err.message)

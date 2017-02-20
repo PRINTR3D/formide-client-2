@@ -1,12 +1,3 @@
-/**
-* @Author: chris
-* @Date:   2016-12-18T17:08:09+01:00
-* @Filename: index.js
-* @Last modified by:   chris
-* @Last modified time: 2017-01-13T16:23:44+01:00
-* @Copyright: Copyright (c) 2016, All rights reserved, http://printr.nl
-*/
-
 'use strict'
 
 const MAX_ALLOWED_PRINTERS = 4
@@ -108,6 +99,7 @@ class Drivers {
   printerDisconnected (port) {
     // if printer was connected and printing, set queueItem back to `queued`
     if (this.printers[port] !== undefined) {
+      // TODO: not use DB and queue
       this._client.db.QueueItem.setQueuedForPort(port, function (err) {
         if (err) {
           return this._client.logger.log(`Error updating queue: ${err.message}`, 'warn')

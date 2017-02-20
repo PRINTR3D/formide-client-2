@@ -3,10 +3,13 @@
   "version": "2.0.0",
   "description": "Client software that connects 3D printers to Formide Cloud Platform",
   "main": "app.js",
+  "directories": {
+    "test": "test"
+  },
   "author": "Chris ter Beke <chris@printr.com>",
   "license": "GPL-2.0",
   "scripts": {
-    "docs": "./node_modules/.bin/apidoc -i ./src/interfaces/http/ -o ./docs/",
+    "docs": "./node_modules/.bin/apidoc -i ./src -o ./docs/",
     "test": "NODE_ENV=test mocha --harmony test/**/*.test.js",
     "dev:mac": "OS_IMPLEMENTATION=mac_os NODE_ENV=development nodemon app",
     "debug:mac": "OS_IMPLEMENTATION=mac_os NODE_ENV=development DEBUG=app:*,plugin:* node app"
@@ -45,5 +48,9 @@
     "eslint-plugin-standard": "^2.0.1",
     "mocha": "^3.2.0",
     "should": "^11.1.2"
+  },
+  "apidoc": {
+    "title": "Formide Client API",
+    "url": "http://localhost:1337"
   }
 }

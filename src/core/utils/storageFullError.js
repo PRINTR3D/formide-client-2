@@ -1,12 +1,3 @@
-/**
-* @Author: chris
-* @Date:   2017-01-07T02:07:09+01:00
-* @Filename: storageFullError.js
-* @Last modified by:   chris
-* @Last modified time: 2017-01-07T02:07:43+01:00
-* @Copyright: Copyright (c) 2016, All rights reserved, http://printr.nl
-*/
-
 'use strict'
 
 class StorageFullError extends Error {

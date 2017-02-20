@@ -8,10 +8,11 @@
  * @returns {*}
  */
 function checkParams (req, res, next) {
-  req.checkParams = function (requiredParams) {
+  req.checkParams = function (requiredParams, type) {
+    type = type || 'body'
     for (var i = 0; i < requiredParams.length; i++) {
-      if (!req.body.hasOwnProperty(requiredParams[i])) {
-        return res.badRequest(`${requiredParams[i]} is a required parameter`)
+      if (!req[type].hasOwnProperty(requiredParams[i])) {
+        return res.badRequest(`${requiredParams[i]} is a required ${type} parameter`)
       }
     }
     return true

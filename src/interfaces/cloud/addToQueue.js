@@ -17,8 +17,9 @@ const Throttle = require('throttle')
  */
 function addToQueue (client, data, callback) {
   const hash = crypto.randomBytes(16).toString('hex')
-
-  db.QueueItem
+	
+	// TODO: not use DB and queue
+  client.db.QueueItem
         .create({
           origin: 'cloud',
           status: 'downloading',

@@ -1,12 +1,3 @@
-/**
-* @Author: chris
-* @Date:   2017-01-07T21:46:37+01:00
-* @Filename: index.js
-* @Last modified by:   chris
-* @Last modified time: 2017-01-11T17:01:44+01:00
-* @Copyright: Copyright (c) 2016, All rights reserved, http://printr.nl
-*/
-
 'use strict'
 
 const path = require('path')
