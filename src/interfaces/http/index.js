@@ -40,7 +40,9 @@ class Http {
     })
 
     // request logging
-	  this.app.use(morgan(':remote-addr - :method :url [:response-time ms]'))
+    if (client.config.http.hasOwnProperty('requestLogging') && client.config.http.requestLogging !== false) {
+	    this.app.use(morgan(':remote-addr - :method :url [:response-time ms]'))
+    }
 
     // use json body parser for json post requests
     this.app.use(bodyParser.json({ limit: '500mb' }))

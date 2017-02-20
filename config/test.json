@@ -1,7 +1,8 @@
 {
   "http": {
     "api": 1337,
-    "www": "8080"
+    "www": "8080",
+    "requestLogging": false
   },
   "cloud": {
     "URL": "http://localhost:3000",
