@@ -7,6 +7,7 @@ const assert = require('assert')
 const Events = require('./events')
 const Drivers = require('./drivers')
 const Logger = require('./utils/logger')
+const Auth = require('./auth')
 
 // other modules
 const Www = require('../www')
@@ -52,6 +53,7 @@ class Client {
     this.events = Events
     this.drivers = new Drivers(this)
     this.storage = require('./storage')
+    this.auth = new Auth(this)
 
     // interfaces
     this.cloud = new Cloud(this)

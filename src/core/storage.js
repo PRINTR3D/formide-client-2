@@ -3,6 +3,7 @@
 const fs = require('fs')
 const diskSpace = require('./utils/diskSpace')
 const gcodeDir = require('./utils/directories').getPaths().gcodeDir
+const filesToHide = ['.', '..', '.DS_Store']
 
 /**
  * List files in gcode storage directory
@@ -13,17 +14,17 @@ function list () {
 		fs.readdir(gcodeDir, (err, files) => {
 			if (err) return reject(err)
 			
-			const response = files.map((file) => {
-				try {
-					const info = fs.statSync(gcodeDir + '/' + file)
+			const response = files.filter((file) => {
+				return (filesToHide.indexOf(file) === -1)
+			}).map((file) => {
+				const info = fs.statSync(gcodeDir + '/' + file)
+				if (filesToHide.indexOf(file) === -1) {
 					return {
 						filename: file,
 						filesize: info.size,
 						createdAt: new Date(info.ctime),
 						updatedAt: new Date(info.mtime)
 					}
-				} catch (e) {
-					return reject(e)
 				}
 			})
 			

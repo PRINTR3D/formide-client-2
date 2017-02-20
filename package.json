@@ -10,7 +10,7 @@
   "license": "GPL-2.0",
   "scripts": {
     "docs": "./node_modules/.bin/apidoc -i ./src -o ./docs/",
-    "test": "NODE_ENV=test mocha --harmony test/**/*.test.js",
+    "test": "NODE_ENV=test mocha --harmony test/index.test.js",
     "dev:mac": "OS_IMPLEMENTATION=mac_os NODE_ENV=development nodemon app",
     "debug:mac": "OS_IMPLEMENTATION=mac_os NODE_ENV=development DEBUG=app:*,plugin:* node app"
   },
@@ -39,9 +39,11 @@
     "sandboxed-module": "^2.0.3",
     "socket.io": "^1.5.0",
     "socket.io-client": "^1.5.0",
-    "throttle": "^1.0.3"
+    "throttle": "^1.0.3",
+    "uuid": "^3.0.1"
   },
   "devDependencies": {
+    "chai": "^3.5.0",
     "eslint": "^3.13.1",
     "eslint-config-standard": "^6.2.1",
     "eslint-plugin-promise": "^3.4.0",
