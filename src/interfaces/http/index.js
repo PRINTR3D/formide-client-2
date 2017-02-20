@@ -61,6 +61,7 @@ class Http {
 
     // check auth middleware (can be used in routes using http.checkAuth.jwt)
     this.checkAuth = require('./middleware/checkAuth')(client)
+    this.checkParams = require('./middleware/checkParams')
 
     // use cors middleware
     this.app.use(cors({
@@ -80,9 +81,6 @@ class Http {
       res.notImplemented = require('./responses/notImplemented').bind({ req, res })
       next()
     })
-
-    // check params middleware
-    this.app.use(checkParams)
 
     // api routes
 	  this.app.use('/api/auth', require('./routes/auth')(client, this))
@@ -112,27 +110,6 @@ class Http {
     if (typeof plugin.getWebRoot === 'function') {
       this.app.use(`/plugins/${plugin.getName()}/www*`, function (req, res) {
         res.sendFile(req.params[0] || 'index.html', { root: plugin.getWebRoot() })
-      })
-    }
-
-    if (typeof plugin.getSettingsForm === 'function') {
-      // get current settings
-      pluginRootRouter.get('/settings', function (req, res) {
-        return res.ok(plugin.getSettings())
-      })
-
-      // save settings
-      pluginRootRouter.post('/settings', function (req, res) {
-        // TODO: check body input
-        plugin.setSettings(req.body, function (err) {
-          if (err) return res.serverError(err)
-          return res.ok({ success: true })
-        })
-      })
-
-      // get settings form
-      pluginRootRouter.get('/settings/form', function (req, res) {
-        return res.ok(plugin.getSettingsForm())
       })
     }
   }
