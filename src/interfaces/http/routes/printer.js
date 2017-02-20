@@ -17,7 +17,7 @@ module.exports = function (client, http) {
   assert(http, '[http] - http not passed in printer router')
 
   /**
-   * @api {GET} /api/printer Get status of all connected printers
+   * @api {GET} /api/printer Printer:list
    * @apiGroup Printer
    * @apiVersion 1.0.0
    * @apiDescription Get the status of all printers that are currently connected to the device.
@@ -39,7 +39,7 @@ module.exports = function (client, http) {
   })
 
   /**
-   * @api {GET} /api/printer/:port Get status of printer on selected port
+   * @api {GET} /api/printer/:port Printer:status
    * @apiGroup Printer
    * @apiVersion 1.0.0
    * @apiDescription Get the status of the printer that's connected to the port given in the URI parameter
@@ -79,7 +79,7 @@ module.exports = function (client, http) {
     })
   })
 
-  router.get('/:port/commands/:command', http.checkAuth.user, function (req, res) {
+  router.get('/:port/commands/:command', http.checkAuth.jwt, function (req, res) {
     client.drivers.getPrinter(req.params.port, function (err, printer) {
       if (err && err.name === 'PrinterNotConnectedError') return res.notFound(err.message)
       else if (err) return res.serverError(err)

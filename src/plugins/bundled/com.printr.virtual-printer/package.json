@@ -2,5 +2,8 @@
   "name": "com.printr.virtual-printer",
   "version": "1.0.0",
   "description": "Starts a virtual printer so you can test endpoints of the Formide client",
-  "main": "index.js"
+  "main": "index.js",
+  "dependencies": {
+    "jsonwebtoken": "^7.3.0"
+  }
 }

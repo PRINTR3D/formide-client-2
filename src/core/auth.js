@@ -124,6 +124,10 @@ class Auth {
 		})
 	}
 	
+	/**
+	 * Reset users state
+	 * @returns {Promise}
+	 */
 	resetUsers () {
 		this.store = []
 		fs.writeFileSync(this.path, JSON.stringify(this.store)) // write empty array

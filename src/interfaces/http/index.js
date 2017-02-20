@@ -54,17 +54,12 @@ class Http {
     // use session middleware
     this.app.use(sessionMiddleware)
 
-    // passport authentication
-    // this.passport = require('./passport')(client)
-    // this.app.use(this.passport.initialize())
-    // this.app.use(this.passport.session())
-
     // use bearer token middleware
     this.app.use(bearerToken({
       queryKey: 'access_token'
     }))
 
-    // check auth middleware (can be used in routes using http.checkAuth.{token/user/admin})
+    // check auth middleware (can be used in routes using http.checkAuth.jwt)
     this.checkAuth = require('./middleware/checkAuth')(client)
 
     // use cors middleware

@@ -9,7 +9,7 @@ module.exports = function (client, http) {
   assert(client, '[http] - http not passed in network router')
 
   /**
-   * @api {get} /api/network/status Network status
+   * @api {get} /api/network/status Network:status
    * @apiGroup Network
    * @apiDescription Get the current network status
    * @apiVersion 2.0.0
@@ -22,19 +22,12 @@ module.exports = function (client, http) {
       const publicIp = yield client.system.network.publicIp()
       const network = yield client.system.network.network()
       const mac = yield client.system.network.mac()
-
-      return res.ok({
-        ip,
-        publicIp,
-        mac,
-        isConnected,
-        network
-      })
+      return res.ok({ ip, publicIp, mac, isConnected, network })
     }).then(null, res.serverError)
   })
 
   /**
-   * @api {get} /api/network/list List nearby networks
+   * @api {get} /api/network/list Network:list
    * @apiGroup Network
    * @apiDescription List nearby wireless networks to connect to
    * @apiVersion 2.0.0
@@ -48,12 +41,12 @@ module.exports = function (client, http) {
   })
 
   /**
-   * @api {post} /api/network/connect Connect to Wi-Fi network
+   * @api {post} /api/network/connect Network:connect
    * @apiGroup Network
    * @apiDescription Connect to a nearby wireless network
    * @apiVersion 2.0.0
    */
-  router.post('/connect', http.checkAuth.admin, function (req, res) {
+  router.post('/connect', http.checkAuth.jwt, function (req, res) {
     if (!client.system.network) return res.notImplemented('Networking is not implemented on this device')
 	  co(function*() {
 	    const connect = yield client.system.network.connect(req.body)

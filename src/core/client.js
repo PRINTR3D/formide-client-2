@@ -8,6 +8,7 @@ const Events = require('./events')
 const Drivers = require('./drivers')
 const Logger = require('./utils/logger')
 const Auth = require('./auth')
+const Storage = require('./storage')
 
 // other modules
 const Www = require('../www')
@@ -52,11 +53,11 @@ class Client {
     // core
     this.events = Events
     this.drivers = new Drivers(this)
-    this.storage = require('./storage')
+    this.storage = new Storage(this)
     this.auth = new Auth(this)
 
     // interfaces
-    this.cloud = new Cloud(this)
+    this.cloud = new Cloud(this) // TODO: separate client logic from cloud module
     this.http = new Http(this)
     this.ws = new Ws(this)
     this.www = new Www(this)
