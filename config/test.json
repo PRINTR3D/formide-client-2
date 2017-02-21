@@ -5,7 +5,7 @@
     "requestLogging": false
   },
   "cloud": {
-    "URL": "https://api.formide.com",
+    "URL": "https://api2.formide.com",
     "platformURL": "https://platform.formide.com"
   },
   "log": {

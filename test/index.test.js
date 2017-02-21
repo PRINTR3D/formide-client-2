@@ -16,7 +16,7 @@ require('./tests/routes/network.test')(client)
 require('./tests/websocket/index.test')(client)
 
 // cloud
-require('./tests/cloud/downloadGcodeFromCloud.test')(client)
+// require('./tests/cloud/downloadGcodeFromCloud.test')(client)
 
 // plugins
 require('./tests/plugins/com.printr.virtual-printer.test')(client)
