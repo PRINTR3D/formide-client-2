@@ -2,7 +2,6 @@
 
 // packages
 const fs = require('fs')
-const decache = require('decache')
 const SandboxedModule = require('sandboxed-module')
 const vm = require('vm')
 
