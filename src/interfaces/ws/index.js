@@ -1,16 +1,8 @@
-/**
-* @Author: chris
-* @Date:   2016-12-17T14:17:52+01:00
-* @Filename: index.js
-* @Last modified by:   chris
-* @Last modified time: 2017-01-10T23:17:30+01:00
-* @Copyright: Copyright (c) 2016, All rights reserved, http://printr.nl
-*/
-
 'use strict'
 
 const io = require('socket.io')
 const ws = require('nodejs-websocket')
+const jwt = require('../../core/utils/jwt')
 
 class Ws {
 
@@ -36,7 +28,7 @@ class Ws {
           const data = JSON.parse(message)
 
           if (data.channel === 'authenticate') {
-            self.authenticate(data.data.accessToken, function (err, accessToken) {
+            self.authenticate(data.data.token, function (err, user) {
               if (err) {
                 client.logger.log(`Native UI socket error: ${err.message}`, 'error')
               }
@@ -46,7 +38,8 @@ class Ws {
                 data: {
                   success: true,
                   message: 'Authentication successful',
-                  notification: false
+                  notification: false,
+	                user: user
                 }
               }))
 
@@ -77,26 +70,26 @@ class Ws {
       }
 
       socket.on('authenticate', function (data, callback) {
-        self.authenticate(data.accessToken, function (err, accessToken) {
+        self.authenticate(data.token, function (err, user) {
           if (err) {
             if (typeof callback === 'function') callback({ success: false, message: err.message })
             return socket.disconnect()
           }
 
-          if (!accessToken) {
-            if (typeof callback === 'function') callback({ success: false, message: 'Access token not found. Please provide a valid access token.' })
+          if (!user) {
+            if (typeof callback === 'function') callback({ success: false, message: 'Token not found. Please provide a valid token.' })
             return socket.disconnect()
           }
 
           client.events.onAny(forwardSocketEvents)
-
           client.logger.log(`Local socket.io connected`, 'info')
 
           // respond to client
           if (typeof callback === 'function') {
             callback({
               success: true,
-              message: 'Authentication successful'
+              message: 'Authentication successful',
+              user: user
             })
           }
         })
@@ -112,9 +105,21 @@ class Ws {
       })
     })
   }
-
+	
+	/**
+   * Authenticate websocket using JWT tokens
+	 * @param token
+	 * @param callback
+	 * @returns {*}
+	 */
   authenticate (token, callback) {
-    this._client.db.AccessToken.findOne({ token }, callback)
+    token = jwt.verify(token)
+    if (!token) return callback(null, false)
+	
+	  // find user and set session
+    const user = this._client.auth.find(token.id, 'id')
+    if (!user) return callback(null, false)
+    return callback(null, user)
   }
 }
 

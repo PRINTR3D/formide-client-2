@@ -1,9 +1,0 @@
-{
-  "name": "com.printr.element-debug-logger",
-  "version": "1.0.0",
-  "description": "Read debug logs on The Element, handy for remote support",
-  "main": "index.js",
-  "dependencies": {
-    "slice-file": "^1.0.0"
-  }
-}

@@ -1,12 +1,3 @@
-/**
-* @Author: chris
-* @Date:   2017-01-07T21:46:37+01:00
-* @Filename: index.js
-* @Last modified by:   chris
-* @Last modified time: 2017-01-11T17:01:44+01:00
-* @Copyright: Copyright (c) 2016, All rights reserved, http://printr.nl
-*/
-
 'use strict'
 
 const path = require('path')
@@ -16,6 +7,7 @@ const VirtualPrinter = require('./virtualPrinter')
 class VirtualPrinterPlugin extends Plugin {
   constructor (client) {
     super(client, pkg)
+    this._client = client
     this.startVirtualPrinter()
   }
 
@@ -26,7 +18,16 @@ class VirtualPrinterPlugin extends Plugin {
   }
 
   getApi (router) {
-    router.get('/status', function (req, res) {
+    
+    /**
+     * @api {get} /plugins/com.printr.virtual-printer/api/status VirtualPrinter:status
+     * @apiGroup Plugin:VirtualPrinter
+     * @apiDescription Set the status of virtual printer
+     * @apiVersion 2.0.0
+     *
+     * @apiParam {String=online,printing,paused,stopping,heating,offline} status Status to set the printer to
+     */
+    router.get('/status', this._client.http.checkParams(['status'], 'query'), function (req, res) {
       this.virtualPrinter.setStatus(req.query.status)
       return res.ok({ message: `Status changed to ${req.query.status}` })
     }.bind(this))

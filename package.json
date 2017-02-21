@@ -3,18 +3,27 @@
   "version": "2.0.0",
   "description": "Client software that connects 3D printers to Formide Cloud Platform",
   "main": "app.js",
+  "directories": {
+    "test": "test"
+  },
   "author": "Chris ter Beke <chris@printr.com>",
   "license": "GPL-2.0",
   "scripts": {
-    "docs": "./node_modules/.bin/apidoc -i ./src/interfaces/http/ -o ./docs/",
-    "test": "NODE_ENV=test mocha --harmony test/**/*.test.js",
-    "dev:mac": "OS_IMPLEMENTATION=mac_os NODE_ENV=development nodemon app",
-    "debug:mac": "OS_IMPLEMENTATION=mac_os NODE_ENV=development DEBUG=app:*,plugin:* node app"
+    "docs": "./node_modules/.bin/apidoc -i ./src -e node_modules -o ./docs/",
+    "dev": "NODE_ENV=development nodemon app",
+    "debug": "NODE_ENV=development DEBUG=app:*,plugin:* node app",
+    "test": "NODE_ENV=test mocha --harmony test/index.test.js",
+    "coverage": "NODE_ENV=test istanbul cover _mocha -- -R spec && open coverage/lcov-report/index.html",
+    "dev:mac": "OS_IMPLEMENTATION=mac_os npm run dev",
+    "debug:mac": "OS_IMPLEMENTATION=mac_os npm run debug",
+    "test:mac": "OS_IMPLEMENTATION=mac_os npm test",
+    "coverage:mac": "OS_IMPLEMENTATION=mac_os npm run coverage"
   },
   "dependencies": {
     "async": "^2.1.4",
     "bcrypt": "^1.0.2",
     "body-parser": "^1.15.2",
+    "chai-http": "^3.0.0",
     "cli-color": "^1.1.0",
     "co": "^4.6.0",
     "cookie-parser": "^1.4.3",
@@ -22,31 +31,37 @@
     "debug": "^2.6.0",
     "decache": "^4.1.0",
     "diskspace": "^1.0.3",
-    "eventemitter2": "^2.1.3",
+    "eventemitter2": "^2.2.2",
     "express": "^4.14.0",
     "express-bearer-token": "^2.1.0",
     "express-session": "^1.14.1",
     "formide-drivers": "PRINTR3D/formide-drivers-npm#v6.5.0",
     "getmac": "^1.2.1",
     "handlebars": "^4.0.6",
-    "katana-slicer": "PRINTR3D/katana-slicer-npm#v1.4.0-alpha.4",
+    "jsonwebtoken": "^7.3.0",
     "moment": "^2.17.1",
-    "mongoose": "4.7.2",
+    "morgan": "^1.8.1",
     "nodejs-websocket": "^1.7.0",
-    "passport": "^0.3.2",
-    "passport-local": "^1.0.0",
     "request": "^2.75.0",
     "sandboxed-module": "^2.0.3",
     "socket.io": "^1.5.0",
     "socket.io-client": "^1.5.0",
-    "throttle": "^1.0.3"
+    "throttle": "^1.0.3",
+    "uuid": "^3.0.1"
   },
   "devDependencies": {
+    "apidoc": "^0.17.5",
+    "chai": "^3.5.0",
     "eslint": "^3.13.1",
     "eslint-config-standard": "^6.2.1",
     "eslint-plugin-promise": "^3.4.0",
     "eslint-plugin-standard": "^2.0.1",
     "mocha": "^3.2.0",
     "should": "^11.1.2"
+  },
+  "apidoc": {
+    "title": "Formide Client API",
+    "url": "http://localhost:1337",
+    "sampleUrl": "http://localhost:1337"
   }
 }

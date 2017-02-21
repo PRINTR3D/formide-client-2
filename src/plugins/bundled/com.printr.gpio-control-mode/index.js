@@ -1,12 +1,3 @@
-/**
-* @Author: chris
-* @Date:   2017-01-05T01:17:19+01:00
-* @Filename: index.js
-* @Last modified by:   chris
-* @Last modified time: 2017-01-11T17:00:08+01:00
-* @Copyright: Copyright (c) 2016, All rights reserved, http://printr.nl
-*/
-
 'use strict'
 
 const pkg = require('./package.json')

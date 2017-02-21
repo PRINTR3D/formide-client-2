@@ -1,12 +1,3 @@
-/**
-* @Author: chris
-* @Date:   2016-12-17T13:54:59+01:00
-* @Filename: socket.js
-* @Last modified by:   chris
-* @Last modified time: 2017-01-07T16:10:03+01:00
-* @Copyright: Copyright (c) 2016, All rights reserved, http://printr.nl
-*/
-
 'use strict'
 
 const socketClient = require('socket.io-client')

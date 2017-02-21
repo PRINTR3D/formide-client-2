@@ -1,12 +1,3 @@
-/**
-* @Author: chris
-* @Date:   2017-01-05T01:29:16+01:00
-* @Filename: gpio.js
-* @Last modified by:   chris
-* @Last modified time: 2017-01-05T02:45:18+01:00
-* @Copyright: Copyright (c) 2016, All rights reserved, http://printr.nl
-*/
-
 'use strict'
 
 const assert = require('assert')

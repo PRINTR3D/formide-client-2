@@ -1,51 +1,41 @@
 'use strict'
 
+const jwt = require('../../../core/utils/jwt')
+
 module.exports = function (client) {
-  function token (req, res, next) {
-    if (req.token) {
-      client.db.AccessToken.findOne({ token: req.token }).then(function (accessToken) {
-        if (accessToken) {
-          req.accessToken = accessToken
-          return next(null, accessToken)
-        } else {
-          returnUnauthorized(client, res, 'Access token not found in database')
-        }
-      }).catch(next)
-    } else {
-      returnUnauthorized(client, res, 'Token not found in request')
-    }
-  }
-
-  function user (req, res, next) {
-    token(req, res, function (_err, accessToken) {
-      client.db.User.findOne({ [global.MONGO_ID_FIELD]: accessToken.createdBy }).then(function (user) {
-        if (user) {
-          req.user = user
-          req.user.id = req.user[global.MONGO_ID_FIELD]
-          return next(null, user)
-        } else {
-          returnUnauthorized(client, res, 'User not found in database')
-        }
-      }).catch(next)
-    })
-  }
-
-  function admin (req, res, next) {
-    user(req, res, function (_err, user) {
-      if (user.isAdmin && req.accessToken.isAdmin) {
-        return next()
-      } else {
-        returnUnauthorized(client, res, 'User is not admin and cannot access this endpoint')
-      }
-    })
+	
+	/**
+   * JWT auth middleware
+	 * @param req
+	 * @param res
+	 * @param next
+	 * @returns {*}
+	 */
+  function jwtMiddleware (req, res, next) {
+	  const authHeader = req.get('Authorization')
+	  if (!authHeader) return res.unauthorized('No Bearer token found')
+	
+	  // split header
+	  const authHeaderParts = authHeader.split(' ')
+	  if (authHeaderParts.length !== 2) return res.unauthorized('No Bearer token found')
+	
+	  // find schema and Bearer
+	  const schema = authHeaderParts[0]
+	  const bearer = authHeaderParts[1]
+	  if (schema !== 'Bearer') return res.unauthorized('No Bearer token found')
+	
+	  // verify Bearer token with JWT
+	  const token = jwt.verify(bearer)
+	  if (!token) return res.unauthorized('Could not validate Bearer')
+    
+    // find user and set session
+		const user = client.auth.find(token.id, 'id')
+		req.authenticated = true
+		req.user = user
+		return next()
   }
 
   return {
-    token, user, admin
+    jwt: jwtMiddleware
   }
-}
-
-function returnUnauthorized (client, res, reason) {
-  client.logger.log(`unauthorized: ${reason}`, 'debug')
-  return res.unauthorized(reason)
 }
