@@ -40,6 +40,10 @@ class VirtualPrinter extends Printer {
   sendCommand (command, callback) {
     this._driver.sendGcode(command, callback)
   }
+  
+  pausePrint (callback) {
+    this._driver.pausePrint(callback)
+  }
 }
 
 module.exports = VirtualPrinter
