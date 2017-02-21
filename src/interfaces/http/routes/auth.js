@@ -71,6 +71,7 @@ module.exports = function (client, http) {
 	 */
 	router.put('/users/:id', http.checkAuth.jwt, http.checkParams(['username', 'password']), function (req, res) {
 		co(function* () {
+			if (req.params.id !== req.user.id) return res.unauthorized('You can only edit your own user credentials')
 			const updatedUser = yield client.auth.updateUser(req.params.id, req.body.username, req.body.password)
 			if (!updatedUser) return res.notFound('Could not update user')
 			return res.ok({ success: true, user: updatedUser })

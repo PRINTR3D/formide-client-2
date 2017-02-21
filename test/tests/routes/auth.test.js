@@ -59,6 +59,60 @@ module.exports = (client) => {
 			
 		})
 		
+		describe('POST /api/auth/users', () => {
+			
+			it('should create a new user when all the fields are passed', (done) => {
+				const user = client.auth.find('admin@local')
+				const token = jwt.sign(user)
+				
+				chai.request(client.http.app).post('/api/auth/users').send({
+					username: 'test@user',
+					password: 'testpassword'
+				}).set('Authorization', `Bearer ${token}`).end((req, res) => {
+					expect(res.status).to.equal(200)
+					expect(res.body.success).to.equal(true)
+					expect(res.body.user.username).to.equal('test@user')
+					done()
+				})
+			})
+			
+		})
+		
+		describe('PUT /api/auth/users', () => {
+			
+			it('should update the authorized user when all the fields are passed', (done) => {
+				const user = client.auth.find('admin@local')
+				const token = jwt.sign(user)
+				
+				chai.request(client.http.app).put('/api/auth/users/' + user.id).send({
+					username: 'admin2@local',
+					password: 'password'
+				}).set('Authorization', `Bearer ${token}`).end((req, res) => {
+					expect(res.status).to.equal(200)
+					expect(res.body.success).to.equal(true)
+					expect(res.body.user.username).to.equal('admin2@local')
+					client.auth.resetUsers().then(() => done()).catch(done)
+				})
+			})
+			
+			it('should throw an 401 when editing another user', (done) => {
+				const user = client.auth.find('admin@local')
+				const token = jwt.sign(user)
+				
+				client.auth.createUser('admin2@local', 'password').then((userTwo) => {
+					expect(userTwo).to.not.equal(undefined)
+					chai.request(client.http.app).put('/api/auth/users/' + userTwo.id).send({
+						username: 'admin3@local',
+						password: 'password'
+					}).set('Authorization', `Bearer ${token}`).end((req, res) => {
+						expect(res.status).to.equal(401)
+						client.auth.resetUsers().then(() => done()).catch(done)
+					})
+				}).catch(done)
+			})
+			
+		})
+		
 	})
 	
 }
