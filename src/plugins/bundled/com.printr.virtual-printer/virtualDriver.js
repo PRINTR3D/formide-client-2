@@ -1,5 +1,7 @@
 'use strict'
 
+const PrinterActionNowAllowedError = require('../../../core/drivers/printerActionNotAllowedError')
+
 class VirtualDriver {
 
   constructor (port) {
@@ -42,7 +44,9 @@ class VirtualDriver {
 	pausePrint (callback) {
     const self = this
 	  setTimeout(function () {
-	    if (self._status !== 'printing' && self.status !== 'heating') return callback(new Error('Printer is not able to pause'))
+	    if (self._status !== 'printing' && self.status !== 'heating')
+	    	return callback(new PrinterActionNowAllowedError('Printer can only pause when printing or heating'))
+		  
       console.log('pausing virtual printer')
       return callback(null, 'OK')
 	  }, 200)

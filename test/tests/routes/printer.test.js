@@ -9,6 +9,9 @@ const VIRTUAL_PRINTER_PORT = '/dev/virt0'
 
 module.exports = (client) => {
 	
+	const user = client.auth.find('admin@local')
+	const token = jwt.sign(user)
+	
 	describe('Printer', () => {
 		
 		describe('GET /api/printer', () => {
@@ -40,18 +43,23 @@ module.exports = (client) => {
 		
 		describe('GET /api/printer/:port/pause', () => {
 			it('should pause the printer if it is available and the user is authorized', (done) => {
-				const user = client.auth.find('admin@local')
-				const token = jwt.sign(user)
-				
 				// set virtual printer to printing so we can pause it
-				client.drivers.getPrinter(VIRTUAL_PRINTER_PORT, (err, printer) => {
-					printer.setStatus('printing')
-					
-					chai.request(client.http.app).get('/api/printer/' + encodeURIComponent(VIRTUAL_PRINTER_PORT) + '/pause').set('Authorization', `Bearer ${token}`).end((req, res) => {
-						expect(res.status).to.equal(200)
-						expect(res.body).to.equal('OK')
-						done()
-					})
+				client.drivers.printers[VIRTUAL_PRINTER_PORT].setStatus('printing')
+				
+				chai.request(client.http.app).get('/api/printer/' + encodeURIComponent(VIRTUAL_PRINTER_PORT) + '/pause').set('Authorization', `Bearer ${token}`).end((req, res) => {
+					expect(res.status).to.equal(200)
+					expect(res.body).to.equal('OK')
+					done()
+				})
+			})
+			
+			it('should throw a 409 when the printer is not able to pause at this moment', (done) => {
+				// set virtual printer to printing so we can pause it
+				client.drivers.printers[VIRTUAL_PRINTER_PORT].setStatus('online')
+				
+				chai.request(client.http.app).get('/api/printer/' + encodeURIComponent(VIRTUAL_PRINTER_PORT) + '/pause').set('Authorization', `Bearer ${token}`).end((req, res) => {
+					expect(res.status).to.equal(409)
+					done()
 				})
 			})
 		})

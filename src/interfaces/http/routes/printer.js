@@ -78,6 +78,7 @@ module.exports = function (client, http) {
 	router.get('/:port/commands/:command', http.checkAuth.jwt, function (req, res) {
 		client.drivers.runCommandTemplate(req.params.port, req.params.command, req.query, (err, response) => {
 			if (err && err.name === 'PrinterNotConnectedError') return res.notFound(err.message)
+			else if (err && err.name === 'PrinterActionNotAllowed') return res.conflict(err.message)
 			else if (err) return res.serverError(err)
 			return res.ok(response)
 		})
@@ -112,6 +113,7 @@ module.exports = function (client, http) {
 	router.get('/:port/gcode', http.checkAuth.jwt, http.checkParams(['command'], 'query'), function (req, res) {
 		client.drivers.sendCommand(req.params.port, req.query.command, (err, response) => {
 			if (err && err.name === 'PrinterNotConnectedError') return res.notFound(err.message)
+			else if (err && err.name === 'PrinterActionNotAllowed') return res.conflict(err.message)
 			else if (err) return res.serverError(err)
 			return res.ok(response)
 		})
@@ -129,6 +131,7 @@ module.exports = function (client, http) {
 	router.get('/:port/tune', http.checkAuth.jwt, http.checkParams(['command'], 'query'), function (req, res) {
 		client.drivers.sendTuneCommand(req.params.port, req.query.command, (err, response) => {
 			if (err && err.name === 'PrinterNotConnectedError') return res.notFound(err.message)
+			else if (err && err.name === 'PrinterActionNotAllowed') return res.conflict(err.message)
 			else if (err) return res.serverError(err)
 			return res.ok(response)
 		})
@@ -146,6 +149,7 @@ module.exports = function (client, http) {
 	router.get('/:port/print', http.checkAuth.jwt, http.checkParams(['file'], 'query'), function (req, res) {
 		client.drivers.printFile(req.params.port, req.query.file, (err, response) => {
 			if (err && err.name === 'PrinterNotConnectedError') return res.notFound(err.message)
+			else if (err && err.name === 'PrinterActionNotAllowed') return res.conflict(err.message)
 			else if (err) return res.serverError(err)
 			return res.ok(response)
 		})
@@ -162,6 +166,7 @@ module.exports = function (client, http) {
 	router.get('/:port/pause', http.checkAuth.jwt, function (req, res) {
 		client.drivers.pausePrint(req.params.port, (err, response) => {
 			if (err && err.name === 'PrinterNotConnectedError') return res.notFound(err.message)
+			else if (err && err.name === 'PrinterActionNotAllowed') return res.conflict(err.message)
 			else if (err) return res.serverError(err)
 			return res.ok(response)
 		})
@@ -178,6 +183,7 @@ module.exports = function (client, http) {
 	router.get('/:port/resume', http.checkAuth.jwt, function (req, res) {
 		client.drivers.resumePrint(req.params.port, (err, response) => {
 			if (err && err.name === 'PrinterNotConnectedError') return res.notFound(err.message)
+			else if (err && err.name === 'PrinterActionNotAllowed') return res.conflict(err.message)
 			else if (err) return res.serverError(err)
 			return res.ok(response)
 		})
@@ -194,6 +200,7 @@ module.exports = function (client, http) {
 	router.get('/:port/stop', http.checkAuth.jwt, function (req, res) {
 		client.drivers.stopPrint(req.params.port, (err, response) => {
 			if (err && err.name === 'PrinterNotConnectedError') return res.notFound(err.message)
+			else if (err && err.name === 'PrinterActionNotAllowed') return res.conflict(err.message)
 			else if (err) return res.serverError(err)
 			return res.ok(response)
 		})
