@@ -4,10 +4,11 @@ const assert = require('assert')
 const co = require('co')
 const socket = require('./socket')
 const proxy = require('./proxy')
-const addToQueue = require('./addToQueue')
+const downloadGcodeFromCloud = require('./downloadGcodeFromCloud')
 const getCallbackData = require('./getCallbackData')
 
 // TODO: rewrite to separate package without client dependency
+
 class Cloud {
 
   /**
@@ -49,14 +50,14 @@ class Cloud {
       co(function*() {
         const publicIP = yield client.system.network.publicIp()
         const internalIP = yield client.system.network.ip()
-        const MAC = yield client.system.network.mac()
+        const macAddress = yield client.system.network.mac()
 
         // emit authentication data
         self.cloud.emit('authenticate', {
           type: 'client',
           ip: publicIP,
           ip_internal: internalIP,
-          mac: MAC,
+          mac: macAddress,
           version: client.version,
           environment: process.env.NODE_ENV,
           port: client.config.http.port
@@ -65,7 +66,7 @@ class Cloud {
             client.logger.log(`Cloud connected`, 'info')
           } else {
             client.logger.log(`Cloud not connected: ${response.message}`, 'warn')
-            client.logger.log(`MAC address is ${MAC}`, 'info')
+            client.logger.log(`MAC address is ${macAddress}`, 'info')
           }
         })
       }).then(null, console.error)
@@ -78,12 +79,16 @@ class Cloud {
         self.cloud.emit('http', getCallbackData(data._callbackId, err, response))
       })
     })
-
-    // Adding to queue from Formide Cloud
-    this.cloud.on('addToQueue', function (data) {
-      client.logger.log(`Cloud addToQueue: ${data.gcode}`, 'debug')
-      addToQueue(client, data, function (err, response) {
-        self.cloud.emit('addToQueue', getCallbackData(data._callbackId, err, response))
+    
+    // Adding a G-code file from the cloud
+    this.cloud.on('downloadGcode', function (data) {
+      client.logger.log(`Download cloud G-code: ${data.gcode}`, 'debug')
+      // TODO: improve this
+	    downloadGcodeFromCloud(data, function (err, gcodeFileName) {
+	      self.cloud.emit('downloadGcode', getCallbackData(data._callbackId, err, {
+	        success: true,
+		      gcodeFileName: gcodeFileName
+        }))
       })
     })
 

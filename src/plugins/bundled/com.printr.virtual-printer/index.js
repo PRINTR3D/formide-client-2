@@ -21,7 +21,7 @@ class VirtualPrinterPlugin extends Plugin {
     
     /**
      * @api {get} /plugins/com.printr.virtual-printer/api/status VirtualPrinter:status
-     * @apiGroup VirtualPrinter
+     * @apiGroup Plugin:VirtualPrinter
      * @apiDescription Set the status of virtual printer
      * @apiVersion 2.0.0
      *

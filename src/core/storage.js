@@ -47,8 +47,13 @@ class Storage {
 		
 	}
 	
-	write () {
-		
+	/**
+	 * Create a new write stream to store G-code
+	 * @param gcodeStoragePath
+	 */
+	write (gcodeStoragePath) {
+		const writeStream = fs.createWriteStream(gcodeStoragePath)
+		return writeStream
 	}
 	
 	remove () {

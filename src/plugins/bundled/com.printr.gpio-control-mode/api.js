@@ -4,7 +4,7 @@ module.exports = function api (plugin, router) {
 
   /**
    * @api {get} /plugins/com.printr.gpio-control-mode/api/mode GPIO:mode
-   * @apiGroup GPIO
+   * @apiGroup Plugin:GPIO
    * @apiDescription Get current GPIO control mode
    * @apiVersion 2.0.0
    */
@@ -18,7 +18,7 @@ module.exports = function api (plugin, router) {
 
   /**
    * @api {post} /plugins/com.printr.gpio-control-mode/api/mode GPIO:switch
-   * @apiGroup GPIO
+   * @apiGroup Plugin:GPIO
    * @apiDescription Set the GPIO control mode to switch between integration and host
    * @apiVersion 2.0.0
    */
@@ -33,7 +33,7 @@ module.exports = function api (plugin, router) {
 
   /**
    * @api {post} /plugins/com.printr.gpio-control-mode/api/enable GPIO:enable
-   * @apiGroup GPIO
+   * @apiGroup Plugin:GPIO
    * @apiDescription Enable the GPIO control mode to receive USB plug events over WS
    * @apiVersion 2.0.0
    */
