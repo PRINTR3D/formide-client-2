@@ -57,6 +57,7 @@
   },
   "apidoc": {
     "title": "Formide Client API",
-    "url": "http://localhost:1337"
+    "url": "http://localhost:1337",
+    "sampleUrl": "http://localhost:1337"
   }
 }

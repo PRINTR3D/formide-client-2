@@ -1,12 +1,3 @@
-/**
-* @Author: chris
-* @Date:   2016-12-18T17:19:51+01:00
-* @Filename: index.js
-* @Last modified by:   chris
-* @Last modified time: 2017-01-07T16:16:12+01:00
-* @Copyright: Copyright (c) 2016, All rights reserved, http://printr.nl
-*/
-
 'use strict'
 
 const assert = require('assert')

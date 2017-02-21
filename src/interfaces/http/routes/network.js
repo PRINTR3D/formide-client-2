@@ -5,8 +5,8 @@ const assert = require('assert')
 const router = require('express').Router()
 
 module.exports = function (client, http) {
-  assert(client, '[http] - client not passed in network router')
-  assert(client, '[http] - http not passed in network router')
+  assert(client, '[client] - client not passed in network router')
+  assert(http, '[http] - http not passed in network router')
 
   /**
    * @api {get} /api/network/status Network:status
@@ -35,7 +35,6 @@ module.exports = function (client, http) {
   router.get('/list', function (req, res) {
     if (!client.system.network) return res.notImplemented('Networking is not implemented on this device')
     client.system.network.list().then(function (networks) {
-      console.log('networks', networks)
       return res.ok(networks)
     }).catch(res.serverError)
   })
@@ -45,6 +44,9 @@ module.exports = function (client, http) {
    * @apiGroup Network
    * @apiDescription Connect to a nearby wireless network
    * @apiVersion 2.0.0
+   * @apiHeader {String} Authentication Valid Bearer JWT token
+   * @apiParam {String} ssid
+   * @apiParam {String} password
    */
   router.post('/connect', http.checkAuth.jwt, function (req, res) {
     if (!client.system.network) return res.notImplemented('Networking is not implemented on this device')
