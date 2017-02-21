@@ -10,11 +10,14 @@
   "license": "GPL-2.0",
   "scripts": {
     "docs": "./node_modules/.bin/apidoc -i ./src -e node_modules -o ./docs/",
+    "dev": "NODE_ENV=development nodemon app",
+    "debug": "NODE_ENV=development DEBUG=app:*,plugin:* node app",
     "test": "NODE_ENV=test mocha --harmony test/index.test.js",
-    "test:coverage": "istanbul cover _mocha -- -R spec && open coverage/lcov-report/index.html",
+    "coverage": "NODE_ENV=test istanbul cover _mocha -- -R spec && open coverage/lcov-report/index.html",
+    "dev:mac": "OS_IMPLEMENTATION=mac_os npm dev",
+    "debug:mac": "OS_IMPLEMENTATION=mac_os npm run debug",
     "test:mac": "OS_IMPLEMENTATION=mac_os npm test",
-    "dev:mac": "OS_IMPLEMENTATION=mac_os NODE_ENV=development nodemon app",
-    "debug:mac": "OS_IMPLEMENTATION=mac_os NODE_ENV=development DEBUG=app:*,plugin:* node app"
+    "coverage:mac": "OS_IMPLEMENTATION=mac_os npm run coverage"
   },
   "dependencies": {
     "async": "^2.1.4",
