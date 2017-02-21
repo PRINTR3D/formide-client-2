@@ -1,7 +1,7 @@
 'use strict'
 
 class StorageFullError extends Error {
-  constructor (port, extra) {
+  constructor (extra) {
     super()
     Error.captureStackTrace(this, this.constructor)
     this.name = 'StorageFull'
