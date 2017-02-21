@@ -30,11 +30,12 @@ class Printer {
 
     // we ask for the printer status every 2 seconds and store it
     this._statusInterval = setInterval(function () {
-      self.askStatus(function (err, status) {
-        if (err) return self._client.logger.log(`Could not get printer info: - ${err.message}`, 'warning')
-        self._status = status
-        self._client.events.emit('printer.status', status)
-      })
+      // TODO: fix this
+      // self.askStatus(function (err, status) {
+      //   if (err) return self._client.logger.log(`Could not get printer info: - ${err.message}`, 'warning')
+      //   self._status = status
+      //   self._client.events.emit('printer.status', status)
+      // })
     }, PRINTER_STATUS_INTERVAL)
   }
 

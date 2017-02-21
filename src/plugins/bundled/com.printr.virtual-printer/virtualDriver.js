@@ -13,7 +13,8 @@ class VirtualDriver {
       port: port,
       type: 'VIRTUAL',
       status: this._status,
-      progress: this._progress
+      progress: this._progress,
+      device: 'local'
     })
   }
 
