@@ -40,7 +40,7 @@ class Printer {
 
   askStatus (callback) {
     this._client.logger.log(`Printer.askStatus not implemented for this printer`, 'critical')
-    return callback(new Error('Not implemented'))
+    // return callback(new Error('Not implemented'))
   }
 
   /**

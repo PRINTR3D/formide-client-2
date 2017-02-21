@@ -28,8 +28,8 @@ class VirtualPrinter extends Printer {
     this.addCommandTemplate('fan_off', ['M107'])
     this.addCommandTemplate('gcode', ['{{gcode}}'])
   }
-
-  askStatus (callback) {
+	
+	askStatus (callback) {
     return this._driver.getStatus(this._port, callback)
   }
 

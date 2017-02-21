@@ -56,8 +56,6 @@ class Drivers {
 
     // all connected printers will be stored in this named array
     this.printers = {}
-
-    // TODO: Reset queue items
   }
 
   /**
@@ -100,20 +98,20 @@ class Drivers {
     // if printer was connected and printing, set queueItem back to `queued`
     if (this.printers[port] !== undefined) {
       // TODO: not use DB and queue
-      this._client.db.QueueItem.setQueuedForPort(port, function (err) {
-        if (err) {
-          return this._client.logger.log(`Error updating queue: ${err.message}`, 'warn')
-        }
-
-        this._client.logger.log(`Printer ${port} disconnected`, 'info')
-        this._client.events.emit('printer.disconnected', { port, message: `Printer disconnected from ${port}` })
-
-        // clear status interval before removing printer from printer list
-        this.printers[port].stopStatusInterval()
-
-        // remove entry from printers list
-        delete this.printers[port]
-      }.bind(this))
+      // this._client.db.QueueItem.setQueuedForPort(port, function (err) {
+      //   if (err) {
+      //     return this._client.logger.log(`Error updating queue: ${err.message}`, 'warn')
+      //   }
+      //
+      //   this._client.logger.log(`Printer ${port} disconnected`, 'info')
+      //   this._client.events.emit('printer.disconnected', { port, message: `Printer disconnected from ${port}` })
+      //
+      //   // clear status interval before removing printer from printer list
+      //   this.printers[port].stopStatusInterval()
+      //
+      //   // remove entry from printers list
+      //   delete this.printers[port]
+      // }.bind(this))
     }
   }
 

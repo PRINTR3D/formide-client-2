@@ -22,6 +22,17 @@ module.exports = (client) => {
 			
 		})
 		
+		describe('GET /api/network/list', () => {
+			
+			it('should return a list of nearby networks', (done) => {
+				chai.request(client.http.app).get('/api/network/list').end((req, res) => {
+					expect(res.status).to.equal(200)
+					done()
+				})
+			}).timeout(5000)
+			
+		})
+		
 	})
 	
 }
