@@ -72,7 +72,7 @@ module.exports = function (client, http) {
 	router.put('/users/:id', http.checkAuth.jwt, http.checkParams(['username', 'password']), function (req, res) {
 		co(function* () {
 			const updatedUser = yield client.auth.updateUser(req.params.id, req.body.username, req.body.password)
-			if (!updatedUser) return res.badRequest('Could not update user')
+			if (!updatedUser) return res.notFound('Could not update user')
 			return res.ok({ success: true, user: updatedUser })
 		}).then(null, res.serverError)
 	})
@@ -87,7 +87,9 @@ module.exports = function (client, http) {
 	 */
 	router.delete('/users/:id', http.checkAuth.jwt, function (req, res) {
 		co(function* () {
-			
+			const remove = yield client.auth.removeUser(req.params.id)
+			if (!remove) return res.notFound('Could not remove user')
+			return res.ok({ success: true })
 		}).then(null, res.serverError)
 	})
 	
