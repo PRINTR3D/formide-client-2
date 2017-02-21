@@ -14,7 +14,7 @@
     "debug": "NODE_ENV=development DEBUG=app:*,plugin:* node app",
     "test": "NODE_ENV=test mocha --harmony test/index.test.js",
     "coverage": "NODE_ENV=test istanbul cover _mocha -- -R spec && open coverage/lcov-report/index.html",
-    "dev:mac": "OS_IMPLEMENTATION=mac_os npm dev",
+    "dev:mac": "OS_IMPLEMENTATION=mac_os npm run dev",
     "debug:mac": "OS_IMPLEMENTATION=mac_os npm run debug",
     "test:mac": "OS_IMPLEMENTATION=mac_os npm test",
     "coverage:mac": "OS_IMPLEMENTATION=mac_os npm run coverage"

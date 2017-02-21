@@ -30,7 +30,7 @@ class VirtualPrinter extends Printer {
   }
 	
 	askStatus (callback) {
-    return this._driver.getStatus(this._port, callback)
+    return this._driver.getStatus(callback)
   }
 
   setStatus (status) {
@@ -38,7 +38,7 @@ class VirtualPrinter extends Printer {
   }
 
   sendCommand (command, callback) {
-    this._driver.sendGcode(command, this._port, callback)
+    this._driver.sendGcode(command, callback)
   }
 }
 
