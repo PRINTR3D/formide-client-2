@@ -1,20 +1,13 @@
-/**
-* @Author: chris
-* @Date:   2016-12-17T14:11:12+01:00
-* @Filename: index.js
-* @Last modified by:   chris
-* @Last modified time: 2017-01-07T19:59:29+01:00
-* @Copyright: Copyright (c) 2016, All rights reserved, http://printr.nl
-*/
-
 'use strict'
 
 const assert = require('assert')
 const co = require('co')
 const socket = require('./socket')
 const proxy = require('./proxy')
-const addToQueue = require('./addToQueue')
+const downloadGcodeFromCloud = require('./downloadGcodeFromCloud')
 const getCallbackData = require('./getCallbackData')
+
+// TODO: rewrite to separate package without client dependency
 
 class Cloud {
 
@@ -28,7 +21,7 @@ class Cloud {
     assert(client.config.cloud.URL, '[cloud] - client.config.cloud.URL not passed')
     assert(client.config.cloud.platformURL, '[cloud] - client.config.cloud.platformURL not passed')
     assert(client.events, '[cloud] - client.events not passed')
-    assert(client.db, '[cloud] - client.db not passed')
+    // assert(client.db, '[cloud] - client.db not passed')
     assert(client.logger.log, '[cloud] - client.logger.log not passed')
 
     // set URLs
@@ -54,29 +47,30 @@ class Cloud {
 
     // on connect
     this.cloud.on('connect', function () {
-      co(function*() {
-        const publicIP = yield client.system.network.publicIp()
-        const internalIP = yield client.system.network.ip()
-        const MAC = yield client.system.network.mac()
-
-        // emit authentication data
-        self.cloud.emit('authenticate', {
-          type: 'client',
-          ip: publicIP,
-          ip_internal: internalIP,
-          mac: MAC,
-          version: client.version,
-          environment: process.env.NODE_ENV,
-          port: client.config.http.port
-        }, function (response) {
-          if (response.success) {
-            client.logger.log(`Cloud connected`, 'info')
-          } else {
-            client.logger.log(`Cloud not connected: ${response.message}`, 'warn')
-            client.logger.log(`MAC address is ${MAC}`, 'info')
-          }
-        })
-      }).then(null, console.error)
+      // TODO: cloud error
+      // co(function*() {
+      //   const publicIP = yield client.system.network.publicIp()
+      //   const internalIP = yield client.system.network.ip()
+      //   const macAddress = yield client.system.network.mac()
+      //
+      //   // emit authentication data
+      //   self.cloud.emit('authenticate', {
+      //     type: 'client',
+      //     ip: publicIP,
+      //     ip_internal: internalIP,
+      //     mac: macAddress,
+      //     version: client.version,
+      //     environment: process.env.NODE_ENV,
+      //     port: client.config.http.port
+      //   }, function (response) {
+      //     if (response.success) {
+      //       client.logger.log(`Cloud connected`, 'info')
+      //     } else {
+      //       client.logger.log(`Cloud not connected: ${response.message}`, 'warn')
+      //       client.logger.log(`MAC address is ${macAddress}`, 'info')
+      //     }
+      //   })
+      // }).then(null, console.error)
     })
 
     // HTTP proxy calls are handled by the proxy function
@@ -86,12 +80,16 @@ class Cloud {
         self.cloud.emit('http', getCallbackData(data._callbackId, err, response))
       })
     })
-
-    // Adding to queue from Formide Cloud
-    this.cloud.on('addToQueue', function (data) {
-      client.logger.log(`Cloud addToQueue: ${data.gcode}`, 'debug')
-      addToQueue(client, data, function (err, response) {
-        self.cloud.emit('addToQueue', getCallbackData(data._callbackId, err, response))
+    
+    // Adding a G-code file from the cloud
+    this.cloud.on('downloadGcode', function (data) {
+      client.logger.log(`Download cloud G-code: ${data.gcode}`, 'debug')
+      // TODO: improve this
+	    downloadGcodeFromCloud(data, function (err, gcodeFileName) {
+	      self.cloud.emit('downloadGcode', getCallbackData(data._callbackId, err, {
+	        success: true,
+		      gcodeFileName: gcodeFileName
+        }))
       })
     })
 

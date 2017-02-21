@@ -1,12 +1,3 @@
-/**
-* @Author: chris
-* @Date:   2016-12-18T02:07:08+01:00
-* @Filename: printer.js
-* @Last modified by:   chris
-* @Last modified time: 2017-01-10T23:16:22+01:00
-* @Copyright: Copyright (c) 2016, All rights reserved, http://printr.nl
-*/
-
 'use strict'
 
 const PRINTER_STATUS_INTERVAL = 2000
@@ -27,9 +18,11 @@ class Printer {
     this._driver = driver || client.drivers.getDefaultDrivers()
     this._status = null
     this._commandTemplates = {}
+    this._currentlyPrinting = false
 
     // we ask for the printer status every 2 seconds and store it
     this._statusInterval = setInterval(function () {
+      // TODO: fix this
       self.askStatus(function (err, status) {
         if (err) return self._client.logger.log(`Could not get printer info: - ${err.message}`, 'warning')
         self._status = status
@@ -37,10 +30,13 @@ class Printer {
       })
     }, PRINTER_STATUS_INTERVAL)
   }
-
-  askStatus (callback) {
-    this._client.logger.log(`Printer.askStatus not implemented for this printer`, 'critical')
-    return callback(new Error('Not implemented'))
+	
+	/**
+	 * Return printer type
+	 * @returns {string|string|string|string|string}
+	 */
+	getType () {
+  	return this._type
   }
 
   /**
@@ -57,51 +53,6 @@ class Printer {
    */
   getStatus () {
     return this._status
-  }
-
-  /**
-   * Get the current progress of the printer
-   * Returns 0 when not printing
-   * @returns {number}
-   */
-  getProgress () {
-    return this._status.progress
-  }
-
-  getPosition () {
-
-  }
-
-  getQueue () {
-
-  }
-
-  clearQueue () {
-
-  }
-
-  sendCommand () {
-    this._client.logger.log(`Printer.sendCommand not implemented for this printer`, 'critical')
-  }
-
-  startPrintFromFile () {
-
-  }
-
-  startPrintFromQueueItem () {
-
-  }
-
-  pausePrint () {
-
-  }
-
-  resumePrint () {
-
-  }
-
-  stopPrint () {
-
   }
 
   stopStatusInterval () {
@@ -146,6 +97,38 @@ class Printer {
       })
     })
   }
+	
+	askStatus (callback) {
+		this._client.logger.log(`Printer.askStatus not implemented for this printer`, 'critical')
+	}
+	
+	sendCommand () {
+		this._client.logger.log(`Printer.sendCommand not implemented for this printer`, 'critical')
+	}
+	
+	sendTuneCommand () {
+		this._client.logger.log(`Printer.sendTuneCommand not implemented for this printer`, 'critical')
+	}
+	
+	printFile () {
+		this._client.logger.log(`Printer.printFile not implemented for this printer`, 'critical')
+	}
+	
+	pausePrint (callback) {
+		this._client.logger.log(`Printer.pausePrint not implemented for this printer`, 'critical')
+	}
+	
+	resumePrint (callback) {
+		this._client.logger.log(`Printer.resumePrint not implemented for this printer`, 'critical')
+	}
+	
+	stopPrint (callback) {
+		this._client.logger.log(`Printer.stopPrint not implemented for this printer`, 'critical')
+	}
+	
+	printFinished () {
+		this._client.logger.log(`Printer.printFinished not implemented for this printer`, 'critical')
+	}
 }
 
 module.exports = Printer

@@ -1,12 +1,3 @@
-/**
-* @Author: chris
-* @Date:   2016-12-30T14:42:18+01:00
-* @Filename: update.js
-* @Last modified by:   chris
-* @Last modified time: 2017-01-10T00:14:58+01:00
-* @Copyright: Copyright (c) 2016, All rights reserved, http://printr.nl
-*/
-
 'use strict'
 
 const router = require('express').Router()

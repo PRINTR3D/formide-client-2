@@ -1,169 +1,98 @@
-/**
-* @Author: chris
-* @Date:   2017-01-06T18:47:41+01:00
-* @Filename: auth.js
-* @Last modified by:   chris
-* @Last modified time: 2017-01-08T19:37:56+01:00
-* @Copyright: Copyright (c) 2016, All rights reserved, http://printr.nl
-*/
-
 'use strict'
 
-const assert = require('assert')
+const co = require('co')
 const router = require('express').Router()
+const jwt = require('../../../core/utils/jwt')
 
 module.exports = function (client, http) {
-  assert(client, '[http] - client not passed in auth router')
-  assert(http, '[http] - http not passed in auth router')
-
-  /**
-   * @api {POST} /api/auth/login Local login
-   * @apiGroup Auth
-   * @apiDescription Local user login with email and password
-   * @apiVersion 1.0.0
-   */
-  router.post('/login', http.passport.authenticate('local-login'), function (req, res) {
-    client.db.AccessToken.create({
-      createdBy: req.user[global.MONGO_ID_FIELD],
-      isAdmin: req.user.isAdmin
-    }).then(function (accessToken) {
-      return res.ok({
-        access_token: accessToken.token
-      })
-    }).catch(res.serverError)
-  })
-
-  /**
-   * @api {GET} /api/auth/session Get current session
-   * @apiGroup Auth
-   * @apiDescription Get current session from access token
-   * @apiVersion 1.0.0
-   */
-  router.get('/session', http.checkAuth.user, function (req, res) {
-    client.db.AccessToken.findOne({
-      token: req.token
-    }).then(function (accessToken) {
-      return res.ok(accessToken)
-    }).catch(res.serverError)
-  })
-
-  /**
-   * @api {GET} /api/auth/tokens Get tokens
-   * @apiGroup Auth
-   * @apiDescription Get all access tokens from the database
-   * @apiVersion 1.0.0
-   */
-  router.get('/tokens', http.checkAuth.user, function (req, res) {
-    client.db.AccessToken.find({
-      createdBy: req.user.id
-    }).then(function (accessTokens) {
-      return res.ok(accessTokens)
-    }).catch(res.serverError)
-  })
-
-  /**
-   * @api {POST} /api/auth/tokens Create token
-   * @apiGroup Auth
-   * @apiDescription Generate an access token manually with the asked permissions. Useful for development purposes. Only admins can create tokens this way.
-   * @apiVersion 1.0.0
-   * @apiParam {Boolean} isAdmin Add admin rights to token or not.
-   */
-  router.post('/tokens', http.checkAuth.admin, function (req, res) {
-    client.db.AccessToken.create({
-      createdBy: req.user.id,
-      isAdmin: req.body.isAdmin
-    })
-  })
-
-  /**
-   * @api {DELETE} /api/auth/tokens/:token Delete token
-   * @apiGroup Auth
-   * @apiDescription Delete access token, forcing a user to login again
-   * @apiVersion 1.0.0
-   */
-  router.delete('/tokens/:token', http.checkAuth.admin, function (req, res) {
-    client.db.AccessToken.destroy({ token: req.params.token }).then(function () {
-      return res.ok({ message: 'Access token destroyed' })
-    }).catch(res.serverError)
-  })
-
-  /**
-   * @api {GET} /api/auth/users Get users
-   * @apiGroup Auth
-   * @apiDescription Get a list of users
-   * @apiVersion 1.0.0
-   */
-  router.get('/users', http.checkAuth.admin, function (req, res) {
-    client.db.User.find().then(function (users) {
-      return res.ok(users)
-    }).catch(res.serverError)
-  })
-
-  /**
-   * @api {GET} /api/auth/users/:id Get single user
-   * @apiGroup Auth
-   * @apiDescription Get a single user by ID
-   * @apiVersion 1.0.0
-   */
-  router.get('/users/:id', http.checkAuth.admin, function (req, res) {
-    client.db.User.findOne({ [global.MONGO_ID_FIELD]: req.params.id }).then(function (user) {
-      return res.ok(user)
-    }).catch(res.serverError)
-  })
-
-  /**
-   * @api {POST} /api/auth/users Create user
-   * @apiGroup Auth
-   * @apiDescription Create a new user
-   * @apiVersion 1.0.0
-   */
-  router.post('/users', http.checkAuth.admin, function (req, res) {
-    client.db.User.create({
-      email: req.body.email,
-      password: req.body.password,
-      isAdmin: req.body.isAdmin
-    }).then(function (newUser) {
-      return res.ok({
-        message: 'User created',
-        user: newUser
-      })
-    }).catch(res.serverError)
-  })
-
-  /**
-   * @api {PUT} /api/auth/users/:id Update user
-   * @apiGroup Auth
-   * @apiDescription Update user settings
-   * @apiVersion 1.0.0
-   */
-  router.put('/users/:id', http.checkAuth.admin, function (req, res) {
-    client.db.User.findOneAndUpdate({ [global.MONGO_ID_FIELD]: req.params.id }, {
-      email: req.body.email,
-      password: req.body.password,
-      isAdmin: req.body.isAdmin
-    }, {
-      new: true
-    }).then(function (updatedUser) {
-      return res.ok({
-        message: 'User updated',
-        user: updatedUser
-      })
-    }).catch(res.serverError)
-  })
-
-  /**
-   * @api {DELETE} /api/auth/users/:id Delete user
-   * @apiGroup Auth
-   * @apiDescription Delete a user from the database
-   * @apiVersion 1.0.0
-   */
-  router.delete('/users/:id', http.checkAuth.admin, function (req, res) {
-    client.db.user.destroy({ [global.MONGO_ID_FIELD]: req.params.id }).then(function () {
-      return res.ok({
-        message: 'User removed'
-      })
-    }).catch(res.serverError)
-  })
-
-  return router
+	
+	/**
+	 * @api {post} /api/auth/login Auth:login
+	 * @apiGroup Auth
+	 * @apiDescription Login with username and password
+	 * @apiVersion 1.0.0
+	 * @apiParam {String} username
+	 * @apiParam {String} password
+	 */
+	router.post('/login', http.checkParams(['username', 'password']), function (req, res) {
+		co(function* () {
+			// find user
+			const user = yield client.auth.authenticate(req.body.username, req.body.password)
+			if (!user) return res.unauthorized('Could not find user')
+			
+			const token = jwt.sign(user)
+			return res.ok({
+				success: true,
+				token: token
+			})
+		}).then(null, res.serverError)
+	})
+	
+	/**
+	 * @api {get} /api/auth/validate Auth:validate
+	 * @apiGroup Auth
+	 * @apiDescription Validate JWT token
+	 * @apiVersion 1.0.0
+	 * @apiHeader {String} Authentication Valid Bearer JWT token
+	 */
+	router.get('/validate', http.checkAuth.jwt, function (req, res) {
+		return res.ok({
+			valid: true,
+			user: req.user
+		})
+	})
+	
+	/**
+	 * @api {post} /api/auth/users Auth:users(create)
+	 * @apiGroup Auth
+	 * @apiDescription Create a new user
+	 * @apiVersion 1.0.0
+	 * @apiHeader {String} Authentication Valid Bearer JWT token
+	 * @apiParam {String} username
+	 * @apiParam {String} password
+	 */
+	router.post('/users', http.checkAuth.jwt, http.checkParams(['username', 'password']), function (req, res) {
+		co(function* () {
+			const newUser = yield client.auth.createUser(req.body.username, req.body.password)
+			if (!newUser) return res.badRequest('Could not create new user, please try a different username')
+			return res.ok({ success: true, user: newUser })
+		}).then(null, res.serverError)
+	})
+	
+	/**
+	 * @api {put} /api/auth/users/:id Auth:users(update)
+	 * @apiGroup Auth
+	 * @apiDescription Update a user
+	 * @apiVersion 1.0.0
+	 * @apiHeader {String} Authentication Valid Bearer JWT token
+	 * @apiParam {String} id
+	 * @apiParam {String} username
+	 * @apiParam {String} password
+	 */
+	router.put('/users/:id', http.checkAuth.jwt, http.checkParams(['username', 'password']), function (req, res) {
+		co(function* () {
+			if (req.params.id !== req.user.id) return res.unauthorized('You can only edit your own user credentials')
+			const updatedUser = yield client.auth.updateUser(req.params.id, req.body.username, req.body.password)
+			if (!updatedUser) return res.notFound('Could not update user')
+			return res.ok({ success: true, user: updatedUser })
+		}).then(null, res.serverError)
+	})
+	
+	/**
+	 * @api {delete} /api/auth/users/:id Auth:users(delete)
+	 * @apiGroup Auth
+	 * @apiDescription Delete a user
+	 * @apiVersion 1.0.0
+	 * @apiHeader {String} Authentication Valid Bearer JWT token
+	 * @apiParam {String} id
+	 */
+	router.delete('/users/:id', http.checkAuth.jwt, function (req, res) {
+		co(function* () {
+			const remove = yield client.auth.removeUser(req.params.id)
+			if (!remove) return res.notFound('Could not remove user')
+			return res.ok({ success: true })
+		}).then(null, res.serverError)
+	})
+	
+	return router
 }

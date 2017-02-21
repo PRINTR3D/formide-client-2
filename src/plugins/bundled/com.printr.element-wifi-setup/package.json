@@ -1,6 +1,0 @@
-{
-  "name": "com.printr.element-wifi-setup",
-  "version": "1.0.0",
-  "description": "Wi-Fi setup page for The Element",
-  "main": "index.js"
-}

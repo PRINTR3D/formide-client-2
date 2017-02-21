@@ -1,12 +1,3 @@
-/**
-* @Author: chris
-* @Date:   2016-12-18T17:07:53+01:00
-* @Filename: fmdPrinter.js
-* @Last modified by:   chris
-* @Last modified time: 2017-01-10T23:13:15+01:00
-* @Copyright: Copyright (c) 2016, All rights reserved, http://printr.nl
-*/
-
 'use strict'
 
 const Printer = require('./printer')
@@ -17,11 +8,24 @@ class FdmPrinter extends Printer {
     super(client, port, driver)
     this._type = 'FDM'
 
-    // TODO: load correct drivers inside of printer class, not in main drivers file
-
     // register FDM printer commands
-    this.addCommandTemplate('home', ['G28'])
-    this.addCommandTemplate('jog', ['T{{extnr}}', 'G91', 'G21', 'G1 F300 E{{dist}}'])
+	  this.addCommandTemplate('home', ['G28'])
+	  this.addCommandTemplate('home_x', ['G28 X'])
+	  this.addCommandTemplate('home_y', ['G28 Y'])
+	  this.addCommandTemplate('home_z', ['G28 Z'])
+	  this.addCommandTemplate('jog', ['G91', 'G21', 'G1 {{axis}} {{dist}}'])
+	  this.addCommandTemplate('extrude', ['T{{extnr}}', 'G91', 'G21', 'G1 F300 E{{dist}}'])
+	  this.addCommandTemplate('retract', ['T{{extnr}}', 'G91', 'G21', 'G1 F300 E-{{dist}}'])
+	  this.addCommandTemplate('lcd_message', ['M117                     {{msg}}']) // spaces are on purpose!
+	  this.addCommandTemplate('temp_bed', ['M140 S{{temp}}'])
+	  this.addCommandTemplate('temp_extruder', ['T{{extnr}}', 'M104 S{{temp}}'])
+	  this.addCommandTemplate('power_on', ['M80'])
+	  this.addCommandTemplate('power_off', ['M81'])
+	  this.addCommandTemplate('stop_all', ['M112'])
+	  this.addCommandTemplate('reset', ['M999'])
+	  this.addCommandTemplate('fan_on', ['M106'])
+	  this.addCommandTemplate('fan_off', ['M107'])
+	  this.addCommandTemplate('gcode', ['{{gcode}}'])
   }
 
   askStatus (callback) {
@@ -29,39 +33,62 @@ class FdmPrinter extends Printer {
       return callback(err, status)
     })
   }
-
-  /**
-   * Get the type of printer
-   * @returns {string}
-   */
-  getType () {
-    return this._type
-  }
-
-  /**
-   * Returns the amount of extruders the printer contains a status for
-   * @returns {Number}
-   */
-  getExtruderCount () {
-    return this._status.extruders.length
-  }
-
-  getExtruderTemperature (extruderNumber) {
-    return this._status.extruders[extruderNumber].temperature
-  }
-
-  getBedTemperature () {
-    return this._status.bed.temperature
-  }
-
+  
   sendCommand (command, callback) {
-    this._driver.sendGcode(command, this._port, callback)
+    return this.sendGcode(command, callback)
   }
 
-  sendTuneCommand (command, callback) {
-    this._driver.sendTuneGcode(command, this._port, function (err, response) {
-      if (callback) return callback(err, response)
+  sendGcode (gcode, callback) {
+    this._driver.sendGcode(gcode, this._port, callback)
+  }
+  
+  sendTuneCommand (tuneCommand, callback) {
+  	return this.sendTuneGcode(tuneCommand, callback)
+  }
+
+  sendTuneGcode (tuneGcode, callback) {
+    this._driver.sendTuneGcode(tuneGcode, this._port, callback)
+  }
+	
+	printFile (filePath, callback) {
+    const self = this
+    this._driver.printFile(filePath, this._port, function (err, response) {
+      if (err) return callback(err)
+      self._currentlyPrinting = filePath
+      return callback(null, response)
     })
+  }
+  
+  pausePrint (callback) {
+	  this._driver.pausePrint(this._port, (err, response) => {
+		  if (err) return callback(err)
+		  return callback(null, response)
+	  })
+  }
+  
+  resumePrint (callback) {
+    this._driver.resumePrint(this._port, (err, response) => {
+	    if (err) return callback(err)
+	    return callback(null, response)
+    })
+  }
+  
+  stopPrint (callback) {
+  	const self = this
+    // TODO: 2nd parameter is stop G-code sequence
+	  this._driver.stopPrint(this._port, '', (err, response) => {
+		  if (err) return callback(err)
+		  self._currentlyPrinting = false
+		  return callback(null, response)
+	  })
+  }
+	
+	printFinished (printjobID, callback) {
+  	// remove G-code file from storage and unset status
+		this._client.storage.remove(this._currentlyPrinting).then(() => {
+			this._currentlyPrinting = false
+			return callback()
+		}).catch(callback)
   }
 }
 

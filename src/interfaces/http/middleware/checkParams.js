@@ -1,22 +1,21 @@
 'use strict'
 
 /**
- * Check required parameters middleware
- * @param req
- * @param res
- * @param next
- * @returns {*}
+ * Check required parameters
+ * @param requiredParams
+ * @param type
+ * @returns {Function}
  */
-function checkParams (req, res, next) {
-  req.checkParams = function (requiredParams) {
+function checkParams (requiredParams, type) {
+  return function (req, res, next) {
+    type = type || 'body'
     for (var i = 0; i < requiredParams.length; i++) {
-      if (!req.body.hasOwnProperty(requiredParams[i])) {
-        return res.badRequest(`${requiredParams[i]} is a required parameter`)
+      if (!req[type].hasOwnProperty(requiredParams[i])) {
+        return res.badRequest(`Missing ${type} parameter: ${requiredParams[i]}`)
       }
     }
-    return true
+	  return next()
   }
-  return next()
 }
 
 module.exports = checkParams
