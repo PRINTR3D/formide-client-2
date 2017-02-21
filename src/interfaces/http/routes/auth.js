@@ -55,11 +55,7 @@ module.exports = function (client, http) {
 		co(function* () {
 			const newUser = yield client.auth.createUser(req.body.username, req.body.password)
 			if (!newUser) return res.badRequest('Could not create new user, please try a different username')
-			
-			return res.ok({
-				success: true,
-				user: newUser
-			})
+			return res.ok({ success: true, user: newUser })
 		}).then(null, res.serverError)
 	})
 	
@@ -74,7 +70,11 @@ module.exports = function (client, http) {
 	 * @apiParam {String} password
 	 */
 	router.put('/users/:id', http.checkAuth.jwt, http.checkParams(['username', 'password']), function (req, res) {
-		
+		co(function* () {
+			const updatedUser = yield client.auth.updateUser(req.params.id, req.body.username, req.body.password)
+			if (!updatedUser) return res.badRequest('Could not update user')
+			return res.ok({ success: true, user: updatedUser })
+		}).then(null, res.serverError)
 	})
 	
 	/**
@@ -86,7 +86,9 @@ module.exports = function (client, http) {
 	 * @apiParam {String} id
 	 */
 	router.delete('/users/:id', http.checkAuth.jwt, function (req, res) {
-		
+		co(function* () {
+			
+		}).then(null, res.serverError)
 	})
 	
 	return router

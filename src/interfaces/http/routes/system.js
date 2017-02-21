@@ -18,23 +18,22 @@ module.exports = function (client, http) {
     const uptime = process.uptime()
 
     return res.ok({
-      versions: {
-        client: client.config.version,
-        driver: driverVersion
-      },
+      version: client.config.version,
+      drivers: driverVersion,
       uptime
     })
   })
 
   /**
-   * @api {POST} /api/system/loglevel System:loglevel
+   * @api {POST} /api/system/logs System:logs(level)
    * @apiGroup System
    * @apiVersion 2.0.0
    * @apiDescription Change the log level so you can receive more or less logs via the socket log channels
+   * @apiHeader {String} Authentication Valid Bearer JWT token
+   * @apiParam {String} level Level to set the logging to
    */
-  router.post('/loglevel', http.checkAuth.jwt, function (req, res) {
-    if (!req.body.logLevel) return res.badRequest('logLevel is a required parameter')
-    client.config.log.level = req.body.logLevel
+  router.post('/loglevel', http.checkAuth.jwt, http.checkParams(['level']), function (req, res) {
+    client.config.log.level = req.body.level
     return res.ok({ message: 'Log level updated' })
   })
 
