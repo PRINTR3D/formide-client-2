@@ -17,16 +17,22 @@ module.exports = (client) => {
 				chai.request(client.http.app)
 				.post('/api/storage')
 				.attach('file', fs.readFileSync(__dirname + '/../../resources/3DBenchy.gcode'), '3DBenchy.gcode')
-				.end((req, res) => {
+				.end((err, res) => {
 					expect(res.status).to.equal(200)
 					expect(res.body.success).to.equal(true)
 					done()
 				})
 			})
 			
-			// it('should no upload a non .gcode file', (done) => {
-			//
-			// })
+			it('should not upload a non .gcode file', (done) => {
+				chai.request(client.http.app)
+				.post('/api/storage')
+				.attach('file', fs.readFileSync(__dirname + '/../../resources/cube40mm.stl'), 'cube40mm.stl')
+				.end((err, res) => {
+					expect(res.status).to.equal(400)
+					done()
+				})
+			})
 			
 		})
 		
