@@ -43,10 +43,10 @@ module.exports = function (client) {
 	 * @apiVersion 2.0.0
 	 */
 	router.get('/:filename/download', function (req, res) {
-		client.storage.stat(req.params.filename).then((stats) => {
-			client.storage.read(req.params.filename, filename).then((storageStream) => {
+		client.storage.stat(req.params.filename).then((info) => {
+			client.storage.read(req.params.filename).then((storageStream) => {
 				res.set('Content-Type', 'text/gcode')
-				res.set('Content-Length', stat.filesize)
+				res.set('Content-Length', info.filesize)
 				return storageStream.pipe(res)
 			}).catch((err) => {
 				if (err.name === 'fileNotFound') return res.notFound(err.message)
@@ -69,24 +69,10 @@ module.exports = function (client) {
 		req.busboy.on('file', (field, file, filename) => {
 			
 			// write file to storage
-			client.storage.write(filename).then((storageStream) => {
-				file.pipe(storageStream)
-				
-				// done uploading
-				storageStream.on('close', () => {
-					client.storage.stat(filename).then((info) => {
-						return res.ok({
-							message: 'File uploaded',
-							file: info
-						})
-					}).catch((err) => {
-						return res.serverError(err)
-					})
-				})
-				
-				// catch upload errors
-				storageStream.on('error', (err) => {
-					return res.serverError(err)
+			client.storage.write(filename, file).then((info) => {
+				return res.ok({
+					message: 'File uploaded',
+					file: info
 				})
 			}).catch((err) => {
 				if (err.name === 'invalidFiletype') return res.badRequest(err.message)

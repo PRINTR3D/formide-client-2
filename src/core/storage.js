@@ -91,17 +91,37 @@ class Storage {
 	 * Create a new write stream to store G-code
 	 * @param gcodeStoragePath
 	 */
-	write (filename) {
+	write (filename, readStream) {
+		const self = this
 		return new Promise((resolve, reject) => {
 			const fileExt = path.extname(filename)
+			
+			// check filetype
 			if (fileExt.toLowerCase() !== '.gcode') {
 				const invalidFiletypeError = new Error('File must be of type .gcode')
 				invalidFiletypeError.name = 'invalidFiletype'
 				return reject(invalidFiletypeError)
 			}
-			const gcodeStoragePath = path.resolve(this.gcodeDir, filename)
+			
+			let gcodeStoragePath = path.resolve(this.gcodeDir, filename)
+			
+			// check if exists, if so we put the date behind the filename
+			if (fs.existsSync(gcodeStoragePath)) {
+				gcodeStoragePath = gcodeStoragePath.replace('.gcode', `-${new Date().getTime()}.gcode`)
+			}
+			
 			const writeStream = fs.createWriteStream(gcodeStoragePath)
-			return resolve(writeStream)
+			readStream.pipe(writeStream)
+			
+			// done uploading
+			writeStream.on('close', () => {
+				self.stat(gcodeStoragePath.split('/').pop()).then(resolve, reject)
+			})
+			
+			// catch upload errors
+			writeStream.on('error', (err) => {
+				return reject(err)
+			})
 		})
 	}
 	
