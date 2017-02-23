@@ -53,10 +53,12 @@ module.exports = function (client) {
 	router.post('/', function (req, res) {
 		req.pipe(req.busboy)
 		req.busboy.on('file', (field, file, filename) => {
+			
 			// write file to storage
 			const storageStream = client.storage.write(filename)
 			file.pipe(storageStream)
 			
+			// done uploading
 			storageStream.on('close', () => {
 				client.storage.stat(filename).then((info) => {
 					return res.ok({
@@ -64,12 +66,13 @@ module.exports = function (client) {
 						file: info
 					})
 				}).catch((err) => {
-					// TODO
+					return res.serverError(err)
 				})
 			})
 			
+			// catch upload errors
 			storageStream.on('error', (err) => {
-				// TODO
+				return res.serverError(err)
 			})
 		})
 	})
