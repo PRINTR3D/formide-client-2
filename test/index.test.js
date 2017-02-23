@@ -12,6 +12,7 @@ require('./tests/core/drivers/printerCommandTemplate.test')(client)
 require('./tests/routes/auth.test')(client)
 require('./tests/routes/network.test')(client)
 require('./tests/routes/printer.test')(client)
+require('./tests/routes/storage.test')(client)
 
 // websockets
 require('./tests/websocket/index.test')(client)

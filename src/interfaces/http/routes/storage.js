@@ -72,7 +72,8 @@ module.exports = function (client) {
 			client.storage.write(filename, file).then((info) => {
 				return res.ok({
 					message: 'File uploaded',
-					file: info
+					file: info,
+					success: true
 				})
 			}).catch((err) => {
 				if (err.name === 'invalidFiletype') return res.badRequest(err.message)
