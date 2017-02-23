@@ -13,6 +13,7 @@ const bodyParser = require('body-parser')
 const bearerToken = require('express-bearer-token')
 const checkParams = require('./middleware/checkParams')
 const morgan = require('morgan')
+const busboy = require('connect-busboy')
 
 /**
  * Http server setup
@@ -51,6 +52,9 @@ class Http {
 
     // use json body parser for url encoded post requests
     this.app.use(bodyParser.urlencoded({ extended: true, limit: '500mb' }))
+	
+    // connect middleware for file uploads
+	  this.app.use(busboy())
 
     // use cookie parser middleware
     this.app.use(cookieParser())

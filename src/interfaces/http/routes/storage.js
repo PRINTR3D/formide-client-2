@@ -40,7 +40,8 @@ module.exports = function (client) {
 	 * @apiVersion 2.0.0
 	 */
 	router.get('/:filename/download', function (req, res) {
-		// TODO: download file
+		const storageStream = client.storage.read(req.params.filename, filename)
+		return storageStream.pipe(res)
 	})
 	
 	/**
@@ -50,7 +51,27 @@ module.exports = function (client) {
 	 * @apiVersion 2.0.0
 	 */
 	router.post('/', function (req, res) {
-		// TODO: upload new gcode file
+		req.pipe(req.busboy)
+		req.busboy.on('file', (field, file, filename) => {
+			// write file to storage
+			const storageStream = client.storage.write(filename)
+			file.pipe(storageStream)
+			
+			storageStream.on('close', () => {
+				client.storage.stat(filename).then((info) => {
+					return res.ok({
+						message: 'File uploaded',
+						file: info
+					})
+				}).catch((err) => {
+					// TODO
+				})
+			})
+			
+			storageStream.on('error', (err) => {
+				// TODO
+			})
+		})
 	})
 	
 	/**
@@ -60,7 +81,9 @@ module.exports = function (client) {
 	 * @apiVersion 2.0.0
 	 */
 	router.delete('/:filename', function (req, res) {
-		// TODO: remove file
+		client.storage.remove(req.params.filename).then(() => {
+			return res.ok({ message: 'File removed from storage' })
+		}).catch(res.serverError)
 	})
 	
 	return router

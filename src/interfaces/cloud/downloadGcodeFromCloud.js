@@ -15,8 +15,7 @@ const request = require('request')
  */
 function downloadGcodeFromCloud (client, data, callback) {
 	const gcodeFileName = data.gcode + '.gcode' // create new local file with name of G-code
-	const gcodeStoragePath = path.resolve(client.config.paths.gcodeDir, gcodeFileName)
-	const writeStream = client.storage.write(gcodeStoragePath)
+	const storageStream = client.storage.write(gcodeFileName)
 	
 	request.get(`${client.config.cloud.URL}/files/download/gcode?hash=${data.gcode}`, { strictSSL: false })
 	.on('error', (err) => {
@@ -27,7 +26,7 @@ function downloadGcodeFromCloud (client, data, callback) {
 		})
 		return callback(err)
 	})
-	.pipe(writeStream)
+	.pipe(storageStream)
 	.on('error', (err) => {
 		client.logger.log(`${data.gcode} has failed to download`, 'warn')
 		client.events.emit('cloud.downloadError', {
