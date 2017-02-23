@@ -47,7 +47,17 @@ class Storage {
 	 */
 	stat (filename) {
 		return new Promise((resolve, reject) => {
-			const info = fs.statSync(path.resolve(this.gcodeDir, filename))
+			const gcodeStoragePath = path.resolve(this.gcodeDir, filename)
+			
+			// check if file exists
+			if (!fs.existsSync(gcodeStoragePath)) {
+				const fileNotFoundError = new Error('There was no file with this name found in storage')
+				fileNotFoundError.name = 'fileNotFound'
+				return reject(fileNotFoundError)
+			}
+			
+			// stat file and return
+			const info = fs.statSync(gcodeStoragePath)
 			return resolve({
 				filename: filename,
 				filesize: info.size,
@@ -62,9 +72,19 @@ class Storage {
 	 * @param filename
 	 */
 	read (filename) {
-		const gcodeStoragePath = path.resolve(this.gcodeDir, filename)
-		const readStream = fs.createReadStream(gcodeStoragePath)
-		return readStream
+		return new Promise((resolve, reject) => {
+			const gcodeStoragePath = path.resolve(this.gcodeDir, filename)
+			
+			// check if file exists
+			if (!fs.existsSync(gcodeStoragePath)) {
+				const fileNotFoundError = new Error('There was no file with this name found in storage')
+				fileNotFoundError.name = 'fileNotFound'
+				return reject(fileNotFoundError)
+			}
+			
+			const readStream = fs.createReadStream(gcodeStoragePath)
+			return resolve(readStream)
+		})
 	}
 	
 	/**
@@ -72,9 +92,17 @@ class Storage {
 	 * @param gcodeStoragePath
 	 */
 	write (filename) {
-		const gcodeStoragePath = path.resolve(this.gcodeDir, filename)
-		const writeStream = fs.createWriteStream(gcodeStoragePath)
-		return writeStream
+		return new Promise((resolve, reject) => {
+			const fileExt = path.extname(filename)
+			if (fileExt.toLowerCase() !== '.gcode') {
+				const invalidFiletypeError = new Error('File must be of type .gcode')
+				invalidFiletypeError.name = 'invalidFiletype'
+				return reject(invalidFiletypeError)
+			}
+			const gcodeStoragePath = path.resolve(this.gcodeDir, filename)
+			const writeStream = fs.createWriteStream(gcodeStoragePath)
+			return resolve(writeStream)
+		})
 	}
 	
 	/**

@@ -28,9 +28,12 @@ module.exports = function (client) {
 	 * @apiVersion 2.0.0
 	 */
 	router.get('/:filename', function (req, res) {
-		client.storage.stats(req.params.filename).then((stats) => {
+		client.storage.stat(req.params.filename).then((stats) => {
 			return res.ok(stats)
-		}).catch(res.serverError)
+		}).catch((err) => {
+			if (err.name === 'fileNotFound') return res.notFound(err.message)
+			return res.serverError(err)
+		})
 	})
 	
 	/**
@@ -40,8 +43,19 @@ module.exports = function (client) {
 	 * @apiVersion 2.0.0
 	 */
 	router.get('/:filename/download', function (req, res) {
-		const storageStream = client.storage.read(req.params.filename, filename)
-		return storageStream.pipe(res)
+		client.storage.stat(req.params.filename).then((stats) => {
+			client.storage.read(req.params.filename, filename).then((storageStream) => {
+				res.set('Content-Type', 'text/gcode')
+				res.set('Content-Length', stat.filesize)
+				return storageStream.pipe(res)
+			}).catch((err) => {
+				if (err.name === 'fileNotFound') return res.notFound(err.message)
+				return res.serverError(err)
+			})
+		}).catch((err) => {
+			if (err.name === 'fileNotFound') return res.notFound(err.message)
+			return res.serverError(err)
+		})
 	})
 	
 	/**
@@ -55,23 +69,27 @@ module.exports = function (client) {
 		req.busboy.on('file', (field, file, filename) => {
 			
 			// write file to storage
-			const storageStream = client.storage.write(filename)
-			file.pipe(storageStream)
-			
-			// done uploading
-			storageStream.on('close', () => {
-				client.storage.stat(filename).then((info) => {
-					return res.ok({
-						message: 'File uploaded',
-						file: info
+			client.storage.write(filename).then((storageStream) => {
+				file.pipe(storageStream)
+				
+				// done uploading
+				storageStream.on('close', () => {
+					client.storage.stat(filename).then((info) => {
+						return res.ok({
+							message: 'File uploaded',
+							file: info
+						})
+					}).catch((err) => {
+						return res.serverError(err)
 					})
-				}).catch((err) => {
+				})
+				
+				// catch upload errors
+				storageStream.on('error', (err) => {
 					return res.serverError(err)
 				})
-			})
-			
-			// catch upload errors
-			storageStream.on('error', (err) => {
+			}).catch((err) => {
+				if (err.name === 'invalidFiletype') return res.badRequest(err.message)
 				return res.serverError(err)
 			})
 		})
