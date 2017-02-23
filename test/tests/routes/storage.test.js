@@ -14,7 +14,10 @@ module.exports = (client) => {
 		describe('POST /api/storage', () => {
 			
 			it('should upload a .gcode file', (done) => {
-				chai.request(client.http.app).post('/api/storage').attach('file', fs.readFileSync('../../resources/3DBenchy.gcode'), '3DBenchy.gcode').end((req, res) => {
+				chai.request(client.http.app)
+				.post('/api/storage')
+				.attach('file', fs.readFileSync(__dirname + '/../../resources/3DBenchy.gcode'), '3DBenchy.gcode')
+				.end((req, res) => {
 					expect(res.status).to.equal(200)
 					expect(res.body.success).to.equal(true)
 					done()
