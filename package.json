@@ -26,6 +26,7 @@
     "chai-http": "^3.0.0",
     "cli-color": "^1.1.0",
     "co": "^4.6.0",
+    "connect-busboy": "0.0.2",
     "cookie-parser": "^1.4.3",
     "cors": "^2.8.1",
     "debug": "^2.6.0",

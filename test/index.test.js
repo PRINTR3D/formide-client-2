@@ -10,13 +10,15 @@ require('./tests/core/drivers/printerCommandTemplate.test')(client)
 
 // routes
 require('./tests/routes/auth.test')(client)
-require('./tests/routes/network.test')(client)
+// require('./tests/routes/network.test')(client) // TODO: network list test is slow
+// require('./tests/routes/printer.test')(client) // TODO: virtual printer not online yet
+require('./tests/routes/storage.test')(client)
 
 // websockets
 require('./tests/websocket/index.test')(client)
 
 // cloud
-// require('./tests/cloud/downloadGcodeFromCloud.test')(client)
+// require('./tests/cloud/downloadGcodeFromCloud.test')(client) // TODO: slow test
 
 // plugins
 require('./tests/plugins/com.printr.virtual-printer.test')(client)

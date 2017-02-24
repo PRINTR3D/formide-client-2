@@ -1,5 +1,7 @@
 'use strict'
 
+const PrinterActionNowAllowedError = require('../../../core/drivers/printerActionNotAllowedError')
+
 class VirtualDriver {
 
   constructor (port) {
@@ -22,12 +24,32 @@ class VirtualDriver {
     this._status = status
     return true
   }
-
+	
+	/**
+   * Simulate sending G-code
+	 * @param gcode
+	 * @param callback
+	 */
   sendGcode (gcode, callback) {
     setTimeout(function () {
-      console.log(`sending gcode: ${gcode}`)
+      console.log(`sending virtual gcode: ${gcode}`)
       return callback(null, 'OK')
     }, 200)
+  }
+	
+	/**
+   * Simulate pause command
+	 * @param callback
+	 */
+	pausePrint (callback) {
+    const self = this
+	  setTimeout(function () {
+	    if (self._status !== 'printing' && self.status !== 'heating')
+	    	return callback(new PrinterActionNowAllowedError('Printer can only pause when printing or heating'))
+		  
+      console.log('pausing virtual printer')
+      return callback(null, 'OK')
+	  }, 200)
   }
 }
 
