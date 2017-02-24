@@ -52,7 +52,8 @@ module.exports = function (client) {
 				if (err.name === 'fileNotFound') return res.notFound(err.message)
 				return res.serverError(err)
 			})
-		}).catch((err) => {
+		})
+		.catch((err) => {
 			if (err.name === 'fileNotFound') return res.notFound(err.message)
 			return res.serverError(err)
 		})
@@ -77,6 +78,7 @@ module.exports = function (client) {
 				})
 			}).catch((err) => {
 				if (err.name === 'invalidFiletype') return res.badRequest(err.message)
+				if (err.name === 'storageFull') return res.conflict(err.message)
 				return res.serverError(err)
 			})
 		})

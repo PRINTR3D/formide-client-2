@@ -2,13 +2,13 @@
 
 const fs = require('fs')
 const path = require('path')
-const diskSpace = require('./utils/diskSpace')
 const filesToHide = ['.', '..', '.DS_Store']
 
 class Storage {
 	
 	constructor (client) {
 		this.gcodeDir = client.config.paths.gcodeDir
+		this.diskSpace = require('./utils/diskSpace')(client)
 	}
 	
 	/**
@@ -96,30 +96,36 @@ class Storage {
 		return new Promise((resolve, reject) => {
 			const fileExt = path.extname(filename)
 			
-			// check filetype
-			if (fileExt.toLowerCase() !== '.gcode') {
-				const invalidFiletypeError = new Error('File must be of type .gcode')
-				invalidFiletypeError.name = 'invalidFiletype'
-				return reject(invalidFiletypeError)
-			}
-			
-			let gcodeStoragePath = path.resolve(this.gcodeDir, filename)
-			
-			// check if exists, if so we put the date behind the filename
-			if (fs.existsSync(gcodeStoragePath)) {
-				gcodeStoragePath = gcodeStoragePath.replace('.gcode', `-${new Date().getTime()}.gcode`)
-			}
-			
-			const writeStream = fs.createWriteStream(gcodeStoragePath)
-			readStream.pipe(writeStream)
-			
-			// done uploading
-			writeStream.on('close', () => {
-				self.stat(gcodeStoragePath.split('/').pop()).then(resolve, reject)
-			})
-			
-			// catch upload errors
-			writeStream.on('error', (err) => {
+			// check if there is any space left
+			self.diskSpace.hasSpaceLeft().then(() => {
+				
+				// check filetype
+				if (fileExt.toLowerCase() !== '.gcode') {
+					const invalidFiletypeError = new Error('File must be of type .gcode')
+					invalidFiletypeError.name = 'invalidFiletype'
+					return reject(invalidFiletypeError)
+				}
+				
+				let gcodeStoragePath = path.resolve(this.gcodeDir, filename)
+				
+				// check if exists, if so we put the date behind the filename
+				if (fs.existsSync(gcodeStoragePath)) {
+					gcodeStoragePath = gcodeStoragePath.replace('.gcode', `-${new Date().getTime()}.gcode`)
+				}
+				
+				const writeStream = fs.createWriteStream(gcodeStoragePath)
+				readStream.pipe(writeStream)
+				
+				// done uploading
+				writeStream.on('close', () => {
+					self.stat(gcodeStoragePath.split('/').pop()).then(resolve, reject)
+				})
+				
+				// catch upload errors
+				writeStream.on('error', (err) => {
+					return reject(err)
+				})
+			}).catch((err) => {
 				return reject(err)
 			})
 		})
@@ -140,6 +146,40 @@ class Storage {
 			}
 		})
 	}
+	
+	/**
+	 * Get amount of disk space remaining
+	 * @returns {*}
+	 */
+	diskSpace () {
+		return this.diskSpace().getDiskSpace()
+	}
+	
+	getDrives () {
+		
+	}
+	
+	mountDrive () {
+		
+	}
+	
+	unmountDrive () {
+		
+	}
+	
+	readDrive () {
+		
+	}
+	
+	copyFile () {
+		this.diskSpace.hasSpaceLeft().then(() => {
+			// TODO
+		}).catch((err) => {
+			// TODO
+		})
+	}
+	
+	
 }
 
 module.exports = Storage
