@@ -2,6 +2,8 @@
 
 const exec = require('child_process').exec
 const fusb = 'sudo fusb' // custom script running on The Element
+const fs = require('fs')
+const path = require('path')
 
 module.exports = {
 	
@@ -51,5 +53,15 @@ module.exports = {
 			if (err) return callback(err)
 			return callback(null, stdout.trim())
 		})
+	},
+	
+	/**
+	 * Create a read stream for the file on USB
+	 * @param drive
+	 * @param path
+	 */
+	readFile (drive, path) {
+		const filePath = path.resolve(drive, path)
+		return fs.createReadStream(filePath)
 	}
 }

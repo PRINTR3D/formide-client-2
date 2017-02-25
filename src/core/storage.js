@@ -102,7 +102,7 @@ class Storage {
 				// check filetype
 				if (fileExt.toLowerCase() !== '.gcode') {
 					const invalidFiletypeError = new Error('File must be of type .gcode')
-					invalidFiletypeError.name = 'invalidFiletype'
+					invalidFiletypeError.name = 'invalidFiletype' // TODO: create custom error type?
 					return reject(invalidFiletypeError)
 				}
 				

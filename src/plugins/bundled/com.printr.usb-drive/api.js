@@ -56,9 +56,9 @@ module.exports = function api (plugin, router) {
 	 */
 	router.post('/drives/:drive/copy', plugin._client.http.checkAuth.jwt, plugin._client.http.checkParams(['path'], 'query'), function (req, res) {
 		plugin.copyFile(req.params.drive, req.query.path).then(res.ok).catch((err) => {
-			if (err.name === 'diskFullError') {
+			if (err.name === 'storageFull') {
 				return res.insufficientStorage(err.message)
-			} else if (err.name === 'invalidFiletypeError') {
+			} else if (err.name === 'invalidFiletype') {
 				return res.badRequest(err.message)
 			} else {
 				return res.serverError(err)
