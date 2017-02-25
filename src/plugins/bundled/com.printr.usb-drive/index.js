@@ -43,7 +43,7 @@ class UsbDrives extends Plugin {
 	
 	readDrive (drive, path) {
 		return new Promise((resolve, reject) => {
-			usb.read(drive, path(err, files) => {
+			usb.read(drive, path, (err, files) => {
 				if (err) return reject(err)
 				return resolve(files)
 			})
@@ -53,13 +53,9 @@ class UsbDrives extends Plugin {
 	copyFile (drive, path) {
 		const self = this
 		return new Promise((resolve, reject) => {
-			self._client.storage.diskSpace.hasSpaceLeft().then(() => {
-				const readStream = usb.readFile(drive, path)
-				self._client.storage.write(path, readStream).then((stats) => {
-					return resolve(stats)
-				}).catch((err) => {
-					return reject(err)
-				})
+			const readStream = usb.readFile(drive, path)
+			self._client.storage.write(path, readStream).then((stats) => {
+				return resolve(stats)
 			}).catch((err) => {
 				return reject(err)
 			})
