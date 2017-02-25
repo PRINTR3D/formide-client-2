@@ -22,6 +22,3 @@ require('./tests/websocket/index.test')(client)
 
 // cloud
 // require('./tests/cloud/downloadGcodeFromCloud.test')(client) // TODO: slow test
-
-// plugins
-require('./tests/plugins/com.printr.virtual-printer.test')(client)
