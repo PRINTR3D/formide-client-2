@@ -17,7 +17,6 @@ module.exports = function (client) {
   function hasSpaceLeft () {
     return new Promise(function (resolve, reject) {
       getDiskSpace().then(function (result) {
-        console.log('diskspace', result)
         if (result.free > SPACE_BUFFER) {
           return resolve(result.free)
         } else {
