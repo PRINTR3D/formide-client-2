@@ -4,10 +4,6 @@ const debug = require('debug')('app:boot')
 
 debug('booting...')
 
-// Globals
-// global.Plugin = require('./src/plugins/plugin')
-// global.Printer = require('./src/core/drivers/printers/printer')
-
 // Load version
 const version = require('./package.json').version
 

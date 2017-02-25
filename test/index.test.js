@@ -1,9 +1,12 @@
 'use strict'
 
 const client = require('../app')
+const virtualPrinter = require('./plugins/com.printr.virtual-printer')
+
+// load virtual printer plugin needed for testing
+client.plugins.loadPlugin(virtualPrinter)
 
 // manually load tests to prevent wrong order and inject client instance
-
 // core
 require('./tests/core/auth.test')(client)
 require('./tests/core/drivers/printerCommandTemplate.test')(client)
