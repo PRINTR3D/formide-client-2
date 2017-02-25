@@ -45,7 +45,7 @@ module.exports = function (client, http) {
    */
   router.get('/:port', function (req, res) {
     client.drivers.getStatusByPort(req.params.port, function (err, status) {
-      if (err && err.name === 'PrinterNotConnectedError') return res.notFound(err.message)
+      if (err && err.name === 'printerNotConnectedError') return res.notFound(err.message)
       else if (err) return res.serverError(err)
       return res.ok(status)
     })
@@ -60,7 +60,7 @@ module.exports = function (client, http) {
    */
   router.get('/:port/commands', function (req, res) {
     client.drivers.getPrinter(req.params.port, function (err, printer) {
-      if (err && err.name === 'PrinterNotConnectedError') return res.notFound(err.message)
+      if (err && err.name === 'printerNotConnectedError') return res.notFound(err.message)
       else if (err) return res.serverError(err)
       return res.ok(printer.getCommandTemplates())
     })
@@ -77,8 +77,8 @@ module.exports = function (client, http) {
 	 */
 	router.get('/:port/commands/:command', http.checkAuth.jwt, function (req, res) {
 		client.drivers.runCommandTemplate(req.params.port, req.params.command, req.query, (err, response) => {
-			if (err && err.name === 'PrinterNotConnectedError') return res.notFound(err.message)
-			else if (err && err.name === 'PrinterActionNotAllowed') return res.conflict(err.message)
+			if (err && err.name === 'printerNotConnectedError') return res.notFound(err.message)
+			else if (err && err.name === 'printerActionNotAllowed') return res.conflict(err.message)
 			else if (err) return res.serverError(err)
 			return res.ok(response)
 		})
@@ -95,7 +95,7 @@ module.exports = function (client, http) {
    */
   router.get('/:port/commands/:command/mock', function (req, res) {
   	client.drivers.createCommandFromTemplate(req.params.port, req.params.command, req.query, (err, command) => {
-		  if (err && err.name === 'PrinterNotConnectedError') return res.notFound(err.message)
+		  if (err && err.name === 'printerNotConnectedError') return res.notFound(err.message)
 		  else if (err) return res.serverError(err)
 		  return res.ok(command)
 	  })
@@ -112,8 +112,8 @@ module.exports = function (client, http) {
 	 */
 	router.get('/:port/gcode', http.checkAuth.jwt, http.checkParams(['command'], 'query'), function (req, res) {
 		client.drivers.sendCommand(req.params.port, req.query.command, (err, response) => {
-			if (err && err.name === 'PrinterNotConnectedError') return res.notFound(err.message)
-			else if (err && err.name === 'PrinterActionNotAllowed') return res.conflict(err.message)
+			if (err && err.name === 'printerNotConnectedError') return res.notFound(err.message)
+			else if (err && err.name === 'printerActionNotAllowed') return res.conflict(err.message)
 			else if (err) return res.serverError(err)
 			return res.ok(response)
 		})
@@ -130,8 +130,8 @@ module.exports = function (client, http) {
 	 */
 	router.get('/:port/tune', http.checkAuth.jwt, http.checkParams(['command'], 'query'), function (req, res) {
 		client.drivers.sendTuneCommand(req.params.port, req.query.command, (err, response) => {
-			if (err && err.name === 'PrinterNotConnectedError') return res.notFound(err.message)
-			else if (err && err.name === 'PrinterActionNotAllowed') return res.conflict(err.message)
+			if (err && err.name === 'printerNotConnectedError') return res.notFound(err.message)
+			else if (err && err.name === 'printerActionNotAllowed') return res.conflict(err.message)
 			else if (err) return res.serverError(err)
 			return res.ok(response)
 		})
@@ -148,8 +148,8 @@ module.exports = function (client, http) {
 	 */
 	router.get('/:port/print', http.checkAuth.jwt, http.checkParams(['file'], 'query'), function (req, res) {
 		client.drivers.printFile(req.params.port, req.query.file, (err, response) => {
-			if (err && err.name === 'PrinterNotConnectedError') return res.notFound(err.message)
-			else if (err && err.name === 'PrinterActionNotAllowed') return res.conflict(err.message)
+			if (err && err.name === 'printerNotConnectedError') return res.notFound(err.message)
+			else if (err && err.name === 'printerActionNotAllowed') return res.conflict(err.message)
 			else if (err) return res.serverError(err)
 			return res.ok(response)
 		})
@@ -165,8 +165,8 @@ module.exports = function (client, http) {
 	 */
 	router.get('/:port/pause', http.checkAuth.jwt, function (req, res) {
 		client.drivers.pausePrint(req.params.port, (err, response) => {
-			if (err && err.name === 'PrinterNotConnectedError') return res.notFound(err.message)
-			else if (err && err.name === 'PrinterActionNotAllowed') return res.conflict(err.message)
+			if (err && err.name === 'printerNotConnectedError') return res.notFound(err.message)
+			else if (err && err.name === 'printerActionNotAllowed') return res.conflict(err.message)
 			else if (err) return res.serverError(err)
 			return res.ok(response)
 		})
@@ -182,8 +182,8 @@ module.exports = function (client, http) {
 	 */
 	router.get('/:port/resume', http.checkAuth.jwt, function (req, res) {
 		client.drivers.resumePrint(req.params.port, (err, response) => {
-			if (err && err.name === 'PrinterNotConnectedError') return res.notFound(err.message)
-			else if (err && err.name === 'PrinterActionNotAllowed') return res.conflict(err.message)
+			if (err && err.name === 'printerNotConnectedError') return res.notFound(err.message)
+			else if (err && err.name === 'printerActionNotAllowed') return res.conflict(err.message)
 			else if (err) return res.serverError(err)
 			return res.ok(response)
 		})
@@ -199,8 +199,8 @@ module.exports = function (client, http) {
 	 */
 	router.get('/:port/stop', http.checkAuth.jwt, function (req, res) {
 		client.drivers.stopPrint(req.params.port, (err, response) => {
-			if (err && err.name === 'PrinterNotConnectedError') return res.notFound(err.message)
-			else if (err && err.name === 'PrinterActionNotAllowed') return res.conflict(err.message)
+			if (err && err.name === 'printerNotConnectedError') return res.notFound(err.message)
+			else if (err && err.name === 'printerActionNotAllowed') return res.conflict(err.message)
 			else if (err) return res.serverError(err)
 			return res.ok(response)
 		})
