@@ -1,0 +1,7 @@
+{
+  "name": "com.printr.usb-drive",
+  "version": "1.0.0",
+  "description": "Read and copy files from USB drives to local storage",
+  "main": "index.js",
+  "dependencies": {}
+}

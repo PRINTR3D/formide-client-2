@@ -64,6 +64,7 @@ module.exports = function (client) {
 	 * @apiGroup Storage
 	 * @apiDescription Upload new G-code file to storage
 	 * @apiVersion 2.0.0
+	 * @apiHeader {String} Authentication Valid Bearer JWT token
 	 */
 	router.post('/', function (req, res) {
 		req.pipe(req.busboy)
@@ -89,6 +90,7 @@ module.exports = function (client) {
 	 * @apiGroup Storage
 	 * @apiDescription Delete G-code file from storage
 	 * @apiVersion 2.0.0
+	 * @apiHeader {String} Authentication Valid Bearer JWT token
 	 */
 	router.delete('/:filename', function (req, res) {
 		client.storage.remove(req.params.filename).then(() => {

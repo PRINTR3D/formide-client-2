@@ -21,6 +21,7 @@ module.exports = function api (plugin, router) {
    * @apiGroup Plugin:GPIO
    * @apiDescription Set the GPIO control mode to switch between integration and host
    * @apiVersion 2.0.0
+   * @apiHeader {String} Authentication Valid Bearer JWT token
    */
   router.post('/mode', function (req, res) {
     req.checkParams(['mode'])
@@ -36,8 +37,9 @@ module.exports = function api (plugin, router) {
    * @apiGroup Plugin:GPIO
    * @apiDescription Enable the GPIO control mode to receive USB plug events over WS
    * @apiVersion 2.0.0
+   * @apiHeader {String} Authentication Valid Bearer JWT token
    */
-  router.post('/enable', function (req, res) {
+  router.post('/enable', plugin._client.http.checkAuth.jwt, function (req, res) {
     plugin.enableControlMode(function (err) {
       if (err) return res.notImplemented(err.message)
       return res.ok({ message: 'Control mode switching events enabled' })

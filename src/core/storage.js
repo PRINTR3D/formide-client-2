@@ -154,32 +154,6 @@ class Storage {
 	diskSpace () {
 		return this.diskSpace().getDiskSpace()
 	}
-	
-	getDrives () {
-		
-	}
-	
-	mountDrive () {
-		
-	}
-	
-	unmountDrive () {
-		
-	}
-	
-	readDrive () {
-		
-	}
-	
-	copyFile () {
-		this.diskSpace.hasSpaceLeft().then(() => {
-			// TODO
-		}).catch((err) => {
-			// TODO
-		})
-	}
-	
-	
 }
 
 module.exports = Storage
