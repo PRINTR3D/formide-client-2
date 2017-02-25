@@ -1,18 +1,9 @@
-/**
-* @Author: chris
-* @Date:   2017-01-05T11:32:27+01:00
-* @Filename: network.js
-* @Last modified by:   chris
-* @Last modified time: 2017-01-06T23:33:32+01:00
-* @Copyright: Copyright (c) 2016, All rights reserved, http://printr.nl
-*/
-
 'use strict'
 
 const http = require('http')
 const exec = require('child_process').exec
 const bashEscape = require('./bashUtils').escape
-const service = 'sudo fiw'
+const fiw = 'sudo fiw' // custom script on The Element
 
 /**
  * Filter list of networks to only return valid essids
@@ -42,9 +33,9 @@ function getSsids (stdout) {
  */
 function list () {
   return new Promise(function (resolve, reject) {
-    exec(`${service} wlan0 cached-scan`, function (err, stdout) {
+    exec(`${fiw} wlan0 cached-scan`, function (err, stdout) {
       if (err || !stdout) {
-        exec(`${service} wlan0 scan`, function (err, stdout) {
+        exec(`${fiw} wlan0 scan`, function (err, stdout) {
           if (err) return reject(err)
           const result = getSsids(stdout)
           return resolve(result)
@@ -58,12 +49,12 @@ function list () {
 }
 
 /**
- * Get current Wi-Fi status from fiw service
+ * Get current Wi-Fi status from fiw fiw
  * @returns {Promise}
  */
 function status () {
   return new Promise(function (resolve, reject) {
-    exec(`${service} wlan0 status`, function (err, stdout) {
+    exec(`${fiw} wlan0 status`, function (err, stdout) {
       if (err) return reject(err)
       const isConnected = stdout.trim() === 'connected,configured'
       return resolve(isConnected)
@@ -77,7 +68,7 @@ function status () {
  */
 function network () {
   return new Promise(function (resolve, reject) {
-    exec(`${service} wlan0 network`, function (err, stdout) {
+    exec(`${fiw} wlan0 network`, function (err, stdout) {
       if (err) return reject(err)
       const network = stdout.trim()
       return resolve(network)
@@ -91,7 +82,7 @@ function network () {
  */
 function ip () {
   return new Promise(function (resolve, reject) {
-    exec(`${service} wlan0 ip`, function (err, stdout) {
+    exec(`${fiw} wlan0 ip`, function (err, stdout) {
       if (err) return reject(err)
       const ip = stdout.trim()
       return resolve(ip)
@@ -123,7 +114,7 @@ function publicIp () {
  */
 function mac () {
   return new Promise(function (resolve, reject) {
-    exec(`${service} wlan0 mac`, function (err, stdout) {
+    exec(`${fiw} wlan0 mac`, function (err, stdout) {
       if (err) return reject(err)
       const mac = stdout.trim()
       return resolve(mac)
@@ -163,7 +154,7 @@ function connectSimple (essid, password) {
 
     essid = bashEscape(essid)
     password = bashEscape(password)
-    const connectCommand = `${service} wlan0 connect ${essid} ${password}`.trim()
+    const connectCommand = `${fiw} wlan0 connect ${essid} ${password}`.trim()
 
     exec(connectCommand, function (err, stdout, stderr) {
       if (err || stderr) return reject(err || stderr)
@@ -198,7 +189,7 @@ function connectAdvanced (config) {
       wpaSupplicant += wpaSupplicantCommand + ' '
     }
 
-    exec(`${service} wlan0 connectWithConfig ${wpaSupplicant}`, function (err, stdout, stderr) {
+    exec(`${fiw} wlan0 connectWithConfig ${wpaSupplicant}`, function (err, stdout, stderr) {
       if (err || stderr) return reject(err || stderr)
       if (stdout.trim() !== 'OK') return reject(new Error(`Failed to connect to ${config.ssid}`))
       return resolve({ message: `Successfully connected to ${config.ssid}` })
@@ -212,7 +203,7 @@ function connectAdvanced (config) {
  */
 function reset () {
   return new Promise(function (resolve, reject) {
-    exec(`${service} wlan0 reset`, function (err, stdout) {
+    exec(`${fiw} wlan0 reset`, function (err, stdout) {
       if (err) return reject(err)
       return resolve({ message: 'Successfully reset wlan0' })
     })
