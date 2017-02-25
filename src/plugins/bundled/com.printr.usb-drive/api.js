@@ -66,4 +66,5 @@ module.exports = function api (plugin, router) {
 		})
 	})
 	
+	return router
 }
