@@ -8,6 +8,8 @@ class VirtualPrinter extends Printer {
     const virtualDriver = new VirtualDriver(port)
     super(client, port, virtualDriver)
     this._type = 'VIRTUAL'
+    
+    virtualDriver.setPrinter(this)
 
     // register virtual printer commands
     this.addCommandTemplate('home', ['G28'])
