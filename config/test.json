@@ -9,6 +9,6 @@
     "platformURL": "https://platform.formide.com"
   },
   "log": {
-    "level": 5
+    "level": 1
   }
 }
