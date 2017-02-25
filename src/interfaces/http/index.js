@@ -87,6 +87,7 @@ class Http {
       res.serverError = require('./responses/serverError').bind({ req, res })
       res.unauthorized = require('./responses/unauthorized').bind({ req, res })
       res.notImplemented = require('./responses/notImplemented').bind({ req, res })
+      res.insufficientStorage = require('./responses/insufficientStorage').bind({ req, res })
       next()
     })
 

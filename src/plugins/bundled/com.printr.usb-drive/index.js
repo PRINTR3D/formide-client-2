@@ -2,6 +2,7 @@
 
 const pkg = require('./package.json')
 const api = require('./api')
+const usb = require('./usb')
 
 class UsbDrives extends Plugin {
 	
@@ -14,25 +15,45 @@ class UsbDrives extends Plugin {
 	}
 	
 	getDrives () {
-		
+		return new Promise((resolve, reject) => {
+			usb.drives((err, drives) => {
+				if (err) return reject(err)
+				return resolve(drives)
+			})
+		})
 	}
 	
-	mountDrive () {
-		
+	mountDrive (drive) {
+		return new Promise((resolve, reject) => {
+			usb.mount(drive, (err, result) => {
+				if (err) return reject(err)
+				return resolve(result)
+			})
+		})
 	}
 	
-	unmountDrive () {
-		
+	unmountDrive (drive) {
+		return new Promise((resolve, reject) => {
+			usb.drives(drive, (err, result) => {
+				if (err) return reject(err)
+				return resolve(result)
+			})
+		})
 	}
 	
-	readDrive () {
-		
+	readDrive (drive, path) {
+		return new Promise((resolve, reject) => {
+			usb.read(drive, path(err, files) => {
+				if (err) return reject(err)
+				return resolve(files)
+			})
+		})
 	}
 	
-	copyFile () {
+	copyFile (drive, path) {
 		const self = this
 		self._client.storage.diskSpace.hasSpaceLeft().then(() => {
-			// TODO
+			// TODO: read stream from USB, write to storage
 			// self._client.storage.write().then(() => {})
 		}).catch((err) => {
 			// TODO
