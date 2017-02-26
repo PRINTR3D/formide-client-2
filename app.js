@@ -35,5 +35,6 @@ const Client = require('./src/core/client')
 const client = new Client(config)
 
 debug('finished booting', process.uptime())
+client.logger.log('Boot time: ' + process.uptime(), 'debug')
 
 module.exports = client
