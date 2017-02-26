@@ -8,7 +8,7 @@ class Storage {
 	
 	constructor (client) {
 		this.gcodeDir = client.config.paths.gcodeDir
-		this.diskSpace = require('./utils/diskSpace')(client)
+		this.diskSpace = require('./diskSpace')(client)
 	}
 	
 	/**

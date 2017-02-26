@@ -48,7 +48,7 @@ class Client {
 
     // utils
     this.utils = {}
-    this.utils.diskSpace = require('./utils/diskSpace')(this)
+    // this.utils.diskSpace = require('./storage/diskSpace')(this)
 
     // core
     this.events = Events
