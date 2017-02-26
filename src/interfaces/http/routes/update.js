@@ -12,7 +12,7 @@ module.exports = function (client, http) {
    */
   router.get('/status', function (req, res) {
     if (!client.system.update) return res.notImplemented('Updates are not available on this system')
-	  if (!client.system.getUpdateStatus) return res.notImplemented('Updates are not available on this system')
+	  if (!client.system.update.getUpdateStatus) return res.notImplemented('Updates are not available on this system')
     client.system.update.getUpdateStatus().then(res.ok).catch(res.serverError)
   })
 
@@ -24,7 +24,7 @@ module.exports = function (client, http) {
    */
   router.get('/current', function (req, res) {
 	  if (!client.system.update) return res.notImplemented('Updates are not available on this system')
-	  if (!client.system.getCurrentVersion) return res.notImplemented('Updates are not available on this system')
+	  if (!client.system.update.getCurrentVersion) return res.notImplemented('Updates are not available on this system')
     client.system.update.getCurrentVersion().then((currentVersion) => {
 	    return res.ok({
         version: currentVersion.version,
