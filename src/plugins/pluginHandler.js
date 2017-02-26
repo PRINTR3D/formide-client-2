@@ -2,6 +2,7 @@
 
 // packages
 const fs = require('fs')
+const path = require('path')
 const SandboxedModule = require('sandboxed-module')
 const vm = require('vm')
 
@@ -9,11 +10,13 @@ class PluginHandler {
   constructor (client) {
     this._client = client
     this._plugins = {}
-    this.loadPlugins(`${__dirname}/bundled`) // bundled plugins
+    // this.loadPlugins(path.resolve(__dirname, 'bundled')) // bundled plugins, none at the moment
+    this.loadPlugins(path.resolve(client.config.paths.pluginDir)) // installed plugins
   }
 
   loadPlugins (pluginDir) {
     const pluginList = fs.readdirSync(pluginDir).filter((item) => {
+      console.log('item', item)
       return fs.statSync(`${pluginDir}/${item}`).isDirectory()
     })
 

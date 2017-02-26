@@ -1,7 +1,0 @@
-{
-  "name": "com.printr.log-reader",
-  "version": "1.0.0",
-  "description": "Read debug logs from The Element",
-  "main": "index.js",
-  "dependencies": {}
-}

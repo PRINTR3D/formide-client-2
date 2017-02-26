@@ -1,5 +1,15 @@
 'use strict'
 
+/**
+ * @apiDefine NotFound
+ * @apiError NotFound The requested path or resource does not exist.
+ * @apiErrorExample {json} NotFound:
+ *  {
+ *    "statusCode": "404",
+ *    "statusName": "NotFound",
+ *    "message": "Could not find resource"
+ *  }
+ */
 module.exports = function notFound (message, error) {
   var res = this.res
   var statusCode = 404

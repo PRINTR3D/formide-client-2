@@ -7,12 +7,13 @@ const path = require('path')
 const storageDir = path.join(getHomeDirectory(), 'formide')
 const logsDir = path.join(storageDir, './logs')
 const gcodeDir = path.join(storageDir, './gcode')
+const pluginDir = path.join(storageDir, './plugins')
 
 /**
  * Return an object containing the used system paths
  */
 function getPaths () {
-  return { storageDir, logsDir, gcodeDir }
+  return { storageDir, logsDir, gcodeDir, pluginDir }
 }
 
 /**
@@ -23,6 +24,7 @@ function checkDirectories () {
   createWhenNotExisting(storageDir)
   createWhenNotExisting(logsDir)
   createWhenNotExisting(gcodeDir)
+	createWhenNotExisting(pluginDir)
 }
 
 /**
