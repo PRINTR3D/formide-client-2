@@ -13,7 +13,7 @@ require('./tests/core/drivers/printerCommandTemplate.test')(client)
 // routes
 require('./tests/routes/auth.test')(client)
 // require('./tests/routes/network.test')(client) // TODO: network list test is slow
-// require('./tests/routes/printer.test')(client) // TODO: virtual printer not online yet
+require('./tests/routes/printer.test')(client)
 require('./tests/routes/storage.test')(client)
 
 // websockets

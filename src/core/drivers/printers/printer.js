@@ -4,8 +4,6 @@ const PRINTER_STATUS_INTERVAL = 2000
 const assert = require('assert')
 const Handlebars = require('handlebars')
 const async = require('async')
-const PrinterNotConnectedError = require('../printerNotConnectedError')
-const PrinterActionNotAllowedError = require('../printerActionNotAllowedError')
 
 class Printer {
 
@@ -21,12 +19,6 @@ class Printer {
     this._status = null
     this._commandTemplates = {}
     this._currentlyPrinting = false
-	  
-	  // expose error objects for printer implementations
-	  this._errors = {
-		  PrinterNotConnectedError,
-		  PrinterActionNotAllowedError
-	  }
 
     // we ask for the printer status every 2 seconds and store it
     this._statusInterval = setInterval(function () {
