@@ -11,8 +11,17 @@ module.exports = function (client, http) {
 	 * @apiGroup Auth
 	 * @apiDescription Login with username and password
 	 * @apiVersion 1.0.0
+	 *
 	 * @apiParam {String} username
 	 * @apiParam {String} password
+	 *
+	 * @apiSuccess {Boolean} success=true Indicates successful login
+	 * @apiSuccess {String} token JWT token to call protected endpoints with
+	 * @apiSuccessExample {json} Success:
+	 *  {
+	 *    "success": true,
+	 *    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImQzMGRiOGUyLWNhZjYtNDlkNC1iOTkxLWY1ZjZhN2NmZTNhNyIsInVzZXJuYW1lIjoiYWRtaW5AbG9jYWwiLCJleHAiOjE0OTA4MjMxNTcsInN1YiI6ImxvZ2luIn0.BFNInvsgQ2DnvfOVmu8xnwnPA_K5JJnfw8_LbJN5cns"
+	 *  }
 	 */
 	router.post('/login', http.checkParams(['username', 'password']), function (req, res) {
 		co(function* () {
@@ -33,7 +42,22 @@ module.exports = function (client, http) {
 	 * @apiGroup Auth
 	 * @apiDescription Validate JWT token
 	 * @apiVersion 1.0.0
-	 * @apiHeader {String} Authentication Valid Bearer JWT token
+	 * @apiUse user
+	 * @apiPermission user
+	 * @apiUse Unauthorized
+	 *
+	 * @apiSuccess {Boolean} valid=true Indicates successful validation
+	 * @apiSuccess {Object} user Details for the validated user
+	 * @apiSuccess {String} user.id ID of the user
+	 * @apiSuccess {String} user.username Username of the user
+	 * @apiSuccessExample {json} Success:
+	 *  {
+	 *    "valid": true,
+	 *    "user": {
+	 *      "id": "d30db8e2-caf6-49d4-b991-f5f6a7cfe3a7",
+	 *      "username": "admin@local"
+	 *    }
+	 *  }
 	 */
 	router.get('/validate', http.checkAuth.jwt, function (req, res) {
 		return res.ok({
