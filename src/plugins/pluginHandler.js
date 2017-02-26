@@ -16,7 +16,6 @@ class PluginHandler {
 
   loadPlugins (pluginDir) {
     const pluginList = fs.readdirSync(pluginDir).filter((item) => {
-      console.log('item', item)
       return fs.statSync(`${pluginDir}/${item}`).isDirectory()
     })
 
