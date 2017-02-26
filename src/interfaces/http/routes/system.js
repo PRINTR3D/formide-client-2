@@ -33,6 +33,7 @@ module.exports = function (client, http) {
    * @apiParam {String} level Level to set the logging to
    */
   router.post('/loglevel', http.checkAuth.jwt, http.checkParams(['level']), function (req, res) {
+    if (req.body.level < 1 || req.body.level > 6) return res.badRequest('Level should be between 1 and 6')
     client.config.log.level = req.body.level
     return res.ok({ message: 'Log level updated' })
   })
