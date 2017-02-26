@@ -16,6 +16,11 @@ module.exports = function (client, http) {
    */
   router.get('/status', function (req, res) {
     if (!client.system.network) return res.notImplemented('Networking is not implemented on this device')
+	  if (!client.system.network.status) return res.notImplemented('Networking is not implemented on this device')
+	  if (!client.system.network.ip) return res.notImplemented('Networking is not implemented on this device')
+	  if (!client.system.network.publicIp) return res.notImplemented('Networking is not implemented on this device')
+	  if (!client.system.network.network) return res.notImplemented('Networking is not implemented on this device')
+	  if (!client.system.network.mac) return res.notImplemented('Networking is not implemented on this device')
     co(function*() {
       const isConnected = yield client.system.network.status()
       const ip = yield client.system.network.ip()
@@ -34,6 +39,7 @@ module.exports = function (client, http) {
    */
   router.get('/list', function (req, res) {
     if (!client.system.network) return res.notImplemented('Networking is not implemented on this device')
+	  if (!client.system.network.list) return res.notImplemented('Networking is not implemented on this device')
     client.system.network.list().then(function (networks) {
       return res.ok(networks)
     }).catch(res.serverError)
@@ -50,6 +56,7 @@ module.exports = function (client, http) {
    */
   router.post('/connect', http.checkAuth.jwt, function (req, res) {
     if (!client.system.network) return res.notImplemented('Networking is not implemented on this device')
+	  if (!client.system.network.connect) return res.notImplemented('Networking is not implemented on this device')
 	  co(function*() {
 	    const connect = yield client.system.network.connect(req.body)
       if (!connect) return res.badRequest('Incorrect network credentials')

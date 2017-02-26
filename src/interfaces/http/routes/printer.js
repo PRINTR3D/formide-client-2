@@ -74,6 +74,8 @@ module.exports = function (client, http) {
 	 * @apiHeader {String} Authentication Valid Bearer JWT token
 	 * @apiParam {String} port Select one of the ports where a printer is connected to. %2F should be used to encode forward slashes.
 	 * @apiParam {String} command The command to run.
+	 * @apiSuccessExample {json} 200 success
+	 *  'OK'
 	 */
 	router.get('/:port/commands/:command', http.checkAuth.jwt, function (req, res) {
 		client.drivers.runCommandTemplate(req.params.port, req.params.command, req.query, (err, response) => {
@@ -109,6 +111,8 @@ module.exports = function (client, http) {
 	 * @apiHeader {String} Authentication Valid Bearer JWT token
 	 * @apiParam {String} port Select one of the ports where a printer is connected to. %2F should be used to encode forward slashes.
 	 * @apiParam {String} command G-code to send
+	 * @apiSuccessExample {json} 200 success
+	 *  'OK'
 	 */
 	router.get('/:port/gcode', http.checkAuth.jwt, http.checkParams(['command'], 'query'), function (req, res) {
 		client.drivers.sendCommand(req.params.port, req.query.command, (err, response) => {
@@ -127,6 +131,8 @@ module.exports = function (client, http) {
 	 * @apiHeader {String} Authentication Valid Bearer JWT token
 	 * @apiParam {String} port Select one of the ports where a printer is connected to. %2F should be used to encode forward slashes.
 	 * @apiParam {String} command Tune G-code to send
+	 * @apiSuccessExample {json} 200 success
+	 *  'OK'
 	 */
 	router.get('/:port/tune', http.checkAuth.jwt, http.checkParams(['command'], 'query'), function (req, res) {
 		client.drivers.sendTuneCommand(req.params.port, req.query.command, (err, response) => {
