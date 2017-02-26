@@ -91,7 +91,6 @@ module.exports = function (client, http) {
    * @apiGroup Printer
    * @apiDescription Mock a printer command to check the resulting G-code
    * @apiVersion 2.0.0
-   * @apiHeader {String} Authentication Valid Bearer JWT token
    * @apiParam {String} port Select one of the ports where a printer is connected to. %2F should be used to encode forward slashes.
    * @apiParam {String} command The command to mock.
    */
