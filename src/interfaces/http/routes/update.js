@@ -2,7 +2,7 @@
 
 const router = require('express').Router()
 
-module.exports = function (client) {
+module.exports = function (client, http) {
   
   /**
    * @api {get} /api/update/status Update:status
@@ -49,7 +49,7 @@ module.exports = function (client) {
    * @apiVersion 2.0.0
    * @apiHeader {String} Authentication Valid Bearer JWT token
    */
-  router.post('/do', function (req, res) {
+  router.post('/do', http.checkAuth.jwt, function (req, res) {
     if (!client.system.update) return res.notImplemented('Updates are not available on this system')
     // TODO
   })

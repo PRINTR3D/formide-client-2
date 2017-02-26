@@ -6,6 +6,7 @@ const exec = require('child_process').exec
 const fs = require('fs')
 const ini = require('ini')
 const path = require('path')
+const network = require('./network')
 const request = require('request')
 const updateBaseURL = 'https://factoryservice.formide.com/update'
 const fota = 'sudo fota' // custom script on The Element, all sudo actions have to be permitted in sudoers.d/formide
@@ -72,16 +73,46 @@ function getUpdateStatus () {
 	})
 }
 
+/**
+ * Check for an available update on the Element factory server
+ * @returns {Promise}
+ */
 function checkForUpdate () {
 	return new Promise(function (resolve, reject) {
 		getCurrentVersion().then((currentVersion) => {
-			
-		  
-		  
-		  
-		  // TODO
-			// if (!hasUpdate.imageURL || !hasUpdate.signature) return reject(new Error('incomplete update object'))
-      
+			network.mac().then((macAddress) => {
+				const checkUpdateURI = `${updateBaseURL}/${currentVersion.flavour}/${currentVersion.version}/${macAddress}`
+				request(checkUpdateURI, (err, response, body) => {
+					if (err) return reject(err)
+					if (response.statusCode !== 200) return reject(new Error('There was an issue getting the latest update information'))
+					
+					try {
+						body = JSON.parse(body)
+					} catch (e) {
+						return reject(e)
+					}
+					
+					if (!body.hasOwnProperty('hasUpdate')) return reject(new Error('Incomplete update object'))
+					
+					if (body.hasUpdate) {
+						return resolve({
+							message: 'Update found',
+							needsUpdate: true,
+							imageURL: body.imageURL,
+							signature: body.signature,
+							version: body.version,
+							flavour: body.flavour,
+							releaseNotesURL: body.releaseNotesURL
+						})
+					} else {
+						return resolve({
+							message: 'No update required at the moment',
+							needsUpdate: false
+						})
+					}
+				})
+				
+			}).catch(reject)
 		}).catch(reject)
 	})
 }
@@ -93,9 +124,13 @@ function checkForUpdate () {
 function update () {
 	return new Promise(function (resolve, reject) {
 		checkForUpdate().then((hasUpdate) => {
-			exec(`${fota} update ${hasUpdate.imageURL} ${hasUpdate.signature}`), (err, stdout, stderr) => {
-				if (err || stderr) return reject(err || stderr)
-				return resolve()
+			if (hasUpdate.needsUpdate) {
+				exec(`${fota} update ${hasUpdate.imageURL} ${hasUpdate.signature}`), (err, stdout, stderr) => {
+					if (err || stderr) return reject(err || stderr)
+					return resolve()
+				}
+			} else {
+				return reject(new Error(hasUpdate.message))
 			}
 		}).catch(reject)
 	})
