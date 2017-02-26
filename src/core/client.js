@@ -46,10 +46,6 @@ class Client {
       this.logger.log(`No native client implementation found: ${e.message}`, 'warning')
     }
 
-    // utils
-    this.utils = {}
-    // this.utils.diskSpace = require('./storage/diskSpace')(this)
-
     // core
     this.events = Events
     this.drivers = new Drivers(this)
