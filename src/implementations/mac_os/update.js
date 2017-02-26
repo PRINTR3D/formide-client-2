@@ -3,7 +3,7 @@
 const pkg = require('../../../package.json')
 
 /**
- * Get current version from Element update config
+ * Get current version
  * @param callback
  */
 function getCurrentVersion () {

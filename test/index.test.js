@@ -15,6 +15,7 @@ require('./tests/routes/auth.test')(client)
 // require('./tests/routes/network.test')(client) // TODO: network list test is slow
 require('./tests/routes/printer.test')(client)
 require('./tests/routes/storage.test')(client)
+require('./tests/routes/update.test')(client)
 
 // websockets
 require('./tests/websocket/index.test')(client)
