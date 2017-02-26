@@ -198,7 +198,7 @@ function connectAdvanced (config) {
 }
 
 /**
- * Reset Wi-Fi and fall back to hotspot mode
+ * Reset Wi-Fi connection
  * @returns {Promise}
  */
 function reset () {
@@ -210,6 +210,20 @@ function reset () {
   })
 }
 
+/**
+ * Enable or disable hotspot mode
+ * @returns {Promise}
+ */
+function hotspot (enabled) {
+	return new Promise(function (resolve, reject) {
+	  const action = (enabled) ? 'connect' : 'disconnect'
+		exec(`${fiw} wlan1 connect ${action}`, function (err, stdout) {
+			if (err) return reject(err)
+			return resolve({ message: 'Successfully enabled hotspot' })
+		})
+	})
+}
+
 module.exports = {
   list,
   status,
@@ -218,5 +232,6 @@ module.exports = {
   publicIp,
   mac,
   connect,
-  reset
+  reset,
+	hotspot
 }

@@ -5,6 +5,7 @@ const co = require('co')
 const socket = require('./socket')
 const proxy = require('./proxy')
 const downloadGcodeFromCloud = require('./downloadGcodeFromCloud')
+const generateCloudCode = require('./generateCloudCode')
 const getCallbackData = require('./getCallbackData')
 
 // TODO: rewrite to separate package without client dependency
@@ -23,6 +24,8 @@ class Cloud {
     assert(client.events, '[cloud] - client.events not passed')
     // assert(client.db, '[cloud] - client.db not passed')
     assert(client.logger.log, '[cloud] - client.logger.log not passed')
+    
+    this._client = client
 
     // set URLs
     this.URL = client.config.cloud.URL
@@ -47,7 +50,7 @@ class Cloud {
 
     // on connect
     this.cloud.on('connect', function () {
-      // TODO: cloud error
+      // TODO: fix cloud error before trying to connect again!
       // co(function*() {
       //   const publicIP = yield client.system.network.publicIp()
       //   const internalIP = yield client.system.network.ip()
@@ -80,15 +83,14 @@ class Cloud {
         self.cloud.emit('http', getCallbackData(data._callbackId, err, response))
       })
     })
-    
+
     // Adding a G-code file from the cloud
     this.cloud.on('downloadGcode', function (data) {
       client.logger.log(`Download cloud G-code: ${data.gcode}`, 'debug')
-      // TODO: improve this
-	    downloadGcodeFromCloud(data, function (err, gcodeFileName) {
+	    downloadGcodeFromCloud(self._client, data, function (err, stats) {
 	      self.cloud.emit('downloadGcode', getCallbackData(data._callbackId, err, {
 	        success: true,
-		      gcodeFileName: gcodeFileName
+		      gcodeFileName: stats.filename
         }))
       })
     })
@@ -99,6 +101,21 @@ class Cloud {
         client.logger.log('Cloud disconnected, trying to reconnect...', 'warning')
         self.cloud.io.reconnect()
       }
+    })
+  }
+	
+	/**
+   * Generate a cloud code to connect the client to a Formide account
+	 * @returns {Promise}
+	 */
+	generateCode () {
+	  const self = this
+    return new Promise((resolve, reject) => {
+	    self._client.system.network.mac().then((macAddress) => {
+	      return generateCloudCode(self._client, macAddress)
+      }).then((cloudCode) => {
+	      return resolve(cloudCode)
+      }).catch(reject)
     })
   }
 }

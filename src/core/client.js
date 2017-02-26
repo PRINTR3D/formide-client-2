@@ -9,15 +9,15 @@ const Drivers = require('./drivers')
 const Logger = require('./utils/logger')
 const Auth = require('./auth')
 const Storage = require('./storage')
-
-// other modules
-const Www = require('../www')
-const PluginHandler = require('../plugins/pluginHandler')
+const Cloud = require('./cloud')
 
 // interfaces
 const Http = require('../interfaces/http')
 const Ws = require('../interfaces/ws')
-const Cloud = require('../interfaces/cloud')
+const Www = require('../www')
+
+// other
+const PluginHandler = require('../plugins/pluginHandler')
 
 class Client {
 
@@ -51,9 +51,9 @@ class Client {
     this.drivers = new Drivers(this)
     this.storage = new Storage(this)
     this.auth = new Auth(this)
+	  this.cloud = new Cloud(this) // TODO: separate client logic from cloud module
 
     // interfaces
-    this.cloud = new Cloud(this) // TODO: separate client logic from cloud module
     this.http = new Http(this)
     this.ws = new Ws(this)
     this.www = new Www(this)
