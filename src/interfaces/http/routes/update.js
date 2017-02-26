@@ -42,7 +42,7 @@ module.exports = function (client, http) {
   router.get('/check', function (req, res) {
     if (!client.system.update) return res.notImplemented('Updates are not available on this system')
 	  if (!client.system.update.checkForUpdate) return res.notImplemented('Updates are not available on this system')
-    // TODO
+	  client.system.update.checkForUpdate(res.ok).catch(res.serverError)
   })
 
   /**
@@ -55,7 +55,7 @@ module.exports = function (client, http) {
   router.post('/do', http.checkAuth.jwt, function (req, res) {
     if (!client.system.update) return res.notImplemented('Updates are not available on this system')
 	  if (!client.system.update.update) return res.notImplemented('Updates are not available on this system')
-    // TODO
+    client.system.update.update(res.ok).catch(res.serverError)
   })
 
   return router
