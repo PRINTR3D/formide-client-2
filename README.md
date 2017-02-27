@@ -29,7 +29,7 @@ Step 2: set the `NODE_ENV` environment parameter to `production`.
 export NODE_ENV=production
 ```
 
-Step 3: run the client
+Step 3: run the client.
 ```
 formide-client
 ```
@@ -42,6 +42,13 @@ For example, the Felix Pro Touch series can switch between the touchscreen Eleme
 host controller on the side of the printr. A plugin was created to allow switching using GPIO
 and custom hardware. Plugins must be stored in the `src/plugins/bundled` or the `~/formide/plugins`
 directories in order to be loaded. At the moment, hot-loading plugins using a UI is not supported.
+
+### Known plugins
+This is a list of known plugins for Formide client:
+
+* [USB drive support](https://github.com/PRINTR3D/formide-client-usb-drive)
+* [Debug logs reader](https://github.com/PRINTR3D/formide-client-log-reader)
+* [GPIO control switch](https://github.com/PRINTR3D/formide-client-gpio-control-mode)
 
 ## Supported devices
 At the moment, Formide client runs smoothly on the following devices:
