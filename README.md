@@ -66,4 +66,4 @@ adding features or just using it and report bugs! Please check the issue list of
 adding new ones to see if we're already aware of the issue that you're having.
 
 ## License
-Please check LICENSE.md for licensing information.
+Please check [LICENSE.md](LICENSE.md) for licensing information.
