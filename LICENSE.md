@@ -1,4 +1,4 @@
-Copyright (c) 2013-2015 Printr B.V. All rights reserved
+Copyright (c) 2013-2017 Printr B.V. All rights reserved
 
 This code is dual-licensed: you can redistribute it and/or modify
 it under the terms of the GNU General Public License version 2 as
