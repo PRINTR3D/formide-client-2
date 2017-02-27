@@ -8,7 +8,11 @@ to get started with on their own devices or add functionality. The client is ope
 be found on GitHub.
 
 ## Requirements
+Formide client needs the following requirements:
 
+* ARM linux (tailored for The Element, also tested on Raspberry Pi 2 and 3, and Beagle Bone Black) or MacOS (development purposes)
+* NodeJS 4.x (the LTS release) and accompanying NPM version
+* A working internet connection for [cloud](https://formide.com) functionality
 
 ## Installation
 The full installation guide can be found on [developers.formide.com](https://developers.formide.com/docs/installation).
