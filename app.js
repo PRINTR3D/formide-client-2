@@ -4,10 +4,6 @@ const debug = require('debug')('app:boot')
 
 debug('booting...')
 
-// Globals
-// global.Plugin = require('./src/plugins/plugin')
-// global.Printer = require('./src/core/drivers/printers/printer')
-
 // Load version
 const version = require('./package.json').version
 
@@ -39,5 +35,6 @@ const Client = require('./src/core/client')
 const client = new Client(config)
 
 debug('finished booting', process.uptime())
+client.logger.log('Boot time: ' + process.uptime(), 'debug')
 
 module.exports = client

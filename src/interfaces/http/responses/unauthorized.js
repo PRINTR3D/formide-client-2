@@ -1,14 +1,15 @@
-/**
-* @Author: chris
-* @Date:   2016-12-17T13:16:34+01:00
-* @Filename: unauthorized.js
-* @Last modified by:   chris
-* @Last modified time: 2016-12-30T14:35:43+01:00
-* @Copyright: Copyright (c) 2016, All rights reserved, http://printr.nl
-*/
-
 'use strict'
 
+/**
+ * @apiDefine Unauthorized
+ * @apiError Unauthorized No Bearer token was found in the request header or an invalid token was passed.
+ * @apiErrorExample {json} Unauthorized:
+ *  {
+ *    "statusCode": "401",
+ *    "statusName": "Unauthorized",
+ *    "message": "No Bearer token found"
+ *  }
+ */
 module.exports = function unauthorized (message, error) {
   var res = this.res
   var statusCode = 401

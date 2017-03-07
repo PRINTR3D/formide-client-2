@@ -1,14 +1,19 @@
-/**
-* @Author: chris
-* @Date:   2017-01-10T00:21:06+01:00
-* @Filename: update.js
-* @Last modified by:   chris
-* @Last modified time: 2017-01-10T00:21:16+01:00
-* @Copyright: Copyright (c) 2016, All rights reserved, http://printr.nl
-*/
-
 'use strict'
 
-module.exports = {
+const pkg = require('../../../package.json')
 
+/**
+ * Get current version
+ * @param callback
+ */
+function getCurrentVersion () {
+	return new Promise(function (resolve) {
+		return resolve({
+			version: pkg.version
+		})
+	})
+}
+
+module.exports = {
+	getCurrentVersion
 }

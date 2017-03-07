@@ -8,6 +8,8 @@ class VirtualPrinter extends Printer {
     const virtualDriver = new VirtualDriver(port)
     super(client, port, virtualDriver)
     this._type = 'VIRTUAL'
+    
+    virtualDriver.setPrinter(this)
 
     // register virtual printer commands
     this.addCommandTemplate('home', ['G28'])
@@ -39,6 +41,10 @@ class VirtualPrinter extends Printer {
 
   sendCommand (command, callback) {
     this._driver.sendGcode(command, callback)
+  }
+  
+  pausePrint (callback) {
+    this._driver.pausePrint(callback)
   }
 }
 

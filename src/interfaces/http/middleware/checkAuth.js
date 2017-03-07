@@ -5,11 +5,9 @@ const jwt = require('../../../core/utils/jwt')
 module.exports = function (client) {
 	
 	/**
-   * JWT auth middleware
-	 * @param req
-	 * @param res
-	 * @param next
-	 * @returns {*}
+	 * @apiDefine user User auth
+	 * Only authorized users can access this endpoint.
+	 * @apiHeader {String} Authorization Valid Bearer JWT token
 	 */
   function jwtMiddleware (req, res, next) {
 	  const authHeader = req.get('Authorization')
@@ -31,7 +29,10 @@ module.exports = function (client) {
     // find user and set session
 		const user = client.auth.find(token.id, 'id')
 		req.authenticated = true
-		req.user = user
+		req.user = {
+	  	id: user.id,
+			username: user.username
+		}
 		return next()
   }
 

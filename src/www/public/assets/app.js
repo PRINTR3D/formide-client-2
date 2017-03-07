@@ -11,9 +11,11 @@ new Vue({
       password: ''
     },
     loginForm: {
-      email: '',
+      username: '',
       password: ''
     },
+	  cloudConnectURL: '',
+	  cloudConnectError: '',
     showAdvanced: false,
     connecting: false,
     connectError: '',
@@ -26,68 +28,83 @@ new Vue({
     goToPage: function (page) {
       this.page = page
     },
+    cloudCode: function () {
+      var self = this
+      this.$http.get(apiRootURI + '/api/system/cloud/code').then(function success (response) {
+	      self.cloudConnectURL = response.data.redirectURI
+      }, function error (errorResponse) {
+	      self.cloudConnectError = 'Cloud connect error: ' + errorResponse.data.message
+      })
+    },
     login: function () {
+	    var self = this
       if (this.loginForm.email === '' || this.loginForm.password === '') {
-        this.loginError = 'Please enter an email address and password'
+	      self.loginError = 'Please enter an email address and password'
       } else {
-        this.loggingIn = true
-        this.$http.post(apiRootURI + '/api/auth/login', this.loginForm).then(function success (response) {
-          this.loggingIn = false
-          this.accessToken = response.data.access_token
-          this.goToPage('networks')
+	      self.loggingIn = true
+	      self.$http.post(apiRootURI + '/api/auth/login', this.loginForm).then(function success (response) {
+		      self.loggingIn = false
+		      self.accessToken = response.data.token
+		      self.goToPage('networks')
         }, function error (errorResponse) {
-          this.loggingIn = false
+		      self.loggingIn = false
           if (errorResponse.status === 401) {
-            this.loginError = 'Incorrect credentials, please try again'
+	          self.loginError = 'Incorrect credentials, please try again'
           } else {
-            this.loginError = errorResponse.data.message
+	          self.loginError = errorResponse.data.message
           }
         })
       }
     },
     connect: function () {
+      var self = this
       if (this.connectForm.ssid === '') {
-        this.connectError = 'Please select a network'
+	      this.connectError = 'Please select a network'
       } else {
-        this.connecting = true
-        this.$http.post(apiRootURI + '/api/network/connect', this.connectForm, {
+	      this.connecting = true
+	      this.$http.post(apiRootURI + '/api/network/connect', this.connectForm, {
           headers: {
             'Authorization': 'Bearer ' + this.accessToken
           }
         }).then(function success (response) {
-          this.connecting = false
-          this.ip = 'http://' + response.data.ip + ':8080'
-          this.goToPage('success')
+		      self.connecting = false
+		      self.ip = 'http://' + response.data.ip + ':8080'
+		      self.goToPage('success')
         }, function error (errorResponse) {
-          this.connecting = false
+		      self.connecting = false
           if (errorResponse.status === 401) {
-            this.goToPage('login')
+	          self.goToPage('login')
           } else {
-            this.connectError = errorResponse.data.message
+	          self.connectError = errorResponse.data.message
           }
         })
       }
+    },
+    findNetworks: function () {
+      var self = this
+	    var networkInterval = setInterval(function () {
+		    self.$http.get(apiRootURI + '/api/network/list').then(function success (response) {
+			    if (self.networkTry === 3) {
+				    clearInterval(networkInterval)
+			    }
+			    if (response.data.length > 0) {
+				    clearInterval(networkInterval)
+				    self.networks = response.data
+			    } else {
+				    self.networkTry++
+			    }
+		    }, function error (errorResponse) {
+			    if (self.networkTry === 3) {
+				    clearInterval(networkInterval)
+			    }
+			    console.log('errorResponse', errorResponse)
+			    self.networkTry++
+		    })
+	    }, 5000)
     }
   },
   mounted () {
-    var networkInterval = setInterval(function () {
-      this.$http.get(apiRootURI + '/api/network/list').then(function success (response) {
-        if (this.networkTry === 3) {
-          clearInterval(networkInterval)
-        }
-        if (response.data.length > 0) {
-          clearInterval(networkInterval)
-          this.networks = response.data
-        } else {
-          this.networkTry++
-        }
-      }, function error (errorResponse) {
-        if (this.networkTry === 3) {
-          clearInterval(networkInterval)
-        }
-        console.log('errorResponse', errorResponse)
-        this.networkTry++
-      })
-    }.bind(this), 5000)
+    this.findNetworks()
+	  this.cloudCode()
   }
 })

@@ -1,12 +1,3 @@
-/**
-* @Author: chris
-* @Date:   2017-01-06T23:33:55+01:00
-* @Filename: network.js
-* @Last modified by:   chris
-* @Last modified time: 2017-01-07T15:09:44+01:00
-* @Copyright: Copyright (c) 2016, All rights reserved, http://printr.nl
-*/
-
 'use strict'
 
 /**

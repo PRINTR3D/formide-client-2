@@ -1,7 +1,7 @@
 'use strict'
 
 const diskspace = require('diskspace')
-const SPACE_BUFFER = 157412106240 // 40MB should be free to store system info
+const SPACE_BUFFER = 40000000 // 40MB should be free to store system info
 const StorageFullError = require('./storageFullError')
 
 module.exports = function (client) {

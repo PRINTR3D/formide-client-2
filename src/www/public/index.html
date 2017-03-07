@@ -20,7 +20,12 @@
           <hr />
           <a @click="goToPage('login')" class="button">Start Wi-Fi setup</a>
           <br/><br/>
-          <p><a href="/">Go to local dashboard</a></p>
+          <div v-if="!cloudConnectURL && !cloudConnectError">
+            <span class="spinner"></span>
+            <small>Getting cloud code...</small>
+          </div>
+          <a v-if="cloudConnectURL" :href="cloudConnectURL" class="button button--inverse">Connect to Formide</a>
+          <p class="warning">{{ cloudConnectError }}</p>
         </div>
 
         <div id="login" v-if="page === 'login'">
@@ -30,7 +35,7 @@
               If you haven't created your own account yet, you can use the default credentials 'admin', 'admin@local'.
             </p>
             <form>
-              <input type="text" name="email" placeholder="Enter your email..." v-model="loginForm.email" />
+              <input type="text" name="username" placeholder="Enter your username..." v-model="loginForm.username" />
               <input type="password" name="password" placeholder="Enter your password..." v-model="loginForm.password" />
               <a @click="login()" class="button">Login</a>
               <p class="warning">{{ loginError }}</p>

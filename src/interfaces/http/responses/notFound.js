@@ -1,14 +1,15 @@
-/**
-* @Author: chris
-* @Date:   2016-12-17T13:16:34+01:00
-* @Filename: notFound.js
-* @Last modified by:   chris
-* @Last modified time: 2016-12-30T14:52:07+01:00
-* @Copyright: Copyright (c) 2016, All rights reserved, http://printr.nl
-*/
-
 'use strict'
 
+/**
+ * @apiDefine NotFound
+ * @apiError NotFound The requested path or resource does not exist.
+ * @apiErrorExample {json} NotFound:
+ *  {
+ *    "statusCode": "404",
+ *    "statusName": "NotFound",
+ *    "message": "Could not find resource"
+ *  }
+ */
 module.exports = function notFound (message, error) {
   var res = this.res
   var statusCode = 404

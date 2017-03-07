@@ -1,26 +1,19 @@
 'use strict'
 
+const pkg = require('../../../package.json')
+
+/**
+ * Get current version
+ * @param callback
+ */
 function getCurrentVersion () {
-
-}
-
-function getUpdateStatus () {
-
-}
-
-function checkForUpdate () {
-
-}
-
-function update () {
-  // step 1: download install script from remote source (same as for first install), make sure that user has correct permissions
-  // step 2: execute script to replace app source and do needed configuration
-  // step 3: reboot device
+	return new Promise(function (resolve) {
+		return resolve({
+			version: pkg.version
+		})
+	})
 }
 
 module.exports = {
-  getCurrentVersion,
-  getUpdateStatus,
-  checkForUpdate,
-  update
+	getCurrentVersion
 }

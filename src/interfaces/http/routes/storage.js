@@ -28,9 +28,12 @@ module.exports = function (client) {
 	 * @apiVersion 2.0.0
 	 */
 	router.get('/:filename', function (req, res) {
-		client.storage.stats(req.params.filename).then((stats) => {
+		client.storage.stat(req.params.filename).then((stats) => {
 			return res.ok(stats)
-		}).catch(res.serverError)
+		}).catch((err) => {
+			if (err.name === 'fileNotFound') return res.notFound(err.message)
+			return res.serverError(err)
+		})
 	})
 	
 	/**
@@ -40,7 +43,20 @@ module.exports = function (client) {
 	 * @apiVersion 2.0.0
 	 */
 	router.get('/:filename/download', function (req, res) {
-		// TODO: download file
+		client.storage.stat(req.params.filename).then((info) => {
+			client.storage.read(req.params.filename).then((storageStream) => {
+				res.set('Content-Type', 'text/gcode')
+				res.set('Content-Length', info.filesize)
+				return storageStream.pipe(res)
+			}).catch((err) => {
+				if (err.name === 'fileNotFound') return res.notFound(err.message)
+				return res.serverError(err)
+			})
+		})
+		.catch((err) => {
+			if (err.name === 'fileNotFound') return res.notFound(err.message)
+			return res.serverError(err)
+		})
 	})
 	
 	/**
@@ -48,9 +64,25 @@ module.exports = function (client) {
 	 * @apiGroup Storage
 	 * @apiDescription Upload new G-code file to storage
 	 * @apiVersion 2.0.0
+	 * @apiHeader {String} Authentication Valid Bearer JWT token
 	 */
 	router.post('/', function (req, res) {
-		// TODO: upload new gcode file
+		req.pipe(req.busboy)
+		req.busboy.on('file', (field, file, filename) => {
+			
+			// write file to storage
+			client.storage.write(filename, file).then((info) => {
+				return res.ok({
+					message: 'File uploaded',
+					file: info,
+					success: true
+				})
+			}).catch((err) => {
+				if (err.name === 'invalidFiletype') return res.badRequest(err.message)
+				if (err.name === 'storageFull') return res.conflict(err.message)
+				return res.serverError(err)
+			})
+		})
 	})
 	
 	/**
@@ -58,9 +90,12 @@ module.exports = function (client) {
 	 * @apiGroup Storage
 	 * @apiDescription Delete G-code file from storage
 	 * @apiVersion 2.0.0
+	 * @apiHeader {String} Authentication Valid Bearer JWT token
 	 */
 	router.delete('/:filename', function (req, res) {
-		// TODO: remove file
+		client.storage.remove(req.params.filename).then(() => {
+			return res.ok({ message: 'File removed from storage' })
+		}).catch(res.serverError)
 	})
 	
 	return router

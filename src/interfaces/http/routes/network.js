@@ -16,6 +16,11 @@ module.exports = function (client, http) {
    */
   router.get('/status', function (req, res) {
     if (!client.system.network) return res.notImplemented('Networking is not implemented on this device')
+	  if (!client.system.network.status) return res.notImplemented('Networking is not implemented on this device')
+	  if (!client.system.network.ip) return res.notImplemented('Networking is not implemented on this device')
+	  if (!client.system.network.publicIp) return res.notImplemented('Networking is not implemented on this device')
+	  if (!client.system.network.network) return res.notImplemented('Networking is not implemented on this device')
+	  if (!client.system.network.mac) return res.notImplemented('Networking is not implemented on this device')
     co(function*() {
       const isConnected = yield client.system.network.status()
       const ip = yield client.system.network.ip()
@@ -34,6 +39,7 @@ module.exports = function (client, http) {
    */
   router.get('/list', function (req, res) {
     if (!client.system.network) return res.notImplemented('Networking is not implemented on this device')
+	  if (!client.system.network.list) return res.notImplemented('Networking is not implemented on this device')
     client.system.network.list().then(function (networks) {
       return res.ok(networks)
     }).catch(res.serverError)
@@ -48,11 +54,11 @@ module.exports = function (client, http) {
    * @apiParam {String} ssid
    * @apiParam {String} password
    */
-  router.post('/connect', http.checkAuth.jwt, function (req, res) {
+  router.post('/connect', http.checkAuth.jwt, http.checkParams(['ssid']), function (req, res) {
     if (!client.system.network) return res.notImplemented('Networking is not implemented on this device')
+	  if (!client.system.network.connect) return res.notImplemented('Networking is not implemented on this device')
 	  co(function*() {
-	    const connect = yield client.system.network.connect(req.body)
-      if (!connect) return res.badRequest('Incorrect network credentials')
+	    yield client.system.network.connect(req.body) // will trigger error when incorrect
       
       const ip = yield client.system.network.ip()
       if (!ip) return res.notFound('Could not retrieve IP address')
@@ -60,6 +66,41 @@ module.exports = function (client, http) {
       return res.ok({ message: 'Connected to network', ip })
 	  }).then(null, res.serverError)
   })
+	
+	/**
+	 * @api {post} /api/network/hotspot Network:reset
+	 * @apiGroup Network
+	 * @apiDescription Reset the Wi-Fi network connection
+	 * @apiVersion 2.0.0
+	 * @apiHeader {String} Authentication Valid Bearer JWT token
+	 */
+	router.post('/reset', http.checkAuth.jwt, function (req, res) {
+		if (!client.system.network) return res.notImplemented('Networking is not implemented on this device')
+		if (!client.system.network.reset) return res.notImplemented('Networking is not implemented on this device')
+		co(function*() {
+			const reset = yield client.system.network.reset()
+			if (!reset) return res.conflict('Could not reset Wi-Fi connection')
+			return res.ok(reset)
+		}).then(null, res.serverError)
+	})
+	
+	/**
+	 * @api {post} /api/network/hotspot Network:hotspot
+	 * @apiGroup Network
+	 * @apiDescription Enable or disable the Wi-Fi hotspot mode (The Element)
+	 * @apiVersion 2.0.0
+	 * @apiHeader {String} Authentication Valid Bearer JWT token
+	 * @apiParam {Boolean} enabled The action to undertake, will be enable on true and disable on false
+	 */
+	router.post('/hotspot', http.checkAuth.jwt, http.checkParams(['enabled']), function (req, res) {
+		if (!client.system.network) return res.notImplemented('Networking is not implemented on this device')
+		if (!client.system.network.hotspot) return res.notImplemented('Networking is not implemented on this device')
+		co(function*() {
+			const hotspot = yield client.system.network.hotspot(req.body.enabled)
+			if (!hotspot) return res.conflict('Could not enable or disable hotspot')
+			return res.ok(hotspot)
+		}).then(null, res.serverError)
+	})
 
   return router
 }
