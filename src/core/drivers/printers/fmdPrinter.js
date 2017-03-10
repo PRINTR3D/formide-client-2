@@ -89,7 +89,7 @@ class FdmPrinter extends Printer {
 	  this._driver.stopPrint(this._port, '', (err, response) => {
 		  if (err) return callback(err)
 		  self._currentlyPrinting = false
-		  self._queueItemId = 0
+		  self._queueItemId = ''
 		  return callback(null, response)
 	  })
   }
@@ -99,7 +99,7 @@ class FdmPrinter extends Printer {
 		const self = this
 		this._client.storage.remove(this._currentlyPrinting).then(() => {
 			self._currentlyPrinting = false
-			self._queueItemId = 0
+			self._queueItemId = ''
 			return callback(null)
 		}).catch(callback)
   }
