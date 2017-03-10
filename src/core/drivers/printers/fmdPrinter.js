@@ -29,7 +29,10 @@ class FdmPrinter extends Printer {
   }
 
   askStatus (callback) {
+  	const self = this
     this._driver.getPrinterInfo(this._port, function (err, status) {
+	    status.path = encodeURIComponent(status.port) // add the encoded port path for easy of use
+	    status.queueItemId = self._queueItemId // use the client string variable instead of the driver integer for the HTTP API
       return callback(err, status)
     })
   }
