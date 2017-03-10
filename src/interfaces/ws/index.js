@@ -14,11 +14,11 @@ class Ws {
     // These are not compatible with socket.io, hence the separate websocket library
     const nativeWsServer = ws.createServer(function (conn) {
       // Format socket messages
-      function forwardEvents (data) {
-        data = data || {}
+      function forwardEvents (eventName, eventData) {
+        let data = eventData || {}
         data.device = 'LOCAL'
         conn.sendText(JSON.stringify({
-          channel: this.event,
+          channel: eventName,
           data: data
         }))
       }
@@ -74,6 +74,7 @@ class Ws {
 
     // Emit all system events to connected socket.io clients
     socketIO.on('connection', function (socket) {
+      
       function forwardSocketEvents (eventName, eventData) {
         socket.emit(eventName, eventData)
       }
