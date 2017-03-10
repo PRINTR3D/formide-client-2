@@ -113,7 +113,7 @@ module.exports = function (client, http) {
 	 * @apiSuccessExample {json} 200 success
 	 *  'OK'
 	 */
-	router.post('/:port/gcode', http.checkAuth.jwt, http.checkParams(['command'], 'query'), function (req, res) {
+	router.post('/:port/gcode', http.checkAuth.jwt, http.checkParams(['command']), function (req, res) {
 		client.drivers.sendCommand(req.params.port, req.query.command, (err, response) => {
 			if (err && err.name === 'printerNotConnectedError') return res.notFound(err.message)
 			else if (err && err.name === 'printerActionNotAllowed') return res.conflict(err.message)
@@ -133,7 +133,7 @@ module.exports = function (client, http) {
 	 * @apiSuccessExample {json} 200 success
 	 *  'OK'
 	 */
-	router.post('/:port/tune', http.checkAuth.jwt, http.checkParams(['command'], 'query'), function (req, res) {
+	router.post('/:port/tune', http.checkAuth.jwt, http.checkParams(['command']), function (req, res) {
 		client.drivers.sendTuneCommand(req.params.port, req.query.command, (err, response) => {
 			if (err && err.name === 'printerNotConnectedError') return res.notFound(err.message)
 			else if (err && err.name === 'printerActionNotAllowed') return res.conflict(err.message)
@@ -151,7 +151,7 @@ module.exports = function (client, http) {
 	 * @apiParam {String} port Select one of the ports where a printer is connected to. %2F should be used to encode forward slashes.
 	 * @apiParam {String} file Path to the file to print (absolute)
 	 */
-	router.post('/:port/print', http.checkAuth.jwt, http.checkParams(['file'], 'query'), function (req, res) {
+	router.post('/:port/print', http.checkAuth.jwt, http.checkParams(['file']), function (req, res) {
 		client.drivers.printFile(req.params.port, req.query.file, (err, response) => {
 			if (err && err.name === 'printerNotConnectedError') return res.notFound(err.message)
 			else if (err && err.name === 'printerActionNotAllowed') return res.conflict(err.message)
