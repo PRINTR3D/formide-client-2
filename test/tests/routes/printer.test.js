@@ -50,7 +50,6 @@ module.exports = (client) => {
 				
 				chai.request(client.http.app).post('/api/printer/' + encodeURIComponent(VIRTUAL_PRINTER_PORT) + '/pause').set('Authorization', `Bearer ${token}`).end((req, res) => {
 					expect(res.status).to.equal(200)
-					expect(res.body).to.equal('OK')
 					done()
 				})
 			})
