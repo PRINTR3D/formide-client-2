@@ -89,14 +89,17 @@ class FdmPrinter extends Printer {
 	  this._driver.stopPrint(this._port, '', (err, response) => {
 		  if (err) return callback(err)
 		  self._currentlyPrinting = false
+		  self._queueItemId = 0
 		  return callback(null, response)
 	  })
   }
 	
+	// remove G-code file from storage and unset status
 	printFinished (printjobID, callback) {
-  	// remove G-code file from storage and unset status
+		const self = this
 		this._client.storage.remove(this._currentlyPrinting).then(() => {
-			this._currentlyPrinting = false
+			self._currentlyPrinting = false
+			self._queueItemId = 0
 			return callback()
 		}).catch(callback)
   }
