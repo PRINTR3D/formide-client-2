@@ -48,7 +48,7 @@ module.exports = (client) => {
 				// set virtual printer to printing so we can pause it
 				client.drivers.printers[VIRTUAL_PRINTER_PORT].setStatus('printing')
 				
-				chai.request(client.http.app).get('/api/printer/' + encodeURIComponent(VIRTUAL_PRINTER_PORT) + '/pause').set('Authorization', `Bearer ${token}`).end((req, res) => {
+				chai.request(client.http.app).post('/api/printer/' + encodeURIComponent(VIRTUAL_PRINTER_PORT) + '/pause').set('Authorization', `Bearer ${token}`).end((req, res) => {
 					expect(res.status).to.equal(200)
 					expect(res.body).to.equal('OK')
 					done()
