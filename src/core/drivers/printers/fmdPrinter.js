@@ -52,12 +52,22 @@ class FdmPrinter extends Printer {
 	
 	printFile (filePath, callback) {
     const self = this
-    this._driver.printFile(filePath, this._port, function (err, response) {
+    this._driver.printFile(filePath, 0, this._port, function (err, response) {
       if (err) return callback(err)
       self._currentlyPrinting = filePath
       return callback(null, response)
     })
   }
+	
+	printQueueItem (filePath, queueItemId, callback) {
+		const self = this
+		this._driver.printFile(filePath, 0, this._port, function (err, response) {
+			if (err) return callback(err)
+			self._currentlyPrinting = filePath
+			self._queueItemId = queueItemId
+			return callback(null, response)
+		})
+	}
   
   pausePrint (callback) {
 	  this._driver.pausePrint(this._port, (err, response) => {

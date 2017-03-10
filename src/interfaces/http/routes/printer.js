@@ -75,10 +75,14 @@ module.exports = function (client, http) {
 	 * @apiParam {String} port Select one of the ports where a printer is connected to. %2F should be used to encode forward slashes.
 	 * @apiParam {String} command The command to run.
 	 * @apiSuccessExample {json} 200 success
-	 *  'OK'
+	 *  {
+	 *    "code": 200,
+	 *    "rawResponse": "",
+	 *    "port": "/dev/tty.usbmodem1411"
+	 *  }
 	 */
 	router.post('/:port/commands/:command', http.checkAuth.jwt, function (req, res) {
-		client.drivers.runCommandTemplate(req.params.port, req.params.command, req.query, (err, response) => {
+		client.drivers.runCommandTemplate(req.params.port, req.params.command, req.body, (err, response) => {
 			if (err && err.name === 'printerNotConnectedError') return res.notFound(err.message)
 			else if (err && err.name === 'printerActionNotAllowed') return res.conflict(err.message)
 			else if (err) return res.serverError(err)
@@ -111,7 +115,11 @@ module.exports = function (client, http) {
 	 * @apiParam {String} port Select one of the ports where a printer is connected to. %2F should be used to encode forward slashes.
 	 * @apiParam {String} command G-code to send
 	 * @apiSuccessExample {json} 200 success
-	 *  'OK'
+	 *  {
+	 *    "code": 200,
+	 *    "rawResponse": "",
+	 *    "port": "/dev/tty.usbmodem1411"
+	 *  }
 	 */
 	router.post('/:port/gcode', http.checkAuth.jwt, http.checkParams(['command']), function (req, res) {
 		client.drivers.sendCommand(req.params.port, req.body.command, (err, response) => {
@@ -131,7 +139,11 @@ module.exports = function (client, http) {
 	 * @apiParam {String} port Select one of the ports where a printer is connected to. %2F should be used to encode forward slashes.
 	 * @apiParam {String} command Tune G-code to send
 	 * @apiSuccessExample {json} 200 success
-	 *  'OK'
+	 *  {
+	 *    "code": 200,
+	 *    "rawResponse": "",
+	 *    "port": "/dev/tty.usbmodem1411"
+	 *  }
 	 */
 	router.post('/:port/tune', http.checkAuth.jwt, http.checkParams(['command']), function (req, res) {
 		client.drivers.sendTuneCommand(req.params.port, req.body.command, (err, response) => {
@@ -156,6 +168,7 @@ module.exports = function (client, http) {
 			if (err && err.name === 'printerNotConnectedError') return res.notFound(err.message)
 			else if (err && err.name === 'printerActionNotAllowed') return res.conflict(err.message)
 			else if (err) return res.serverError(err)
+			else if (response.success === false && response.file) return res.notFound('File not found')
 			return res.ok(response)
 		})
 	})

@@ -24,11 +24,13 @@ class Storage {
 				const response = files.filter((file) => {
 					return (filesToHide.indexOf(file) === -1)
 				}).map((file) => {
-					const info = fs.statSync(path.resolve(self.gcodeDir, file))
+					const gcodeStoragePath = path.resolve(self.gcodeDir, file)
+					const info = fs.statSync(gcodeStoragePath)
 					if (filesToHide.indexOf(file) === -1) {
 						return {
 							filename: file,
 							filesize: info.size,
+							path: gcodeStoragePath,
 							createdAt: new Date(info.ctime),
 							updatedAt: new Date(info.mtime)
 						}
@@ -61,6 +63,7 @@ class Storage {
 			return resolve({
 				filename: filename,
 				filesize: info.size,
+				path: gcodeStoragePath,
 				createdAt: new Date(info.ctime),
 				updatedAt: new Date(info.mtime)
 			})

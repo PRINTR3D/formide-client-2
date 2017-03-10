@@ -19,6 +19,7 @@ class Printer {
     this._status = null
     this._commandTemplates = {}
     this._currentlyPrinting = false
+	  this._queueItemId = ''
 
     // we ask for the printer status every 2 seconds and store it
     this._statusInterval = setInterval(function () {
@@ -89,7 +90,11 @@ class Printer {
       // TODO: check if parallel works correctly with real drivers
       async.parallel(commandList.map(function (command) {
         return function (printerCallback) {
-          self.sendCommand(command, printerCallback)
+          self.sendCommand(command, function (err, response) {
+          	if (err) return printerCallback(err)
+	          response.command = command
+	          return printerCallback(null, response)
+          })
         }
       }), function (err, results) {
         if (err) return callback(err)
@@ -112,6 +117,10 @@ class Printer {
 	
 	printFile () {
 		this._client.logger.log(`Printer.printFile not implemented for this printer`, 'critical')
+	}
+	
+	printQueueItem () {
+		this._client.logger.log(`Printer.printQueueItem not implemented for this printer`, 'critical')
 	}
 	
 	pausePrint (callback) {
