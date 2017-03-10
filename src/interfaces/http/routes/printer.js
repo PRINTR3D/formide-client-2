@@ -114,7 +114,7 @@ module.exports = function (client, http) {
 	 *  'OK'
 	 */
 	router.post('/:port/gcode', http.checkAuth.jwt, http.checkParams(['command']), function (req, res) {
-		client.drivers.sendCommand(req.params.port, req.query.command, (err, response) => {
+		client.drivers.sendCommand(req.params.port, req.body.command, (err, response) => {
 			if (err && err.name === 'printerNotConnectedError') return res.notFound(err.message)
 			else if (err && err.name === 'printerActionNotAllowed') return res.conflict(err.message)
 			else if (err) return res.serverError(err)
@@ -134,7 +134,7 @@ module.exports = function (client, http) {
 	 *  'OK'
 	 */
 	router.post('/:port/tune', http.checkAuth.jwt, http.checkParams(['command']), function (req, res) {
-		client.drivers.sendTuneCommand(req.params.port, req.query.command, (err, response) => {
+		client.drivers.sendTuneCommand(req.params.port, req.body.command, (err, response) => {
 			if (err && err.name === 'printerNotConnectedError') return res.notFound(err.message)
 			else if (err && err.name === 'printerActionNotAllowed') return res.conflict(err.message)
 			else if (err) return res.serverError(err)
@@ -152,7 +152,7 @@ module.exports = function (client, http) {
 	 * @apiParam {String} file Path to the file to print (absolute)
 	 */
 	router.post('/:port/print', http.checkAuth.jwt, http.checkParams(['file']), function (req, res) {
-		client.drivers.printFile(req.params.port, req.query.file, (err, response) => {
+		client.drivers.printFile(req.params.port, req.body.file, (err, response) => {
 			if (err && err.name === 'printerNotConnectedError') return res.notFound(err.message)
 			else if (err && err.name === 'printerActionNotAllowed') return res.conflict(err.message)
 			else if (err) return res.serverError(err)
