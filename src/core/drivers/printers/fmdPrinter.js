@@ -100,7 +100,7 @@ class FdmPrinter extends Printer {
 		this._client.storage.remove(this._currentlyPrinting).then(() => {
 			self._currentlyPrinting = false
 			self._queueItemId = 0
-			return callback()
+			return callback(null)
 		}).catch(callback)
   }
 }
