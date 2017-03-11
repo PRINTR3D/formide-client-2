@@ -209,6 +209,10 @@ class Drivers {
   }
   
   printQueueItem (port, filePath, queueItemId, callback) {
+  	assert(port, 'port not passed')
+	  assert(filePath, 'filePath not passed')
+	  assert(queueItemId, 'queueItemId not passed')
+  	
 	  const self = this
 	  const printer = this.printers[port]
 	  if (!printer) return callback(new PrinterNotConnectedError(port))

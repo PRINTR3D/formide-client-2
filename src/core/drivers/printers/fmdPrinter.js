@@ -64,7 +64,7 @@ class FdmPrinter extends Printer {
 	
 	printQueueItem (filePath, queueItemId, callback) {
 		const self = this
-		this._driver.printFile(filePath, 0, this._port, function (err, response) {
+		this._driver.printFile(filePath, queueItemId, this._port, function (err, response) {
 			if (err) return callback(err)
 			self._currentlyPrinting = filePath
 			self._queueItemId = queueItemId

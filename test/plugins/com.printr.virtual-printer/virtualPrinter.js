@@ -46,6 +46,16 @@ class VirtualPrinter extends Printer {
   pausePrint (callback) {
     this._driver.pausePrint(callback)
   }
+	
+	printQueueItem (filePath, queueItemId, callback) {
+		const self = this
+		this._driver.printFile(filePath, queueItemId, this._port, function (err, response) {
+			if (err) return callback(err)
+			self._currentlyPrinting = filePath
+			self._queueItemId = queueItemId
+			return callback(null, response)
+		})
+	}
 }
 
 module.exports = VirtualPrinter

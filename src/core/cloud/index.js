@@ -39,8 +39,8 @@ class Cloud {
     const self = this
 
     // forward all events to cloud
-    client.events.onAny(function (data) {
-      self.cloud.emit(this.event, data)
+    client.events.onAny(function (eventName, eventData) {
+      self.cloud.emit(eventName, eventData)
     })
 
     // socket events
@@ -86,7 +86,7 @@ class Cloud {
     // Adding a G-code file from the cloud
     this.cloud.on('printQueueItem', function (data) {
       client.logger.log(`Download cloud G-code: ${data.gcode}`, 'debug')
-	    downloadGcodeFromCloud(self._client, data, function (err, stats) {
+	    downloadGcodeFromCloud(self._client, data.gcode, function (err, stats) {
 		    self._client.drivers.printQueueItem(data.port, stats.path, data.queueItemId, (err, response) => {
 			    self.cloud.emit('printQueueItem', getCallbackData(data._callbackId, err, response))
 		    })

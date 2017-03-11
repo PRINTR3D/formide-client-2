@@ -6,6 +6,7 @@
   },
   "cloud": {
     "URL": "http://localhost:1338",
+    "gcodeDownloadURL": "https://api.formide.com",
     "platformURL": "https://platform.formide.com"
   },
   "log": {
