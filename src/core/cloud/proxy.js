@@ -3,6 +3,13 @@
 const assert = require('assert')
 const request = require('request')
 const co = require('co')
+const jwt = require('../utils/jwt')
+
+// TODO: fix generating cloud access tokens
+const cloudToken = jwt.sign({
+  id: 1,
+  username: 'admin@local'
+})
 
 /**
  * Process proxy call from Formide Cloud
@@ -12,8 +19,7 @@ const co = require('co')
  */
 function proxy (client, data, callback) {
   assert(client, '[cloud / proxy] - client not passed')
-  assert(client.db, '[cloud / proxy] - client.db not passed')
-  assert(client.config.http.port, '[cloud / proxy] - client.config.http.port not passed')
+  assert(client.config.http.api, '[cloud / proxy] - client.config.http.api not passed')
   assert(data, '[cloud / proxy] - data not passed')
   assert(data.url, '[cloud / proxy] - data.url not passed')
 
@@ -21,14 +27,14 @@ function proxy (client, data, callback) {
   // TODO: add correct isAdmin to cloud proxy server
   data.isAdmin = data.isAdmin || false
 
-  authenticate(client.db, data.isAdmin, function (err, accessToken) {
-    if (err) return callback(err)
+  // authenticate(client.db, data.isAdmin, function (err, accessToken) {
+  //   if (err) return callback(err)
 
     var options = {
       method: data.method,
       uri: `http://127.0.0.1:${client.config.http.api}/${data.url}`,
       auth: {
-        bearer: accessToken
+        bearer: cloudToken
       }
     }
 
@@ -43,7 +49,7 @@ function proxy (client, data, callback) {
       if (err) return callback(err)
       return callback(null, response)
     })
-  })
+  // })
 }
 
 /**

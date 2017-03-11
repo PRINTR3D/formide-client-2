@@ -1,6 +1,6 @@
 'use strict'
 
-const downloadGcodeFromCloud = require('../../../src/interfaces/cloud/downloadGcodeFromCloud')
+const downloadGcodeFromCloud = require('../../../src/core/cloud/downloadGcodeFromCloud')
 const expect = require('chai').expect
 const GCODE_FILE = 'ZY8SzVDOoEHacqma4E9jbJi6qIbV1fZPRsVtVJNLPSxrP1okxE' // hardcoded G-code from cloud we know exists
 

@@ -5,7 +5,7 @@
     "requestLogging": false
   },
   "cloud": {
-    "URL": "https://api2.formide.com",
+    "URL": "http://localhost:1338",
     "platformURL": "https://platform.formide.com"
   },
   "log": {
