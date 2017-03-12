@@ -24,14 +24,14 @@ class Cloud {
     assert(client.logger.log, '[cloud] - client.logger.log not passed')
     
     this._client = client
-
+	  this._deviceToken = false
+    
     // set URLs
     this.URL = client.config.cloud.URL
     this.platformURL = client.config.cloud.platformURL
 
     // socket connections
     this.cloud = socket.cloud(client, client.config.cloud.URL)
-    // this.local = socket.local(client, client.config.http.api)
 
     // prevent .bind waterfall
     const self = this
@@ -64,6 +64,7 @@ class Cloud {
           port: client.config.http.port
         }, function (response) {
           if (response.success) {
+            this._deviceToken = response.deviceToken
             client.logger.log(`Cloud connected`, 'info')
           } else {
             client.logger.log(`Cloud not connected: ${response.message}`, 'warn')
@@ -98,6 +99,10 @@ class Cloud {
         self.cloud.io.reconnect()
       }
     })
+  }
+  
+  getDeviceToken () {
+    return this._deviceToken
   }
 	
 	/**
