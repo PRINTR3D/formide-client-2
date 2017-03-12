@@ -5,8 +5,6 @@ const path = require('path')
 const crypto = require('crypto')
 const request = require('request')
 
-// TODO: remove references to client to make separate module
-
 /**
  * Download a G-code file from Formide to print it
  * @param client

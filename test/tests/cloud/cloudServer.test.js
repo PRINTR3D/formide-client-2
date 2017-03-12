@@ -30,7 +30,7 @@ module.exports = (client) => {
 						expect(data.mac).to.equal(mac)
 						
 						// respond with connection success
-						cb({ success: true, message: 'connected' })
+						cb({ success: true, message: 'connected', deviceToken: '12345' })
 						
 						// clean up
 						io.close()
@@ -48,17 +48,19 @@ module.exports = (client) => {
 					socket.on('authenticate', (data, cb) => {
 						
 						// respond with connection success
-						cb({ success: true, message: 'connected' })
+						cb({ success: true, message: 'connected', deviceToken: '12345' })
 						
 						// start printing queueItem
 						socket.emit('printQueueItem', {
 							port: '/dev/virt0', // the virtual printer plugin uses /dev/virt0
 							queueItemId: '8f00b837-5309-4ab4-a5eb-ee62b1461388',
-							gcode: GCODE_FILE
+							gcode: GCODE_FILE,
+							_callbackId: '12345'
 						})
 						
 						// check printQueueItem response
 						socket.on('printQueueItem', (data) => {
+							expect(data._callbackId).to.equal('12345')
 							expect(data.result.success).to.equal(true)
 							expect(data.result.port).to.equal('/dev/virt0')
 							expect(data.result.printerResponse.code).to.equal(200)
