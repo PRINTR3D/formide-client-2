@@ -14,10 +14,13 @@ Formide client needs the following requirements:
 * NodeJS 4.x (the LTS release) and accompanying NPM version
 * A working internet connection for [cloud](https://formide.com) functionality
 
-## Installation
-The full installation guide can be found on [developers.formide.com](https://developers.formide.com/docs/installation).
+## Documentation
+Please find all the documentation in this project's [wiki](/PRINTR3D/formide-client-2/wiki).
 
-### Manual install quick steps
+## Installation
+The full manual installation guide can be found on [developers.formide.com](https://developers.formide.com/docs/installation).
+
+### Quick steps
 
 Step 1: install the `formide-client` NPM package globally.
 ```
@@ -34,21 +37,8 @@ Step 3: run the client.
 formide-client
 ```
 
-For auto-boot scripts, please check the detailed [installation guide](https://developers.formide.com/docs/installation#section-auto-boot).
-
 ## Plugins
-Formide client supports plugins to add additional functionality depending on implementation needs.
-For example, the Felix Pro Touch series can switch between the touchscreen Element and an USB
-host controller on the side of the printr. A plugin was created to allow switching using GPIO
-and custom hardware. Plugins must be stored in the `src/plugins/bundled` or the `~/formide/plugins`
-directories in order to be loaded. At the moment, hot-loading plugins using a UI is not supported.
-
-### Known plugins
-This is a list of known plugins for Formide client:
-
-* [USB drive support](https://github.com/PRINTR3D/formide-client-usb-drive)
-* [Debug logs reader](https://github.com/PRINTR3D/formide-client-log-reader)
-* [GPIO control switch](https://github.com/PRINTR3D/formide-client-gpio-control-mode)
+Details about plugins can be found on the [wiki](/PRINTR3D/formide-client-2/wiki/Plugins).
 
 ## Supported devices
 At the moment, Formide client runs smoothly on the following devices:
@@ -57,19 +47,7 @@ At the moment, Formide client runs smoothly on the following devices:
 * Raspberry Pi 2 & 3 (inc. cloud support)
 * MacOS (inc. Wi-Fi, cloud support)
 
-If you want to make Formide client compatible with another device, please check the 
-[native implementation guide](https://developers.formide.com/docs/native-api).
-
-## Documentation
-
-### HTTP API
-Full documentation for the HTTP API can be found at [printr3d.github.io/formide-client-2](https://printr3d.github.io/formide-client-2).
-
-### RTM API
-Full documentation for the RTM API can be found at [developers.formide.com](https://developers.formide.com/v1.0/reference#introduction).
-
-### Native API
-Full documentation for the Native API can be found at [developers.formide.com](https://developers.formide.com/docs/native-api).
+If you want to make Formide client compatible with another device, please check the [wiki](/PRINTR3D/formide-client-2/wiki/native-api) for native implementations.
 
 ## Contributing
 You can contribute to `formide-client` by closing issues (via fork -> pull request to development),
