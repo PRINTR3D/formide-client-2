@@ -1,60 +1,88 @@
-<!--
-@Author: chris
-@Date:   2017-01-10T21:42:49+01:00
-@Filename: index.html
-@Last modified by:   chris
-@Last modified time: 2017-01-10T23:21:27+01:00
-@Copyright: Copyright (c) 2016, All rights reserved, http://printr.nl
--->
-
 <!doctype html>
 <html>
   <head>
     <title>Virtual Printer Plugin - Printr</title>
     <style>
       * { margin: 0; padding: 0; box-sizing: border-box; }
+      label { width: 120px; display: inline-block; }
     </style>
   </head>
   <body>
     <p id="printerStatus"></p>
 
     <form id="statusForm">
+      <label for="port">Port</label>
       <input type="text" name="port" /><br/>
+      <label for="status">Status</label>
       <input type="text" name="status" /><br/>
+      <label for="progress">Progress</label>
       <input type="number" name="progress" /><br/>
-      <input type="text" name="type" /><br/>
+      <label for="baudrate">Baud rate</label>
+      <input type="number" name="baudrate" /><br/>
+      <label for="filePath">File path</label>
+      <input type="text" name="filePath" /><br/>
+      <label for="queueItemId">Queue item ID</label>
+      <input type="text" name="queueItemId" /><br/>
+
+      <br/><input type="submit" value="Update status" />
     </form>
+
+    <button onclick="getStatus()">Get latest status</button>
 
     <script src="/socket.io/socket.io.js"></script>
     <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
     <script>
       var socket = io()
+      var printerStatus = {}
+
+      $('#statusForm').on('submit', function (e) {
+      	e.preventDefault()
+        $.ajax({
+          type: 'POST',
+          url: '/plugins/com.printr.virtual-printer/api/status',
+          data: $('#statusForm').serializeArray(),
+          dataType: 'json',
+          success: function (response) {
+            console.log('status response', response)
+          }
+        })
+      })
+
+      function getStatus () {
+        for(key in printerStatus) {
+          if(printerStatus.hasOwnProperty(key)) {
+            $('#statusForm input[name='+key+']').val(printerStatus[key])
+          }
+        }
+      }
 
       $.ajax({
         type: 'POST',
         url: '/api/auth/login',
         data: {
-          email: 'admin@local',
+          username: 'admin@local',
           password: 'admin'
         },
         dataType: 'json',
         success: function (data) {
           socket.emit('authenticate', {
             type: 'user',
-            accessToken: data.access_token
+            accessToken: data.token
           }, function (response) {
             console.log('auth response', response)
           })
         }
       })
 
-      socket.on('printer.status', function (printerStatus) {
-        for(key in printerStatus) {
-          if(printerStatus.hasOwnProperty(key)) {
-            $('#statusForm input[name='+key+']').val(printerStatus[key])
-          }
-        }
+      socket.on('printer.status', function (status) {
+        printerStatus = status
       })
+
+      socket.once('printer.status', function (status) {
+        printerStatus = status
+        getStatus()
+      })
+
     </script>
   </body>
 </html>

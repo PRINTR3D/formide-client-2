@@ -80,7 +80,7 @@ class Ws {
       }
 
       socket.on('authenticate', function (data, callback) {
-        self.authenticate(data.token, function (err, user) {
+        self.authenticate(data.accessToken, function (err, user) {
           if (err) {
             if (typeof callback === 'function') callback({ success: false, message: err.message })
             return socket.disconnect()

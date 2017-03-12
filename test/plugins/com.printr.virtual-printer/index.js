@@ -27,9 +27,9 @@ class VirtualPrinterPlugin extends Plugin {
      *
      * @apiParam {String=online,printing,paused,stopping,heating,offline} status Status to set the printer to
      */
-    router.get('/status', this._client.http.checkParams(['status'], 'query'), function (req, res) {
-      this.virtualPrinter.setStatus(req.query.status)
-      return res.ok({ message: `Status changed to ${req.query.status}` })
+    router.post('/status', function (req, res) {
+      this.virtualPrinter.setStatus(req.body)
+      return res.ok({ message: `Status changed to ${req.body.status}` })
     }.bind(this))
 
     return router

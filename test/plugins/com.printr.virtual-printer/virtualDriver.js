@@ -3,11 +3,20 @@
 class VirtualDriver {
 
   constructor (port) {
-    this._progress = 0
-    this._status = 'offline'
-    this._port = port
-	  this._queueItemId = 0
-	  this._filePath = ''
+	  this._status = {
+    	progress: 0,
+		  status: 'connecting',
+		  port: port,
+		  queueItemId: 0,
+		  filePath: '',
+		  baudrate: 250000,
+		  startTime: null
+	  }
+	  
+	  // simulate connection time
+	  setTimeout(function () {
+	  	this._status.status = 'online'
+	  }.bind(this), 6000)
   }
   
   setPrinter (printer) {
@@ -16,18 +25,37 @@ class VirtualDriver {
 
   getStatus (callback) {
     return callback(null, {
-      port: this._port,
-      status: this._status,
-      progress: this._progress,
-	    filePath: this._filePath,
-	    queueItemId: this._queueItemId,
+      port: this._status.port,
+      status: this._status.status,
+      progress: this._status.progress,
+	    filePath: this._status.filePath,
+	    queueItemId: this._status.queueItemId,
+	    baudrate: this._status.baudrate,
+	    currentTime: new Date(),
+	    startTime: this._status.startTime,
 	    type: 'VIRTUAL',
-      device: 'local'
+	    bed: {
+      	temp: 0,
+		    targetTemp: 0
+	    },
+	    extruders: [
+		    {
+		    	temp: 0,
+			    targetTemp: 0
+		    }
+	    ]
     })
   }
-
+	
+	/**
+	 * Change status using plugin test UI
+	 * @param status
+	 * @returns {boolean}
+	 */
   setStatus (status) {
-    this._status = status
+  	for (var i in status) {
+  		this._status[i] = status[i]
+	  }
     return true
   }
 	
@@ -39,7 +67,8 @@ class VirtualDriver {
   sendGcode (gcode, callback) {
     setTimeout(function () {
       console.log(`sending virtual gcode: ${gcode}`)
-      return callback(null, {
+	    if (self._status.status !== 'online') return callback(new Error('Printer could not execute gcode command'))
+	    return callback(null, {
       	code: 200,
 	      rawResponse: 'OK',
 	      msg: 'command sent'
@@ -47,11 +76,43 @@ class VirtualDriver {
     }, 200)
   }
 	
-	printFile (filePath, queueItemId, port, callback) {
-  	this._status = 'printing'
-		this._progress = 50
-		this._queueItemId = queueItemId
-		this._filePath = filePath
+	/**
+	 * Simulate tune g-code sending
+	 * @param gcode
+	 * @param callback
+	 */
+	sendTuneGcode(gcode, callback) {
+		setTimeout(function () {
+			console.log(`sending virtual tune gcode: ${gcode}`)
+			if (self._status.status !== 'printing' && self.status !== 'heating' && self.status !== 'paused') return callback(new Error('Printer could not execute tune gcode command'))
+			return callback(null, {
+				code: 200,
+				rawResponse: 'OK',
+				msg: 'tune command sent'
+			})
+		}, 200)
+	}
+	
+	/**
+	 * Simulate printing file
+	 * @param filePath
+	 * @param queueItemId
+	 * @param callback
+	 * @returns {*}
+	 */
+	printFile (filePath, queueItemId, callback) {
+  	this._status.status = 'heating'
+		this._status.progress = 10
+		this._status.queueItemId = queueItemId
+		this._status.filePath = filePath
+		this._status.currentPrintStartTime = new Date()
+		
+		// simulate 5 seconds of heating time
+		setTimeout(function () {
+			this._status.status = 'printing'
+			this._status.progress = 50
+		}.bind(this), 5000)
+		
 		return callback(null, {
 			code: 200,
 			rawResponse: 'OK',
@@ -66,8 +127,7 @@ class VirtualDriver {
 	pausePrint (callback) {
     const self = this
 	  setTimeout(function () {
-	    if (self._status !== 'printing' && self.status !== 'heating') return callback(new Error('Printer could not be paused'))
-      
+	    if (self._status.status !== 'printing' && self.status !== 'heating') return callback(new Error('Printer could not be paused'))
 		  return callback(null, {
 	      code: 200,
 	      rawResponse: 'OK',
@@ -75,18 +135,59 @@ class VirtualDriver {
       })
 	  }, 200)
   }
-  
-  stopPrint (callback) {
+	
+	/**
+	 * Simulate resuming printer
+	 * @param callback
+	 */
+	resumePrint (callback) {
+	  const self = this
+	  setTimeout(function () {
+		  if (self._status.status !== 'paused') return callback(new Error('Printer could not be resumed'))
+		  return callback(null, {
+			  code: 200,
+			  rawResponse: 'OK',
+			  msg: 'printer resuming'
+		  })
+	  }, 200)
+  }
+	
+	/**
+	 * Simulate stopping printer
+	 * @param callback
+	 */
+	stopPrint (callback) {
 		const self = this
 	  setTimeout(function () {
-	  	if (self._status !== 'printing' && self.status !== 'paused' && self.status !== 'heating') return callback(new Error('Printer could not be stopped'))
-		  
+	  	if (self._status.status !== 'printing' && self.status !== 'paused' && self.status !== 'heating') return callback(new Error('Printer could not be stopped'))
+		  self.resetStatus()
 		  return callback(null, {
 		  	code: 200,
 			  rawResponse: 'OK',
 			  message: 'printer stopping'
-		  }, 1000)
-	  })
+		  })
+	  }, 1000)
+  }
+	
+	/**
+	 * Handle print finished
+	 * @param queueItemId
+	 * @param callback
+	 */
+  printFinished (queueItemId, callback) {
+  	this.resetStatus()
+		return callback(null, {
+			code: 200,
+			rawResponse: 'OK',
+			message: 'printer stopping'
+		})
+  }
+  
+  resetStatus () {
+	  this._status.status = 'online'
+	  this._status.progress = 0
+	  this._status.startTime = null
+	  this._status.queueItemId = 0
   }
 }
 

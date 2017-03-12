@@ -32,7 +32,13 @@ class VirtualPrinter extends Printer {
   }
 	
 	askStatus (callback) {
-    return this._driver.getStatus(callback)
+		const self = this
+		this._driver.getStatus(function (err, status) {
+			if (err) return callback(err)
+			status.path = encodeURIComponent(status.port) // add the encoded port path for easy of use
+			status.queueItemId = self._queueItemId // use the client string variable instead of the driver integer for the HTTP API
+			return callback(null, status)
+		})
   }
 
   setStatus (status) {
@@ -43,18 +49,52 @@ class VirtualPrinter extends Printer {
     this._driver.sendGcode(command, callback)
   }
   
+  sendGcode (command, callback) {
+	  this._driver.sendGcode(command, callback)
+  }
+  
+  sendTuneCommand(command, callback) {
+	  this._driver.sendTuneGcode(command, callback)
+  }
+  
+  sendTuneGcode(command, callback) {
+	  this._driver.sendTuneGcode(command, callback)
+  }
+  
   pausePrint (callback) {
     this._driver.pausePrint(callback)
   }
 	
+	resumePrint (callback) {
+		this._driver.resumePrint(callback)
+	}
+  
+  stopPrint (callback) {
+  	this._driver.stopPrint(callback)
+  }
+  
+  printFile (filePath, callback) {
+	  const self = this
+	  this._driver.printFile(filePath, 0, function (err, response) {
+		  if (err) return callback(err)
+		  self._currentlyPrinting = filePath
+		  self._queueItemId = ''
+		  return callback(null, response)
+	  })
+  }
+	
 	printQueueItem (filePath, queueItemId, callback) {
 		const self = this
-		this._driver.printFile(filePath, queueItemId, this._port, function (err, response) {
+		this._driver.printFile(filePath, queueItemId, function (err, response) {
 			if (err) return callback(err)
 			self._currentlyPrinting = filePath
 			self._queueItemId = queueItemId
 			return callback(null, response)
 		})
+	}
+	
+	printFinished (queueItemId, callback) {
+  	this._driver.printFinished(queueItemId, callback)
 	}
 }
 
