@@ -12,13 +12,13 @@ class Ws {
 
     // Emit all system events to connected native UI socket connections
     // These are not compatible with socket.io, hence the separate websocket library
-    ws.createServer(function (conn) {
+    const nativeWsServer = ws.createServer(function (conn) {
       // Format socket messages
-      function forwardEvents (data) {
-        data = data || {}
+      function forwardEvents (eventName, eventData) {
+        let data = eventData || {}
         data.device = 'LOCAL'
         conn.sendText(JSON.stringify({
-          channel: this.event,
+          channel: eventName,
           data: data
         }))
       }
@@ -60,17 +60,27 @@ class Ws {
         client.logger.log(`Native UI socket error: ${err.message}`, 'error')
       })
     })
+	
+	  // catch error
+	  nativeWsServer.on('error', function (err) {
+		  client.logger.log(`Native UI socket error: ${err.message}`, 'error')
+	  })
+    
+    // listen
+	  nativeWsServer.listen(3001)
 
+    // create socket.io
     const socketIO = io.listen(client.http.httpServer)
 
     // Emit all system events to connected socket.io clients
     socketIO.on('connection', function (socket) {
+      
       function forwardSocketEvents (eventName, eventData) {
         socket.emit(eventName, eventData)
       }
 
       socket.on('authenticate', function (data, callback) {
-        self.authenticate(data.token, function (err, user) {
+        self.authenticate(data.accessToken, function (err, user) {
           if (err) {
             if (typeof callback === 'function') callback({ success: false, message: err.message })
             return socket.disconnect()

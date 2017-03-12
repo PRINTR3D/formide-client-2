@@ -4,10 +4,9 @@
     "www": "8080"
   },
   "cloud": {
-    "URL": "https://api.formide.com",
-    "URL2": "http://localhost:3000",
-    "platformURL": "https://platform.formide.com",
-    "platformURL2": "http://localhost:8081"
+    "URL": "http://localhost:3000",
+    "gcodeDownloadURL": "https://api.formide.com",
+    "platformURL": "https://platform.formide.com"
   },
   "log": {
     "level": 5

@@ -18,6 +18,13 @@ class Auth {
 		// create auth.json when not found
 		if (!fs.existsSync(this.path)) fs.writeFileSync(this.path, JSON.stringify([]))
 		this.store = require(this.path)
+		
+		// create the default admin user
+		this.createUser(defaultUser.username, defaultUser.password).then((newUser) => {
+			if (newUser) client.log(`Created default admin user since it didn't exist yet`, 'info')
+		}).catch((err) => {
+			client.log(`Error creating default admin user: ${err.message}`, 'warning')
+		})
 	}
 	
 	/**

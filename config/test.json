@@ -5,7 +5,8 @@
     "requestLogging": false
   },
   "cloud": {
-    "URL": "https://api2.formide.com",
+    "URL": "http://localhost:1338",
+    "gcodeDownloadURL": "https://api.formide.com",
     "platformURL": "https://platform.formide.com"
   },
   "log": {

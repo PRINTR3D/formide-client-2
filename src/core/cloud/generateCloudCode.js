@@ -11,17 +11,16 @@ const request = require('request')
 function generateCloudCode (client, macAddress) {
 	return new Promise((resolve, reject) => {
 		request.get(`${client.config.cloud.URL}/devices/register/code?mac_address=${macAddress}`, {
-			strictSSL: false
+			auth: {
+				bearer: client.cloud.getDeviceToken()
+			},
+			strictSSL: false,
+			json: true
 		}, (err, response, body) => {
 			if (err) return reject(err)
 			if (response.statusCode !== 200) return reject(new Error(`Could not get code: ${body.message}`))
-			try {
-				body = JSON.parse(body)
-				if (!body.code) return reject(new Error(`Could not get code: ${body.message}`))
-				return resolve(body.code)
-			} catch (e) {
-				return reject(e)
-			}
+			if (!body.code) return reject(new Error(`Could not get code: ${body.message}`))
+			return resolve(body.code)
 		})
 	})
 }

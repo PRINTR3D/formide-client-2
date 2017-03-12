@@ -15,7 +15,7 @@ module.exports = (client) => {
 				const socketClient = io.connect(`http://localhost:${client.config.http.api}`)
 				
 				socketClient.emit('authenticate', {
-					token: token
+					accessToken: token
 				}, (data) => {
 					expect(data.success).to.equal(true)
 					expect(data.user.id).to.equal(user.id)
@@ -28,7 +28,7 @@ module.exports = (client) => {
 				const socketClient = io.connect(`http://localhost:${client.config.http.api}`)
 				
 				socketClient.emit('authenticate', {
-					token: 'wrongtoken'
+					accessToken: 'wrongtoken'
 				}, (data) => {
 					expect(data.success).to.equal(false)
 					socketClient.disconnect()

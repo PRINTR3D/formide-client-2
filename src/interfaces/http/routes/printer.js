@@ -67,7 +67,7 @@ module.exports = function (client, http) {
   })
 	
 	/**
-	 * @api {get} /api/printer/:port/commands/:command Printer:commands(run)
+	 * @api {post} /api/printer/:port/commands/:command Printer:commands(run)
 	 * @apiGroup Printer
 	 * @apiDescription Run a printer command
 	 * @apiVersion 2.0.0
@@ -75,10 +75,14 @@ module.exports = function (client, http) {
 	 * @apiParam {String} port Select one of the ports where a printer is connected to. %2F should be used to encode forward slashes.
 	 * @apiParam {String} command The command to run.
 	 * @apiSuccessExample {json} 200 success
-	 *  'OK'
+	 *  {
+	 *    "code": 200,
+	 *    "rawResponse": "",
+	 *    "port": "/dev/tty.usbmodem1411"
+	 *  }
 	 */
-	router.get('/:port/commands/:command', http.checkAuth.jwt, function (req, res) {
-		client.drivers.runCommandTemplate(req.params.port, req.params.command, req.query, (err, response) => {
+	router.post('/:port/commands/:command', http.checkAuth.jwt, function (req, res) {
+		client.drivers.runCommandTemplate(req.params.port, req.params.command, req.body, (err, response) => {
 			if (err && err.name === 'printerNotConnectedError') return res.notFound(err.message)
 			else if (err && err.name === 'printerActionNotAllowed') return res.conflict(err.message)
 			else if (err) return res.serverError(err)
@@ -103,7 +107,7 @@ module.exports = function (client, http) {
   })
 	
 	/**
-	 * @api {get} /api/printer/:port/gcode Printer:gcode
+	 * @api {post} /api/printer/:port/gcode Printer:gcode
 	 * @apiGroup Printer
 	 * @apiDescription Send a G-code command to the printer
 	 * @apiVersion 1.0.0
@@ -111,10 +115,14 @@ module.exports = function (client, http) {
 	 * @apiParam {String} port Select one of the ports where a printer is connected to. %2F should be used to encode forward slashes.
 	 * @apiParam {String} command G-code to send
 	 * @apiSuccessExample {json} 200 success
-	 *  'OK'
+	 *  {
+	 *    "code": 200,
+	 *    "rawResponse": "",
+	 *    "port": "/dev/tty.usbmodem1411"
+	 *  }
 	 */
-	router.get('/:port/gcode', http.checkAuth.jwt, http.checkParams(['command'], 'query'), function (req, res) {
-		client.drivers.sendCommand(req.params.port, req.query.command, (err, response) => {
+	router.post('/:port/gcode', http.checkAuth.jwt, http.checkParams(['command']), function (req, res) {
+		client.drivers.sendCommand(req.params.port, req.body.command, (err, response) => {
 			if (err && err.name === 'printerNotConnectedError') return res.notFound(err.message)
 			else if (err && err.name === 'printerActionNotAllowed') return res.conflict(err.message)
 			else if (err) return res.serverError(err)
@@ -123,7 +131,7 @@ module.exports = function (client, http) {
 	})
 	
 	/**
-	 * @api {get} /api/printer/:port/tune Printer:tune
+	 * @api {post} /api/printer/:port/tune Printer:tune
 	 * @apiGroup Printer
 	 * @apiDescription Send a tune G-code command to the printer while it's printing
 	 * @apiVersion 1.0.0
@@ -131,10 +139,14 @@ module.exports = function (client, http) {
 	 * @apiParam {String} port Select one of the ports where a printer is connected to. %2F should be used to encode forward slashes.
 	 * @apiParam {String} command Tune G-code to send
 	 * @apiSuccessExample {json} 200 success
-	 *  'OK'
+	 *  {
+	 *    "code": 200,
+	 *    "rawResponse": "",
+	 *    "port": "/dev/tty.usbmodem1411"
+	 *  }
 	 */
-	router.get('/:port/tune', http.checkAuth.jwt, http.checkParams(['command'], 'query'), function (req, res) {
-		client.drivers.sendTuneCommand(req.params.port, req.query.command, (err, response) => {
+	router.post('/:port/tune', http.checkAuth.jwt, http.checkParams(['command']), function (req, res) {
+		client.drivers.sendTuneCommand(req.params.port, req.body.command, (err, response) => {
 			if (err && err.name === 'printerNotConnectedError') return res.notFound(err.message)
 			else if (err && err.name === 'printerActionNotAllowed') return res.conflict(err.message)
 			else if (err) return res.serverError(err)
@@ -143,7 +155,7 @@ module.exports = function (client, http) {
 	})
 	
 	/**
-	 * @api {get} /api/printer/:port/print Printer:print
+	 * @api {post} /api/printer/:port/print Printer:print
 	 * @apiGroup Printer
 	 * @apiDescription Start a print by file path
 	 * @apiVersion 1.0.0
@@ -151,24 +163,25 @@ module.exports = function (client, http) {
 	 * @apiParam {String} port Select one of the ports where a printer is connected to. %2F should be used to encode forward slashes.
 	 * @apiParam {String} file Path to the file to print (absolute)
 	 */
-	router.get('/:port/print', http.checkAuth.jwt, http.checkParams(['file'], 'query'), function (req, res) {
-		client.drivers.printFile(req.params.port, req.query.file, (err, response) => {
+	router.post('/:port/print', http.checkAuth.jwt, http.checkParams(['file']), function (req, res) {
+		client.drivers.printFile(req.params.port, req.body.file, (err, response) => {
 			if (err && err.name === 'printerNotConnectedError') return res.notFound(err.message)
 			else if (err && err.name === 'printerActionNotAllowed') return res.conflict(err.message)
 			else if (err) return res.serverError(err)
+			else if (response.success === false && response.file) return res.notFound('File not found')
 			return res.ok(response)
 		})
 	})
 	
 	/**
-	 * @api {get} /api/printer/:port/pause Printer:pause
+	 * @api {post} /api/printer/:port/pause Printer:pause
 	 * @apiGroup Printer
 	 * @apiDescription Pause the printer
 	 * @apiVersion 1.0.0
 	 * @apiHeader {String} Authentication Valid Bearer JWT token
 	 * @apiParam {String} port Select one of the ports where a printer is connected to. %2F should be used to encode forward slashes.
 	 */
-	router.get('/:port/pause', http.checkAuth.jwt, function (req, res) {
+	router.post('/:port/pause', http.checkAuth.jwt, function (req, res) {
 		client.drivers.pausePrint(req.params.port, (err, response) => {
 			if (err && err.name === 'printerNotConnectedError') return res.notFound(err.message)
 			else if (err && err.name === 'printerActionNotAllowed') return res.conflict(err.message)
@@ -178,14 +191,14 @@ module.exports = function (client, http) {
 	})
 	
 	/**
-	 * @api {get} /api/printer/:port/resume Printer:resume
+	 * @api {post} /api/printer/:port/resume Printer:resume
 	 * @apiGroup Printer
 	 * @apiDescription Resume the printer
 	 * @apiVersion 1.0.0
 	 * @apiHeader {String} Authentication Valid Bearer JWT token
 	 * @apiParam {String} port Select one of the ports where a printer is connected to. %2F should be used to encode forward slashes.
 	 */
-	router.get('/:port/resume', http.checkAuth.jwt, function (req, res) {
+	router.post('/:port/resume', http.checkAuth.jwt, function (req, res) {
 		client.drivers.resumePrint(req.params.port, (err, response) => {
 			if (err && err.name === 'printerNotConnectedError') return res.notFound(err.message)
 			else if (err && err.name === 'printerActionNotAllowed') return res.conflict(err.message)
@@ -195,14 +208,14 @@ module.exports = function (client, http) {
 	})
 	
 	/**
-	 * @api {get} /api/printer/:port/stop Printer:stop
+	 * @api {post} /api/printer/:port/stop Printer:stop
 	 * @apiGroup Printer
 	 * @apiDescription Stop the printer
 	 * @apiVersion 1.0.0
 	 * @apiHeader {String} Authentication Valid Bearer JWT token
 	 * @apiParam {String} port Select one of the ports where a printer is connected to. %2F should be used to encode forward slashes.
 	 */
-	router.get('/:port/stop', http.checkAuth.jwt, function (req, res) {
+	router.post('/:port/stop', http.checkAuth.jwt, function (req, res) {
 		client.drivers.stopPrint(req.params.port, (err, response) => {
 			if (err && err.name === 'printerNotConnectedError') return res.notFound(err.message)
 			else if (err && err.name === 'printerActionNotAllowed') return res.conflict(err.message)

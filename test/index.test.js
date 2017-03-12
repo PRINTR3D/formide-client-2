@@ -21,4 +21,4 @@ require('./tests/routes/update.test')(client)
 require('./tests/websocket/index.test')(client)
 
 // cloud
-// require('./tests/cloud/downloadGcodeFromCloud.test')(client) // TODO: slow test
+require('./tests/cloud/cloudServer.test')(client)

@@ -2,6 +2,7 @@
 
 const MAX_ALLOWED_PRINTERS = 4
 const debug = require('debug')('app:driver')
+const fs = require('fs')
 const path = require('path')
 const assert = require('assert')
 const FdmPrinter = require('./printers/fmdPrinter') // we ship an FDM printer spec by default
@@ -184,15 +185,59 @@ class Drivers {
 	  const printer = this.printers[port]
 		if (!printer) return callback(new PrinterNotConnectedError(port))
 		
+		// check if file exists
+		if (!fs.existsSync(filePath)) {
+			return callback(null, {
+				success: false,
+				file: filePath
+			})
+		}
+		
     printer.printFile(filePath, (err, response) => {
-	    if (err) return callback (err)
+	    if (err) return callback(err)
 	    self._client.events.emit(PRINTER_EVENTS.STARTED, {
 		    port: port,
 		    filePath: filePath,
         message: `Printer on port ${port} started printing ${filePath}`
 	    })
-	    return callback(null, response)
+	    return callback(null, {
+	    	printerResponse: response,
+		    success: true,
+		    port: port
+	    })
     })
+  }
+  
+  printQueueItem (port, filePath, queueItemId, callback) {
+  	assert(port, 'port not passed')
+	  assert(filePath, 'filePath not passed')
+	  assert(queueItemId, 'queueItemId not passed')
+  	
+	  const self = this
+	  const printer = this.printers[port]
+	  if (!printer) return callback(new PrinterNotConnectedError(port))
+	
+	  // check if file exists
+	  if (!fs.existsSync(filePath)) {
+		  return callback(null, {
+			  success: false,
+			  file: filePath
+		  })
+	  }
+	
+	  printer.printQueueItem(filePath, queueItemId, (err, response) => {
+		  if (err) return callback(err)
+		  self._client.events.emit(PRINTER_EVENTS.STARTED, {
+			  port: port,
+			  filePath: filePath,
+			  message: `Printer on port ${port} started printing ${filePath}`
+		  })
+		  return callback(null, {
+			  printerResponse: response,
+			  success: true,
+			  port: port
+		  })
+	  })
   }
 	
 	/**
@@ -211,7 +256,11 @@ class Drivers {
 	    self._client.events.emit(PRINTER_EVENTS.PAUSED, {
 	      port: port
       })
-      return callback(null, response)
+      return callback(null, {
+	      printerResponse: response,
+	      success: true,
+	      port: port
+      })
     })
   }
 	
@@ -231,7 +280,11 @@ class Drivers {
 	    self._client.events.emit(PRINTER_EVENTS.RESUMED, {
 		    port: port
 	    })
-	    return callback(null, response)
+	    return callback(null, {
+		    printerResponse: response,
+		    success: true,
+		    port: port
+	    })
     })
   }
 	
@@ -251,7 +304,11 @@ class Drivers {
 			self._client.events.emit(PRINTER_EVENTS.STOPPED, {
 				port: port
 			})
-			return callback(null, response)
+			return callback(null, {
+				printerResponse: response,
+				success: true,
+				port: port
+			})
 		})
   }
 	
@@ -265,7 +322,7 @@ class Drivers {
 		if (!printer) return this._client.log(new PrinterNotConnectedError(port).message, 'error')
 		
 		printer.printFinished(printjobID, (err, response) => {
-			
+			// TODO
 		})
 	}
 	
@@ -282,7 +339,11 @@ class Drivers {
     
     printer.runCommandTemplate(command, parameters, (err, response) => {
 	    if (err) return callback (err)
-	    return callback(null, response)
+	    return callback(null, {
+		    printerResponse: response,
+		    success: true,
+		    port: port
+	    })
     })
   }
 	
@@ -317,7 +378,11 @@ class Drivers {
 		
 		printer.sendCommand(gcode, (err, response) => {
 			if (err) return callback (err)
-			return callback(null, response)
+			return callback(null, {
+				printerResponse: response,
+				success: true,
+				port: port
+			})
 		})
   }
 	
@@ -334,7 +399,11 @@ class Drivers {
 		
 		printer.sendTuneCommand(tuneGcode, (err, response) => {
 			if (err) return callback (err)
-			return callback(null, response)
+			return callback(null, {
+				printerResponse: response,
+				success: true,
+				port: port
+			})
 		})
   }
 }

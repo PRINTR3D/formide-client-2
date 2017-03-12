@@ -6,9 +6,8 @@ const socket = require('./socket')
 const proxy = require('./proxy')
 const downloadGcodeFromCloud = require('./downloadGcodeFromCloud')
 const generateCloudCode = require('./generateCloudCode')
+const getCloudQueue = require('./getCloudQueue')
 const getCallbackData = require('./getCallbackData')
-
-// TODO: rewrite to separate package without client dependency
 
 class Cloud {
 
@@ -26,21 +25,21 @@ class Cloud {
     assert(client.logger.log, '[cloud] - client.logger.log not passed')
     
     this._client = client
-
+	  this._deviceToken = false
+    
     // set URLs
     this.URL = client.config.cloud.URL
     this.platformURL = client.config.cloud.platformURL
 
     // socket connections
     this.cloud = socket.cloud(client, client.config.cloud.URL)
-    this.local = socket.local(client, client.config.http.api)
 
     // prevent .bind waterfall
     const self = this
 
     // forward all events to cloud
-    client.events.onAny(function (data) {
-      self.cloud.emit(this.event, data)
+    client.events.onAny(function (eventName, eventData) {
+      self.cloud.emit(eventName, eventData)
     })
 
     // socket events
@@ -50,48 +49,47 @@ class Cloud {
 
     // on connect
     this.cloud.on('connect', function () {
-      // TODO: fix cloud error before trying to connect again!
-      // co(function*() {
-      //   const publicIP = yield client.system.network.publicIp()
-      //   const internalIP = yield client.system.network.ip()
-      //   const macAddress = yield client.system.network.mac()
-      //
-      //   // emit authentication data
-      //   self.cloud.emit('authenticate', {
-      //     type: 'client',
-      //     ip: publicIP,
-      //     ip_internal: internalIP,
-      //     mac: macAddress,
-      //     version: client.version,
-      //     environment: process.env.NODE_ENV,
-      //     port: client.config.http.port
-      //   }, function (response) {
-      //     if (response.success) {
-      //       client.logger.log(`Cloud connected`, 'info')
-      //     } else {
-      //       client.logger.log(`Cloud not connected: ${response.message}`, 'warn')
-      //       client.logger.log(`MAC address is ${macAddress}`, 'info')
-      //     }
-      //   })
-      // }).then(null, console.error)
+      co(function*() {
+        const publicIP = yield client.system.network.publicIp()
+        const internalIP = yield client.system.network.ip()
+        const macAddress = yield client.system.network.mac()
+
+        // emit authentication data
+        self.cloud.emit('authenticate', {
+          type: 'client',
+          ip: publicIP,
+          ip_internal: internalIP,
+          mac: macAddress,
+          version: client.version,
+          environment: process.env.NODE_ENV,
+          port: client.config.http.port
+        }, function (response) {
+          if (response.success && response.deviceToken) {
+	          self._deviceToken = response.deviceToken
+            client.logger.log(`Cloud connected`, 'info')
+          } else {
+            client.logger.log(`Cloud not connected: ${response.message}`, 'warn')
+            client.logger.log(`MAC address is ${macAddress}`, 'info')
+          }
+        })
+      }).then(null, console.error)
     })
 
     // HTTP proxy calls are handled by the proxy function
     this.cloud.on('http', function (data) {
       client.logger.log(`Cloud HTTP call: ${data.url}`, 'debug')
       proxy(client, data, function (err, response) {
-        self.cloud.emit('http', getCallbackData(data._callbackId, err, response))
+        self.cloud.emit('http', getCallbackData(data._callbackId, err, response.body))
       })
     })
 
     // Adding a G-code file from the cloud
-    this.cloud.on('downloadGcode', function (data) {
+    this.cloud.on('printQueueItem', function (data) {
       client.logger.log(`Download cloud G-code: ${data.gcode}`, 'debug')
-	    downloadGcodeFromCloud(self._client, data, function (err, stats) {
-	      self.cloud.emit('downloadGcode', getCallbackData(data._callbackId, err, {
-	        success: true,
-		      gcodeFileName: stats.filename
-        }))
+	    downloadGcodeFromCloud(self._client, data.gcode, function (err, stats) {
+		    self._client.drivers.printQueueItem(data.port, stats.path, data.queueItemId, (err, response) => {
+			    self.cloud.emit('printQueueItem', getCallbackData(data._callbackId, err, response))
+		    })
       })
     })
 
@@ -102,6 +100,10 @@ class Cloud {
         self.cloud.io.reconnect()
       }
     })
+  }
+  
+  getDeviceToken () {
+    return this._deviceToken
   }
 	
 	/**
@@ -115,6 +117,20 @@ class Cloud {
 	      return generateCloudCode(self._client, macAddress)
       }).then((cloudCode) => {
 	      return resolve(cloudCode)
+      }).catch(reject)
+    })
+  }
+	
+	/**
+   * Get cloud queue for a connected printer by port
+	 * @param port
+	 * @returns {Promise}
+	 */
+  getCloudQueue (port) {
+	  const self = this
+    return new Promise((resolve, reject) => {
+	    getCloudQueue(self._client, port).then((response) => {
+	      return resolve(response)
       }).catch(reject)
     })
   }

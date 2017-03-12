@@ -5,6 +5,7 @@
   },
   "cloud": {
     "URL": "https://api.formide.com",
+    "gcodeDownloadURL": "https://api.formide.com",
     "platformURL": "https://platform.formide.com"
   },
   "log": {

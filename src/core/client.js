@@ -39,7 +39,8 @@ class Client {
     this.env = process.env.NODE_ENV
 
     try {
-      const OS_IMPLEMENTATION = process.env.OS_IMPLEMENTATION || 'raspberry_pi'
+      const OS_IMPLEMENTATION = process.env.OS_IMPLEMENTATION || 'the_element'
+      this.logger.log(`Loading native implementation for ${OS_IMPLEMENTATION}...`, 'info')
       this.system.network = require(`../implementations/${OS_IMPLEMENTATION}/network`)
       this.system.update = require(`../implementations/${OS_IMPLEMENTATION}/update`)
     } catch (e) {
