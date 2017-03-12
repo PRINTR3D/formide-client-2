@@ -97,14 +97,12 @@ class FdmPrinter extends Printer {
 	  })
   }
 	
-	// remove G-code file from storage and unset status
+	// reset currently printing and queue item ID
 	printFinished (printjobID, callback) {
 		const self = this
-		this._client.storage.remove(this._currentlyPrinting).then(() => {
-			self._currentlyPrinting = false
-			self._queueItemId = ''
-			return callback(null)
-		}).catch(callback)
+		self._currentlyPrinting = false
+		self._queueItemId = ''
+		return callback(null)
   }
 }
 
