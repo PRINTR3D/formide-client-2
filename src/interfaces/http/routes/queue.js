@@ -16,8 +16,9 @@ module.exports = function (client, http) {
 	 * @apiParam {String} port Select one of the ports where a printer is connected to. %2F should be used to encode forward slashes.
 	 */
 	router.get('/', http.checkAuth.jwt, http.checkParams(['port'], 'query'), function (req, res) {
-		client.cloud.getCloudQueue(decodeURIComponent(req.query.port)).then((queue) => {
-			return res.ok(queue)
+		client.cloud.getCloudQueue(decodeURIComponent(req.query.port)).then((response) => {
+			if (response.statusCode !== 200) return res.status(response.statusCode).ok(response.body)
+			return res.ok(response.body)
 		}).catch(res.serverError)
 	})
 	

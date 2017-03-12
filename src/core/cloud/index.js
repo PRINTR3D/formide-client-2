@@ -6,6 +6,7 @@ const socket = require('./socket')
 const proxy = require('./proxy')
 const downloadGcodeFromCloud = require('./downloadGcodeFromCloud')
 const generateCloudCode = require('./generateCloudCode')
+const getCloudQueue = require('./getCloudQueue')
 const getCallbackData = require('./getCallbackData')
 
 class Cloud {
@@ -64,7 +65,7 @@ class Cloud {
           port: client.config.http.port
         }, function (response) {
           if (response.success) {
-            this._deviceToken = response.deviceToken
+	          self._deviceToken = response.deviceToken
             client.logger.log(`Cloud connected`, 'info')
           } else {
             client.logger.log(`Cloud not connected: ${response.message}`, 'warn')
@@ -128,15 +129,9 @@ class Cloud {
   getCloudQueue (port) {
 	  const self = this
     return new Promise((resolve, reject) => {
-	    self.cloud.emit('getQueue', {
-		    port: port
-	    }, function (response) {
-		    if (response.success) {
-		      return resolve(response.data)
-		    } else {
-		      return reject(new Error(response.message))
-		    }
-	    })
+	    getCloudQueue(self._client, port).then((response) => {
+	      return resolve(response)
+      }).catch(reject)
     })
   }
 }
