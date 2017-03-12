@@ -4,7 +4,7 @@
     "www": "8080"
   },
   "cloud": {
-    "URL": "https://api.formide.com",
+    "URL": "http://localhost:3000",
     "gcodeDownloadURL": "https://api.formide.com",
     "platformURL": "https://platform.formide.com"
   },

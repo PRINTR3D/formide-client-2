@@ -8,8 +8,6 @@ const downloadGcodeFromCloud = require('./downloadGcodeFromCloud')
 const generateCloudCode = require('./generateCloudCode')
 const getCallbackData = require('./getCallbackData')
 
-// TODO: rewrite to separate package without client dependency
-
 class Cloud {
 
   /**
@@ -114,6 +112,26 @@ class Cloud {
       }).then((cloudCode) => {
 	      return resolve(cloudCode)
       }).catch(reject)
+    })
+  }
+	
+	/**
+   * Get cloud queue for a connected printer by port
+	 * @param port
+	 * @returns {Promise}
+	 */
+  getCloudQueue (port) {
+	  const self = this
+    return new Promise((resolve, reject) => {
+	    self.cloud.emit('getQueue', {
+		    port: port
+	    }, function (response) {
+		    if (response.success) {
+		      return resolve(response.data)
+		    } else {
+		      return reject(new Error(response.message))
+		    }
+	    })
     })
   }
 }

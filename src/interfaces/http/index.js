@@ -98,6 +98,7 @@ class Http {
     this.app.use('/api/storage', require('./routes/storage')(client, this))
 	  this.app.use('/api/system', require('./routes/system')(client, this))
 	  this.app.use('/api/update', require('./routes/update')(client, this))
+    this.app.use('/api/queue', require('./routes/queue')(client, this))
 
     // redirect root URL to local dashboard
     this.app.get('/', function (req, res) {
