@@ -68,7 +68,7 @@ module.exports = function (client, http) {
   })
 	
 	/**
-	 * @api {post} /api/network/hotspot Network:reset
+	 * @api {post} /api/network/reset Network:reset
 	 * @apiGroup Network
 	 * @apiDescription Reset the Wi-Fi network connection
 	 * @apiVersion 2.0.0
