@@ -66,14 +66,27 @@ class VirtualDriver {
 	pausePrint (callback) {
     const self = this
 	  setTimeout(function () {
-	    if (self._status !== 'printing' && self.status !== 'heating') return callback(new Error('Printer can only pause when printing or heating'))
+	    if (self._status !== 'printing' && self.status !== 'heating') return callback(new Error('Printer could not be paused'))
       
 		  return callback(null, {
 	      code: 200,
 	      rawResponse: 'OK',
-	      msg: 'printer paused'
+	      msg: 'printer pausing'
       })
 	  }, 200)
+  }
+  
+  stopPrint (callback) {
+		const self = this
+	  setTimeout(function () {
+	  	if (self._status !== 'printing' && self.status !== 'paused' && self.status !== 'heating') return callback(new Error('Printer could not be stopped'))
+		  
+		  return callback(null, {
+		  	code: 200,
+			  rawResponse: 'OK',
+			  message: 'printer stopping'
+		  }, 1000)
+	  })
   }
 }
 

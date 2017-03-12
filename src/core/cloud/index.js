@@ -64,7 +64,7 @@ class Cloud {
           environment: process.env.NODE_ENV,
           port: client.config.http.port
         }, function (response) {
-          if (response.success) {
+          if (response.success && response.deviceToken) {
 	          self._deviceToken = response.deviceToken
             client.logger.log(`Cloud connected`, 'info')
           } else {

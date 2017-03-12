@@ -37,4 +37,6 @@ const client = new Client(config)
 debug('finished booting', process.uptime())
 client.logger.log('Boot time: ' + process.uptime(), 'debug')
 
+client.plugins.loadPlugin(`${__dirname}/test/plugins/com.printr.virtual-printer`)
+
 module.exports = client
