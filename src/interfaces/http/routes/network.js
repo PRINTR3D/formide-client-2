@@ -90,7 +90,7 @@ module.exports = function (client, http) {
 	 * @apiDescription Enable or disable the Wi-Fi hotspot mode (The Element)
 	 * @apiVersion 2.0.0
 	 * @apiHeader {String} Authentication Valid Bearer JWT token
-	 * @apiParam {Boolean} enabled The action to undertake, will be enable on true and disable on false
+	 * @apiParam {Boolean} enabled Enable or disable the hotspot mode
 	 */
 	router.post('/hotspot', http.checkAuth.jwt, http.checkParams(['enabled']), function (req, res) {
 		if (!client.system.network) return res.notImplemented('Networking is not implemented on this device')
