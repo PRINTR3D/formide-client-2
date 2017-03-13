@@ -217,10 +217,18 @@ function reset () {
 function hotspot (enabled) {
 	return new Promise(function (resolve, reject) {
 	  const action = (enabled === true) ? 'connect' : 'disconnect'
-		exec(`${fiw} wlan1 connect ${action}`, function (err, stdout) {
-			if (err) return reject(err)
-			return resolve({ message: 'Successfully enabled hotspot' })
-		})
+    
+    if (enabled) {
+	    exec(`${fiw} wlan1 start-ap`, function (err, stdout) {
+		    if (err) return reject(err)
+		    return resolve({ message: 'Successfully enabled hotspot' })
+	    })
+    } else {
+	    exec(`${fiw} wlan1 stop-ap`, function (err, stdout) {
+		    if (err) return reject(err)
+		    return resolve({ message: 'Successfully enabled hotspot' })
+	    })
+    }
 	})
 }
 
