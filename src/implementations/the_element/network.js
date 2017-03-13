@@ -216,8 +216,6 @@ function reset () {
  */
 function hotspot (enabled) {
 	return new Promise(function (resolve, reject) {
-	  const action = (enabled === true) ? 'connect' : 'disconnect'
-    
     if (enabled) {
 	    exec(`${fiw} wlan1 start-ap`, function (err, stdout) {
 		    if (err) return reject(err)
