@@ -208,9 +208,9 @@ function connectAdvanced (config) {
  */
 function reset () {
   return new Promise(function (resolve, reject) {
-    exec(`${fiw} wlan0 reset`, function (err, stdout) {
-      if (err) return reject(err)
-      return resolve({ message: 'Successfully reset wlan0' })
+    exec(`${fiw} wlan0 reset`, function (err, stdout, stderr) {
+	    if (err || stderr) return reject(err || stderr)
+      return resolve({ message: 'Successfully reset wlan0', stdout })
     })
   })
 }
@@ -222,14 +222,14 @@ function reset () {
 function hotspot (enabled) {
 	return new Promise(function (resolve, reject) {
     if (enabled) {
-	    exec(`${fiw} wlan1 start-ap`, function (err, stdout) {
-		    if (err) return reject(err)
-		    return resolve({ message: 'Successfully enabled hotspot' })
+	    exec(`${fiw} wlan1 start-ap`, function (err, stdout, stderr) {
+		    if (err || stderr) return reject(err || stderr)
+		    return resolve({ message: 'Successfully enabled hotspot', stdout })
 	    })
     } else {
-	    exec(`${fiw} wlan1 stop-ap`, function (err, stdout) {
-		    if (err) return reject(err)
-		    return resolve({ message: 'Successfully disabled hotspot' })
+	    exec(`${fiw} wlan1 stop-ap`, function (err, stdout, stderr) {
+		    if (err || stderr) return reject(err || stderr)
+		    return resolve({ message: 'Successfully disabled hotspot', stdout })
 	    })
     }
 	})
