@@ -10,7 +10,7 @@ const getMac = require('getmac')
  */
 function publicIp () {
   return new Promise(function (resolve, reject) {
-    http.get('http://bot.whatismyipaddress.com', function (res) {
+    const request = http.get('http://bot.whatismyipaddress.com', function (res) {
       res.setEncoding('utf8')
       res.on('data', function (chunk) {
         return resolve(chunk)
@@ -19,6 +19,11 @@ function publicIp () {
         return reject(err)
       })
     })
+	
+	  // handle request error
+	  request.on('error', function (err) {
+		  return reject(err)
+	  })
   })
 }
 
@@ -38,6 +43,11 @@ function ip () {
         return reject(false)
       }
     })
+	
+	  // handle request error
+	  client.on('error', function (err) {
+		  return reject(err)
+	  })
   })
 }
 
