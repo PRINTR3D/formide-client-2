@@ -229,7 +229,7 @@ function hotspot (enabled) {
     } else {
 	    exec(`${fiw} wlan1 stop-ap`, function (err, stdout) {
 		    if (err) return reject(err)
-		    return resolve({ message: 'Successfully enabled hotspot' })
+		    return resolve({ message: 'Successfully disabled hotspot' })
 	    })
     }
 	})
