@@ -1,5 +1,6 @@
 'use strict'
 
+const os = require('os') // TMP!
 const debug = require('debug')('app:boot')
 
 debug('booting...')
@@ -36,6 +37,7 @@ const client = new Client(config)
 
 debug('finished booting', process.uptime())
 client.logger.log('Boot time: ' + process.uptime(), 'debug')
+client.logger.log('OS uptime: ' + os.uptime(), 'debug')
 
 client.plugins.loadPlugin(`${__dirname}/test/plugins/com.printr.virtual-printer`)
 
