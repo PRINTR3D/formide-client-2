@@ -1,11 +1,15 @@
 'use strict'
 
 const fs = require('fs')
+const assert = require('assert')
 
 class Plugin {
 
   constructor (client, pkg) {
-    // TODO: asserts
+    assert(client, 'client instance not passed in plugin')
+    assert(pkg.name, 'package name not passed in plugin')
+    assert(pkg.version, 'package version not passed in plugin')
+    
     this._client = client
     this._name = pkg.name.toLowerCase()
     this._version = pkg.version

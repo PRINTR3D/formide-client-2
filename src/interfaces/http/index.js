@@ -99,7 +99,6 @@ class Http {
 	  this.app.use('/api/system', require('./routes/system')(client, this))
 	  this.app.use('/api/update', require('./routes/update')(client, this))
     this.app.use('/api/queue', require('./routes/queue')(client, this))
-	  this.app.use('/api/db/queue', require('./routes/queue')(client, this)) // TODO: remove temporary /db proxy
 
     // redirect root URL to local dashboard
     this.app.get('/', function (req, res) {
