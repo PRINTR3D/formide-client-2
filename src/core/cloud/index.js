@@ -79,7 +79,8 @@ class Cloud {
     this.cloud.on('http', function (data) {
       client.logger.log(`Cloud HTTP call: ${data.url}`, 'debug')
       proxy(client, data, function (err, response) {
-        self.cloud.emit('http', getCallbackData(data._callbackId, err, response.body))
+      	if (err) return self.cloud.emit('http', getCallbackData(data._callbackId, err, {}))
+        self.cloud.emit('http', getCallbackData(data._callbackId, null, response.body))
       })
     })
 
@@ -88,7 +89,8 @@ class Cloud {
       client.logger.log(`Download cloud G-code: ${data.gcode}`, 'debug')
 	    downloadGcodeFromCloud(self._client, data.gcode, function (err, stats) {
 		    self._client.drivers.printQueueItem(data.port, stats.path, data.queueItemId, (err, response) => {
-			    self.cloud.emit('printQueueItem', getCallbackData(data._callbackId, err, response))
+		    	if (err) return self.cloud.emit('printQueueItem', getCallbackData(data._callbackId, err, {}))
+			    self.cloud.emit('printQueueItem', getCallbackData(data._callbackId, null, response))
 		    })
       })
     })
