@@ -29,8 +29,8 @@ module.exports = function (client, http) {
     	if (client.system.network.network) network = yield client.system.network.network()
 	    if (client.system.network.ip) ip = yield client.system.network.ip()
 	    if (client.system.network.publicIp) publicIp = yield client.system.network.publicIp()
-	    if (client.system.network.mac) yield client.system.network.mac()
-	    if (client.system.network.hotspotStatus) yield client.system.network.hotspotStatus()
+	    if (client.system.network.mac) mac = yield client.system.network.mac()
+	    if (client.system.network.hotspotStatus) isHotspot = yield client.system.network.hotspotStatus()
 	    
       return res.ok({ ip, publicIp, mac, isConnected, isHotspot, network })
     }).then(null, res.serverError)
