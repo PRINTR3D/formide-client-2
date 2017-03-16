@@ -15,19 +15,24 @@ module.exports = function (client, http) {
    * @apiVersion 2.0.0
    */
   router.get('/status', function (req, res) {
-    if (!client.system.network) return res.notImplemented('Networking is not implemented on this device')
-	  if (!client.system.network.status) return res.notImplemented('Networking is not implemented on this device')
-	  if (!client.system.network.ip) return res.notImplemented('Networking is not implemented on this device')
-	  if (!client.system.network.publicIp) return res.notImplemented('Networking is not implemented on this device')
-	  if (!client.system.network.network) return res.notImplemented('Networking is not implemented on this device')
-	  if (!client.system.network.mac) return res.notImplemented('Networking is not implemented on this device')
+  	
+  	// check if networking is available
+	  if (!client.system.network) return res.notImplemented('Networking is not implemented on this device')
+	  
     co(function*() {
-      const isConnected = yield client.system.network.status()
-      const ip = yield client.system.network.ip()
-      const publicIp = yield client.system.network.publicIp()
-      const network = yield client.system.network.network()
-      const mac = yield client.system.network.mac()
-      return res.ok({ ip, publicIp, mac, isConnected, network })
+    	
+    	// default all status data to false
+    	let isConnected, isHotspot, ip, publicIp, network, mac = false
+	    
+	    // get available status data
+	    if (client.system.network.status) isConnected = yield client.system.network.status()
+    	if (client.system.network.network) network = yield client.system.network.network()
+	    if (client.system.network.ip) ip = yield client.system.network.ip()
+	    if (client.system.network.publicIp) publicIp = yield client.system.network.publicIp()
+	    if (client.system.network.mac) yield client.system.network.mac()
+	    if (client.system.network.hotspotStatus) yield client.system.network.hotspotStatus()
+	    
+      return res.ok({ ip, publicIp, mac, isConnected, isHotspot, network })
     }).then(null, res.serverError)
   })
 

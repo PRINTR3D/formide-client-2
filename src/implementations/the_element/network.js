@@ -49,7 +49,7 @@ function list () {
 }
 
 /**
- * Get current Wi-Fi status from fiw fiw
+ * Get current Wi-Fi status from fiw
  * @returns {Promise}
  */
 function status () {
@@ -59,6 +59,20 @@ function status () {
       const isConnected = stdout.trim() === 'connected,configured'
       return resolve(isConnected)
     })
+  })
+}
+
+/**
+ * Get current hotspot status from fiw
+ * @returns {Promise}
+ */
+function hotspotStatus () {
+  return new Promise(function (resolve, reject) {
+	  exec(`${fiw} wlan1 status`, function (err, stdout) {
+		  if (err) return reject(err)
+		  const isHotspot = stdout.trim() === 'connected,configured'
+		  return resolve(isHotspot)
+	  })
   })
 }
 
@@ -238,6 +252,7 @@ function hotspot (enabled) {
 module.exports = {
   list,
   status,
+	hotspotStatus,
   network,
   ip,
   publicIp,
