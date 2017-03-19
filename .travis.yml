@@ -1,8 +1,7 @@
 deploy:
   provider: npm
   email: chris@printr.nl
-  api_key:
-    secure: phd8gefDWb2NQvfZMfjmVqu3OEie8rHWDc8b1mA/I3FDiZzRhtaLxum41JITWrvuWejSN0P85yFNArJymTpfyVqen4uGRCL4weTpkmANa0r9cysHJ4+V+zGWMJZhnyEYeEQkqNXnle8J3eDC/ADijduix/4Hp93BrW6sE8VSKUZH7ZiYM7LJnlsmh7lk0iIYeDOSZH1D+FvV3v/e67VcWTE3X5dQ9J85oUKo1yUvyK/u6gTMbkpGo0Z7e/zKq41s2G1fUpbQBe3yY1oX5LEUB9pFX8ydNc+Xv6sZTidM6ZEi/LjRNBSiGvRlv/wxTSCy/XPyLliMgqCFTjjwTdkY1Ozds69ufPvKE1wrlBrhJX/+yrwVl+ZAmiJxW3iz0+GAP7phiB6PDqSTxgLxzuW4ZjjTaSGCWez56QZCBSnqL8W1gugOUO2KzWNza5BQG4KKLMnP3aC2HaNSFngf7XDdySoW59NU+Fc+AYQDOr2lKlnZuHRHGKhu7laWTi8Q8NfcMZa0TPsBp2VC0lWdYbiwm3kf2rjkV6Ils3a190UI3+qRE+8cTXOhR1hIApe30rwKJ3E5FYz4BAGN9eicl0iI8aO7JhKdb/Ni3qtMoeC3mNoqAN27fVrNW9fr2Ue9w4+XmEI9Vch3HeasrSWRfebMRFKyewWXVGloIHw2Pratuzc=
+  api_key: $NPM_TOKEN
   on:
     tags: true
     repo: PRINTR3D/formide-client-2
