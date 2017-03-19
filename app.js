@@ -12,6 +12,10 @@ const version = require('./package.json').version
 const env = process.env.NODE_ENV || 'production'
 var config
 
+// catch buggy Node.js errors
+const handleException = require('./src/core/utils/catchEconnResetError')
+process.on('uncaughtException', handleException)
+
 try {
   config = require(`./config/${env}.json`)
 } catch (e) {
