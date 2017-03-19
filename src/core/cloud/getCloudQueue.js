@@ -17,6 +17,7 @@ function getCloudQueue (client, port) {
 			strictSSL: false,
 			json: true
 		}, (err, response) => {
+			if (err && err.code === 'ECONNREFUSED') return reject(new Error('Could not connect to server'))
 			if (err) return reject(err)
 			return resolve(response)
 		})

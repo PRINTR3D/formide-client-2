@@ -321,8 +321,8 @@ class Drivers {
 		const printer = this.printers[port]
 		if (!printer) return this._client.log(new PrinterNotConnectedError(port).message, 'error')
 		
-		printer.printFinished(printjobID, (err, response) => {
-			// TODO
+		printer.printFinished(printjobID, (err) => {
+			if (err) this._client.log(err, 'error')
 		})
 	}
 	

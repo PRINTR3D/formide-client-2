@@ -49,7 +49,7 @@ function list () {
 }
 
 /**
- * Get current Wi-Fi status from fiw fiw
+ * Get current Wi-Fi status from fiw
  * @returns {Promise}
  */
 function status () {
@@ -59,6 +59,20 @@ function status () {
       const isConnected = stdout.trim() === 'connected,configured'
       return resolve(isConnected)
     })
+  })
+}
+
+/**
+ * Get current hotspot status from fiw
+ * @returns {Promise}
+ */
+function hotspotStatus () {
+  return new Promise(function (resolve, reject) {
+	  exec(`${fiw} wlan1 status`, function (err, stdout) {
+		  if (err) return reject(err)
+		  const isHotspot = stdout.trim() === 'connected,configured'
+		  return resolve(isHotspot)
+	  })
   })
 }
 
@@ -96,7 +110,7 @@ function ip () {
  */
 function publicIp () {
   return new Promise(function (resolve, reject) {
-    http.get('http://bot.whatismyipaddress.com', function (res) {
+    const request = http.get('http://bot.whatismyipaddress.com', function (res) {
       res.setEncoding('utf8')
       res.on('data', function (chunk) {
         return resolve(chunk)
@@ -104,6 +118,11 @@ function publicIp () {
       res.on('error', function (err) {
         return reject(err)
       })
+    })
+    
+    // handle request error
+    request.on('error', function (err) {
+      return reject(err)
     })
   })
 }
@@ -203,9 +222,9 @@ function connectAdvanced (config) {
  */
 function reset () {
   return new Promise(function (resolve, reject) {
-    exec(`${fiw} wlan0 reset`, function (err, stdout) {
-      if (err) return reject(err)
-      return resolve({ message: 'Successfully reset wlan0' })
+    exec(`${fiw} wlan0 reset`, function (err, stdout, stderr) {
+	    if (err || stderr) return reject(err || stderr)
+      return resolve({ message: 'Successfully reset wlan0', stdout })
     })
   })
 }
@@ -216,17 +235,24 @@ function reset () {
  */
 function hotspot (enabled) {
 	return new Promise(function (resolve, reject) {
-	  const action = (enabled === true) ? 'connect' : 'disconnect'
-		exec(`${fiw} wlan1 connect ${action}`, function (err, stdout) {
-			if (err) return reject(err)
-			return resolve({ message: 'Successfully enabled hotspot' })
-		})
+    if (enabled) {
+	    exec(`${fiw} wlan1 start-ap`, function (err, stdout, stderr) {
+		    if (err || stderr) return reject(err || stderr)
+		    return resolve({ message: 'Successfully enabled hotspot', stdout })
+	    })
+    } else {
+	    exec(`${fiw} wlan1 stop-ap`, function (err, stdout, stderr) {
+		    if (err || stderr) return reject(err || stderr)
+		    return resolve({ message: 'Successfully disabled hotspot', stdout })
+	    })
+    }
 	})
 }
 
 module.exports = {
   list,
   status,
+	hotspotStatus,
   network,
   ip,
   publicIp,

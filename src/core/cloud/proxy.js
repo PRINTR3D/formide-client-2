@@ -2,10 +2,9 @@
 
 const assert = require('assert')
 const request = require('request')
-const co = require('co')
 const jwt = require('../utils/jwt')
 
-// TODO: fix generating cloud access tokens
+// hardcoded JWT token for local proxy calls
 const cloudToken = jwt.sign({
   id: 1,
   username: 'admin@local'
@@ -23,53 +22,25 @@ function proxy (client, data, callback) {
   assert(data, '[cloud / proxy] - data not passed')
   assert(data.url, '[cloud / proxy] - data.url not passed')
 
-  // add isAdmin to incoming proxy data if not found
-  // TODO: add correct isAdmin to cloud proxy server
-  data.isAdmin = data.isAdmin || false
-
-  // authenticate(client.db, data.isAdmin, function (err, accessToken) {
-  //   if (err) return callback(err)
-
-    var options = {
-      method: data.method,
-      uri: `http://127.0.0.1:${client.config.http.api}/${data.url}`,
-      auth: {
-        bearer: cloudToken
-      }
+  var options = {
+    method: data.method,
+    uri: `http://127.0.0.1:${client.config.http.api}/${data.url}`,
+    auth: {
+      bearer: cloudToken
     }
+  }
 
-    if (data.method === 'GET') {
-      options.qs = data.data
-    } else {
-      options.form = data.data
-    }
+  if (data.method === 'GET') {
+    options.qs = data.data
+  } else {
+    options.form = data.data
+  }
 
-    // Do a local HTTP request to get the data and respond back via socket
-    request(options, function (err, response) {
-      if (err) return callback(err)
-      return callback(null, response)
-    })
-  // })
-}
-
-/**
- * Authenticate proxy call
- * @param db
- * @param callback
- */
-function authenticate (db, isAdmin, callback) {
-  co(function* () {
-    let accessToken = yield db.AccessToken.findOne({ sessionOrigin: 'cloud' })
-
-    if (!accessToken) {
-      accessToken = yield db.AccessToken.create({
-        sessionOrigin: 'cloud',
-        isAdmin
-      })
-    }
-
-    return callback(null, accessToken.token)
-  }).then(null, callback)
+  // Do a local HTTP request to get the data and respond back via socket
+  request(options, function (err, response) {
+    if (err) return callback(err)
+    return callback(null, response)
+  })
 }
 
 module.exports = proxy

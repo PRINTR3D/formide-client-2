@@ -81,7 +81,7 @@ function list () {
  */
 function status () {
   return new Promise(function (resolve, reject) {
-    return resolve(true) // TODO
+    return resolve(true) // we fake this on MacOS
   })
 }
 
@@ -118,7 +118,7 @@ function ip () {
  */
 function publicIp () {
   return new Promise(function (resolve, reject) {
-    http.get('http://bot.whatismyipaddress.com', function (res) {
+    const request = http.get('http://bot.whatismyipaddress.com', function (res) {
       res.setEncoding('utf8')
       res.on('data', function (chunk) {
         return resolve(chunk)
@@ -127,6 +127,11 @@ function publicIp () {
         return reject(err)
       })
     })
+	
+	  // handle request error
+	  request.on('error', function (err) {
+		  return reject(err)
+	  })
   })
 }
 
@@ -165,8 +170,8 @@ function connect (config) {
  * @returns {Promise}
  */
 function reset () {
-  return new Promise(function (resolve, reject) {
-    return resolve({ message: 'Successfully reset Wi-Fi' }) // TODO
+  return new Promise(function (resolve) {
+    return resolve({ message: 'Successfully reset Wi-Fi' }) // we fake this on MacOS
   })
 }
 

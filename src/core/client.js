@@ -52,7 +52,7 @@ class Client {
     this.drivers = new Drivers(this)
     this.storage = new Storage(this)
     this.auth = new Auth(this)
-	  this.cloud = new Cloud(this) // TODO: separate client logic from cloud module
+	  this.cloud = new Cloud(this)
 
     // interfaces
     this.http = new Http(this)

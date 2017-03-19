@@ -42,7 +42,7 @@ module.exports = function (client, http) {
   router.get('/check', function (req, res) {
     if (!client.system.update) return res.notImplemented('Updates are not available on this system')
 	  if (!client.system.update.checkForUpdate) return res.notImplemented('Updates are not available on this system')
-	  client.system.update.checkForUpdate(res.ok).catch(res.serverError)
+	  client.system.update.checkForUpdate().then(res.ok).catch(res.serverError)
   })
 
   /**

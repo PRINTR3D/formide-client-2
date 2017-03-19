@@ -1,5 +1,6 @@
 'use strict'
 
+const os = require('os') // TMP!
 const debug = require('debug')('app:boot')
 
 debug('booting...')
@@ -10,6 +11,10 @@ const version = require('./package.json').version
 // Load configuration
 const env = process.env.NODE_ENV || 'production'
 var config
+
+// catch buggy Node.js errors
+const handleException = require('./src/core/utils/catchEconnResetError')
+process.on('uncaughtException', handleException)
 
 try {
   config = require(`./config/${env}.json`)
@@ -36,7 +41,6 @@ const client = new Client(config)
 
 debug('finished booting', process.uptime())
 client.logger.log('Boot time: ' + process.uptime(), 'debug')
-
-client.plugins.loadPlugin(`${__dirname}/test/plugins/com.printr.virtual-printer`)
+client.logger.log('OS uptime: ' + os.uptime(), 'debug')
 
 module.exports = client
