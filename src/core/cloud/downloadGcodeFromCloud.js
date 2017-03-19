@@ -22,6 +22,7 @@ function downloadGcodeFromCloud (client, gcode, callback) {
 			title: `${gcode} has failed to download`,
 			message: err.message
 		})
+		if (err && err.code === 'ECONNREFUSED') return reject(new Error('Could not connect to server'))
 		return callback(err)
 	})
 	

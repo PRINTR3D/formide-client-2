@@ -4,9 +4,8 @@ module.exports = function serverError (error) {
   var res = this.res
   var statusCode = 500
   var statusName = 'Server Error'
-
-  // TODO: log error in client
-  console.log(error)
+  
+  console.log('HTTP response error:', error)
 
   // Set status code
   res.status(statusCode)

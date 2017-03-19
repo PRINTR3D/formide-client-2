@@ -17,6 +17,7 @@ function generateCloudCode (client, macAddress) {
 			strictSSL: false,
 			json: true
 		}, (err, response, body) => {
+			if (err && err.code === 'ECONNREFUSED') return reject(new Error('Could not connect to server'))
 			if (err) return reject(err)
 			if (response.statusCode !== 200) return reject(new Error(`Could not get code: ${body.message}`))
 			if (!body.code) return reject(new Error(`Could not get code: ${body.message}`))

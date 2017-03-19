@@ -29,8 +29,8 @@ function cloudSocket (client, url) {
     client.logger.log(`Cloud connection timeout: ${err.message}`, 'warning')
   })
 
-  conn.on('reconnect_failed', function (err) {
-    client.logger.log(`Cloud reconnect error: ${err.message}`, 'warning')
+  conn.on('reconnect_failed', function () {
+    client.logger.log(`Cloud reconnect failed`, 'warning')
   })
 
   return conn

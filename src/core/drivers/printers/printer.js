@@ -23,7 +23,6 @@ class Printer {
 
     // we ask for the printer status every 2 seconds and store it
     this._statusInterval = setInterval(function () {
-      // TODO: fix this
       self.askStatus(function (err, status) {
         if (err) return self._client.logger.log(`Could not get printer info: - ${err.message}`, 'warning')
         self._status = status
@@ -87,7 +86,6 @@ class Printer {
     const self = this
     this.createCommandFromTemplate(command, parameters, function (err, commandList) {
       if (err) return callback(err)
-      // TODO: check if parallel works correctly with real drivers
       async.parallel(commandList.map(function (command) {
         return function (printerCallback) {
           self.sendCommand(command, function (err, response) {
