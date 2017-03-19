@@ -12,11 +12,11 @@
     "docs": "./node_modules/.bin/apidoc -i ./src -e node_modules -i ~/formide/plugins -e node_modules -o ./docs/",
     "dev": "NODE_ENV=development nodemon app",
     "debug": "NODE_ENV=development DEBUG=app:*,plugin:* node app",
-    "test": "NODE_ENV=test mocha --timeout=10000 test/index.test.js",
+    "test2": "NODE_ENV=test mocha --timeout=10000 test/index.test.js",
     "coverage": "NODE_ENV=test istanbul cover _mocha -- -R spec && open coverage/lcov-report/index.html",
     "dev:mac": "OS_IMPLEMENTATION=mac_os npm run dev",
     "debug:mac": "OS_IMPLEMENTATION=mac_os npm run debug",
-    "test:mac": "OS_IMPLEMENTATION=mac_os npm test",
+    "test:mac": "OS_IMPLEMENTATION=mac_os npm run test2",
     "coverage:mac": "OS_IMPLEMENTATION=mac_os npm run coverage"
   },
   "dependencies": {
