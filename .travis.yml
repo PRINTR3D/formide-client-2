@@ -2,6 +2,7 @@ language: node_js
 node_js:
   - "node"
 install: true
+test: true
 deploy:
   provider: npm
   email: chris@printr.nl
