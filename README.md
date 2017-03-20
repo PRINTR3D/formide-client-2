@@ -54,7 +54,7 @@ You can contribute to Formide client by closing issues (via fork -> pull request
 Please check the issue list of this repo before adding new ones to see if we're already aware of the issue that you're having.
 
 ### Roadmap
-The roadmap for Formide client can be found at [projects/1](https://github.com/PRINTR3D/formide-client-2/projects/1).
+The public roadmap for Printr can be found at [this board](https://github.com/orgs/PRINTR3D/projects/1).
 
 ### Testing
 We advice you to run automated tests before creating a pull request. This can done by simply running `npm test`, or `npm run test:mac`, depending on your platform. All automated test results from pushes and pull requests can be found on [Travis](https://travis-ci.org/PRINTR3D/formide-client-2).
