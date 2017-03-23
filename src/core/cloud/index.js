@@ -7,6 +7,7 @@ const proxy = require('./proxy')
 const downloadGcodeFromCloud = require('./downloadGcodeFromCloud')
 const generateCloudCode = require('./generateCloudCode')
 const getCloudQueue = require('./getCloudQueue')
+const postQueueItemFinished = require('./postQueueItemFinished')
 const getCallbackData = require('./getCallbackData')
 
 class Cloud {
@@ -23,10 +24,10 @@ class Cloud {
     assert(client.events, '[cloud] - client.events not passed')
     // assert(client.db, '[cloud] - client.db not passed')
     assert(client.logger.log, '[cloud] - client.logger.log not passed')
-    
+
     this._client = client
 	  this._deviceToken = false
-    
+
     // set URLs
     this.URL = client.config.cloud.URL
     this.platformURL = client.config.cloud.platformURL
@@ -103,11 +104,11 @@ class Cloud {
       }
     })
   }
-  
+
   getDeviceToken () {
     return this._deviceToken
   }
-	
+
 	/**
    * Generate a cloud code to connect the client to a Formide account
 	 * @returns {Promise}
@@ -122,7 +123,7 @@ class Cloud {
       }).catch(reject)
     })
   }
-	
+
 	/**
    * Get cloud queue for a connected printer by port
 	 * @param port
@@ -133,6 +134,20 @@ class Cloud {
     return new Promise((resolve, reject) => {
 	    getCloudQueue(self._client, port).then((response) => {
 	      return resolve(response)
+      }).catch(reject)
+    })
+  }
+
+  /**
+   * Notify cloud API that a queue item finished printing
+   * @param queueItemId
+   * @returns {Promise}
+   */
+  postQueueItemFinished (queueItemId) {
+    const self = this
+    return new Promise((resolve, reject) => {
+      postQueueItemFinished(self._client, queueItemId).then((response) => {
+        return resolve(response)
       }).catch(reject)
     })
   }
