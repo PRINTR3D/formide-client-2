@@ -347,10 +347,10 @@ class Drivers {
       queueItemId: printJobId
     })
 
-    // notify cloud API that queue item finished printing
-    if (printJobId) {
+    // notify cloud API when finished print was a cloud queue item
+    if (printJobId && printJobId !== '') {
       this._client.cloud.postQueueItemFinished(printJobId).then((response) => {
-        console.log('response', response)
+        console.log('cloud queue finished response', response)
       }).catch((err) => {
         self._client.log(err, 'error')
       })
