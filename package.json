@@ -62,6 +62,10 @@
     "semver": "^5.3.0",
     "should": "^11.1.2"
   },
+  "bin": {
+    "formide-pi": "bin/formide-pi",
+    "formide-client": "bin/formide-client"
+  },
   "apidoc": {
     "title": "Formide Client API",
     "url": "http://localhost:1337",
