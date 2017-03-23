@@ -9,7 +9,6 @@
   "author": "Chris ter Beke <chris@printr.com>",
   "license": "GPL-2.0",
   "scripts": {
-    "start": "NODE_ENV=development node app",
     "docs": "./node_modules/.bin/apidoc -i ./src -e node_modules -i ~/formide/plugins -e node_modules -o ./docs/",
     "dev": "NODE_ENV=development nodemon app",
     "debug": "NODE_ENV=development DEBUG=app:*,plugin:* node app",
@@ -64,7 +63,8 @@
     "should": "^11.1.2"
   },
   "bin": {
-    "formide-client": "bin/formide-pi"
+    "formide-pi": "bin/formide-pi",
+    "formide-client": "bin/formide-client"
   },
   "apidoc": {
     "title": "Formide Client API",
