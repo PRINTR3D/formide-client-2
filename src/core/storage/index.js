@@ -109,20 +109,34 @@ class Storage {
 					return reject(invalidFiletypeError)
 				}
 
-        // get full storage path
+        // get full storage paths
 				let gcodeStoragePath = path.resolve(this.gcodeDir, filename)
+        let tmpStoragePath = path.resolve('/tmp', filename)
 
 				// check if exists, if so we put the date behind the filename
 				if (fs.existsSync(gcodeStoragePath)) {
 					gcodeStoragePath = gcodeStoragePath.replace('.gcode', `-${new Date().getTime()}.gcode`)
 				}
 
+        // clear tmp storage path if already use
+        if (fs.existsSync(tmpStoragePath)) {
+          fs.unlinkSync(tmpStoragePath)
+        }
+
         // create write stream and pipe file into it
-				const writeStream = fs.createWriteStream(gcodeStoragePath)
+				const writeStream = fs.createWriteStream(tmpStoragePath)
 				readStream.pipe(writeStream)
 
 				// done uploading
 				writeStream.on('close', () => {
+
+          // move the file from /tmp to storage location
+          try {
+            fs.renameSync(tmpStoragePath, gcodeStoragePath)
+          } catch (e) {
+            return reject(e)
+          }
+
           // return uploaded file stats
 					self.stat(gcodeStoragePath.split('/').pop()).then(resolve, reject)
 				})
@@ -132,7 +146,7 @@ class Storage {
 
           // remove the file when an error occurred to make sure we don't leave broken g-codes on disk
           try {
-            fs.unlinkSync(gcodeStoragePath)
+            fs.unlinkSync(tmpStoragePath)
           } catch (e) {
             return reject(e)
           }
