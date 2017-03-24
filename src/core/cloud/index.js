@@ -67,7 +67,7 @@ class Cloud {
         }, function (response) {
           if (response.success && response.deviceToken) {
 	          self._deviceToken = response.deviceToken
-            client.logger.log(`Cloud connected`, 'info')
+            client.logger.log(`Cloud connected with token ${response.deviceToken}`, 'info')
           } else {
             client.logger.log(`Cloud not connected: ${response.message}`, 'warn')
             client.logger.log(`MAC address is ${macAddress}`, 'info')
