@@ -36,7 +36,7 @@ class FdmPrinter extends Printer {
       return callback(err, status)
     })
   }
-  
+
   sendCommand (command, callback) {
     return this.sendGcode(command, callback)
   }
@@ -44,7 +44,7 @@ class FdmPrinter extends Printer {
   sendGcode (gcode, callback) {
     this._driver.sendGcode(gcode, this._port, callback)
   }
-  
+
   sendTuneCommand (tuneCommand, callback) {
   	return this.sendTuneGcode(tuneCommand, callback)
   }
@@ -52,7 +52,7 @@ class FdmPrinter extends Printer {
   sendTuneGcode (tuneGcode, callback) {
     this._driver.sendTuneGcode(tuneGcode, this._port, callback)
   }
-	
+
 	printFile (filePath, callback) {
     const self = this
     this._driver.printFile(filePath, 0, this._port, function (err, response) {
@@ -61,7 +61,7 @@ class FdmPrinter extends Printer {
       return callback(null, response)
     })
   }
-	
+
 	printQueueItem (filePath, queueItemId, callback) {
 		const self = this
 		this._driver.printFile(filePath, queueItemId, this._port, function (err, response) {
@@ -71,21 +71,21 @@ class FdmPrinter extends Printer {
 			return callback(null, response)
 		})
 	}
-  
+
   pausePrint (callback) {
 	  this._driver.pausePrint(this._port, (err, response) => {
 		  if (err) return callback(err)
 		  return callback(null, response)
 	  })
   }
-  
+
   resumePrint (callback) {
     this._driver.resumePrint(this._port, (err, response) => {
 	    if (err) return callback(err)
 	    return callback(null, response)
     })
   }
-  
+
   stopPrint (callback) {
   	const self = this
     // TODO: 2nd parameter is stop G-code sequence
@@ -96,7 +96,7 @@ class FdmPrinter extends Printer {
 		  return callback(null, response)
 	  })
   }
-	
+
 	// reset currently printing and queue item ID
 	printFinished (printjobID, callback) {
 		const self = this
