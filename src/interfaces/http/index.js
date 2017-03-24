@@ -52,7 +52,7 @@ class Http {
 
     // use json body parser for url encoded post requests
     this.app.use(bodyParser.urlencoded({ extended: true, limit: '500mb' }))
-	
+
     // connect middleware for file uploads
 	  this.app.use(busboy())
 
@@ -103,6 +103,11 @@ class Http {
     // redirect root URL to local dashboard
     this.app.get('/', function (req, res) {
       return res.redirect(`http://${req.headers.host.split(':')[0]}:${client.config.http.www}`)
+    })
+
+    // catch all 404
+    this.app.use(function (req, res) {
+      return res.notFound('Page not found')
     })
 
     return this
