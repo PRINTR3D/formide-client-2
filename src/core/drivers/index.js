@@ -15,6 +15,7 @@ const PRINTER_EVENTS = {
   PAUSED: 'printer.paused',
   RESUMED: 'printer.resumed',
   STOPPED: 'printer.stopped',
+  FINISHED: 'printer.finished',
   CONNECTED: 'printer.connected',
   DISCONNECTED: 'printer.disconnected'
 }
@@ -110,10 +111,10 @@ class Drivers {
     if (this.printers[port] !== undefined) {
 	    this._client.logger.log(`Printer ${port} disconnected`, 'info')
 	    this._client.events.emit(PRINTER_EVENTS.DISCONNECTED, { port, message: `Printer disconnected from ${port}` })
-	
+
 	    // clear status interval before removing object from array of printers
 	    this.printers[port].stopStatusInterval()
-	
+
 	    // remove entry from printers list
 	    delete this.printers[port]
     }
@@ -137,7 +138,7 @@ class Drivers {
   printerEvent (level, event) {
     this._client.events.emit(`printer.${level}`, event)
   }
-	
+
 	/**
    * Get a printer by port
 	 * @param port
@@ -172,7 +173,7 @@ class Drivers {
     if (!printer) return callback(new PrinterNotConnectedError(port))
     return callback(null, this.printers[port].getStatus())
   }
-	
+
 	/**
    * Print G-code file
 	 * @param port
@@ -184,7 +185,7 @@ class Drivers {
 	  const self = this
 	  const printer = this.printers[port]
 		if (!printer) return callback(new PrinterNotConnectedError(port))
-		
+
 		// check if file exists
 		if (!fs.existsSync(filePath)) {
 			return callback(null, {
@@ -192,14 +193,18 @@ class Drivers {
 				file: filePath
 			})
 		}
-		
+
     printer.printFile(filePath, (err, response) => {
 	    if (err) return callback(err)
+
+      // emit event
 	    self._client.events.emit(PRINTER_EVENTS.STARTED, {
 		    port: port,
 		    filePath: filePath,
+        queueItemId: false,
         message: `Printer on port ${port} started printing ${filePath}`
 	    })
+
 	    return callback(null, {
 	    	printerResponse: response,
 		    success: true,
@@ -207,16 +212,16 @@ class Drivers {
 	    })
     })
   }
-  
+
   printQueueItem (port, filePath, queueItemId, callback) {
   	assert(port, 'port not passed')
 	  assert(filePath, 'filePath not passed')
 	  assert(queueItemId, 'queueItemId not passed')
-  	
+
 	  const self = this
 	  const printer = this.printers[port]
 	  if (!printer) return callback(new PrinterNotConnectedError(port))
-	
+
 	  // check if file exists
 	  if (!fs.existsSync(filePath)) {
 		  return callback(null, {
@@ -224,22 +229,27 @@ class Drivers {
 			  file: filePath
 		  })
 	  }
-	
+
 	  printer.printQueueItem(filePath, queueItemId, (err, response) => {
 		  if (err) return callback(err)
+
+      // emit event
 		  self._client.events.emit(PRINTER_EVENTS.STARTED, {
 			  port: port,
 			  filePath: filePath,
+        queueItemId: queueItemId,
 			  message: `Printer on port ${port} started printing ${filePath}`
 		  })
+
 		  return callback(null, {
 			  printerResponse: response,
 			  success: true,
-			  port: port
+			  port: port,
+        queueItemId: queueItemId
 		  })
 	  })
   }
-	
+
 	/**
    * Pause printer
 	 * @param port
@@ -250,12 +260,15 @@ class Drivers {
     const self = this
 	  const printer = this.printers[port]
 		if (!printer) return callback(new PrinterNotConnectedError(port))
-    
+
     printer.pausePrint((err, response) => {
       if (err) return callback (err)
+
+      // emit event
 	    self._client.events.emit(PRINTER_EVENTS.PAUSED, {
 	      port: port
       })
+
       return callback(null, {
 	      printerResponse: response,
 	      success: true,
@@ -263,7 +276,7 @@ class Drivers {
       })
     })
   }
-	
+
 	/**
    * Resume printer
 	 * @param port
@@ -274,12 +287,15 @@ class Drivers {
 	  const self = this
 	  const printer = this.printers[port]
 		if (!printer) return callback(new PrinterNotConnectedError(port))
-    
+
     printer.resumePrint((err, response) => {
 	    if (err) return callback (err)
+
+      // emit event
 	    self._client.events.emit(PRINTER_EVENTS.RESUMED, {
 		    port: port
 	    })
+
 	    return callback(null, {
 		    printerResponse: response,
 		    success: true,
@@ -287,7 +303,7 @@ class Drivers {
 	    })
     })
   }
-	
+
 	/**
    * Stop printer
 	 * @param port
@@ -298,12 +314,15 @@ class Drivers {
 	  const self = this
 	  const printer = this.printers[port]
 		if (!printer) return callback(new PrinterNotConnectedError(port))
-		
+
 		printer.stopPrint((err, response) => {
 			if (err) return callback (err)
+
+      // emit event
 			self._client.events.emit(PRINTER_EVENTS.STOPPED, {
 				port: port
 			})
+
 			return callback(null, {
 				printerResponse: response,
 				success: true,
@@ -311,21 +330,38 @@ class Drivers {
 			})
 		})
   }
-	
+
 	/**
 	 * Handler for when printer has finished printing
 	 * @param port
 	 * @param queueItemId
 	 */
-	printFinished (port, printjobID) {
+	printFinished (port, printJobId) {
+    const self = this
 		const printer = this.printers[port]
 		if (!printer) return this._client.log(new PrinterNotConnectedError(port).message, 'error')
-		
-		printer.printFinished(printjobID, (err) => {
-			if (err) this._client.log(err, 'error')
+
+    // emit event
+    self._client.events.emit(PRINTER_EVENTS.FINISHED, {
+      port,
+      queueItemId: printJobId
+    })
+
+    // notify cloud API when finished print was a cloud queue item
+    if (printJobId && printJobId !== '') {
+      this._client.cloud.postQueueItemFinished(printJobId).then((response) => {
+        console.log('cloud queue finished response', response)
+      }).catch((err) => {
+        self._client.log(err, 'error')
+      })
+    }
+
+    // let printer implementation know print was finished (might not be used)
+		printer.printFinished(queueItemId, (err) => {
+      if (err) self._client.log(err, 'error')
 		})
 	}
-	
+
 	/**
    * Send G-code command template, sends resulting G-code to printer (while idle)
 	 * @param port
@@ -336,7 +372,7 @@ class Drivers {
 	runCommandTemplate (port, command, parameters, callback) {
 	  const printer = this.printers[port]
 		if (!printer) return callback(new PrinterNotConnectedError(port))
-    
+
     printer.runCommandTemplate(command, parameters, (err, response) => {
 	    if (err) return callback (err)
 	    return callback(null, {
@@ -346,7 +382,7 @@ class Drivers {
 	    })
     })
   }
-	
+
 	/**
    * Create a comment from template, returns G-code that would be executed
 	 * @param port
@@ -358,13 +394,13 @@ class Drivers {
 	createCommandFromTemplate (port, command, parameters, callback) {
 		const printer = this.printers[port]
 		if (!printer) return callback(new PrinterNotConnectedError(port))
-		
+
 		printer.createCommandFromTemplate(command, parameters, (err, command) => {
 			if (err) return callback (err)
 			return callback(null, command)
 		})
   }
-	
+
 	/**
    * Send custom G-code (while idle)
 	 * @param port
@@ -375,7 +411,7 @@ class Drivers {
   sendCommand (port, gcode, callback) {
 	  const printer = this.printers[port]
 		if (!printer) return callback(new PrinterNotConnectedError(port))
-		
+
 		printer.sendCommand(gcode, (err, response) => {
 			if (err) return callback (err)
 			return callback(null, {
@@ -385,7 +421,7 @@ class Drivers {
 			})
 		})
   }
-	
+
 	/**
    * Send tune G-code (while printing)
 	 * @param port
@@ -396,7 +432,7 @@ class Drivers {
   sendTuneCommand (port, tuneGcode, callback) {
 	  const printer = this.printers[port]
 		if (!printer) return callback(new PrinterNotConnectedError(port))
-		
+
 		printer.sendTuneCommand(tuneGcode, (err, response) => {
 			if (err) return callback (err)
 			return callback(null, {
