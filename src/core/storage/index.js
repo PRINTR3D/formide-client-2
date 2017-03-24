@@ -131,7 +131,11 @@ class Storage {
 				writeStream.on('error', (err) => {
 
           // remove the file when an error occurred to make sure we don't leave broken g-codes on disk
-          fs.unlinkSync(gcodeStoragePath)
+          try {
+            fs.unlinkSync(gcodeStoragePath)
+          } catch (e) {
+            return reject(e)
+          }
 
           // reject
 					return reject(err)
