@@ -18,7 +18,7 @@ class Printer {
     this._driver = driver || client.drivers.getDefaultDrivers()
     this._status = null
     this._commandTemplates = {}
-    this._currentlyPrinting = false
+    this._currentlyPrinting = ''
 	  this._queueItemId = ''
 
     // we ask for the printer status every 2 seconds and store it

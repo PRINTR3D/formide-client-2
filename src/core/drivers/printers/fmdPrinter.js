@@ -33,6 +33,7 @@ class FdmPrinter extends Printer {
     this._driver.getPrinterInfo(this._port, function (err, status) {
 	    status.path = encodeURIComponent(status.port) // add the encoded port path for easy of use
 	    status.queueItemId = self._queueItemId // use the client string variable instead of the driver integer for the HTTP API
+      status.filePath = self._currentlyPrinting // add the path of the file that's being printed
       return callback(err, status)
     })
   }
@@ -58,6 +59,7 @@ class FdmPrinter extends Printer {
     this._driver.printFile(filePath, 0, this._port, function (err, response) {
       if (err) return callback(err)
       self._currentlyPrinting = filePath
+      self._queueItemId = ''
       return callback(null, response)
     })
   }
@@ -91,7 +93,7 @@ class FdmPrinter extends Printer {
     // TODO: 2nd parameter is stop G-code sequence
 	  this._driver.stopPrint(this._port, '', (err, response) => {
 		  if (err) return callback(err)
-		  self._currentlyPrinting = false
+		  self._currentlyPrinting = ''
 		  self._queueItemId = ''
 		  return callback(null, response)
 	  })
@@ -100,7 +102,7 @@ class FdmPrinter extends Printer {
 	// reset currently printing and queue item ID
 	printFinished (printjobID, callback) {
 		const self = this
-		self._currentlyPrinting = false
+		self._currentlyPrinting = ''
 		self._queueItemId = ''
 		return callback(null)
   }
