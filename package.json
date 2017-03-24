@@ -10,7 +10,7 @@
   "license": "GPL-2.0",
   "scripts": {
     "docs": "./node_modules/.bin/apidoc -i ./src -e node_modules -i ~/formide/plugins -e node_modules -o ./docs/",
-    "dev": "NODE_ENV=development nodemon app",
+    "dev": "NODE_ENV=local nodemon app",
     "debug": "NODE_ENV=development DEBUG=app:*,plugin:* node app",
     "test2": "NODE_ENV=test mocha --timeout=10000 test/index.test.js",
     "coverage": "NODE_ENV=test istanbul cover _mocha -- -R spec && open coverage/lcov-report/index.html",
@@ -68,7 +68,6 @@
   },
   "apidoc": {
     "title": "Formide Client API",
-    "url": "http://localhost:1337",
-    "sampleUrl": "http://localhost:1337"
+    "url": "http://localhost:1337"
   }
 }

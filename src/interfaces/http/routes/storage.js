@@ -5,10 +5,10 @@ const assert = require('assert')
 const router = require('express').Router()
 
 module.exports = function (client) {
-	
+
 	assert(client)
 	assert(client.storage)
-	
+
 	/**
 	 * @api {get} /api/storage Storage:list
 	 * @apiGroup Storage
@@ -20,7 +20,7 @@ module.exports = function (client) {
 			return res.ok(files)
 		}).catch(res.serverError)
 	})
-	
+
 	/**
 	 * @api {get} /api/storage/:filename Storage:single
 	 * @apiGroup Storage
@@ -35,7 +35,7 @@ module.exports = function (client) {
 			return res.serverError(err)
 		})
 	})
-	
+
 	/**
 	 * @api {get} /api/storage/:filename/download Storage:download
 	 * @apiGroup Storage
@@ -58,7 +58,7 @@ module.exports = function (client) {
 			return res.serverError(err)
 		})
 	})
-	
+
 	/**
 	 * @api {post} /api/storage Storage:upload
 	 * @apiGroup Storage
@@ -67,24 +67,29 @@ module.exports = function (client) {
 	 * @apiHeader {String} Authentication Valid Bearer JWT token
 	 */
 	router.post('/', function (req, res) {
-		req.pipe(req.busboy)
-		req.busboy.on('file', (field, file, filename) => {
-			
-			// write file to storage
-			client.storage.write(filename, file).then((info) => {
-				return res.ok({
-					message: 'File uploaded',
-					file: info,
-					success: true
-				})
-			}).catch((err) => {
-				if (err.name === 'invalidFiletype') return res.badRequest(err.message)
-				if (err.name === 'storageFull') return res.conflict(err.message)
-				return res.serverError(err)
-			})
-		})
+    if (req.busboy) {
+  		req.busboy.on('file', (field, file, filename) => {
+
+  			// write file to storage
+  			client.storage.write(filename, file).then((info) => {
+  				return res.ok({
+  					message: 'File uploaded',
+  					file: info,
+  					success: true
+  				})
+  			}).catch((err) => {
+  				if (err.name === 'invalidFiletype') return res.badRequest(err.message)
+  				if (err.name === 'storageFull') return res.conflict(err.message)
+  				return res.serverError(err)
+  			})
+
+  		})
+
+      // pipe file stream
+      req.pipe(req.busboy)
+    }
 	})
-	
+
 	/**
 	 * @api {delete} /api/storage/:filename Storage:delete
 	 * @apiGroup Storage
@@ -95,8 +100,11 @@ module.exports = function (client) {
 	router.delete('/:filename', function (req, res) {
 		client.storage.remove(req.params.filename).then(() => {
 			return res.ok({ message: 'File removed from storage' })
-		}).catch(res.serverError)
+		}).catch((err) => {
+			if (err.name === 'fileNotFound') return res.notFound(err.message)
+			return res.serverError(err)
+		})
 	})
-	
+
 	return router
 }
