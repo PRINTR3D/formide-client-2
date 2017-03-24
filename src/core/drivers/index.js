@@ -357,7 +357,7 @@ class Drivers {
     }
 
     // let printer implementation know print was finished (might not be used)
-		printer.printFinished(queueItemId, (err) => {
+		printer.printFinished(printJobId, (err) => {
       if (err) self._client.log(err, 'error')
 		})
 	}
