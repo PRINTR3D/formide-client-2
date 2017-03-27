@@ -26,13 +26,13 @@ function downloadGcodeFromCloud (client, gcode, callback) {
 
     	// handle download error
     	downloadStream.on('error', (err) => {
-    		client.logger.log(`${gcode} has failed to download`, 'warn')
 		    console.log('download error', err)
+    		client.logger.log(`${gcode} has failed to download`, 'warn')
     		client.events.emit('cloud.downloadError', {
     			title: `${gcode} has failed to download`,
     			message: err.message
     		})
-    		if (err && err.code === 'ECONNREFUSED') return reject(new Error('Could not connect to server'))
+    		if (err && err.code === 'ECONNREFUSED') return callback(new Error('Could not connect to server'))
     		return callback(err)
     	})
 
