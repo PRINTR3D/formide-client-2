@@ -38,7 +38,7 @@ function downloadGcodeFromCloud (client, gcode, callback) {
     	// write to local storage
     	client.storage.write(gcodeFileName, downloadStream).then((info) => {
     		client.logger.log(`${gcode} has finished downloading`, 'info')
-    		client.events.emit('cloud.downloaded', {
+    		client.events.emit('cloud.downloadSuccess', {
     			title: `${gcode} has finished downloading`,
     			message: 'The gcode was downloaded and is now ready to be printed',
     			data: info
