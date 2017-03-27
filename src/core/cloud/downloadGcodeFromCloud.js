@@ -19,12 +19,15 @@ function downloadGcodeFromCloud (client, gcode, callback) {
     return callback(null, info)
   }).catch((err) => {
     if (err.name === 'fileNotFound') {
+    	
+    	console.log('Debug', `Trying to download ${gcode}`)
 
       const downloadStream = request.get(`${client.config.cloud.gcodeDownloadURL}/files/download/gcode?hash=${gcode}`, { strictSSL: false })
 
     	// handle download error
     	downloadStream.on('error', (err) => {
     		client.logger.log(`${gcode} has failed to download`, 'warn')
+		    console.log('download error', err)
     		client.events.emit('cloud.downloadError', {
     			title: `${gcode} has failed to download`,
     			message: err.message
