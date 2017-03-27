@@ -26,8 +26,7 @@ function downloadGcodeFromCloud (client, gcode, callback) {
 
     	// handle download error
     	downloadStream.on('error', (err) => {
-		    console.log('download error', err)
-    		client.logger.log(`${gcode} has failed to download`, 'warn')
+    		client.logger.log(`G-code from cloud (${gcode}) has failed to download`, 'warn')
     		client.events.emit('cloud.downloadError', {
     			title: `${gcode} has failed to download`,
     			message: err.message
@@ -46,7 +45,8 @@ function downloadGcodeFromCloud (client, gcode, callback) {
     		})
     		return callback(null, info)
     	}).catch((err) => {
-    		client.logger.log(`${gcode} has failed to download`, 'warn')
+		    console.log('write error', err)
+    		client.logger.log(`G-code from cloud (${gcode}) has failed to store`, 'warn')
     		client.events.emit('cloud.downloadError', {
     			title: `${gcode} has failed to download`,
     			message: err.message
