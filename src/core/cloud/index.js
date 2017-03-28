@@ -7,7 +7,6 @@ const proxy = require('./proxy')
 const downloadGcodeFromCloud = require('./downloadGcodeFromCloud')
 const generateCloudCode = require('./generateCloudCode')
 const getCloudQueue = require('./getCloudQueue')
-const postQueueItemFinished = require('./postQueueItemFinished')
 const getCallbackData = require('./getCallbackData')
 
 class Cloud {
