@@ -46,6 +46,14 @@ class Printer {
   getPort () {
     return this._port
   }
+	
+	/**
+	 * Get the cloud queue item ID of the current print (empty string when printing local file)
+	 * @returns {string}
+	 */
+	getQueueItemId () {
+  	return this._queueItemId
+  }
 
   /**
    * Return the last printer status from the drivers

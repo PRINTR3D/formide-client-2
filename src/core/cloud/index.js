@@ -105,7 +105,6 @@ class Cloud {
   }
 
   getDeviceToken () {
-  	console.log('this._deviceToken', this._deviceToken)
     return this._deviceToken
   }
 
