@@ -342,14 +342,14 @@ class Drivers {
 		if (!printer) return this._client.log(new PrinterNotConnectedError(port).message, 'error')
 
     // emit event
-    self._client.events.emit(PRINTER_EVENTS.FINISHED, {
+		self._client.events.emit(PRINTER_EVENTS.FINISHED, {
       port,
       queueItemId: printJobId
     })
 
     // notify cloud API when finished print was a cloud queue item
     if (printJobId && printJobId !== '') {
-      this._client.cloud.postQueueItemFinished(printJobId).then((response) => {
+	    self._client.cloud.postQueueItemFinished(printJobId).then((response) => {
         console.log('cloud queue finished response', response)
       }).catch((err) => {
         self._client.log(err, 'error')

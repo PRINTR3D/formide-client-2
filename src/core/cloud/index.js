@@ -87,7 +87,6 @@ class Cloud {
 
     // Adding a G-code file from the cloud
     this.cloud.on('printQueueItem', function (data) {
-      client.logger.log(`Download cloud G-code: ${data.gcode}`, 'debug')
 	    downloadGcodeFromCloud(self._client, data.gcode, function (err, stats) {
 		    self._client.drivers.printQueueItem(data.port, stats.path, data.queueItemId, (err, response) => {
 		    	if (err) return self.cloud.emit('printQueueItem', getCallbackData(data._callbackId, err, {}))
@@ -106,6 +105,7 @@ class Cloud {
   }
 
   getDeviceToken () {
+  	console.log('this._deviceToken', this._deviceToken)
     return this._deviceToken
   }
 

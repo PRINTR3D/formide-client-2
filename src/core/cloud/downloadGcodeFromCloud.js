@@ -16,19 +16,20 @@ function downloadGcodeFromCloud (client, gcode, callback) {
 
   // if the file already exists, use it, otherwise download it from the cloud
   client.storage.stat(gcodeFileName).then((info) => {
+		client.logger.log(`Cloud G-code ${gcodeFileName} was already downloaded before`, 'info')
     return callback(null, info)
   }).catch((err) => {
     if (err.name === 'fileNotFound') {
-    	
-    	console.log('Debug', `Trying to download ${gcode}`)
+	    client.logger.log(`Cloud G-code ${gcodeFileName} was not downloaded before, downloading...`, 'info')
 
+    	// create download stream
       const downloadStream = request.get(`${client.config.cloud.gcodeDownloadURL}/files/download/gcode?hash=${gcode}`, { strictSSL: false })
 
     	// handle download error
     	downloadStream.on('error', (err) => {
-    		client.logger.log(`G-code from cloud (${gcode}) has failed to download`, 'warn')
+    		client.logger.log(`Cloud G-code (${gcode}) has failed to download`, 'warn')
     		client.events.emit('cloud.downloadError', {
-    			title: `${gcode} has failed to download`,
+    			title: `Cloud G-code ${gcode} has failed to download`,
     			message: err.message
     		})
     		if (err && err.code === 'ECONNREFUSED') return callback(new Error('Could not connect to server'))
@@ -37,18 +38,18 @@ function downloadGcodeFromCloud (client, gcode, callback) {
 
     	// write to local storage
     	client.storage.write(gcodeFileName, downloadStream).then((info) => {
-    		client.logger.log(`${gcode} has finished downloading`, 'info')
+    		client.logger.log(`Cloud G-code ${gcode} has finished downloading`, 'info')
     		client.events.emit('cloud.downloadSuccess', {
-    			title: `${gcode} has finished downloading`,
-    			message: 'The gcode was downloaded and is now ready to be printed',
+    			title: `Cloud G-code ${gcode} has finished downloading`,
+    			message: 'The G-code was downloaded and is now ready to be printed',
     			data: info
     		})
     		return callback(null, info)
     	}).catch((err) => {
 		    console.log('write error', err)
-    		client.logger.log(`G-code from cloud (${gcode}) has failed to store`, 'warn')
+    		client.logger.log(`Cloud G-code (${gcode}) has failed to store`, 'warn')
     		client.events.emit('cloud.downloadError', {
-    			title: `${gcode} has failed to download`,
+    			title: `Cloud G-code ${gcode} has failed to download`,
     			message: err.message
     		})
     		return callback(err)
