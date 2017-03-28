@@ -16,10 +16,10 @@ function postQueueItemFinished (client, queueItemId) {
 			},
 			strictSSL: false,
 			json: true
-		}, (err, response) => {
+		}, (err, response, body) => {
 			if (err && err.code === 'ECONNREFUSED') return reject(new Error('Could not connect to server'))
 			if (err) return reject(err)
-			return resolve(response)
+			return resolve(body)
 		})
 	})
 }
