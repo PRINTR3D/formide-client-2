@@ -136,20 +136,6 @@ class Cloud {
       }).catch(reject)
     })
   }
-
-  /**
-   * Notify cloud API that a queue item finished printing
-   * @param queueItemId
-   * @returns {Promise}
-   */
-  postQueueItemFinished (queueItemId) {
-    const self = this
-    return new Promise((resolve, reject) => {
-      postQueueItemFinished(self._client, queueItemId).then((response) => {
-        return resolve(response)
-      }).catch(reject)
-    })
-  }
 }
 
 module.exports = Cloud

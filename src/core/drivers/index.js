@@ -344,26 +344,11 @@ class Drivers {
 		// get correct queue item ID from printer instance
 		const queueItemId = printer.getQueueItemId()
 
-    // notify cloud API when finished print was a cloud queue item
-    if (queueItemId && queueItemId !== '') {
-	    self._client.cloud.postQueueItemFinished(queueItemId).then((response) => {
-        console.log(`cloud queue finished response for ${queueItemId}`, response)
-      }).catch((err) => {
-        self._client.log(err, 'error')
-		
-		    // emit event
-		    self._client.events.emit(PRINTER_EVENTS.FINISHED, {
-			    port,
-			    queueItemId
-		    })
-      })
-    } else {
-	    // emit event
-	    self._client.events.emit(PRINTER_EVENTS.FINISHED, {
-		    port,
-		    queueItemId
-	    })
-    }
+		// emit finished event
+    self._client.events.emit(PRINTER_EVENTS.FINISHED, {
+			port,
+			queueItemId
+		})
 
     // let printer implementation know print was finished (might not be used)
 		printer.printFinished(printJobId, (err) => {
