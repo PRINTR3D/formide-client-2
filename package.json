@@ -35,7 +35,7 @@
     "express": "^4.14.0",
     "express-bearer-token": "^2.1.0",
     "express-session": "^1.14.1",
-    "formide-drivers": "PRINTR3D/formide-drivers-npm#v6.6.0-alpha.1",
+    "formide-drivers": "PRINTR3D/formide-drivers-npm#v6.6.1-alpha.1",
     "fs-extra": "^2.1.2",
     "getmac": "^1.2.1",
     "handlebars": "^4.0.6",
