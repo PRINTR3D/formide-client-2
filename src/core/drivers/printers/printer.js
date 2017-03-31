@@ -18,7 +18,7 @@ class Printer {
     this._driver = driver || client.drivers.getDefaultDrivers()
     this._status = null
     this._commandTemplates = {}
-    this._currentlyPrinting = false
+    this._currentlyPrinting = ''
 	  this._queueItemId = ''
 
     // we ask for the printer status every 2 seconds and store it
@@ -30,7 +30,7 @@ class Printer {
       })
     }, PRINTER_STATUS_INTERVAL)
   }
-	
+
 	/**
 	 * Return printer type
 	 * @returns {string|string|string|string|string}
@@ -45,6 +45,14 @@ class Printer {
    */
   getPort () {
     return this._port
+  }
+	
+	/**
+	 * Get the cloud queue item ID of the current print (empty string when printing local file)
+	 * @returns {string}
+	 */
+	getQueueItemId () {
+  	return this._queueItemId
   }
 
   /**
@@ -74,7 +82,7 @@ class Printer {
       for (let i in this._commandTemplates[command]) {
         const template = Handlebars.compile(this._commandTemplates[command][i])
         const gcode = template(parameters)
-        commandList.push(gcode)
+        commandList.push(gcode.toUpperCase())
       }
       return callback(null, commandList)
     } else {
@@ -100,39 +108,39 @@ class Printer {
       })
     })
   }
-	
+
 	askStatus (callback) {
 		this._client.logger.log(`Printer.askStatus not implemented for this printer`, 'critical')
 	}
-	
+
 	sendCommand () {
 		this._client.logger.log(`Printer.sendCommand not implemented for this printer`, 'critical')
 	}
-	
+
 	sendTuneCommand () {
 		this._client.logger.log(`Printer.sendTuneCommand not implemented for this printer`, 'critical')
 	}
-	
+
 	printFile () {
 		this._client.logger.log(`Printer.printFile not implemented for this printer`, 'critical')
 	}
-	
+
 	printQueueItem () {
 		this._client.logger.log(`Printer.printQueueItem not implemented for this printer`, 'critical')
 	}
-	
+
 	pausePrint (callback) {
 		this._client.logger.log(`Printer.pausePrint not implemented for this printer`, 'critical')
 	}
-	
+
 	resumePrint (callback) {
 		this._client.logger.log(`Printer.resumePrint not implemented for this printer`, 'critical')
 	}
-	
+
 	stopPrint (callback) {
 		this._client.logger.log(`Printer.stopPrint not implemented for this printer`, 'critical')
 	}
-	
+
 	printFinished () {
 		this._client.logger.log(`Printer.printFinished not implemented for this printer`, 'critical')
 	}
