@@ -35,7 +35,7 @@ module.exports = function (client, http) {
 	 * @apiParam {String} gcode The name of the G-code file (part of the GET /api/queue response).
 	 */
 	router.post('/:queueItemId/print', http.checkAuth.jwt, http.checkParams(['port', 'gcode']), function (req, res) {
-		client.cloud.printGcodeFromCloud(req.params.queueItemId, req.params.gcode, req.query.port).then((response) => {
+		client.cloud.printGcodeFromCloud(req.params.queueItemId, req.body.gcode, req.body.port).then((response) => {
 			return res.ok(response)
 		}).catch((err) => {
 			if (err && err.name === 'printerNotConnectedError') return res.notFound(err.message)
