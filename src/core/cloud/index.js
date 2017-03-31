@@ -135,6 +135,26 @@ class Cloud {
       }).catch(reject)
     })
   }
+	
+	/**
+	 * Print a G-code from the cloud queue
+	 * @param gcode
+	 * @param port
+	 * @param queueItemId
+	 * @returns {Promise}
+	 */
+	printGcodeFromCloud (queueItemId, gcode, port) {
+  	const self = this
+		return new Promise((resolve, reject) => {
+			downloadGcodeFromCloud(self._client, gcode, function (err, stats) {
+				if (err) return reject(err)
+				self._client.drivers.printQueueItem(port, stats.path, queueItemId, (err, response) => {
+					if (err) return reject(err)
+					return resolve(response)
+				})
+			})
+		})
+	}
 }
 
 module.exports = Cloud
