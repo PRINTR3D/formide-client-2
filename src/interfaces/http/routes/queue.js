@@ -34,7 +34,7 @@ module.exports = function (client, http) {
 	 * @apiParam {String} port Select one of the ports where a printer is connected to. %2F should be used to encode forward slashes.
 	 * @apiParam {String} gcode The name of the G-code file (part of the GET /api/queue response).
 	 */
-	router.post('/:queueItemId/print', http.checkAuth.jwt, http.checkParams(['port', 'qcode'], 'query'), function (req, res) {
+	router.post('/:queueItemId/print', http.checkAuth.jwt, http.checkParams(['port', 'gcode']), function (req, res) {
 		client.cloud.printGcodeFromCloud(req.params.queueItemId, req.params.gcode, req.query.port).then((response) => {
 			return res.ok(response)
 		}).catch((err) => {
