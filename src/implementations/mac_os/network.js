@@ -69,6 +69,7 @@ function list () {
       if (err) return reject(err)
       parseOutput(networks, function (err, list) {
         if (err) return reject(err)
+	      if (!list) return reject(new Error('No network list found'))
         return resolve(list)
       })
     })
@@ -93,6 +94,7 @@ function network () {
   return new Promise(function (resolve, reject) {
     execute(commands.currentNetwork.replace('{IFACE}', iface), function (err, network) {
       if (err) return reject(err)
+      if (!network) return reject(new Error('No network connection found'))
       network = network.split(':')[1].trim()
       return resolve(network)
     })
@@ -107,6 +109,7 @@ function ip () {
   return new Promise(function (resolve, reject) {
     execute(commands.ip.replace('{IFACE}', iface), function (err, ip) {
       if (err) return reject(err)
+	    if (!ip) return reject(new Error('No IP found'))
       return resolve(ip)
     })
   })
@@ -143,6 +146,7 @@ function mac () {
   return new Promise(function (resolve, reject) {
     execute(commands.mac.replace('{IFACE}', iface), function (err, mac) {
       if (err) return reject(err)
+	    if (!mac) return reject(new Error('No MAC address found'))
       return resolve(parseMacAddress(mac))
     })
   })
