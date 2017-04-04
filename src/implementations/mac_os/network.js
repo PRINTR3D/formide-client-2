@@ -94,8 +94,14 @@ function network () {
   return new Promise(function (resolve, reject) {
     execute(commands.currentNetwork.replace('{IFACE}', iface), function (err, network) {
       if (err) return reject(err)
-      if (!network) return reject(new Error('No network connection found'))
-      network = network.split(':')[1].trim()
+      if (!network && typeof network === 'undefined') return reject(new Error('No network connection found'))
+      
+      try {
+	      network = network.split(':')[1].trim()
+      } catch (e) {
+        return reject(e)
+      }
+      
       return resolve(network)
     })
   })
