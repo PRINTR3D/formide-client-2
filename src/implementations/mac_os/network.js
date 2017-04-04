@@ -82,7 +82,12 @@ function list () {
  */
 function status () {
   return new Promise(function (resolve, reject) {
-    return resolve(true) // we fake this on MacOS
+	  network().then((network) => {
+		  if (!network) return resolve(false)
+      return resolve(true)
+	  }).catch((err) => {
+		  return resolve(false)
+	  })
   })
 }
 
@@ -93,10 +98,7 @@ function status () {
 function network () {
   return new Promise(function (resolve, reject) {
     execute(commands.currentNetwork.replace('{IFACE}', iface), function (err, network) {
-      if (err) return reject(err)
-      if (!network && typeof network === 'undefined') return reject(new Error('No network connection found'))
-      
-      console.log('network', network)
+	    if (err || !network) return resolve(false)
       
       try {
 	      network = network.split(':')[1]
@@ -118,8 +120,7 @@ function network () {
 function ip () {
   return new Promise(function (resolve, reject) {
     execute(commands.ip.replace('{IFACE}', iface), function (err, ip) {
-      if (err) return reject(err)
-	    if (!ip) return reject(new Error('No IP found'))
+      if (err || !ip) return resolve(false)
       return resolve(ip)
     })
   })
@@ -137,13 +138,13 @@ function publicIp () {
         return resolve(chunk)
       })
       res.on('error', function (err) {
-        return reject(err)
+	      return resolve(false)
       })
     })
 	
 	  // handle request error
 	  request.on('error', function (err) {
-		  return reject(err)
+		  return resolve(false)
 	  })
   })
 }
