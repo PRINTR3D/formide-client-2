@@ -96,8 +96,12 @@ function network () {
       if (err) return reject(err)
       if (!network && typeof network === 'undefined') return reject(new Error('No network connection found'))
       
+      console.log('network', network)
+      
       try {
-	      network = network.split(':')[1].trim()
+	      network = network.split(':')[1]
+	      if (!network && typeof network === 'undefined') return reject(new Error('No network connection found'))
+	      if (network) network = network.trim()
       } catch (e) {
         return reject(e)
       }
