@@ -100,7 +100,7 @@ function network () {
       
       try {
 	      network = network.split(':')[1]
-	      if (!network && typeof network === 'undefined') return reject(new Error('No network connection found'))
+	      if (!network && typeof network === 'undefined') return resolve(false)
 	      if (network) network = network.trim()
       } catch (e) {
         return reject(e)
