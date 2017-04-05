@@ -21,7 +21,7 @@ class Auth {
 		
 		// check total amount of users, if 0, create default admin user
 		if (this.store.length === 0) {
-			this.resetUsers().then((newUser) => {
+			this.resetUsers().then(() => {
 				client.log(`Created default admin user since there were no users`, 'info')
 			}).catch((err) => {
 				client.log(`Error creating default admin user: ${err.message}`, 'warning')
