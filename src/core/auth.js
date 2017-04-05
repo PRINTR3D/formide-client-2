@@ -52,7 +52,7 @@ class Auth {
 	find (value, field) {
 		field = field || 'username'
 		const user = this.store.find((user) => {
-			if (!user) return false
+			if (!user || user === null) return false
 			return user[field] === value
 		})
 		if (user) return user
@@ -123,8 +123,10 @@ class Auth {
 				// update existing user by array index
 				const updatedUser = { id: user.id, username: username, password: hash }
 				const index = self.store.indexOf(user)
-				self.store[index] = updatedUser
-				fs.writeFileSync(self.path, JSON.stringify(self.store))
+				if (index > -1) {
+					self.store[index] = updatedUser
+					fs.writeFileSync(self.path, JSON.stringify(self.store))
+				}
 				
 				// return updated user without password
 				return resolve({ id: updatedUser.id, username: username })
@@ -143,10 +145,13 @@ class Auth {
 			const user = self.find(id, 'id')
 			if (!user) return resolve(false)
 			
+			// get index and remove user
 			const index = self.store.indexOf(user)
-			self.store.splice(index, 1)
+			if (index > -1) {
+				self.store.splice(index, 1)
+				fs.writeFileSync(self.path, JSON.stringify(self.store))
+			}
 			
-			fs.writeFileSync(self.path, JSON.stringify(self.store))
 			return resolve(true)
 		})
 	}
