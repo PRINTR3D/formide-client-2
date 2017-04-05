@@ -144,7 +144,7 @@ class Auth {
 			if (!user) return resolve(false)
 			
 			const index = self.store.indexOf(user)
-			delete self.store[index]
+			self.store.splice(index, 1)
 			
 			fs.writeFileSync(self.path, JSON.stringify(self.store))
 			return resolve(true)
