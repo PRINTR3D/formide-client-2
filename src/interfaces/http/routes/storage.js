@@ -34,7 +34,7 @@ module.exports = function (client) {
 	 *    }
 	 */
 	router.get('/diskspace', function (req, res) {
-		client.storage.diskSpace().then((diskSpace) => {
+		client.storage.getDiskSpace().then((diskSpace) => {
 			return res.ok(diskSpace)
 		}).catch(res.serverError)
 	})
