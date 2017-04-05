@@ -32,6 +32,17 @@ class Auth {
 	}
 	
 	/**
+	 * Find all users
+	 * @returns []
+	 */
+	findAll () {
+		const users = this.store.map((user) => {
+			return { id: user.id, username: user.username }
+		})
+		return users
+	}
+	
+	/**
 	 * Find a user by username
 	 * @param username
 	 * @returns {*|T|{}}

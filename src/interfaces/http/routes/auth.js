@@ -67,6 +67,20 @@ module.exports = function (client, http) {
 	})
 	
 	/**
+	 * @api {get} /api/auth/users Auth:users(list)
+	 * @apiGroup Auth
+	 * @apiDescription List users
+	 * @apiVersion 1.0.0
+	 * @apiHeader {String} Authentication Valid Bearer JWT token
+	 */
+	router.get('/users', function (req, res) {
+		co(function* () {
+			const users = client.auth.findAll()
+			return res.ok(users)
+		}).then(null, res.serverError)
+	})
+	
+	/**
 	 * @api {post} /api/auth/users Auth:users(create)
 	 * @apiGroup Auth
 	 * @apiDescription Create a new user
