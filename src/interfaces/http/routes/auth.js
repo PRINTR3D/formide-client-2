@@ -126,6 +126,7 @@ module.exports = function (client, http) {
 	 */
 	router.delete('/users/:id', http.checkAuth.jwt, function (req, res) {
 		co(function* () {
+			if (req.user.id === req.params.id) return res.conflict('You cannot remove yourself!')
 			const remove = yield client.auth.removeUser(req.params.id)
 			if (!remove) return res.notFound('Could not remove user')
 			return res.ok({ success: true })

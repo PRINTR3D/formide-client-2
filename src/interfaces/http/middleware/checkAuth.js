@@ -30,7 +30,7 @@ module.exports = function (client) {
 		const user = client.auth.find(token.id, 'id')
 		req.authenticated = true
 		req.user = {
-	  	id: user.id,
+	    	id: user.id,
 			username: user.username
 		}
 		return next()
