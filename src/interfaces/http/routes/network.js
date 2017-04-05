@@ -65,10 +65,14 @@ module.exports = function (client, http) {
 	  co(function*() {
 	    yield client.system.network.connect(req.body) // will trigger error when incorrect
       
-      const ip = yield client.system.network.ip()
-      if (!ip) return res.notFound('Could not retrieve IP address')
-      
-      return res.ok({ message: 'Connected to network', ip })
+		  setTimeout(() => {
+			  co(function*() {
+				  const ip = yield client.system.network.ip()
+				  if (!ip) return res.notFound('Could not retrieve IP address')
+				  return res.ok({ message: 'Connected to network', ip })
+			  }).then(null, res.serverError)
+		  }, 2000)
+		  
 	  }).then(null, res.serverError)
   })
 	
