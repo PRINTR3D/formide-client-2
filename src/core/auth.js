@@ -21,8 +21,8 @@ class Auth {
 		
 		// check total amount of users, if 0, create default admin user
 		if (this.store.length === 0) {
-			this.createUser(defaultUser.username, defaultUser.password).then((newUser) => {
-				if (newUser) client.log(`Created default admin user since there were no users`, 'info')
+			this.resetUsers().then((newUser) => {
+				client.log(`Created default admin user since there were no users`, 'info')
 			}).catch((err) => {
 				client.log(`Error creating default admin user: ${err.message}`, 'warning')
 			})
@@ -142,8 +142,6 @@ class Auth {
 		return new Promise((resolve, reject) => {
 			const user = self.find(id, 'id')
 			if (!user) return resolve(false)
-			
-			
 			
 			const index = self.store.indexOf(user)
 			delete self.store[index]
