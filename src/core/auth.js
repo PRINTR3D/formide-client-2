@@ -20,7 +20,7 @@ class Auth {
 		this.store = require(this.path)
 		
 		// validate existing users
-		this.validate()
+		this._validateUsers()
 		
 		// check total amount of users, if 0, create default admin user
 		if (this.store.length === 0) {
@@ -32,22 +32,28 @@ class Auth {
 		}
 	}
 	
-	getDefaultUser () {
-		return defaultUser
-	}
-	
 	/**
 	 * Validate all existing users
+	 * @returns {boolean}
+	 * @private
 	 */
-	validate () {
+	_validateUsers () {
 		const self = this
 		this.store.map((user, index) => {
-			if (user === null || !user.id || !user.username || !user.password) {
+			if (user === null || typeof user !== 'object' || !user.id || !user.username || !user.password) {
 				self.store.splice(index, 1)
 				fs.writeFileSync(self.path, JSON.stringify(self.store))
 			}
 		})
 		return true
+	}
+	
+	/**
+	 * Get the default user
+	 * @returns {{username: string, password: string}}
+	 */
+	getDefaultUser () {
+		return defaultUser
 	}
 	
 	/**
