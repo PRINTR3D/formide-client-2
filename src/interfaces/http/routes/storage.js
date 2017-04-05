@@ -20,6 +20,24 @@ module.exports = function (client) {
 			return res.ok(files)
 		}).catch(res.serverError)
 	})
+	
+	/**
+	 * @api {get} /api/storage/diskspace Storage:diskspace
+	 * @apiGroup Storage
+	 * @apiDescription Get the used and remaining disk space
+	 * @apiVersion 2.0.0
+	 *
+	 * @apiSuccessExample {json} 200
+	 *    {
+	 *      "total": 12345,
+	 *      "free": 1234
+	 *    }
+	 */
+	router.get('/diskspace', function (req, res) {
+		client.storage.diskSpace().then((diskSpace) => {
+			return res.ok(diskSpace)
+		}).catch(res.serverError)
+	})
 
 	/**
 	 * @api {get} /api/storage/:filename Storage:single
