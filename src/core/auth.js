@@ -19,12 +19,14 @@ class Auth {
 		if (!fs.existsSync(this.path)) fs.writeFileSync(this.path, JSON.stringify([]))
 		this.store = require(this.path)
 		
-		// create the default admin user
-		this.createUser(defaultUser.username, defaultUser.password).then((newUser) => {
-			if (newUser) client.log(`Created default admin user since it didn't exist yet`, 'info')
-		}).catch((err) => {
-			client.log(`Error creating default admin user: ${err.message}`, 'warning')
-		})
+		// check total amount of users, if 0, create default admin user
+		if (this.store.length === 0) {
+			this.createUser(defaultUser.username, defaultUser.password).then((newUser) => {
+				if (newUser) client.log(`Created default admin user since there were no users`, 'info')
+			}).catch((err) => {
+				client.log(`Error creating default admin user: ${err.message}`, 'warning')
+			})
+		}
 	}
 	
 	getDefaultUser () {
@@ -49,7 +51,10 @@ class Auth {
 	 */
 	find (value, field) {
 		field = field || 'username'
-		const user = this.store.find(user => user[field] === value)
+		const user = this.store.find((user) => {
+			if (!user) return false
+			return user[field] === value
+		})
 		if (user) return user
 		return false
 	}
@@ -137,6 +142,8 @@ class Auth {
 		return new Promise((resolve, reject) => {
 			const user = self.find(id, 'id')
 			if (!user) return resolve(false)
+			
+			
 			
 			const index = self.store.indexOf(user)
 			delete self.store[index]
