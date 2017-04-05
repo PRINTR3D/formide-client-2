@@ -64,15 +64,7 @@ module.exports = function (client, http) {
 	  if (!client.system.network.connect) return res.notImplemented('Networking is not implemented on this device')
 	  co(function*() {
 	    yield client.system.network.connect(req.body) // will trigger error when incorrect
-      
-		  setTimeout(() => {
-			  co(function*() {
-				  const ip = yield client.system.network.ip()
-				  if (!ip) return res.notFound('Could not retrieve IP address')
-				  return res.ok({ message: 'Connected to network', ip })
-			  }).then(null, res.serverError)
-		  }, 2000)
-		  
+		  return res.ok({ message: 'Connected to network' })
 	  }).then(null, res.serverError)
   })
 	
