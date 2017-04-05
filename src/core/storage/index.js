@@ -193,7 +193,7 @@ class Storage {
 	 * @returns {*}
 	 */
 	getDiskSpace () {
-		return this.diskSpace().getDiskSpace()
+		return this.diskSpace.getDiskSpace()
 	}
 }
 
