@@ -73,7 +73,7 @@ module.exports = function (client, http) {
 	 * @apiVersion 1.0.0
 	 * @apiHeader {String} Authentication Valid Bearer JWT token
 	 */
-	router.get('/users', function (req, res) {
+	router.get('/users', http.checkAuth.jwt, function (req, res) {
 		co(function* () {
 			const users = client.auth.findAll()
 			return res.ok(users)
