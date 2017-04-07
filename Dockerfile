@@ -1,4 +1,4 @@
-FROM mhart/alpine-node:4
+FROM node:4-alpine
 
 # Install native dependencies
 RUN apk add --update git python make g++ && \
@@ -22,4 +22,4 @@ EXPOSE 1337
 EXPOSE 8080
 
 # Run the app
-CMD ["node", "app.js"]
+CMD ["npm", "start"]
