@@ -11,8 +11,8 @@ function cloudSocket (client, url) {
   const conn = socketClient(url, {
     reconnection: true,
     reconnectionDelay: 1000,
-    reconnectionAttempts: 1000,
     reconnectionDelayMax: 5000,
+	  randomizationFactor: 0,
     transports: ['websocket'],
     timeout: 5000
   })
