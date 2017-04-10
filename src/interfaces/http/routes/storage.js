@@ -86,25 +86,24 @@ module.exports = function (client, http) {
 	 */
 	router.post('/', http.checkAuth.jwt, function (req, res) {
     if (req.busboy) {
-  		req.busboy.on('file', (field, file, filename) => {
-
-  			// write file to storage
-  			client.storage.write(filename, file).then((info) => {
-  				return res.ok({
-  					message: 'File uploaded',
-  					file: info,
-  					success: true
-  				})
-  			}).catch((err) => {
-  				if (err.name === 'invalidFiletype') return res.badRequest(err.message)
-  				if (err.name === 'storageFull') return res.conflict(err.message)
-  				return res.serverError(err)
-  			})
-
-  		})
-
-      // pipe file stream
-      req.pipe(req.busboy)
+  		  req.busboy.on('file', (field, file, filename) => {
+  		  	
+  		  	  // write file to storage
+  			  client.storage.write(filename, file).then((info) => {
+  				  return res.ok({
+  					  message: 'File uploaded',
+  					  file: info,
+  					  success: true
+  				  })
+  			  }).catch((err) => {
+  				  if (err.name === 'invalidFiletype') return res.badRequest(err.message)
+  				  if (err.name === 'storageFull') return res.conflict(err.message)
+  				  return res.serverError(err)
+  			  })
+  		  })
+	    
+	    // pipe file stream
+	    req.pipe(req.busboy)
     }
 	})
 
