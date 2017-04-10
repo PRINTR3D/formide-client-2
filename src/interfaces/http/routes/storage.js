@@ -86,9 +86,9 @@ module.exports = function (client, http) {
 	 */
 	router.post('/', http.checkAuth.jwt, function (req, res) {
     if (req.busboy) {
+	
+	    // write file to storage
   		  req.busboy.on('file', (field, file, filename) => {
-  		  	
-  		  	  // write file to storage
   			  client.storage.write(filename, file).then((info) => {
   				  return res.ok({
   					  message: 'File uploaded',

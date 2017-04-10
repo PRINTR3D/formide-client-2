@@ -18,7 +18,8 @@
     "debug:mac": "OS_IMPLEMENTATION=mac_os npm run debug",
     "test:mac": "OS_IMPLEMENTATION=mac_os npm run test2",
     "coverage:mac": "OS_IMPLEMENTATION=mac_os npm run coverage",
-    "start": "NODE_ENV=production OS_IMPLEMENTATION=raspberry_pi node app"
+    "start": "NODE_ENV=production OS_IMPLEMENTATION=raspberry_pi node app",
+    "start:mac": "NODE_ENV=production OS_IMPLEMENTATION=mac_os node app"
   },
   "dependencies": {
     "async": "^2.1.4",

@@ -53,6 +53,9 @@ class Cloud {
         const publicIP = yield client.system.network.publicIp()
         const internalIP = yield client.system.network.ip()
         const macAddress = yield client.system.network.mac()
+	      
+	      // log MAC address for debugging
+	      client.logger.log(`Using MAC address ${macAddress}`, 'info')
 
         // emit authentication data
         self.cloud.emit('authenticate', {
