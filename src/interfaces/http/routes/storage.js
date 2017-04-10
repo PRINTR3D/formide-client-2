@@ -4,7 +4,7 @@
 const assert = require('assert')
 const router = require('express').Router()
 
-module.exports = function (client) {
+module.exports = function (client, http) {
 
 	assert(client)
 	assert(client.storage)
@@ -60,7 +60,7 @@ module.exports = function (client) {
 	 * @apiDescription Download a G-code file from storage
 	 * @apiVersion 2.0.0
 	 */
-	router.get('/:filename/download', function (req, res) {
+	router.get('/:filename/download', http.checkAuth.jwt, function (req, res) {
 		client.storage.stat(req.params.filename).then((info) => {
 			client.storage.read(req.params.filename).then((storageStream) => {
 				res.set('Content-Type', 'text/gcode')
@@ -84,7 +84,7 @@ module.exports = function (client) {
 	 * @apiVersion 2.0.0
 	 * @apiHeader {String} Authentication Valid Bearer JWT token
 	 */
-	router.post('/', function (req, res) {
+	router.post('/', http.checkAuth.jwt, function (req, res) {
     if (req.busboy) {
   		req.busboy.on('file', (field, file, filename) => {
 
@@ -115,7 +115,7 @@ module.exports = function (client) {
 	 * @apiVersion 2.0.0
 	 * @apiHeader {String} Authentication Valid Bearer JWT token
 	 */
-	router.delete('/:filename', function (req, res) {
+	router.delete('/:filename', http.checkAuth.jwt, function (req, res) {
 		client.storage.remove(req.params.filename).then(() => {
 			return res.ok({ message: 'File removed from storage' })
 		}).catch((err) => {
