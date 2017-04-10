@@ -22,7 +22,6 @@ function determineDevice () {
 			console.info('Could not parse /etc/os-release, probably not running on Raspberry Pi...')
 		}
 		
-		
 	} else if (osType === 'Windows_NT') {
 		console.warn('Formide client does currently not support Windows, exiting...')
 		process.exit(0)
