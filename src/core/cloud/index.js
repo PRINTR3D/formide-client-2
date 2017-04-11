@@ -7,7 +7,6 @@ const proxy = require('./proxy')
 const downloadGcodeFromCloud = require('./downloadGcodeFromCloud')
 const generateCloudCode = require('./generateCloudCode')
 const getCloudQueue = require('./getCloudQueue')
-const postQueueItemFinished = require('./postQueueItemFinished')
 const getCallbackData = require('./getCallbackData')
 
 class Cloud {
@@ -87,7 +86,6 @@ class Cloud {
 
     // Adding a G-code file from the cloud
     this.cloud.on('printQueueItem', function (data) {
-      client.logger.log(`Download cloud G-code: ${data.gcode}`, 'debug')
 	    downloadGcodeFromCloud(self._client, data.gcode, function (err, stats) {
 		    self._client.drivers.printQueueItem(data.port, stats.path, data.queueItemId, (err, response) => {
 		    	if (err) return self.cloud.emit('printQueueItem', getCallbackData(data._callbackId, err, {}))
@@ -137,20 +135,26 @@ class Cloud {
       }).catch(reject)
     })
   }
-
-  /**
-   * Notify cloud API that a queue item finished printing
-   * @param queueItemId
-   * @returns {Promise}
-   */
-  postQueueItemFinished (queueItemId) {
-    const self = this
-    return new Promise((resolve, reject) => {
-      postQueueItemFinished(self._client, queueItemId).then((response) => {
-        return resolve(response)
-      }).catch(reject)
-    })
-  }
+	
+	/**
+	 * Print a G-code from the cloud queue
+	 * @param gcode
+	 * @param port
+	 * @param queueItemId
+	 * @returns {Promise}
+	 */
+	printGcodeFromCloud (queueItemId, gcode, port) {
+  	const self = this
+		return new Promise((resolve, reject) => {
+			downloadGcodeFromCloud(self._client, gcode, function (err, stats) {
+				if (err) return reject(err)
+				self._client.drivers.printQueueItem(port, stats.path, queueItemId, (err, response) => {
+					if (err) return reject(err)
+					return resolve(response)
+				})
+			})
+		})
+	}
 }
 
 module.exports = Cloud

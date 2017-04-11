@@ -13,36 +13,52 @@ const request = require('request')
  */
 function downloadGcodeFromCloud (client, gcode, callback) {
 	const gcodeFileName = gcode + '.gcode' // create new local file with name of G-code
-	const downloadStream = request.get(`${client.config.cloud.gcodeDownloadURL}/files/download/gcode?hash=${gcode}`, { strictSSL: false })
-	
-	// handle download error
-	downloadStream.on('error', (err) => {
-		client.logger.log(`${gcode} has failed to download`, 'warn')
-		client.events.emit('cloud.downloadError', {
-			title: `${gcode} has failed to download`,
-			message: err.message
-		})
-		if (err && err.code === 'ECONNREFUSED') return reject(new Error('Could not connect to server'))
-		return callback(err)
-	})
-	
-	// write to local storage
-	client.storage.write(gcodeFileName, downloadStream).then((info) => {
-		client.logger.log(`${gcode} has finished downloading`, 'info')
-		client.events.emit('cloud.downloaded', {
-			title: `${gcode} has finished downloading`,
-			message: 'The gcode was downloaded and is now ready to be printed',
-			data: info
-		})
-		return callback(null, info)
-	}).catch((err) => {
-		client.logger.log(`${gcode} has failed to download`, 'warn')
-		client.events.emit('cloud.downloadError', {
-			title: `${gcode} has failed to download`,
-			message: err.message
-		})
-		return callback(err)
-	})
+
+  // if the file already exists, use it, otherwise download it from the cloud
+  client.storage.stat(gcodeFileName).then((info) => {
+		client.logger.log(`Cloud G-code ${gcodeFileName} was already downloaded before`, 'info')
+    return callback(null, info)
+  }).catch((err) => {
+    if (err.name === 'fileNotFound') {
+	    client.logger.log(`Cloud G-code ${gcodeFileName} was not downloaded before, downloading...`, 'info')
+
+    	// create download stream
+      const downloadStream = request.get(`${client.config.cloud.gcodeDownloadURL}/files/download/gcode?hash=${gcode}`, { strictSSL: false })
+
+    	// handle download error
+    	downloadStream.on('error', (err) => {
+    		client.logger.log(`Cloud G-code (${gcode}) has failed to download`, 'warn')
+    		client.events.emit('cloud.downloadError', {
+    			title: `Cloud G-code ${gcode} has failed to download`,
+    			message: err.message
+    		})
+    		if (err && err.code === 'ECONNREFUSED') return callback(new Error('Could not connect to server'))
+    		return callback(err)
+    	})
+
+    	// write to local storage
+    	client.storage.write(gcodeFileName, downloadStream).then((info) => {
+    		client.logger.log(`Cloud G-code ${gcode} has finished downloading`, 'info')
+    		client.events.emit('cloud.downloadSuccess', {
+    			title: `Cloud G-code ${gcode} has finished downloading`,
+    			message: 'The G-code was downloaded and is now ready to be printed',
+    			data: info
+    		})
+    		return callback(null, info)
+    	}).catch((err) => {
+		    console.log('write error', err)
+    		client.logger.log(`Cloud G-code (${gcode}) has failed to store`, 'warn')
+    		client.events.emit('cloud.downloadError', {
+    			title: `Cloud G-code ${gcode} has failed to download`,
+    			message: err.message
+    		})
+    		return callback(err)
+    	})
+
+    } else {
+      return callback(err)
+    }
+  })
 }
 
 module.exports = downloadGcodeFromCloud

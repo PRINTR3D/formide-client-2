@@ -27,6 +27,10 @@ class Auth {
 		})
 	}
 	
+	getDefaultUser () {
+		return defaultUser
+	}
+	
 	/**
 	 * Find a user by username
 	 * @param username

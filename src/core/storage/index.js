@@ -1,6 +1,7 @@
 'use strict'
 
 const fs = require('fs')
+const fsExtra = require('fs-extra')
 const path = require('path')
 const filesToHide = ['.', '..', '.DS_Store']
 
@@ -132,7 +133,8 @@ class Storage {
 
           // move the file from /tmp to storage location
           try {
-            fs.renameSync(tmpStoragePath, gcodeStoragePath)
+          	// we need fsExtra to properly handle non-atomic moving (from one partition to another)
+          	fsExtra.moveSync(tmpStoragePath, gcodeStoragePath, { overwrite: true })
           } catch (e) {
             return reject(e)
           }
