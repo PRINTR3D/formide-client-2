@@ -31,13 +31,10 @@ class UI {
     })
 
     // public assets
-    this.app.get('/public/*', function (req, res) {
-      return res.sendFile(req.params[0], { root: path.join(__dirname, 'public') })
-    })
-
-    // angular app
     this.app.get('/*', function (req, res) {
-      return res.sendFile(path.join(__dirname, 'public/index.html'))
+      // default to index.html
+      req.params[0] = req.params[0] || 'index.html'
+      return res.sendFile(path.join(__dirname, 'public', req.params[0]))
     })
 
     return {

@@ -49,30 +49,33 @@ class Cloud {
 
     // on connect
     this.cloud.on('connect', function () {
-      co(function*() {
-        const publicIP = yield client.system.network.publicIp()
-        const internalIP = yield client.system.network.ip()
-        const macAddress = yield client.system.network.mac()
-
-        // emit authentication data
-        self.cloud.emit('authenticate', {
-          type: 'client',
-          ip: publicIP,
-          ip_internal: internalIP,
-          mac: macAddress,
-          version: client.version,
-          environment: process.env.NODE_ENV,
-          port: client.config.http.port
-        }, function (response) {
-          if (response.success && response.deviceToken) {
-	          self._deviceToken = response.deviceToken
-            client.logger.log(`Cloud connected with token ${response.deviceToken}`, 'info')
-          } else {
-            client.logger.log(`Cloud not connected: ${response.message}`, 'warn')
-            client.logger.log(`MAC address is ${macAddress}`, 'info')
-          }
-        })
-      }).then(null, console.error)
+	      co(function*() {
+		      const publicIP = yield client.system.network.publicIp()
+		      const internalIP = yield client.system.network.ip()
+		      const macAddress = yield client.system.network.mac()
+		
+		      // log MAC address for debugging
+		      client.logger.log(`Using MAC address ${macAddress}`, 'info')
+		
+		      // emit authentication data
+		      self.cloud.emit('authenticate', {
+			      type: 'client',
+			      ip: publicIP,
+			      ip_internal: internalIP,
+			      mac: macAddress,
+			      version: client.version,
+			      environment: process.env.NODE_ENV,
+			      port: client.config.http.port
+		      }, function (response) {
+			      if (response.success && response.deviceToken) {
+				      self._deviceToken = response.deviceToken
+				      client.logger.log(`Cloud connected with token ${response.deviceToken}`, 'info')
+			      } else {
+				      client.logger.log(`Cloud not connected: ${response.message}`, 'warn')
+				      self.cloud.disconnect()
+			      }
+		      })
+	      }).then(null, console.error)
     })
 
     // HTTP proxy calls are handled by the proxy function
@@ -95,11 +98,15 @@ class Cloud {
     })
 
     // on disconnect try reconnecting when server did not ban client
-    this.cloud.on('disconnect', function (data) {
-      if (data !== 'io server disconnect') {
-        client.logger.log('Cloud disconnected, trying to reconnect...', 'warning')
-        self.cloud.io.reconnect()
-      }
+    this.cloud.on('disconnect', function () {
+	    client.logger.log('Cloud disconnected, trying to reconnect...', 'warning')
+	    setTimeout(() => {
+	    	  if (self.cloud.connected === false) {
+	    	  	  self.cloud.connect() // re-connect
+		    } else {
+	    	  	  self.cloud.disconnect() // trigger another disconnect event
+		    }
+	    }, 5000)
     })
   }
 

@@ -8,13 +8,14 @@ const socketClient = require('socket.io-client')
  * @returns {*}
  */
 function cloudSocket (client, url) {
-  const conn = socketClient(url, {
+  const conn = socketClient.connect(url, {
     reconnection: true,
     reconnectionDelay: 1000,
     reconnectionDelayMax: 5000,
 	  randomizationFactor: 0,
     transports: ['websocket'],
-    timeout: 5000
+    timeout: 5000,
+    forceNew: true
   })
 
   conn.on('error', function (err) {

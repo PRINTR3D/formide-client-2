@@ -3,7 +3,7 @@
 const fs = require('fs')
 const path = require('path')
 const uuid = require('uuid')
-const bcrypt = require('bcrypt')
+const bcrypt = require('bcryptjs')
 const defaultUser = { username: 'admin@local', password: 'admin' }
 
 /**
