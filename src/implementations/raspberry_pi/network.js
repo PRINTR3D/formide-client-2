@@ -3,7 +3,7 @@
 const net = require('net')
 const http = require('http')
 const getMac = require('getmac')
-const network = require('network')
+const networkUtils = require('network')
 
 /**
  * Get current connection status (boolean)
@@ -11,7 +11,7 @@ const network = require('network')
  */
 function status () {
   return new Promise(function (resolve) {
-	  network.get_active_interface(function (err, obj) {
+	  networkUtils.get_active_interface(function (err, obj) {
 	    if (err) return resolve(false)
       if (!obj) return resolve(false)
       return resolve(true)
@@ -25,7 +25,7 @@ function status () {
  */
 function network () {
 	return new Promise(function (resolve) {
-		network.get_active_interface(function (err, obj) {
+		networkUtils.get_active_interface(function (err, obj) {
 			if (err) return resolve(false)
 			if (!obj) return resolve(false)
 			return resolve(obj.name)
