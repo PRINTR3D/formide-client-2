@@ -14629,7 +14629,7 @@ printer-fan svg,
 }
 
 /* line 8042, /Users/alan/formide/formide-local/tmp/application_local.scss */
-.webcam-feed img[src='./public/assets/images/connectwebcam.png'] {
+.webcam-feed img[src='images/connectwebcam.png'] {
   width: 150px;
   position: relative;
   z-index: 1;
