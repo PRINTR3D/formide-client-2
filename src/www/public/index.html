@@ -1,115 +1,130 @@
-<!doctype html>
+<!--
+ *	This code was created for Printr B.V.
+ *	Copyright (c) 2017, All rights reserved, http://printr.nl
+-->
 
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <title>The Element - Setup</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="The Element - Setup">
-    <meta name="author" content="Printr">
-    <link rel="stylesheet" href="/public/assets/style.css">
-  </head>
-  <body>
+<head>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta charset="UTF-8">
+	<title>Formide</title>
 
-    <main role="main" id="app">
+	<!-- Start of Headway release notes Widget script -->
+	<script src="//cdn.headwayapp.co/widget.js"></script>
+	<!-- End of Headway release notes Widget script -->
 
-      <div class="page-block">
-        <div id="welcome" v-if="page === 'welcome'">
-          <h1>Welcome</h1>
-          <p>To set up your Element's Wi-Fi network and connect it to your Formide account, please follow these steps.</p>
-          <hr />
-          <a @click="goToPage('login')" class="button">Start Wi-Fi setup</a>
-          <br/><br/>
-          <div v-if="!cloudConnectURL && !cloudConnectError">
-            <span class="spinner"></span>
-            <small>Getting cloud code...</small>
-          </div>
-          <a v-if="cloudConnectURL" :href="cloudConnectURL" class="button button--inverse">Connect to Formide</a>
-          <p class="warning">{{ cloudConnectError }}</p>
-        </div>
+	<script src="javascripts/application.min.js"></script>
+	<link rel="stylesheet" href="stylesheets/application_local.min.css">
 
-        <div id="login" v-if="page === 'login'">
-            <h1>Login</h1>
-            <p>
-              You need to login with your Element credentials before you can change the Wi-Fi settings.
-              If you haven't created your own account yet, you can use the default credentials 'admin', 'admin@local'.
-            </p>
-            <form>
-              <input type="text" name="username" placeholder="Enter your username..." v-model="loginForm.username" />
-              <input type="password" name="password" placeholder="Enter your password..." v-model="loginForm.password" />
-              <a @click="login()" class="button">Login</a>
-              <p class="warning">{{ loginError }}</p>
-            </form>
-        </div>
+	<link rel="shortcut icon" href="images/favicon/favicon.ico">
+	<link rel="icon" sizes="16x16 32x32 64x64" href="images/favicon/favicon.ico">
+	<link rel="icon" type="image/png" sizes="196x196" href="images/favicon/favicon-192.png">
+	<link rel="icon" type="image/png" sizes="160x160" href="images/favicon/favicon-160.png">
+	<link rel="icon" type="image/png" sizes="96x96" href="images/favicon/favicon-96.png">
+	<link rel="icon" type="image/png" sizes="64x64" href="images/favicon/favicon-64.png">
+	<link rel="icon" type="image/png" sizes="32x32" href="images/favicon/favicon-32.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="images/favicon/favicon-16.png">
 
-        <div id="networks" v-if="page === 'networks'">
-          <h1>Wi-Fi network</h1>
-          <p>Select one of the networks from the list and enter your password. If you need more options, click 'advanced'.</p>
-          <form>
-              <div v-if="networks.length === 0">
-                <span class="spinner"></span>
-                <small>Searching for networks... (try {{ networkTry }})</small>
-              </div>
+	<link rel="apple-touch-icon" href="images/favicon/launcher.png">
+	<link rel="apple-touch-icon" sizes="72x72" href="images/favicon/launcher_hdpi.png">
+	<link rel="apple-touch-icon" sizes="98x98" href="images/favicon/launcher_xhdpi.png">
+	<link rel="apple-touch-icon" sizes="144x144" href="images/favicon/launcher_xxhdpi.png">
+	<link rel="apple-touch-icon" sizes="192x192" href="images/favicon/launcher_xxxhdpi.png">
+	<link rel="apple-touch-icon" sizes="120x120" href="images/favicon/Icon-60@2x.png">
+	<link rel="apple-touch-icon" sizes="180x180" href="images/favicon/Icon-60@3x.png">
+	<link rel="apple-touch-icon" sizes="76x76" href="images/favicon/Icon-76.png">
+	<link rel="apple-touch-icon" sizes="152x152" href="images/favicon/Icon-76@2x.png">
+	<link rel="apple-touch-icon" sizes="167x167" href="images/favicon/Icon-83.5@2x.png">
 
-              <div v-if="connecting">
-                <span class="spinner"></span>
-                <small>Connecting to {{ connectForm.ssid }}...</small>
-              </div>
+	<meta name="msapplication-TileColor" content="#FFFFFF">
+	<meta name="msapplication-TileImage" content="images/favicon/favicon-144.png">
+	<meta name="msapplication-config" content="images/favicon/browserconfig.xml">
 
-              <div v-if="networks.length > 0 && !connecting">
-                <select v-if="networks.length > 0" v-model="connectForm.ssid">
-                  <option value="" disabled selected>Select your network...</option>
-                  <option v-for="network in networks" v-bind:value="network.ssid">
-                    {{ network.ssid }}
-                  </option>
-                </select>
-                <input type="password" name="password" placeholder="Enter your password..." v-model="connectForm.password" />
-                <a @click="connect()" class="button">Connect</a>
-                <p class="warning">{{ connectError }}</p>
+	<meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no" />
+</head>
+<body
+	ng-controller="AppController as app"
+	ng-class="{'sidebar-invisible': app.sidebarInvisible, 'ng-dialog-open--away': app.dialogAway, 'loaded': app.loaded }"
+	ngf-drop
+	ngf-multiple="true"
+	ng-model="app.droppedFiles"
+	file-droppable>
 
-                <hr />
-                <a @click="showAdvanced = !showAdvanced" class="link">
-                  <span v-if="!showAdvanced">+</span>
-                  <span v-if="showAdvanced">-</span>
-                  Advanced
-                </a>
+	<loading-screen>
+		<div class="loading-spinner"></div>
+    </loading-screen>
 
-                <div v-if="showAdvanced">
-                  <br />
-                  <input type="text" name="key_mgmt" placeholder="key_mgmt" v-model="connectForm.key_mgmt">
-                  <input type="text" name="eap" placeholder="eap" v-model="connectForm.eap">
-                  <input type="text" name="identity" placeholder="identity" v-model="connectForm.identity">
-                  <input type="text" name="anonymous_identity" placeholder="anonymous_identity" v-model="connectForm.anonymous_identity">
-                  <input type="text" name="phase1" placeholder="phase1 security" v-model="connectForm.phase1">
-                  <input type="text" name="phase2" placeholder="phase2 security" v-model="connectForm.phase2">
-                </div>
-              </div>
+	<div class="layout layout--withoutGutter">
 
-          </form>
-        </div>
+		<main id="main" class="layout__item u-fill" ng-class="{'noScroll': $root.bodyNoScroll || app.sidebarInvisible}">
 
-        <div id="success" v-if="page === 'success'">
-            <h1>Successfully connected</h1>
-            <p>
-              Your Element is now connected to <i>{{ connectForm.ssid }}</i>.
-            </p>
-            <p>
-              You can access your Element via your local network on <i><a v-bind:href="ip">{{ ip }}</a></i>
-              and connect it to Formide.com for cloud printing.
-            </p>
-            <br/>
-            <a class="button" v-bind:href="ip">Go to Element login</a>
-            <br/><br/>
-            <p class="warning">Please connect to <i>{{ connectForm.ssid }}</i> before continuing.</p>
-            <br/>
-            <p><a href="/setup">Back to setup start</a></p>
-        </div>
-      </div>
+			<header
+				role="banner"
+				core-header
+				id="main__header"
+				class="header">
+			</header>
 
-    </main>
+			<article
+				core-page-content
+				route-config="app.routeConfig"
+				class="main-page-content"
+				id="main__content">
+	        </article>
 
-    <script src="/public/assets/vue.js"></script>
-    <script src="/public/assets/vue-resource.min.js"></script>
-    <script src="/public/assets/app.js"></script>
-  </body>
+		</main>
+
+		<aside
+			core-aside
+			id="sidebar"
+			rel="sidebar"
+			class="layout__item u-fit aside"
+			ng-class="{'noScroll': ($root.bodyNoScroll && !app.sidebarInvisible) || !app.sidebarInvisible}"
+			template="sidebar/componentTemplate.html"
+			ng-if="$root.sidebar">
+		</aside>
+
+	</div>
+
+	<ul class="alert-list list-bare hidden" ng-class="{'visible': app.notifications}">
+		<li alert-box
+			ng-repeat="alert in app.notifications"
+			popup="{{alert.popup}}"
+			alert-id="alert.id"
+			type="{{alert.type}}"
+			title="alert.title"
+			message="alert.message"
+			actions="alert.actions"
+			link="alert.link">
+		</li>
+	</ul>
+
+	<dashboard-webcam
+		ng-if="$root.floatingWebcam && !$root.webcamError"
+		id="floating-webcam"
+		show-close="true"
+		ng-style="$root.floatingWebcamPosition"
+		drag-webcam>
+	</dashboard-webcam>
+
+	<!-- Start of formide Zendesk Widget script -->
+	<script>/*<![CDATA[*/window.zEmbed||function(e,t){var n,o,d,i,s,a=[],r=document.createElement("iframe");window.zEmbed=function(){a.push(arguments)},window.zE=window.zE||window.zEmbed,r.src="javascript:false",r.title="",r.role="presentation",(r.frameElement||r).style.cssText="display: none",d=document.getElementsByTagName("script"),d=d[d.length-1],d.parentNode.insertBefore(r,d),i=r.contentWindow,s=i.document;try{o=s}catch(c){n=document.domain,r.src='javascript:var d=document.open();d.domain="'+n+'";void(0);',o=s}o.open()._l=function(){var o=this.createElement("script");n&&(this.domain=n),o.id="js-iframe-async",o.src=e,this.t=+new Date,this.zendeskHost=t,this.zEQueue=a,this.body.appendChild(o)},o.write('<body onload="document._l();">'),o.close()}("https://assets.zendesk.com/embeddable_framework/main.js","formide.zendesk.com");/*]]>*/</script>
+	<!-- End of formide Zendesk Widget script -->
+
+
+	<!-- Start of GoogleAnalyticsObject script -->
+	<script>
+	  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+	  ga('create', 'UA-53836101-1', 'auto');
+	  ga('send', 'pageview');
+
+	</script>
+	<!-- End of GoogleAnalyticsObject script -->
+
+</body>
 </html>
