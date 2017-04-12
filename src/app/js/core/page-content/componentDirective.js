@@ -72,11 +72,9 @@
 				 				   }
 				 				   else {
 				 					   $rootScope.isLoggedIn = false;
-									   navigate('/login');
 				 				   }
 								}, function (error) {
 								   $rootScope.isLoggedIn = false;
-								   navigate('/login');
 								});
 	                        }
 	                    }

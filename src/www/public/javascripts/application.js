@@ -15115,22 +15115,10 @@ function angularLoaded() {
             return deferred.promise;
         };
 
-        factory.getLoginURL = function () {
-            return $api
-            .get('/auth/login', {}, auth_url)
-            .then(function( response )
-            {
-                return response;
-            });
-        };
-
         factory.logout = function () {
             var promise = $api
-            .get('/auth/logout', {}, auth_url)
-            .then(function(response)
-            {
-                window.localStorage.removeItem("formide.auth:token");
-            });
+            window.localStorage.removeItem("formide.auth:token");
+            $location.path('/login');
 
             return promise;
         };
@@ -15142,6 +15130,7 @@ function angularLoaded() {
             .then(function(access_token) {
                 if(access_token.length < 1) {
                     deferred.reject("Not loggedin");
+					factory.logout();
                 }
                 else {
 					$api.get('/auth/validate')
@@ -15149,6 +15138,7 @@ function angularLoaded() {
 						deferred.resolve(access_token);
 					}, function(err) {
 						deferred.reject("access_token invalid");
+						factory.logout();
 					});
                 }
             },
@@ -15157,8 +15147,8 @@ function angularLoaded() {
                   console.error("Error: %s", "API Request");
                   console.error(error);
                 }
-
                 deferred.reject(error);
+				factory.logout();
             });
 
             return deferred.promise;
@@ -16025,7 +16015,7 @@ function angularLoaded() {
 
 		factory.authenticate = function () {
 
-			$api.getAccessToken()
+			$auth.checkLoggedin()
 			.then(function(access_token) {
 				if(access_token.length < 1) {
 					if (window.DEBUG) console.info("Not loggedin, could not connect to sockets.");
@@ -16126,16 +16116,15 @@ function angularLoaded() {
 		  vm.mobilenavInvisible = vm.mobilenavInvisible ? false : true;
       }
 
-	  function logOut(){
-		  window.localStorage.removeItem('formide.auth:token');
-		  navigate('/login');
+	  function logout(){
+		  $auth.logout()
 	  }
 
       // exports
       angular.extend(vm, {
       	toggleMobilenav: toggleMobilenav,
 		navigate: navigate,
-		logOut: logOut
+		logout: logout
       });
   }
 
@@ -16226,11 +16215,9 @@ function angularLoaded() {
 				 				   }
 				 				   else {
 				 					   $rootScope.isLoggedIn = false;
-									   navigate('/login');
 				 				   }
 								}, function (error) {
 								   $rootScope.isLoggedIn = false;
-								   navigate('/login');
 								});
 	                        }
 	                    }
@@ -19865,7 +19852,7 @@ function foundPrinter(resource, data) {
 
 
   $templateCache.put('manage-device/componentView.html',
-    "<article id=manage-device><header class=layout><div class=\"layout__item u-1/2\"><h3>Manage Device</h3></div><div class=\"u-textRight layout__item u-1/2\"><a class=\"btn btn--tertiary\" ng-click=\"manage.navigate('/manage/device/update')\">Update Device</a></div></header><div class=layout><div class=\"layout__item u-1/2-sm pad\"><h4>Network</h4><section class=block><table class=\"table--formide network-table\"><tbody><tr class=table__item><td>Connected to</td><td>{{manageDevice.network.network || '-'}}</td></tr><tr class=table__item><td>Internal IP Address</td><td>{{manageDevice.network.ip || '-'}}</td></tr><tr class=table__item><td>Public IP Address</td><td>{{manageDevice.network.publicIp || '-'}}</td></tr><tr class=table__item><td>Mac Address</td><td>{{manageDevice.network.mac || '-'}}</td></tr><tr class=table__item><td>Hotspot Mode</td><td><div ng-click=manageDevice.setHotspot()><span class=checkbox><i ng-if=!manageDevice.network.isHotspot class=\"fa fa-square-o\"></i> <i ng-if=manageDevice.network.isHotspot class=\"fa fa-check-square-o\"></i></span></div><span ng-if=\"manageDevice.deviceType == 'the_element'\">-</span></td></tr></tbody></table></section></div><div class=\"layout__item u-1/2-sm pad\"><h4>Storage</h4><section class=block><div class=\"container layout layout--withoutGutter layout--alignMiddle layout--alignCenter u-margin-top-1 u-margin-bottom-1\"><div class=\"storageChart layout__item u-fill\"><canvas id=doughnut height=230 width=230 class=\"chart chart-doughnut\" chart-data=manageDevice.chart.data chart-labels=manageDevice.chart.labels chart-dataset-override=manageDevice.chart.datasetOverride chart-options=manageDevice.chart.options></canvas><div class=label><h3>{{manageDevice.storage.percentageUsedRnd}}%<br><small>used</small></h3></div><div class=info><h3>of {{manageDevice.diskspace.total | smartbytes:1}}</h3></div></div></div></section></div><div class=\"layout__item u-1/2-sm pad connect\"><h4>Connect</h4><section class=block><form role=form><fieldset><ul class=form-fields><li><label for=\"\">SSID</label><select class=text-input ng-options=\"ssid.ssid as ssid.ssid for ssid in manageDevice.ssids\" ng-model=manageDevice.wifi.ssid><option value=\"\" disabled selected style=\"display: none\">Select a SSID</option></select></li><li><label for=\"\">Password</label><input type=password class=text-input ng-model=manageDevice.wifi.password placeholder=Password></li><li><a add-new ng-init=\"manageDevice.toggleAdvanced = false\" ng-click=\"manageDevice.toggleAdvanced = !manageDevice.toggleAdvanced\"><small><i class=\"fa u-margin-right-_5\" ng-class=\"{true:'fa-minus',false:'fa-plus'}[manageDevice.toggleAdvanced]\"></i>Advanced Settings</small></a></li><li ng-if=manageDevice.toggleAdvanced><ul class=advanced-settings><li><input class=text-input placeholder=key_mgmt ng-model=manageDevice.wifi.key_mgmt></li><li><input class=text-input placeholder=eap ng-model=manageDevice.wifi.eap></li><li><input class=text-input placeholder=identity ng-model=manageDevice.wifi.identity></li><li><input class=text-input placeholder=anonymous_identity ng-model=manageDevice.wifi.anonymous_identity></li><li><input class=text-input placeholder=phase1 ng-model=manageDevice.wifi.phase1></li><li><input class=text-input placeholder=phase2 ng-model=manageDevice.wifi.phase2></li></ul></li></ul></fieldset><div class=layout><div class=\"layout__item u-1/2\"><button class=\"btn btn--primary\" ng-click=manageDevice.connectWifi() ng-disabled=manageDevice.connecting>Connect to Wi-Fi <i ng-if=manageDevice.connecting class=\"fa fa-refresh fa-spin\"></i></button></div><div class=\"u-textRight layout__item u-1/2\"><button class=\"btn btn--secondary\" ng-click=manageDevice.resetWifi()>Reset Wi-Fi</button></div></div></form></section></div><div class=\"layout__item u-1/2-sm pad\"><h4>Users</h4><section class=block><table class=\"table--formide table--formide--responsive\"><thead><tr><th>Username</th><th></th></tr></thead><tbody><tr ng-repeat=\"user in manageDevice.users\" class=table__item><td data-th=Username>{{user.username}}</td><td class=\"table__item__controls u-textRight\"><a class=\"btn btn--small btn--tertiary\" ng-click=manageDevice.updateModal(user)><i class=\"fa fa-pencil\"></i></a> <a class=\"btn btn--small btn--alert\" ng-click=manageDevice.deleteUser(user)><i class=\"fa fa-trash-o\"></i></a></td></tr></tbody></table><button class=\"btn btn--tertiary\" ng-click=manageDevice.createModal()>Add User</button></section></div></div></article><script type=text/ng-template id=settingsModal><form role=\"form\">\n" +
+    "<article id=manage-device><header class=layout><div class=\"layout__item u-1/2\"><h3>Manage Device</h3></div><div class=\"u-textRight layout__item u-1/2\"><a class=\"btn btn--tertiary\" ng-click=\"manage.navigate('/manage/device/update')\">Update Device</a></div></header><div class=layout><div class=\"layout__item u-1/2-sm pad\"><h4>Network</h4><section class=block><table class=\"table--formide network-table\"><tbody><tr class=table__item><td>Connected to</td><td>{{manageDevice.network.network || '-'}}</td></tr><tr class=table__item><td>Internal IP Address</td><td>{{manageDevice.network.ip || '-'}}</td></tr><tr class=table__item><td>Public IP Address</td><td>{{manageDevice.network.publicIp || '-'}}</td></tr><tr class=table__item><td>Mac Address</td><td>{{manageDevice.network.mac || '-'}}</td></tr><tr class=table__item><td>Hotspot Mode</td><td><div ng-if=\"manageDevice.deviceType === 'the_element'\" ng-click=manageDevice.setHotspot()><span class=checkbox><i ng-if=!manageDevice.network.isHotspot class=\"fa fa-square-o\"></i> <i ng-if=manageDevice.network.isHotspot class=\"fa fa-check-square-o\"></i></span></div><span ng-if=\"manageDevice.deviceType !== 'the_element'\">-</span></td></tr></tbody></table></section></div><div class=\"layout__item u-1/2-sm pad\"><h4>Storage</h4><section class=block><div class=\"container layout layout--withoutGutter layout--alignMiddle layout--alignCenter u-margin-top-1 u-margin-bottom-1\"><div class=\"storageChart layout__item u-fill\"><canvas id=doughnut height=230 width=230 class=\"chart chart-doughnut\" chart-data=manageDevice.chart.data chart-labels=manageDevice.chart.labels chart-dataset-override=manageDevice.chart.datasetOverride chart-options=manageDevice.chart.options></canvas><div class=label><h3>{{manageDevice.storage.percentageUsedRnd}}%<br><small>used</small></h3></div><div class=info><h3>of {{manageDevice.diskspace.total | smartbytes:1}}</h3></div></div></div></section></div><div class=\"layout__item u-1/2-sm pad connect\"><h4>Connect</h4><section class=block><form role=form><fieldset><ul class=form-fields><li><label for=\"\">SSID</label><select class=text-input ng-options=\"ssid.ssid as ssid.ssid for ssid in manageDevice.ssids\" ng-model=manageDevice.wifi.ssid><option value=\"\" disabled selected style=\"display: none\">Select a SSID</option></select></li><li><label for=\"\">Password</label><input type=password class=text-input ng-model=manageDevice.wifi.password placeholder=Password></li><li><a add-new ng-init=\"manageDevice.toggleAdvanced = false\" ng-click=\"manageDevice.toggleAdvanced = !manageDevice.toggleAdvanced\"><small><i class=\"fa u-margin-right-_5\" ng-class=\"{true:'fa-minus',false:'fa-plus'}[manageDevice.toggleAdvanced]\"></i>Advanced Settings</small></a></li><li ng-if=manageDevice.toggleAdvanced><ul class=advanced-settings><li><input class=text-input placeholder=key_mgmt ng-model=manageDevice.wifi.key_mgmt></li><li><input class=text-input placeholder=eap ng-model=manageDevice.wifi.eap></li><li><input class=text-input placeholder=identity ng-model=manageDevice.wifi.identity></li><li><input class=text-input placeholder=anonymous_identity ng-model=manageDevice.wifi.anonymous_identity></li><li><input class=text-input placeholder=phase1 ng-model=manageDevice.wifi.phase1></li><li><input class=text-input placeholder=phase2 ng-model=manageDevice.wifi.phase2></li></ul></li></ul></fieldset><div class=layout><div class=\"layout__item u-1/2\"><button class=\"btn btn--primary\" ng-click=manageDevice.connectWifi() ng-disabled=manageDevice.connecting>Connect to Wi-Fi <i ng-if=manageDevice.connecting class=\"fa fa-refresh fa-spin\"></i></button></div><div class=\"u-textRight layout__item u-1/2\"><button class=\"btn btn--secondary\" ng-click=manageDevice.resetWifi()>Reset Wi-Fi</button></div></div></form></section></div><div class=\"layout__item u-1/2-sm pad\"><h4>Users</h4><section class=block><table class=\"table--formide table--formide--responsive\"><thead><tr><th>Username</th><th></th></tr></thead><tbody><tr ng-repeat=\"user in manageDevice.users\" class=table__item><td data-th=Username>{{user.username}}</td><td class=\"table__item__controls u-textRight\"><a class=\"btn btn--small btn--tertiary\" ng-click=manageDevice.updateModal(user)><i class=\"fa fa-pencil\"></i></a> <a class=\"btn btn--small btn--alert\" ng-click=manageDevice.deleteUser(user)><i class=\"fa fa-trash-o\"></i></a></td></tr></tbody></table><button class=\"btn btn--tertiary\" ng-click=manageDevice.createModal()>Add User</button></section></div></div></article><script type=text/ng-template id=settingsModal><form role=\"form\">\n" +
     "\t\t <fieldset>\n" +
     "            <ul class=\"form-fields\">\n" +
     "                <li>\n" +
@@ -19900,7 +19887,7 @@ function foundPrinter(resource, data) {
 (function () { angular.module('templateCache.core', []).run(['$templateCache', function($templateCache) {'use strict';  'use strict';
 
   $templateCache.put('header/componentTemplate.html',
-    "<div class=header__content><div class=\"layout layout--withoutGutter layout--alignMiddle\"><ul class=\"list-inline layout__item u-fill navigation-container\"><li class=navigation-home><a class=header__item ng-click=\"vm.navigate('/formide')\"><img src=./images/logo_small.png alt=\"\" class=\"formide-logo\"><div class=logo_element>Formide Local</div></a></li></ul><ul class=\"list-inline layout__item u-fit\" ng-if=$root.isLoggedIn><li class=\"u-margin-right-1_5 xs-hide\"><button class=btn ng-click=vm.logOut()>Log Out</button></li><li class=sidebarToggle><a class=sm-and-down-hide ng-click=\"$root.setSidebarInvisible(); vm.scrollToTop()\"><img ng-src=\"{{$root.sidebarInvisible ? './images/hamburger_collapse.svg' : './images/hamburger_expand.svg'}}\"></a> <a class=md-hide ng-click=\"$root.setSidebarInvisible(); vm.scrollToTop()\"><img ng-src=\"{{$root.sidebarInvisible ? './images/hamburger_expand.svg' : './images/hamburger_collapse.svg'}}\"></a></li></ul></div></div>"
+    "<div class=header__content><div class=\"layout layout--withoutGutter layout--alignMiddle\"><ul class=\"list-inline layout__item u-fill navigation-container\"><li class=navigation-home><a class=header__item ng-click=\"vm.navigate('/formide')\"><img src=./images/logo_small.png alt=\"\" class=\"formide-logo\"><div class=logo_element>Formide Local</div></a></li></ul><ul class=\"list-inline layout__item u-fit\" ng-if=$root.isLoggedIn><li class=\"u-margin-right-1_5 xs-hide\"><button class=btn ng-click=vm.logout()>Log Out</button></li><li class=sidebarToggle><a class=sm-and-down-hide ng-click=\"$root.setSidebarInvisible(); vm.scrollToTop()\"><img ng-src=\"{{$root.sidebarInvisible ? './images/hamburger_collapse.svg' : './images/hamburger_expand.svg'}}\"></a> <a class=md-hide ng-click=\"$root.setSidebarInvisible(); vm.scrollToTop()\"><img ng-src=\"{{$root.sidebarInvisible ? './images/hamburger_expand.svg' : './images/hamburger_collapse.svg'}}\"></a></li></ul></div></div>"
   );
 
 

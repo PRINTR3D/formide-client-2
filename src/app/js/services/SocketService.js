@@ -24,7 +24,7 @@
 
 		factory.authenticate = function () {
 
-			$api.getAccessToken()
+			$auth.checkLoggedin()
 			.then(function(access_token) {
 				if(access_token.length < 1) {
 					if (window.DEBUG) console.info("Not loggedin, could not connect to sockets.");

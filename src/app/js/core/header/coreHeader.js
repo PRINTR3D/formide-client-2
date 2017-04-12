@@ -39,16 +39,15 @@
 		  vm.mobilenavInvisible = vm.mobilenavInvisible ? false : true;
       }
 
-	  function logOut(){
-		  window.localStorage.removeItem('formide.auth:token');
-		  navigate('/login');
+	  function logout(){
+		  $auth.logout()
 	  }
 
       // exports
       angular.extend(vm, {
       	toggleMobilenav: toggleMobilenav,
 		navigate: navigate,
-		logOut: logOut
+		logout: logout
       });
   }
 
