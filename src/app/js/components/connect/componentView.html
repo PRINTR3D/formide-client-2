@@ -136,7 +136,7 @@
 					<section ng-switch-when="connect-formide">
 						<h3>Connect to Formide</h3>
 						<p class="u-margin-top-2">
-							Before clicking Connect to Formide, ensure that your computer is connected to the Internet.
+							Before continuing, ensure that your computer is connected to the Internet.
 						</p>
 						<p>
 							If this is a custom device, such as a Raspberry Pi, it must first be whitelisted.
@@ -146,9 +146,9 @@
 						<div class="layout layout--withoutGutter layout--alignMiddle u-margin-top-2">
 							<button class="btn btn--primary" ng-click="connect.connectToFormide()" ng-disabled="connect.connecting">
 								<span ng-if="!connect.connectURL">
-									Connect <i ng-if="connect.connecting" class="fa fa-refresh fa-spin"></i>
+									<i ng-if="connect.connecting" class="fa fa-refresh fa-spin"></i>
 								</span>
-								<span ng-if="connect.connectURL">Go to Formide</span>
+								<span ng-if="connect.connectURL">Connect <i ng-if="connect.connecting" class="fa fa-refresh fa-spin"></i></span>
 							</button>
 							<div ng-if="connect.connectingError">
 								<div class="text-base-alert-color u-margin-top-1" ng-bind-html="connect.connectingError"></div>

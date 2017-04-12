@@ -18341,7 +18341,7 @@ function MainController ($timeout, $auth, $location, $rootScope, $api) {
 		  $api.get('/network/status')
 		  .then(function(status) {
 			  if (status.isConnected && status.publicIp) {
-				  vm.connectSetupStep = 'connect-formide';
+				  getConnectCode();
 			  }
 			  else if (status.isConnected) {
 			  	  vm.connectSetupStep = 'network-no-internet';
@@ -18388,33 +18388,38 @@ function MainController ($timeout, $auth, $location, $rootScope, $api) {
 	  }
 
 
+	  function getConnectCode(){
+		  vm.connectSetupStep = 'connect-formide';
+
+		  vm.connecting = true;
+		  vm.connectingError = false;
+
+		  $api
+		  .get('/system/cloud/code')
+		  .then(function(response) {
+
+			  vm.connecting = false;
+			  vm.connectURL = response.redirectURI;
+
+		  }, function(e){
+			  vm.connecting = false;
+			  vm.connectingError = e.message;
+		  });
+	  }
+
+
 	  function connectToFormide(){
 
-		  if (vm.connectURL) {
-			  window.location = vm.connectURL;
-	  	  }
-	  	  else {
-  			  vm.connecting = true;
-  			  vm.connectingError = false;
+		  vm.connecting = true;
+		  vm.connectingError = false;
+		  window.location = vm.connectURL;
 
-  			  $api
-  			  .get('/system/cloud/code')
-  			  .then(function(response) {
-
-				  window.location = response.redirectURI;
-
-  				  $timeout(function () {
-  					  window.stop();
-  					  vm.connecting = false;
-  					  vm.connectingError = "Ensure that you are connected to the Internet";
-  					  vm.connectURL = response.redirectURI;
-  				  }, 15000)
-
-  			  }, function(e){
-  				  vm.connecting = false;
-  				  vm.connectingError = e.message;
-  			  });
-	  	  }
+		  $timeout(function () {
+			  window.stop();
+			  vm.connecting = false;
+			  vm.connectingError = "Ensure that you are connected to the Internet";
+			  vm.connectURL = response.redirectURI;
+		  }, 15000);
 	  }
 
 
@@ -19812,7 +19817,7 @@ function foundPrinter(resource, data) {
 
 
   $templateCache.put('connect/componentView.html',
-    "<article id=connect><h3>Connect your Device to Formide</h3><section class=block><div class=layout><div class=\"layout__item u-fit-sm xs-hide\"><div class=figure-container><figure class=onboarding-figure><img class=main-image src=./images/setup/setup_connect.png width=250 height=250 alt=Welcome></figure></div></div><div class=\"layout__item u-fill\"><fieldset class=settings ng-switch=connect.connectSetupStep><section ng-switch-when=device-wifi><ul class=form-fields><li class=u-margin-bottom-1><h3>Select a network to connect to</h3><select class=text-input ng-options=\"ssid.ssid as ssid.ssid for ssid in connect.ssids\" ng-model=connect.wifi.ssid><option value=\"\" disabled selected style=\"display: none\">Select a SSID</option></select></li><li><input type=password class=text-input ng-model=connect.wifi.password placeholder=Password></li><li><a add-new ng-init=\"connect.toggleAdvanced = false\" ng-click=\"connect.toggleAdvanced = !connect.toggleAdvanced\"><small><i class=\"fa u-margin-right-_5\" ng-class=\"{true:'fa-minus',false:'fa-plus'}[connect.toggleAdvanced]\"></i>Advanced Settings</small></a></li><li ng-if=connect.toggleAdvanced><ul class=advanced-settings><li><input class=text-input placeholder=key_mgmt ng-model=connect.wifi.key_mgmt></li><li><input class=text-input placeholder=eap ng-model=connect.wifi.eap></li><li><input class=text-input placeholder=identity ng-model=connect.wifi.identity></li><li><input class=text-input placeholder=anonymous_identity ng-model=connect.wifi.anonymous_identity></li><li><input class=text-input placeholder=phase1 ng-model=connect.wifi.phase1></li><li><input class=text-input placeholder=phase2 ng-model=connect.wifi.phase2></li></ul></li><li><div class=\"layout layout--withoutGutter layout--alignMiddle u-margin-top-2\"><div class=\"layout__item u-fit\"><button class=\"btn btn--primary\" ng-click=connect.connectWifi() ng-disabled=connect.connecting>Connect to Wi-Fi <i ng-if=connect.connecting class=\"fa fa-refresh fa-spin\"></i></button></div><div class=\"layout__item u-fill u-margin-left-1\">This may take up to a minute</div><div ng-if=connect.wifiError class=layout__item><div class=\"text-base-alert-color u-margin-top-1\" ng-bind-html=connect.wifiError></div></div></div></li><li class=u-margin-top-3><a add-new ng-init=\"connect.toggleFAQ = false\" ng-click=\"connect.toggleFAQ = !connect.toggleFAQ\"><small><i class=\"fa u-margin-right-_5\" ng-class=\"{true:'fa-minus',false:'fa-plus'}[connect.toggleFAQ]\"></i>Frequently Asked Questions</small></a></li><li ng-if=connect.toggleFAQ><ul class=faqs><li><div class=faqTitle>What should I do if my network is not listed?</div><div class=faqBody>Make sure the router or access point is turned on, and that it is within range of the element. If it is, check that your network type is supported.</div></li><li><div class=faqTitle>What type of networks are supported?</div><div class=faqBody>The Wi-Fi network you select has to be a WPA-2 secured network (a common router security standard for homes and offices) or an open network. We also support enterprise networks that use the 802.11x protocol using a custom config.</div></li><li><div class=faqTitle>I get \"Failed to connect to ...\", what should I do?</div><div class=faqBody>This usually means you've entered a wrong password or connecting to the router took longer than expected. You can just try again.</div></li></ul></li></ul></section><section ng-switch-when=custom-device-wifi class=u-margin-top-3><h3>Custom Device</h3><p>Your device is not connected to Wi-Fi. Ensure that it is before trying to link your device to formide.</p></section><section ng-switch-when=network-no-internet class=u-margin-top-3><h3>No Internet</h3><p>The network your device is connected to does not have access to the Internet. Ensure that it has before trying to link your device to formide.</p></section><section ng-switch-when=connect-formide><h3>Connect to Formide</h3><p class=u-margin-top-2>Before clicking Connect to Formide, ensure that your computer is connected to the Internet.</p><p>If this is a custom device, such as a Raspberry Pi, it must first be whitelisted. You can request this via <a class=anchor__link href=\"mailto:hello@formide.com?subject=I would like to whitelist my device\">Email</a>.</p><div class=\"layout layout--withoutGutter layout--alignMiddle u-margin-top-2\"><button class=\"btn btn--primary\" ng-click=connect.connectToFormide() ng-disabled=connect.connecting><span ng-if=!connect.connectURL>Connect <i ng-if=connect.connecting class=\"fa fa-refresh fa-spin\"></i></span> <span ng-if=connect.connectURL>Go to Formide</span></button><div ng-if=connect.connectingError><div class=\"text-base-alert-color u-margin-top-1\" ng-bind-html=connect.connectingError></div></div></div></section><section ng-switch-default class=\"u-margin-top-3 u-textCenter\"><i class=\"fa fa-refresh fa-spin fa-3x text-base-primary-color\"></i></section></fieldset></div></div></section></article>"
+    "<article id=connect><h3>Connect your Device to Formide</h3><section class=block><div class=layout><div class=\"layout__item u-fit-sm xs-hide\"><div class=figure-container><figure class=onboarding-figure><img class=main-image src=./images/setup/setup_connect.png width=250 height=250 alt=Welcome></figure></div></div><div class=\"layout__item u-fill\"><fieldset class=settings ng-switch=connect.connectSetupStep><section ng-switch-when=device-wifi><ul class=form-fields><li class=u-margin-bottom-1><h3>Select a network to connect to</h3><select class=text-input ng-options=\"ssid.ssid as ssid.ssid for ssid in connect.ssids\" ng-model=connect.wifi.ssid><option value=\"\" disabled selected style=\"display: none\">Select a SSID</option></select></li><li><input type=password class=text-input ng-model=connect.wifi.password placeholder=Password></li><li><a add-new ng-init=\"connect.toggleAdvanced = false\" ng-click=\"connect.toggleAdvanced = !connect.toggleAdvanced\"><small><i class=\"fa u-margin-right-_5\" ng-class=\"{true:'fa-minus',false:'fa-plus'}[connect.toggleAdvanced]\"></i>Advanced Settings</small></a></li><li ng-if=connect.toggleAdvanced><ul class=advanced-settings><li><input class=text-input placeholder=key_mgmt ng-model=connect.wifi.key_mgmt></li><li><input class=text-input placeholder=eap ng-model=connect.wifi.eap></li><li><input class=text-input placeholder=identity ng-model=connect.wifi.identity></li><li><input class=text-input placeholder=anonymous_identity ng-model=connect.wifi.anonymous_identity></li><li><input class=text-input placeholder=phase1 ng-model=connect.wifi.phase1></li><li><input class=text-input placeholder=phase2 ng-model=connect.wifi.phase2></li></ul></li><li><div class=\"layout layout--withoutGutter layout--alignMiddle u-margin-top-2\"><div class=\"layout__item u-fit\"><button class=\"btn btn--primary\" ng-click=connect.connectWifi() ng-disabled=connect.connecting>Connect to Wi-Fi <i ng-if=connect.connecting class=\"fa fa-refresh fa-spin\"></i></button></div><div class=\"layout__item u-fill u-margin-left-1\">This may take up to a minute</div><div ng-if=connect.wifiError class=layout__item><div class=\"text-base-alert-color u-margin-top-1\" ng-bind-html=connect.wifiError></div></div></div></li><li class=u-margin-top-3><a add-new ng-init=\"connect.toggleFAQ = false\" ng-click=\"connect.toggleFAQ = !connect.toggleFAQ\"><small><i class=\"fa u-margin-right-_5\" ng-class=\"{true:'fa-minus',false:'fa-plus'}[connect.toggleFAQ]\"></i>Frequently Asked Questions</small></a></li><li ng-if=connect.toggleFAQ><ul class=faqs><li><div class=faqTitle>What should I do if my network is not listed?</div><div class=faqBody>Make sure the router or access point is turned on, and that it is within range of the element. If it is, check that your network type is supported.</div></li><li><div class=faqTitle>What type of networks are supported?</div><div class=faqBody>The Wi-Fi network you select has to be a WPA-2 secured network (a common router security standard for homes and offices) or an open network. We also support enterprise networks that use the 802.11x protocol using a custom config.</div></li><li><div class=faqTitle>I get \"Failed to connect to ...\", what should I do?</div><div class=faqBody>This usually means you've entered a wrong password or connecting to the router took longer than expected. You can just try again.</div></li></ul></li></ul></section><section ng-switch-when=custom-device-wifi class=u-margin-top-3><h3>Custom Device</h3><p>Your device is not connected to Wi-Fi. Ensure that it is before trying to link your device to formide.</p></section><section ng-switch-when=network-no-internet class=u-margin-top-3><h3>No Internet</h3><p>The network your device is connected to does not have access to the Internet. Ensure that it has before trying to link your device to formide.</p></section><section ng-switch-when=connect-formide><h3>Connect to Formide</h3><p class=u-margin-top-2>Before continuing, ensure that your computer is connected to the Internet.</p><p>If this is a custom device, such as a Raspberry Pi, it must first be whitelisted. You can request this via <a class=anchor__link href=\"mailto:hello@formide.com?subject=I would like to whitelist my device\">Email</a>.</p><div class=\"layout layout--withoutGutter layout--alignMiddle u-margin-top-2\"><button class=\"btn btn--primary\" ng-click=connect.connectToFormide() ng-disabled=connect.connecting><span ng-if=!connect.connectURL><i ng-if=connect.connecting class=\"fa fa-refresh fa-spin\"></i></span> <span ng-if=connect.connectURL>Connect <i ng-if=connect.connecting class=\"fa fa-refresh fa-spin\"></i></span></button><div ng-if=connect.connectingError><div class=\"text-base-alert-color u-margin-top-1\" ng-bind-html=connect.connectingError></div></div></div></section><section ng-switch-default class=\"u-margin-top-3 u-textCenter\"><i class=\"fa fa-refresh fa-spin fa-3x text-base-primary-color\"></i></section></fieldset></div></div></section></article>"
   );
 
 
