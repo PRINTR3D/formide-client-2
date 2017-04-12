@@ -19,6 +19,21 @@
 		 margin: 0.25rem 0 0 0;
 	 }
 
+	 .advanced-settings{
+		 li{
+			 margin-bottom: 0.75rem;
+		 }
+	 }
+
+	 .form-fields [add-new]{
+		 margin-bottom: 0;
+		 padding: 0.3rem;
+
+		 .fa{
+			 color: color(grey, dark);
+		 }
+	 }
+
 	 .storageChart {
 
 		.label{
