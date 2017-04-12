@@ -18992,17 +18992,18 @@ function MainController($rootScope, $api, Upload, File, printerCtrl, Printer, $l
 				  					  channel: 'system',
 				  					  type: 'success'
 				  				  });
-				  			  });
 
-								console.log('setHotspot debug', $location.$$host, localIp);
-								if ($location.$$host == '10.20.30.40') {
-									//navigate to the deive ip
-									window.location = 'http://'+localIp+':8080';
-									$timeout(function () {
-										window.stop();
-									}, 15000)
-									return true;
-								}
+	  							  if ($location.$$host == '10.20.30.40') {
+  									//navigate to the deive ip
+  									window.location = 'http://'+localIp+':8080';
+  									$timeout(function () {
+  										window.stop();
+  									}, 15000)
+
+	  							  }
+				  			    });
+
+								return true;
 							}
 						}
 					],
