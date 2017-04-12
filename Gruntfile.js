@@ -1,5 +1,5 @@
 /*
- *	This code was created for Printr B.V. It is open source under the formideos-interface package.
+ *	This code was created for Printr B.V. It is open source under the formide-client package.
  *	Copyright (c) 2017, All rights reserved, http://printr.nl
  */
 
@@ -78,19 +78,19 @@ module.exports = function (grunt) {
 					"./node_modules/angular-sanitize/angular-sanitize.min.js",
 					"./node_modules/angular-touch/angular-touch.min.js",
 					"./node_modules/angular-resource/angular-resource.min.js",
-					"./node_modules/socket.io-client/socket.io.js",
+					"./node_modules/socket.io-client/dist/socket.io.js",
 					"./node_modules/moment/moment.js",
 					"./node_modules/moment-duration-format/lib/moment-duration-format.js",
 					"./node_modules/lodash/lodash.min.js",
 					"./node_modules/angular-filter/dist/angular-filter.min.js",
-					"./node_modules/ng-file-upload/ng-file-upload.min.js",
+					"./node_modules/ng-file-upload/dist/ng-file-upload.min.js",
 					"./node_modules/angular-socket-io/socket.min.js",
 					"./node_modules/ng-dialog/js/ngDialog.min.js",
 					"./node_modules/angular-ui-select3/src/select3.js",
 					"./node_modules/angular-paginate-anything/dist/paginate-anything-tpls.js",
 					"./node_modules/angular-ui-select/dist/select.min.js",
 					"./node_modules/ng-sortable/dist/ng-sortable.min.js",
-					"./node_modules/angular-chart.js/node_modules/chart.js/dist/Chart.min.js",
+					"./node_modules/chart.js/dist/Chart.min.js",
 					"./node_modules/angular-chart.js/dist/angular-chart.min.js",
 					
 					"./src/app/js/modules/AngularModule.js",

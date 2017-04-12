@@ -26,7 +26,7 @@
         return links;
     }
 
-    function MainService($http, $location, $resource, $q, $timeout, linkHeaderParser, $notification) {
+    function MainService($http, $location, $resource, $q, $timeout, $notification) {
         function getAccessToken() {
             var deferred = $q.defer();
 
@@ -371,7 +371,7 @@
     }
 
     angular.module('service.api', [])
-        .factory('$api', ['$http', '$location', '$resource', '$q', '$timeout', 'linkHeaderParser', '$notification',
+        .factory('$api', ['$http', '$location', '$resource', '$q', '$timeout', '$notification',
             MainService])
         .config(function ($httpProvider) {
             $httpProvider.defaults.headers.post['Content-Type'] =
