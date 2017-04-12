@@ -14071,7 +14071,7 @@ module.core = angular.module('module.core', [
 ;
 // Source: ./src/app/js/config/helpers.js
 /*
- *	This code was created for Printr B.V. It is open source under the formideos-interface package.
+ *	This code was created for Printr B.V. It is open source under the formide-client package.
  *	Copyright (c) 2017, All rights reserved, http://printr.nl
  */
 
@@ -14104,7 +14104,7 @@ function httpGetAsync(url, callback)
 ;
 // Source: ./src/app/js/config/environment.js
 /*
- *	This code was created for Printr B.V. It is open source under the formideos-interface package.
+ *	This code was created for Printr B.V. It is open source under the formide-client package.
  *	Copyright (c) 2017, All rights reserved, http://printr.nl
  */
 // Put general configuration here.
@@ -14119,7 +14119,7 @@ window.DEBUG				=	(window.ENV.type == 'development' || window.ENV.type == 'testi
 ;
 // Source: ./src/app/js/config/auth.js
 /*
- *	This code was created for Printr B.V. It is open source under the formideos-interface package.
+ *	This code was created for Printr B.V. It is open source under the formide-client package.
  *	Copyright (c) 2017, All rights reserved, http://printr.nl
  */
 
@@ -14127,7 +14127,7 @@ window.AUTH = window.AUTH || {};
 ;
 // Source: ./src/app/js/config/path.js
 /*
- *	This code was created for Printr B.V. It is open source under the formideos-interface package.
+ *	This code was created for Printr B.V. It is open source under the formide-client package.
  *	Copyright (c) 2017, All rights reserved, http://printr.nl
  */
 
@@ -14168,13 +14168,13 @@ window.PATH.login 			= 	'/login';
 ;
 // Source: ./src/app/js/config/include.js
 /*
- *	This code was created for Printr B.V. It is open source under the formideos-interface package.
+ *	This code was created for Printr B.V. It is open source under the formide-client package.
  *	Copyright (c) 2017, All rights reserved, http://printr.nl
  */
 ;
 // Source: ./src/app/js/config/debug.js
 /*
- *	This code was created for Printr B.V. It is open source under the formideos-interface package.
+ *	This code was created for Printr B.V. It is open source under the formide-client package.
  *	Copyright (c) 2017, All rights reserved, http://printr.nl
  */
 
@@ -14210,7 +14210,7 @@ function angularLoaded() {
 ;
 // Source: ./src/app/js/filters/BooleanFilter.js
 /*
- *	This code was created for Printr B.V. It is open source under the formideos-interface package.
+ *	This code was created for Printr B.V. It is open source under the formide-client package.
  *	Copyright (c) 2017, All rights reserved, http://printr.nl
  */
 
@@ -14228,7 +14228,7 @@ function angularLoaded() {
 ;
 // Source: ./src/app/js/filters/BytesFilter.js
 /*
- *	This code was created for Printr B.V. It is open source under the formideos-interface package.
+ *	This code was created for Printr B.V. It is open source under the formide-client package.
  *	Copyright (c) 2017, All rights reserved, http://printr.nl
  */
 
@@ -14249,7 +14249,7 @@ function angularLoaded() {
 ;
 // Source: ./src/app/js/filters/CeilFilter.js
 /*
- *	This code was created for Printr B.V. It is open source under the formideos-interface package.
+ *	This code was created for Printr B.V. It is open source under the formide-client package.
  *	Copyright (c) 2017, All rights reserved, http://printr.nl
  */
 
@@ -14266,7 +14266,7 @@ function angularLoaded() {
 ;
 // Source: ./src/app/js/filters/DurationFilter.js
 /*
- *	This code was created for Printr B.V. It is open source under the formideos-interface package.
+ *	This code was created for Printr B.V. It is open source under the formide-client package.
  *	Copyright (c) 2017, All rights reserved, http://printr.nl
  */
 
@@ -14283,7 +14283,7 @@ function angularLoaded() {
 ;
 // Source: ./src/app/js/filters/FloatFilter.js
 /*
- *	This code was created for Printr B.V. It is open source under the formideos-interface package.
+ *	This code was created for Printr B.V. It is open source under the formide-client package.
  *	Copyright (c) 2017, All rights reserved, http://printr.nl
  */
 
@@ -14300,7 +14300,7 @@ function angularLoaded() {
 ;
 // Source: ./src/app/js/filters/InArray.js
 /*
- *	This code was created for Printr B.V. It is open source under the formideos-interface package.
+ *	This code was created for Printr B.V. It is open source under the formide-client package.
  *	Copyright (c) 2017, All rights reserved, http://printr.nl
  */
 
@@ -14321,7 +14321,7 @@ function angularLoaded() {
 ;
 // Source: ./src/app/js/filters/NumFilter.js
 /*
- *	This code was created for Printr B.V. It is open source under the formideos-interface package.
+ *	This code was created for Printr B.V. It is open source under the formide-client package.
  *	Copyright (c) 2017, All rights reserved, http://printr.nl
  */
 
@@ -14338,7 +14338,7 @@ function angularLoaded() {
 ;
 // Source: ./src/app/js/filters/PropsFilter.js
 /*
- *	This code was created for Printr B.V. It is open source under the formideos-interface package.
+ *	This code was created for Printr B.V. It is open source under the formide-client package.
  *	Copyright (c) 2017, All rights reserved, http://printr.nl
  */
 
@@ -14382,7 +14382,7 @@ function angularLoaded() {
 ;
 // Source: ./src/app/js/filters/RemoveDashesFilter.js
 /*
- *	This code was created for Printr B.V. It is open source under the formideos-interface package.
+ *	This code was created for Printr B.V. It is open source under the formide-client package.
  *	Copyright (c) 2017, All rights reserved, http://printr.nl
  */
 
@@ -14399,7 +14399,7 @@ function angularLoaded() {
 ;
 // Source: ./src/app/js/filters/RemoveFiletypeFilter.js
 /*
- *	This code was created for Printr B.V. It is open source under the formideos-interface package.
+ *	This code was created for Printr B.V. It is open source under the formide-client package.
  *	Copyright (c) 2017, All rights reserved, http://printr.nl
  */
 
@@ -14428,7 +14428,7 @@ function angularLoaded() {
 ;
 // Source: ./src/app/js/filters/SliceFilter.js
 /*
- *	This code was created for Printr B.V. It is open source under the formideos-interface package.
+ *	This code was created for Printr B.V. It is open source under the formide-client package.
  *	Copyright (c) 2017, All rights reserved, http://printr.nl
  */
 
@@ -14446,7 +14446,7 @@ function angularLoaded() {
 ;
 // Source: ./src/app/js/filters/SmartBytesFilter.js
 /*
- *	This code was created for Printr B.V. It is open source under the formideos-interface package.
+ *	This code was created for Printr B.V. It is open source under the formide-client package.
  *	Copyright (c) 2017, All rights reserved, http://printr.nl
  */
 
@@ -14486,7 +14486,7 @@ function angularLoaded() {
 ;
 // Source: ./src/app/js/filters/SmartDurationFilter.js
 /*
- *	This code was created for Printr B.V. It is open source under the formideos-interface package.
+ *	This code was created for Printr B.V. It is open source under the formide-client package.
  *	Copyright (c) 2017, All rights reserved, http://printr.nl
  */
 
@@ -14531,7 +14531,7 @@ function angularLoaded() {
 ;
 // Source: ./src/app/js/filters/TenthFilter.js
 /*
- *	This code was created for Printr B.V. It is open source under the formideos-interface package.
+ *	This code was created for Printr B.V. It is open source under the formide-client package.
  *	Copyright (c) 2017, All rights reserved, http://printr.nl
  */
 
@@ -14550,7 +14550,7 @@ function angularLoaded() {
 ;
 // Source: ./src/app/js/filters/TimeAgoFilter.js
 /*
- *	This code was created for Printr B.V. It is open source under the formideos-interface package.
+ *	This code was created for Printr B.V. It is open source under the formide-client package.
  *	Copyright (c) 2017, All rights reserved, http://printr.nl
  */
 
@@ -14567,7 +14567,7 @@ function angularLoaded() {
 ;
 // Source: ./src/app/js/filters/TimestampFilter.js
 /*
- *	This code was created for Printr B.V. It is open source under the formideos-interface package.
+ *	This code was created for Printr B.V. It is open source under the formide-client package.
  *	Copyright (c) 2017, All rights reserved, http://printr.nl
  */
 
@@ -14584,7 +14584,7 @@ function angularLoaded() {
 ;
 // Source: ./src/app/js/filters/TitleFilter.js
 /*
- *	This code was created for Printr B.V. It is open source under the formideos-interface package.
+ *	This code was created for Printr B.V. It is open source under the formide-client package.
  *	Copyright (c) 2017, All rights reserved, http://printr.nl
  */
 
@@ -14604,7 +14604,7 @@ function angularLoaded() {
 ;
 // Source: ./src/app/js/filters/TrustedHTML.js
 /*
- *	This code was created for Printr B.V. It is open source under the formideos-interface package.
+ *	This code was created for Printr B.V. It is open source under the formide-client package.
  *	Copyright (c) 2017, All rights reserved, http://printr.nl
  */
 
@@ -14665,7 +14665,7 @@ function angularLoaded() {
 ;
 // Source: ./src/app/js/services/ApiService.js
 /*
- *	This code was created for Printr B.V. It is open source under the formideos-interface package.
+ *	This code was created for Printr B.V. It is open source under the formide-client package.
  *	Copyright (c) 2017, All rights reserved, http://printr.nl
  */
 
@@ -15047,7 +15047,7 @@ function angularLoaded() {
 ;
 // Source: ./src/app/js/services/AuthService.js
 /*
- *	This code was created for Printr B.V. It is open source under the formideos-interface package.
+ *	This code was created for Printr B.V. It is open source under the formide-client package.
  *	Copyright (c) 2017, All rights reserved, http://printr.nl
  */
 
@@ -15154,7 +15154,7 @@ function angularLoaded() {
 ;
 // Source: ./src/app/js/services/FileService.js
 /*
- *	This code was created for Printr B.V. It is open source under the formideos-interface package.
+ *	This code was created for Printr B.V. It is open source under the formide-client package.
  *	Copyright (c) 2017, All rights reserved, http://printr.nl
  */
 
@@ -15286,7 +15286,7 @@ function angularLoaded() {
 ;
 // Source: ./src/app/js/services/NotificationService.js
 /*
- *	This code was created for Printr B.V. It is open source under the formideos-interface package.
+ *	This code was created for Printr B.V. It is open source under the formide-client package.
  *	Copyright (c) 2017, All rights reserved, http://printr.nl
  */
 
@@ -15458,7 +15458,7 @@ function angularLoaded() {
 ;
 // Source: ./src/app/js/services/PrinterControlService.js
 /*
- *	This code was created for Printr B.V. It is open source under the formideos-interface package.
+ *	This code was created for Printr B.V. It is open source under the formide-client package.
  *	Copyright (c) 2017, All rights reserved, http://printr.nl
  */
 
@@ -15692,7 +15692,7 @@ function angularLoaded() {
 ;
 // Source: ./src/app/js/services/PrinterService.js
 /*
-*	This code was created for Printr B.V. It is open source under the formideos-interface package.
+*	This code was created for Printr B.V. It is open source under the formide-client package.
 *	Copyright (c) 2017, All rights reserved, http://printr.nl
 */
 
@@ -15925,7 +15925,7 @@ function angularLoaded() {
 ;
 // Source: ./src/app/js/services/SidebarService.js
 /*
- *	This code was created for Printr B.V. It is open source under the formideos-interface package.
+ *	This code was created for Printr B.V. It is open source under the formide-client package.
  *	Copyright (c) 2017, All rights reserved, http://printr.nl
  */
 
@@ -15951,7 +15951,7 @@ function angularLoaded() {
 ;
 // Source: ./src/app/js/services/SocketService.js
 /*
- *	This code was created for Printr B.V. It is open source under the formideos-interface package.
+ *	This code was created for Printr B.V. It is open source under the formide-client package.
  *	Copyright (c) 2017, All rights reserved, http://printr.nl
  */
 
@@ -16037,7 +16037,7 @@ function angularLoaded() {
 ;
 // Source: ./src/app/js/core/header/coreHeader.js
 /*
- *	This code was created for Printr B.V. It is open source under the formideos-interface package.
+ *	This code was created for Printr B.V. It is open source under the formide-client package.
  *	Copyright (c) 2017, All rights reserved, http://printr.nl
  */
 
@@ -16104,7 +16104,7 @@ function angularLoaded() {
 ;
 // Source: ./src/app/js/core/page-content/componentDirective.js
 /*
- *	This code was created for Printr B.V. It is open source under the formideos-interface package.
+ *	This code was created for Printr B.V. It is open source under the formide-client package.
  *	Copyright (c) 2017, All rights reserved, http://printr.nl
  */
 
@@ -16223,7 +16223,7 @@ function angularLoaded() {
 ;
 // Source: ./src/app/js/core/sidebar/componentDirective.js
 /*
- *	This code was created for Printr B.V. It is open source under the formideos-interface package.
+ *	This code was created for Printr B.V. It is open source under the formide-client package.
  *	Copyright (c) 2017, All rights reserved, http://printr.nl
  */
 
@@ -16397,7 +16397,7 @@ function angularLoaded() {
 ;
 // Source: ./src/app/js/shared/add-new/componentDirective.js
 /*
- *	This code was created for Printr B.V. It is open source under the formideos-interface package.
+ *	This code was created for Printr B.V. It is open source under the formide-client package.
  *	Copyright (c) 2017, All rights reserved, http://printr.nl
  */
 
@@ -16449,7 +16449,7 @@ function angularLoaded() {
 ;
 // Source: ./src/app/js/shared/alert-box/componentDirective.js
 /*
- *	This code was created for Printr B.V. It is open source under the formideos-interface package.
+ *	This code was created for Printr B.V. It is open source under the formide-client package.
  *	Copyright (c) 2017, All rights reserved, http://printr.nl
  */
 
@@ -16519,7 +16519,7 @@ function angularLoaded() {
 ;
 // Source: ./src/app/js/shared/checkbox/componentDirective.js
 /*
- *	This code was created for Printr B.V. It is open source under the formideos-interface package.
+ *	This code was created for Printr B.V. It is open source under the formide-client package.
  *	Copyright (c) 2017, All rights reserved, http://printr.nl
  */
 
@@ -16588,7 +16588,7 @@ function angularLoaded() {
 ;
 // Source: ./src/app/js/shared/dashboard-temperatures/componentDirective.js
 /*
- *	This code was created for Printr B.V. It is open source under the formideos-interface package.
+ *	This code was created for Printr B.V. It is open source under the formide-client package.
  *	Copyright (c) 2017, All rights reserved, http://printr.nl
  */
 
@@ -16797,7 +16797,7 @@ function angularLoaded() {
 ;
 // Source: ./src/app/js/shared/dashboard-webcam/componentDirective.js
 /*
- *	This code was created for Printr B.V. It is open source under the formideos-interface package.
+ *	This code was created for Printr B.V. It is open source under the formide-client package.
  *	Copyright (c) 2017, All rights reserved, http://printr.nl
  */
 
@@ -16864,7 +16864,7 @@ function angularLoaded() {
 ;
 // Source: ./src/app/js/shared/file-droppable/componentDirective.js
 /*
- *	This code was created for Printr B.V. It is open source under the formideos-interface package.
+ *	This code was created for Printr B.V. It is open source under the formide-client package.
  *	Copyright (c) 2017, All rights reserved, http://printr.nl
  */
 
@@ -16952,7 +16952,7 @@ function angularLoaded() {
 ;
 // Source: ./src/app/js/shared/float/componentDirective.js
 /*
- *	This code was created for Printr B.V. It is open source under the formideos-interface package.
+ *	This code was created for Printr B.V. It is open source under the formide-client package.
  *	Copyright (c) 2017, All rights reserved, http://printr.nl
  */
 
@@ -16983,7 +16983,7 @@ function angularLoaded() {
 ;
 // Source: ./src/app/js/shared/focus/componentDirective.js
 /*
- *	This code was created for Printr B.V. It is open source under the formideos-interface package.
+ *	This code was created for Printr B.V. It is open source under the formide-client package.
  *	Copyright (c) 2017, All rights reserved, http://printr.nl
  */
 
@@ -17021,7 +17021,7 @@ function angularLoaded() {
 ;
 // Source: ./src/app/js/shared/loading-screen/componentDirective.js
 /*
- *	This code was created for Printr B.V. It is open source under the formideos-interface package.
+ *	This code was created for Printr B.V. It is open source under the formide-client package.
  *	Copyright (c) 2017, All rights reserved, http://printr.nl
  */
 
@@ -17055,7 +17055,7 @@ function angularLoaded() {
 ;
 // Source: ./src/app/js/shared/notification-list-item/componentDirective.js
 /*
- *	This code was created for Printr B.V. It is open source under the formideos-interface package.
+ *	This code was created for Printr B.V. It is open source under the formide-client package.
  *	Copyright (c) 2017, All rights reserved, http://printr.nl
  */
 
@@ -17114,7 +17114,7 @@ function angularLoaded() {
 ;
 // Source: ./src/app/js/shared/notification-list/componentDirective.js
 /*
- *	This code was created for Printr B.V. It is open source under the formideos-interface package.
+ *	This code was created for Printr B.V. It is open source under the formide-client package.
  *	Copyright (c) 2017, All rights reserved, http://printr.nl
  */
 
@@ -17165,7 +17165,7 @@ function angularLoaded() {
 ;
 // Source: ./src/app/js/shared/on-enter/componentDirective.js
 /*
- *	This code was created for Printr B.V. It is open source under the formideos-interface package.
+ *	This code was created for Printr B.V. It is open source under the formide-client package.
  *	Copyright (c) 2017, All rights reserved, http://printr.nl
  */
 
@@ -17200,7 +17200,7 @@ function angularLoaded() {
 ;
 // Source: ./src/app/js/shared/print-job-item/componentDirective.js
 /*
- *	This code was created for Printr B.V. It is open source under the formideos-interface package.
+ *	This code was created for Printr B.V. It is open source under the formide-client package.
  *	Copyright (c) 2017, All rights reserved, http://printr.nl
  */
 
@@ -17305,7 +17305,7 @@ function angularLoaded() {
 ;
 // Source: ./src/app/js/shared/printer-controls-fan/componentDirective.js
 /*
- *	This code was created for Printr B.V. It is open source under the formideos-interface package.
+ *	This code was created for Printr B.V. It is open source under the formide-client package.
  *	Copyright (c) 2017, All rights reserved, http://printr.nl
  */
 
@@ -17363,7 +17363,7 @@ function angularLoaded() {
 ;
 // Source: ./src/app/js/shared/printer-controls-flow-rate/componentDirective.js
 /*
- *	This code was created for Printr B.V. It is open source under the formideos-interface package.
+ *	This code was created for Printr B.V. It is open source under the formide-client package.
  *	Copyright (c) 2017, All rights reserved, http://printr.nl
  */
 
@@ -17502,7 +17502,7 @@ function angularLoaded() {
 ;
 // Source: ./src/app/js/shared/printer-controls-speed/componentDirective.js
 /*
- *	This code was created for Printr B.V. It is open source under the formideos-interface package.
+ *	This code was created for Printr B.V. It is open source under the formide-client package.
  *	Copyright (c) 2017, All rights reserved, http://printr.nl
  */
 
@@ -17568,7 +17568,7 @@ function angularLoaded() {
 ;
 // Source: ./src/app/js/shared/printer-controls/componentDirective.js
 /*
- *	This code was created for Printr B.V. It is open source under the formideos-interface package.
+ *	This code was created for Printr B.V. It is open source under the formide-client package.
  *	Copyright (c) 2017, All rights reserved, http://printr.nl
  */
 
@@ -17680,7 +17680,7 @@ function angularLoaded() {
 ;
 // Source: ./src/app/js/shared/printer-fan/componentDirective.js
 /*
- *	This code was created for Printr B.V. It is open source under the formideos-interface package.
+ *	This code was created for Printr B.V. It is open source under the formide-client package.
  *	Copyright (c) 2017, All rights reserved, http://printr.nl
  */
 
@@ -17738,7 +17738,7 @@ function angularLoaded() {
 ;
 // Source: ./src/app/js/shared/printer-list-item/componentDirective.js
 /*
- *	This code was created for Printr B.V. It is open source under the formideos-interface package.
+ *	This code was created for Printr B.V. It is open source under the formide-client package.
  *	Copyright (c) 2017, All rights reserved, http://printr.nl
  */
 
@@ -17846,7 +17846,7 @@ function angularLoaded() {
 ;
 // Source: ./src/app/js/shared/printer-list/componentDirective.js
 /*
- *	This code was created for Printr B.V. It is open source under the formideos-interface package.
+ *	This code was created for Printr B.V. It is open source under the formide-client package.
  *	Copyright (c) 2017, All rights reserved, http://printr.nl
  */
 
@@ -17897,7 +17897,7 @@ function angularLoaded() {
 ;
 // Source: ./src/app/js/shared/printer-speed/componentDirective.js
 /*
- *	This code was created for Printr B.V. It is open source under the formideos-interface package.
+ *	This code was created for Printr B.V. It is open source under the formide-client package.
  *	Copyright (c) 2017, All rights reserved, http://printr.nl
  */
 
@@ -17963,7 +17963,7 @@ function angularLoaded() {
 ;
 // Source: ./src/app/js/shared/progress-bar/componentDirective.js
 /*
- *	This code was created for Printr B.V. It is open source under the formideos-interface package.
+ *	This code was created for Printr B.V. It is open source under the formide-client package.
  *	Copyright (c) 2017, All rights reserved, http://printr.nl
  */
 
@@ -18017,7 +18017,7 @@ function angularLoaded() {
 ;
 // Source: ./src/app/js/shared/selection-block/componentDirective.js
 /*
- *	This code was created for Printr B.V. It is open source under the formideos-interface package.
+ *	This code was created for Printr B.V. It is open source under the formide-client package.
  *	Copyright (c) 2017, All rights reserved, http://printr.nl
  */
 
@@ -18073,7 +18073,7 @@ function angularLoaded() {
 ;
 // Source: ./src/app/js/shared/selection-list/componentDirective.js
 /*
- *	This code was created for Printr B.V. It is open source under the formideos-interface package.
+ *	This code was created for Printr B.V. It is open source under the formide-client package.
  *	Copyright (c) 2017, All rights reserved, http://printr.nl
  */
 
@@ -18127,7 +18127,7 @@ function angularLoaded() {
 ;
 // Source: ./src/app/js/shared/status-icon/componentDirective.js
 /*
- *	This code was created for Printr B.V. It is open source under the formideos-interface package.
+ *	This code was created for Printr B.V. It is open source under the formide-client package.
  *	Copyright (c) 2017, All rights reserved, http://printr.nl
  */
 
@@ -18187,7 +18187,7 @@ function angularLoaded() {
 ;
 // Source: ./src/app/js/shared/temperature-bar/componentDirective.js
 /*
- *	This code was created for Printr B.V. It is open source under the formideos-interface package.
+ *	This code was created for Printr B.V. It is open source under the formide-client package.
  *	Copyright (c) 2017, All rights reserved, http://printr.nl
  */
 
@@ -18238,7 +18238,7 @@ function angularLoaded() {
 ;
 // Source: ./src/app/js/components/auth-login/componentController.js
 /*
- *	This code was created for Printr B.V. It is open source under the formideos-interface package.
+ *	This code was created for Printr B.V. It is open source under the formide-client package.
  *	Copyright (c) 2017, All rights reserved, http://printr.nl
  */
 
@@ -18300,7 +18300,7 @@ function MainController ($timeout, $auth, $location, $rootScope, $api) {
 // Source: ./src/app/js/components/connect/componentController.js
 
  /*
-  *	This code was created for Printr B.V. It is open source under the formideos-interface package.
+  *	This code was created for Printr B.V. It is open source under the formide-client package.
   *	Copyright (c) 2017, All rights reserved, http://printr.nl
   */
 
@@ -18416,7 +18416,7 @@ function MainController ($timeout, $auth, $location, $rootScope, $api) {
 ;
 // Source: ./src/app/js/components/control-print/componentController.js
 /*
- *	This code was created for Printr B.V. It is open source under the formideos-interface package.
+ *	This code was created for Printr B.V. It is open source under the formide-client package.
  *	Copyright (c) 2017, All rights reserved, http://printr.nl
  */
 
@@ -18571,7 +18571,7 @@ function MainController ($timeout, $auth, $location, $rootScope, $api) {
 ;
 // Source: ./src/app/js/components/file-library/componentController.js
 /*
-*	This code was created for Printr B.V. It is open source under the formideos-interface package.
+*	This code was created for Printr B.V. It is open source under the formide-client package.
 *	Copyright (c) 2017, All rights reserved, http://printr.nl
 */
 
@@ -19161,7 +19161,7 @@ function MainController($rootScope, $api, Upload, File, printerCtrl, Printer, $l
 // Source: ./src/app/js/components/manage/componentController.js
 
 /*
- *	This code was created for Printr B.V. It is open source under the formideos-interface package.
+ *	This code was created for Printr B.V. It is open source under the formide-client package.
  *	Copyright (c) 2017, All rights reserved, http://printr.nl
  */
 
@@ -19231,7 +19231,7 @@ function MainController($router, $routeParams, $timeout, $location, $auth) {
 ;
 // Source: ./src/app/js/components/monitor-print/componentController.js
 /*
- *	This code was created for Printr B.V. It is open source under the formideos-interface package.
+ *	This code was created for Printr B.V. It is open source under the formide-client package.
  *	Copyright (c) 2017, All rights reserved, http://printr.nl
  */
 
@@ -19316,7 +19316,7 @@ function MainController($router, $routeParams, $timeout, $location, $auth) {
 ;
 // Source: ./src/app/js/app.js
 /*
- *	This code was created for Printr B.V. It is open source under the formideos-interface package.
+ *	This code was created for Printr B.V. It is open source under the formide-client package.
  *	Copyright (c) 2017, All rights reserved, http://printr.nl
  */
 
