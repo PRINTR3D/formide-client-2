@@ -1,8 +1,6 @@
 # formide-client-2
 Second version of Formide client, an open source 3D printing client software.
 
-[![Build Status](https://travis-ci.org/PRINTR3D/formide-client-2.svg?branch=master)](https://travis-ci.org/PRINTR3D/formide-client-2)
-
 ## Introduction
 The Formide client is an IoT client that works as a stand alone local 3D printing server as well as connection to the Formide 3D printing cloud platform.
 It is written in Node.js, making it easy for developers to get started with on their own devices or add functionality.
@@ -22,9 +20,9 @@ The full manual installation guide can be found on [developers.formide.com](http
 
 ### Quick steps
 
-Step 1: install the `formide-client` NPM package globally.
+Step 1: install the `formide-client-2` NPM package globally.
 ```
-npm install -g formide-client
+npm install -g formide-client-2
 ```
 
 Step 2: set the `NODE_ENV` environment parameter to `production`.
