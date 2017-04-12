@@ -62,7 +62,7 @@ function foundPrinter(resource, data) {
 		window.ENV.theme = response.theme || 'formide';
 
 		window.PATH.root   = window.location.protocol + '//' + window.location.hostname + ':' + window.location.port;
-
+		
 		window.PATH.api    = window.location.protocol + '//' + window.location.hostname + ':1337/api';
 		window.PATH.socket = window.location.protocol + '//' + window.location.hostname + ':1337';
 		window.PATH.images = window.location.protocol + '//' + window.location.hostname + ':1337/api/db/files';
