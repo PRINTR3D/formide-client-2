@@ -14586,7 +14586,23 @@ temperature-bar .target,
   margin: 0.25rem 0 0 0;
 }
 
-/* line 8329, /Users/chris/Code/printr/formide-client-2/tmp/application.scss */
+/* line 8328, /Users/chris/Code/printr/formide-client-2/tmp/application.scss */
+#manage-device .advanced-settings li {
+  margin-bottom: 0.75rem;
+}
+
+/* line 8333, /Users/chris/Code/printr/formide-client-2/tmp/application.scss */
+#manage-device .form-fields [add-new] {
+  margin-bottom: 0;
+  padding: 0.3rem;
+}
+
+/* line 8337, /Users/chris/Code/printr/formide-client-2/tmp/application.scss */
+#manage-device .form-fields [add-new] .fa, #manage-device .form-fields [add-new] .icon {
+  color: #afb0b9;
+}
+
+/* line 8344, /Users/chris/Code/printr/formide-client-2/tmp/application.scss */
 #manage-device .storageChart .label {
   position: absolute;
   top: 42%;
@@ -14594,19 +14610,19 @@ temperature-bar .target,
   width: 100%;
 }
 
-/* line 8335, /Users/chris/Code/printr/formide-client-2/tmp/application.scss */
+/* line 8350, /Users/chris/Code/printr/formide-client-2/tmp/application.scss */
 #manage-device .storageChart .label h3 {
   font-size: 2rem;
   line-height: 0.75;
 }
 
-/* line 8339, /Users/chris/Code/printr/formide-client-2/tmp/application.scss */
+/* line 8354, /Users/chris/Code/printr/formide-client-2/tmp/application.scss */
 #manage-device .storageChart .label h3 small, #manage-device .storageChart .label h3 .pill, #manage-device .storageChart .label h3 .loz, #manage-device .storageChart .label h3 .tag, #manage-device .storageChart .label h3 formide-button.btn--pill, #manage-device .storageChart .label h3
 .btn.btn--pill {
   font-size: 1rem;
 }
 
-/* line 8345, /Users/chris/Code/printr/formide-client-2/tmp/application.scss */
+/* line 8360, /Users/chris/Code/printr/formide-client-2/tmp/application.scss */
 #manage-device .storageChart .info {
   position: absolute;
   left: 72%;
@@ -14614,28 +14630,28 @@ temperature-bar .target,
   margin-right: -1rem;
 }
 
-/* line 8351, /Users/chris/Code/printr/formide-client-2/tmp/application.scss */
+/* line 8366, /Users/chris/Code/printr/formide-client-2/tmp/application.scss */
 #manage-device .storageChart .info h3 {
   font-size: 1.2rem;
 }
 
-/* line 8356, /Users/chris/Code/printr/formide-client-2/tmp/application.scss */
+/* line 8371, /Users/chris/Code/printr/formide-client-2/tmp/application.scss */
 #manage-device .storageChart h3 {
   margin: 0;
 }
 
-/* line 8361, /Users/chris/Code/printr/formide-client-2/tmp/application.scss */
+/* line 8376, /Users/chris/Code/printr/formide-client-2/tmp/application.scss */
 #manage-device checkbox .checkbox {
   margin-left: 0;
 }
 
-/* line 8363, /Users/chris/Code/printr/formide-client-2/tmp/application.scss */
+/* line 8378, /Users/chris/Code/printr/formide-client-2/tmp/application.scss */
 #manage-device checkbox .checkbox i {
   padding-left: 0;
 }
 
 @media only screen and (max-width: 719px) {
-  /* line 8370, /Users/chris/Code/printr/formide-client-2/tmp/application.scss */
+  /* line 8385, /Users/chris/Code/printr/formide-client-2/tmp/application.scss */
   #manage-device .connect {
     -ms-flex-order: -1;
         order: -1;
@@ -14644,23 +14660,23 @@ temperature-bar .target,
   }
 }
 
-/* line 8379, /Users/chris/Code/printr/formide-client-2/tmp/application.scss */
+/* line 8394, /Users/chris/Code/printr/formide-client-2/tmp/application.scss */
 .layout__item.u-1\/2-sm.pad {
   padding-top: 1rem;
 }
 
-/* line 8383, /Users/chris/Code/printr/formide-client-2/tmp/application.scss */
+/* line 8398, /Users/chris/Code/printr/formide-client-2/tmp/application.scss */
 .layout__item.u-1\/2-sm.pad:first-child {
   padding-top: 0;
 }
 
-/* line 8387, /Users/chris/Code/printr/formide-client-2/tmp/application.scss */
+/* line 8402, /Users/chris/Code/printr/formide-client-2/tmp/application.scss */
 .layout__item.u-1\/2-sm.pad:nth-child(2) {
   padding-top: 0;
 }
 
 @media only screen and (max-width: 719px) {
-  /* line 8392, /Users/chris/Code/printr/formide-client-2/tmp/application.scss */
+  /* line 8407, /Users/chris/Code/printr/formide-client-2/tmp/application.scss */
   .layout__item.u-1\/2-sm.pad:nth-child(2) {
     padding-top: 1rem;
   }
@@ -14670,45 +14686,45 @@ temperature-bar .target,
  *	This code was created for Printr B.V. It is open source under the formideos-interface package.
  *	Copyright (c) 2017, All rights reserved, http://printr.nl
  */
-/* line 8405, /Users/chris/Code/printr/formide-client-2/tmp/application.scss */
+/* line 8420, /Users/chris/Code/printr/formide-client-2/tmp/application.scss */
 #monitor-print .block--panel {
   height: 362px;
   overflow: auto;
   position: relative;
 }
 
-/* line 8411, /Users/chris/Code/printr/formide-client-2/tmp/application.scss */
+/* line 8426, /Users/chris/Code/printr/formide-client-2/tmp/application.scss */
 #monitor-print .webcam-panel .body {
   padding: 0 !important;
   overflow: hidden !important;
 }
 
-/* line 8417, /Users/chris/Code/printr/formide-client-2/tmp/application.scss */
+/* line 8432, /Users/chris/Code/printr/formide-client-2/tmp/application.scss */
 #monitor-print .tune-values printer-controls-fan {
   position: relative;
 }
 
-/* line 8421, /Users/chris/Code/printr/formide-client-2/tmp/application.scss */
+/* line 8436, /Users/chris/Code/printr/formide-client-2/tmp/application.scss */
 #monitor-print .tune-values printer-controls-speed {
   width: 45px;
   height: 45px;
   position: relative;
 }
 
-/* line 8427, /Users/chris/Code/printr/formide-client-2/tmp/application.scss */
+/* line 8442, /Users/chris/Code/printr/formide-client-2/tmp/application.scss */
 #monitor-print .tune-values printer-controls-flow-rate {
   width: 45px;
   height: 45px;
   position: relative;
 }
 
-/* line 8433, /Users/chris/Code/printr/formide-client-2/tmp/application.scss */
+/* line 8448, /Users/chris/Code/printr/formide-client-2/tmp/application.scss */
 #monitor-print .tune-values .tune-header {
   text-align: center;
   margin: 0 0 0.75rem;
 }
 
-/* line 8438, /Users/chris/Code/printr/formide-client-2/tmp/application.scss */
+/* line 8453, /Users/chris/Code/printr/formide-client-2/tmp/application.scss */
 #monitor-print .tune-values .tune-block {
   margin-bottom: 0;
   padding: 0.75rem 0 0.5rem;
