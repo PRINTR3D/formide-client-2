@@ -92,7 +92,7 @@ module.exports = function (grunt) {
 					"./node_modules/ng-sortable/dist/ng-sortable.min.js",
 					"./node_modules/chart.js/dist/Chart.min.js",
 					"./node_modules/angular-chart.js/dist/angular-chart.min.js",
-					
+
 					"./src/app/js/modules/AngularModule.js",
 					"./src/app/js/modules/VendorModule.js",
 					"./src/app/js/modules/FiltersModule.js",
@@ -120,7 +120,7 @@ module.exports = function (grunt) {
 			scss: {
 				src: [
 					'./src/app/sass/settings/_defaults.scss',
-					
+
 					"./node_modules/angular-ui-select/dist/select.min.css",
 					"./node_modules/animate.css/animate.min.css",
 					"./node_modules/open-sans-fontface/scss/_*.scss",
@@ -134,14 +134,14 @@ module.exports = function (grunt) {
 					"./node_modules/font-awesome/scss/_icons.scss",
 					"./node_modules/angular-ui-select/dist/select.min.css",
 					"./node_modules/ng-sortable/dist/ng-sortable.min.css",
-					
+
 					"./node_modules/normalize.css/normalize.css",
 					"./node_modules/suitcss-base/lib/base.css",
 					"./node_modules/suitcss-utils-display/lib/display.css",
 					"./node_modules/suitcss-utils-layout/lib/layout.css",
 					"./node_modules/suitcss-utils-position/lib/position.css",
 					"./node_modules/suitcss-utils-text/lib/text.css",
-					
+
 					"./src/app/sass/formide/formide-tools/*.scss",
 					"./src/app/sass/formide/formide-base/*.scss",
 					"./src/app/sass/formide/formide-alert/*.scss",
@@ -164,7 +164,7 @@ module.exports = function (grunt) {
 					"./src/app/sass/formide/formide-button/*.scss",
 					"./src/app/sass/formide/formide-typography/*.scss",
 					"./src/app/sass/formide/formide-layout/*.scss",
-					
+
 					"./src/app/js/filters/**/*.scss",
 					"./src/app/js/services/**/*.scss",
 					"./src/app/js/core/**/*.scss",
@@ -330,7 +330,7 @@ module.exports = function (grunt) {
 	/*
 	 * Register Tasks
 	 */
-	
+
 	// partial tasks
 	grunt.registerTask('build:fonts', ['copy:fonts', 'copy:icons']);
 	grunt.registerTask('build:images', ['copy:images']);
@@ -339,5 +339,5 @@ module.exports = function (grunt) {
 	grunt.registerTask('build:sass', ['concat:scss', 'sass', 'autoprefixer', 'cssmin']);
 
 	// dist builds
-	grunt.registerTask('default', ['clean:www', 'build:fonts', 'build:images', 'build:html', 'build:js', 'build:sass', 'uglify:js']);
+	grunt.registerTask('default', ['clean:www', 'build:fonts', 'build:images', 'build:html', 'build:js', 'build:sass']);
 };
