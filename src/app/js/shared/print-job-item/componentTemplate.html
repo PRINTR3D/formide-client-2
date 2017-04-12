@@ -1,0 +1,90 @@
+<!--
+ *	This code was created for Printr B.V. It is open source under the formide-client package.
+ *	Copyright (c) 2017, All rights reserved, http://printr.nl
+-->
+
+<div class="layout layout--alignMiddle">
+
+	<section class="layout__item u-1/1">
+
+        <div class="layout layout--alignMiddle">
+            <header class="layout__item u-1/1">
+
+                <div class="layout layout--alignMiddle u-margin-bottom-1">
+                    <hgroup class="layout__item u-fill u-margin-0">
+                        <h4 class="u-textTruncate text-base-primary-color u-margin-0">{{ vm.printer.printJob | title}}</h4>
+                    </hgroup>
+
+					<aside ng-switch="vm.printer.status" class="layout__item u-1/3-sm u-textRight">
+
+                            <section ng-switch-when="printing" class="layout layout--smallGutter"
+                               ng-init="vm.executingCommand = false">
+								   <!--<a class="btn btn--tertiary actionButton" ng-click="vm.previewPrint()"><i class="fa fa-eye"></i> <span class="xs-hide">View Live G-code</span></a>-->
+								<div class="layout__item u-1/2">
+									<a class="btn btn--tertiary actionButton u-1/1" style="min-width: 0;" ng-click="vm.pausePrint()"><i ng-class="{true: 'fa-refresh fa-spin', false: 'fa-pause'}[vm.executingCommand]" class="fa"></i></a>
+								</div>
+								<div class="layout__item u-1/2">
+									<a class="btn btn--alert actionButton u-1/1" style="min-width: 0;" ng-class="{true: 'btn--disabled'}[vm.executingCommand]" ng-click="vm.stopPrint()"><i class="fa fa-stop"></i></a>
+								</div>
+
+                            </section>
+
+                            <section ng-switch-when="heating" class="layout layout--smallGutter"
+                               ng-init="vm.executingCommand = false">
+								   <!--<a class="btn btn--tertiary actionButton" ng-click="vm.previewPrint()"><i class="fa fa-eye"></i> <span class="xs-hide">View Live G-code</span></a>-->
+
+								<div class="layout__item u-1/2">
+									<a class="btn btn--tertiary actionButton u-1/1" style="min-width: 0;" ng-click="vm.pausePrint()"><i ng-class="{true: 'fa-refresh fa-spin', false: 'fa-pause'}[vm.executingCommand]" class="fa"></i></a>
+   								</div>
+   								<div class="layout__item u-1/2">
+									<a class="btn btn--alert actionButton u-1/1" style="min-width: 0;" ng-class="{true: 'btn--disabled'}[vm.executingCommand]" ng-click="vm.stopPrint()"><i class="fa fa-stop"></i></a>
+   								</div>
+                            </section>
+
+                            <section ng-switch-when="paused" class="layout layout--smallGutter"
+                               ng-init="vm.executingCommand = false">
+								   <!--<a class="btn btn--tertiary actionButton" ng-click="vm.previewPrint()"><i class="fa fa-eye"></i> <span class="xs-hide">View Live G-code</span></a>-->
+								<div class="layout__item u-1/2">
+									<a class="btn btn--tertiary actionButton u-1/1" style="min-width: 0;" ng-click="vm.resumePrint()"><i ng-class="{true: 'fa-refresh fa-spin', false: 'fa-play'}[vm.executingCommand]" class="fa"></i></a>
+   								</div>
+   								<div class="layout__item u-1/2">
+									<a class="btn btn--alert actionButton u-1/1" style="min-width: 0;" ng-class="{true: 'btn--disabled'}[vm.executingCommand]" ng-click="vm.stopPrint()"><i class="fa fa-stop"></i></a>
+   								</div>
+                            </section>
+
+                            <section ng-switch-default class="u-textRight"
+                               ng-init="vm.executingCommand = false">
+   								<h4><i class="fa fa-refresh fa-spin"></i></h4>
+                            </section>
+                    </aside>
+                </div>
+            </header>
+
+            <div class="layout__item u-1/1">
+                <hr class="rule"/>
+            </div>
+
+
+            <footer class="layout__item u-1/1">
+
+				<div class="layout">
+					<section class="layout__item u-1/1">
+	                    <p class="u-textTruncate expected-printing-time u-margin-bottom-_5">
+							<small>
+								Progress: {{vm.printer.progress | ceil }} %
+								<span class="xs-hide" ng-if="vm.printer.remainingPrintingTime && vm.printer.remainingPrintingTime > 0">
+									&mdash;
+									<i class="fa fa-clock-o hide-on-palm"></i>
+									Remaining Printing Time {{vm.printer.remainingPrintingTime * 10 | smartduration}}
+								</span>
+							</small>
+						</p>
+	                    <progress-bar valuemax="100" valuenow="{{vm.printer.progress}}"></progress-bar>
+	                </section>
+				</div>
+
+            </footer>
+
+        </div>
+    </section>
+</div>

@@ -1,0 +1,207 @@
+/*
+ *	This code was created for Printr B.V. It is open source under the formide-client package.
+ *	Copyright (c) 2017, All rights reserved, http://printr.nl
+ */
+
+%table--formide,
+.table--formide {
+
+	display: table;
+    width: 100%;
+	border-collapse: collapse;
+	margin-bottom: 1.5rem;
+    text-align: left;
+
+	tbody {
+	    border-bottom: 1px solid color(gray, light);
+	}
+
+    &__th, th,
+    &__td, td {
+        @include share(padding-top, padding-bottom, $baseline/2);
+        @include share(padding-left, padding-right, $baseline/4);
+		text-align: left;
+		min-width: 60px;
+    }
+
+    &__th, th {
+        font-weight: 600;
+        border-bottom: 1px solid color(gray, light);
+
+		a {
+			color: $text-color;
+
+			&:hover {
+				text-decoration: underline;
+			}
+		}
+
+		.fa-sort, .fa-sort-asc, .fa-sort-desc{
+			font-size: 0.8rem;
+			top: 6px;
+			right: -14px;
+			position: absolute;
+		}
+    }
+
+    &__row, tr {
+        border-bottom: 1px solid color(gray, light);
+
+		&:last-child {
+			border-bottom: none;
+		}
+    }
+
+    // Messaging state modifiers
+    &__row, tr,
+    &__td, td {
+        &--success {
+            background-color: color(green, light);
+        }
+
+        &--warning {
+            background-color: color(yellow, light);
+        }
+
+        &--error {
+            background-color: color(red, light);
+        }
+    }
+
+    // "Zebra-striped" rows change in color every other row
+    &--zebra &__row:nth-child(odd),
+    &--zebra tbody tr:nth-child(odd) {
+        background-color: color(gray, light);
+    }
+
+    // Selectable states also get hover/focus interaction
+    &--selectable &__row,
+    &--selectable tbody tr {
+        &:hover, &:focus,
+        &.has-focus {
+            background-color: color(blue, light);
+        }
+
+        &.is-selected {
+            background-color: color(blue, light);
+        }
+    }
+
+	.table__item__controls {
+		transition: opacity .15s ease-in-out;
+		padding-top: 0;
+		padding-bottom: 0;
+
+		& > small {
+			cursor: pointer;
+		}
+
+		.btn{
+			margin-right: 8px;
+
+			&:last-child {
+				margin-right: 0;
+			}
+		}
+	}
+}
+
+
+%table--formide--clean,
+.table--formide--clean {
+
+	&__th, th, &__row, tr {
+	    border: none;
+	}
+
+}
+
+
+%table--formide--animate,
+.table--formide--animate {
+
+	tr {
+		transition: opacity .15s ease-in-out;
+
+		&.ng-enter {
+			animation: flipInX 1s;
+		}
+		&.ng-enter-stagger {
+			animation-delay: .2s;
+			animation-duration: 0s;
+		}
+		&.ng-leave {
+			animation: bounceOut100 1s;
+		}
+	}
+
+}
+
+
+%table--formide--responsive,
+.table--formide--responsive {
+
+	td {
+	    display: block;
+	    vertical-align: middle;
+	    white-space: nowrap;
+	    overflow: hidden;
+	    text-overflow: ellipsis;
+
+		&.name {
+			white-space: normal;
+			line-height: 25px;
+		}
+	}
+
+	@media (min-width: $sm-start) {
+		td, th {
+	    	display: table-cell;
+		}
+	}
+
+	@media (max-width: $xs-end) {
+
+		th, thead {
+		    display: none;
+		}
+
+		td {
+		    width: 98%;
+		    text-align: left!important;
+		}
+
+		td:first-child, th:first-child {
+		    padding-top: 1.5rem;
+		}
+
+		td:last-child, th:last-child {
+		    padding-bottom: 1.5rem;
+		}
+
+		td:before {
+		    content: attr(data-th) " ";
+		    width: 8.5em;
+		    display: inline-block;
+		    font-weight: 600;
+		}
+
+		.table__item__controls {
+
+			&:before {
+			    width: 0;
+			}
+
+			@include media-query(xs) {
+		        width: 100% !important;
+		    }
+
+			.btn{
+				padding: .5rem;
+				width: 49%;
+				margin-right: 0;
+			}
+		}
+
+	}
+}

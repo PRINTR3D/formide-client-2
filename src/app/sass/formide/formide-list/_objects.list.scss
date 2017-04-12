@@ -1,0 +1,47 @@
+
+.list-ui {
+    margin: 0;
+    padding: 0;
+
+    list-style: none;
+
+    &--dividers > li + li {
+        border-top: 1px solid;
+        border-color: color(gray, x-dark, 0.1);
+    }
+
+    &--inline > li {
+        display: inline-block;
+    }
+
+	.list-ui__item {
+	    padding: 1rem;
+		border-bottom: 1px solid $tertiary-color;
+
+		&:first-child {
+			border-top: 1px solid $tertiary-color;
+		}
+	}
+}
+
+
+.list-inline{
+	@extend .list-ui;
+
+	> li {
+        display: inline-block;
+    }
+}
+
+.list {
+	list-style-type: circle;
+    line-height: 1.8;
+    font-size: .9rem;
+    margin: 1rem 0 1rem 18px;
+
+	&.list--noStyle {
+		list-style: none;
+		margin-left: 0;
+    	margin-right: 0;
+	}
+}

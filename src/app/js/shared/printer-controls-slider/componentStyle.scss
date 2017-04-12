@@ -1,0 +1,90 @@
+[printer-controls-slider],
+printer-controls-slider {
+    display: block;
+    margin-bottom: $baseline;
+
+    .pretty-value {
+        @include text-small;
+        position: absolute;
+        bottom: -1.5rem;
+    }
+
+    .pretty--min {
+        left: 0;
+    }
+
+    .pretty--max {
+        right: 0;
+    }
+
+    .percentage-cur .num {
+    	margin-right: 5px;
+    }
+
+    .progress-bar {
+       width: 100%;
+       height: 4px;
+       border-radius: 2px;
+       @include button-background($tertiary-color);
+       position: relative;
+       margin: 8px 0;
+   }
+
+   .progress-bar .inner {
+        position: relative;
+        width: 0;
+        height: 100%;
+        border-radius: 2px;
+        @include button-background($primary-color);
+   }
+
+   .inner {
+        height: 0;
+        width: 0;
+        transition: all 1s ease-out;
+   }
+
+   .progress-bar-slider .inner {
+        transition: none;
+        min-width: 0;
+   }
+
+   .progress-bar-slider .inner:after {
+        content: " ";
+        @include button-background($tertiary-color);
+        width: 16px;
+        height: 16px;
+        min-width: 16px;
+        position: absolute;
+        right: -5px;
+        top: -5px;
+        border-radius: 50%;
+
+        border: 1px solid $secondary-color;
+        margin: 0px;
+   }
+
+   .progress-slider {
+        opacity: 0;
+        width: 100%;
+        height: 4px;
+        position: absolute;
+        min-width: 0;
+        top: 0px;
+        left: 0px;
+        cursor: pointer;
+        z-index: 1;
+   }
+
+   .input-container{
+	   position: relative;
+	   padding-left: 16px;
+	   padding-right: 16px;
+   }
+
+   .symbol{
+	  position: absolute;
+	  top: 8px;
+	  right: 0;
+   }
+}

@@ -1,0 +1,115 @@
+<!--
+ *	This code was created for Printr B.V. It is open source under the formide-client package.
+ *	Copyright (c) 2017, All rights reserved, http://printr.nl
+-->
+
+<article id="monitor-print">
+
+	<h3>Monitor Print</h3>
+
+	<p ng-if="monitorPrint.printer.$active.status !== 'offline' && !monitorPrint.printer.$active.printJob">Selected Printer is not currently printing</p>
+
+	<p ng-if="monitorPrint.printer.$active.status == 'offline'">Selected Printer is currently Offline</p>
+
+	<section id="currently-printing" ng-if="monitorPrint.printer.$active.printJob" class="u-margin-bottom-1">
+
+		<div print-job-item class="block u-margin-bottom-1"></div>
+
+		<div class="tune-values xs-hide">
+
+			<div class="layout layout--alignMiddle">
+				<div class="layout__item u-1/3">
+					<div class="tune-block">
+						<h5 class="tune-header">Print Speed</h5>
+						<div class="layout layout--alignMiddle">
+							<div class="layout__item u-1/2 u-textRight">
+								<printer-controls-speed size="45" speed="monitorPrint.printSpeed" min="1" max="500" class="icon"></printer-controls-speed>
+							</div>
+							<div class="layout__item u-1/2 u-textLeft">
+								<h4>{{monitorPrint.printSpeed}}%</h4>
+							</div>
+						</div>
+					</div>
+
+				</div>
+				<div class="layout__item u-1/3">
+					<div class="tune-block">
+						<h5 class="tune-header">Flow Rate</h5>
+						<div class="layout layout--alignMiddle">
+							<div class="layout__item u-1/2 u-textRight">
+								<printer-controls-flow-rate size="45" speed="monitorPrint.flowRate" min="1" max="500" class="icon"></printer-controls-flow-rate>
+							</div>
+							<div class="layout__item u-1/2 u-textLeft">
+								<h4>{{monitorPrint.flowRate}}%</h4>
+							</div>
+						</div>
+					</div>
+
+				</div>
+				<div class="layout__item u-1/3">
+					<div class="tune-block">
+						<h5 class="tune-header">Fan Speed</h5>
+						<div class="layout layout--alignMiddle">
+							<div class="layout__item u-1/2 u-textRight">
+								<printer-controls-fan size="45" speed="monitorPrint.fanSpeed" max="100" class="icon"></printer-controls-fan>
+							</div>
+							<div class="layout__item u-1/2 u-textLeft">
+								<h4>{{monitorPrint.fanSpeed}}%</h4>
+							</div>
+						</div>
+					</div>
+
+				</div>
+			</div>
+
+		</div>
+
+	</section>
+
+
+	<div ng-show="(monitorPrint.queue.resource | filter: {status: 'printing'}).length < 1" ng-switch="monitorPrint.printer.$active.deviceStatus" class="u-margin-bottom-1">
+		<h3>Monitor Print</h3>
+		<div ng-switch-when="online">
+			<article id="loading-queue-state" class="fade loading-queue-state u-textCenter" ng-if="monitorPrint.printer.$active.status !== 'offline'">
+				<h4><i class="fa fa-2x fa-file-o"></i></h4>
+				<h5 class="loader">No items printing</h5>
+				<a class="fade" ng-click="monitorPrint.navigate('print/queue')" add-new>View queue</a>
+			</article>
+
+			<article id="loading-queue-state" class="fade loading-queue-state u-textCenter u-margin-bottom-2" ng-if="monitorPrint.printer.$active.status == 'offline'">
+				<h4><i class="fa fa-2x fa-file-o"></i></h4>
+				<h5 class="loader">This printer is currently offline</h5>
+			</article>
+		</div>
+		<div ng-switch-when="offline">
+			<article id="loading-queue-state" class="fade loading-queue-state u-textCenter u-margin-bottom-2">
+				<h4><i class="fa fa-2x fa-file-o"></i></h4>
+				<h5 class="loader">This printer is offline</h5>
+			</article>
+		</div>
+		<div ng-switch-default>
+			<article id="loading-queue-state" class="fade loading-queue-state u-textCenter u-margin-bottom-2">
+				<h4><i class="fa fa-2x fa-file-o"></i></h4>
+				<h5 class="loader">No printer connected</h5>
+			</article>
+		</div>
+	</div>
+
+
+	<div class="layout">
+
+		<div class="layout__item u-1/2-sm pad">
+			<h4>Webcam</h4>
+			<section class="block block--panel">
+				<dashboard-webcam></dashboard-webcam>
+			</section>
+		</div>
+		<div class="layout__item u-1/2-sm pad">
+			<h4>Temperatures</h4>
+			<section class="block block--panel">
+				<dashboard-temperatures></dashboard-temperatures>
+			</section>
+		</div>
+
+	</div>
+</article>

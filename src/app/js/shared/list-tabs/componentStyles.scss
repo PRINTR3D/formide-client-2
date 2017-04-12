@@ -1,0 +1,22 @@
+.list-tabs {
+    @extend .list-inline;
+
+    border-bottom: 1px solid $tertiary-color;
+    margin-bottom: $baseline;
+
+    li {
+        margin-bottom: -1px;
+        padding: .5rem 1rem;
+        border: 1px solid $tertiary-color;
+        border-radius: $border-radius $border-radius 0 0;
+        color: $secondary-color;
+        cursor: pointer;
+		margin-right: 5px;
+
+        &.active {
+            border-bottom: 1px solid white;
+            color: $text-color;
+            cursor: default;
+        }
+    }
+}

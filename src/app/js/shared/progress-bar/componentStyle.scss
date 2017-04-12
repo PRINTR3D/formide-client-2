@@ -1,0 +1,56 @@
+/*
+ *	This code was created for Printr B.V. It is open source under the formide-client package.
+ *	Copyright (c) 2017, All rights reserved, http://printr.nl
+ */
+
+progress-bar,
+[progress-bar] {
+	@extend %progress-bar;
+	height: 8px;
+	background-color: $tertiary-color;
+	margin-top: 2px;
+	margin-bottom: 8px;
+
+	.progress {
+		@extend %progress;
+		background-color: $primary-color;
+		text-indent: -9999px;
+		text-align: left;
+	}
+}
+
+%progress-bar {
+	width: 100%;
+	position: relative;
+	overflow: hidden;
+	display: block;
+	border-radius: $border-radius;
+}
+
+%progress {
+	width: 0%;
+	height: 100%;
+	position: absolute;
+	// position: initial;
+	overflow: hidden;
+	display: block;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	transition: width 1s ease-in-out;
+	border-radius: $border-radius;
+}
+
+.progress--undefined {
+	.progress {
+	    box-shadow: 0 0 6px 2px rgba(255, 255, 255, .2) inset;
+	    background-image: linear-gradient(-45deg, rgba(220, 220, 222, 1) 25%, rgba(220, 220, 222, 0) 25%, rgba(220, 220, 222, 0) 50%, rgba(220, 220, 222, 1) 50%, rgba(220, 220, 222, 1) 75%, rgba(220, 220, 222, 0) 75%, rgba(220, 220, 222, 0));
+	    background-repeat: repeat-x;
+	    background-size: 20px 20px;
+		animation: candystripe .8s linear infinite;
+	}
+
+	@keyframes candystripe {
+		to {background-position: 20px 0;}
+	}
+}

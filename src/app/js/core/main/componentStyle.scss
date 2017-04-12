@@ -1,0 +1,105 @@
+
+/* Custom Styling */
+main#main {
+	position: relative;
+	z-index: 1000;
+    background-color: #F6F6F7;
+    transition: transform .3s ease-in-out;
+	width: 100%;
+	overflow-x: hidden;
+
+	@include media-query(xs) {
+		transition: transform .5s ease-in-out;
+	}
+
+	@include media-query(sm-and-down) {
+		&.noScroll{
+			position: fixed;
+			height: 100vh;
+			overflow-y: hidden;
+		}
+	}
+
+	// fix ie11 issue
+	@media (min-width: $sm-start) and (max-width:$sm-end) {
+		&.noScroll{
+			#main__header, section.is-header {
+				position: absolute;
+			}
+		}
+	}
+
+    #main__header {
+        padding: .5rem 1.5rem 0;
+		position: fixed;
+
+		@include media-query(md) {
+            position: absolute;
+        }
+
+        @include media-query(xs) {
+            padding: 0;
+        }
+    }
+
+    #main__content {
+
+		padding-top: 4rem;
+		min-height: 100vh;
+		overflow-x: hidden;
+
+		@include media-query(md) {
+			height: 100vh;
+			overflow-y: auto;
+		}
+
+        & > footer {
+            padding: 1rem;
+        }
+    }
+
+	.inner-page-content{
+		padding: 0 1.5rem 3rem 1.5rem;
+
+		@include media-query(xs) {
+			padding-left: .75rem;
+			padding-right: .75rem;
+        }
+
+		 .inner-page-section{
+			 padding-top: 1rem;
+			 padding-bottom: 0.5rem;
+			 border-bottom: 1px $tertiary-color solid;
+
+			 &:last-child {
+			    border: none;
+			}
+		 }
+	}
+}
+
+@include media-query(xs) {
+	.ngdialog {
+		padding-top: 5px !important;
+	}
+	.ngdialog-onboarding, .ngdialog-setup {
+		padding-top: 5px !important;
+	}
+	.article--modal header {
+	  padding: 1.5rem 3rem 1.5rem 1.5rem !important;
+	}
+}
+
+.border-none{
+	border: none !important;
+}
+
+.hidden{
+	visibility: hidden !important;
+	opacity: 0 !important;
+}
+
+.visible{
+	visibility: visible !important;
+	opacity: 1 !important;
+}

@@ -1,0 +1,58 @@
+<!--
+ *	This code was created for Printr B.V. It is open source under the formide-client package.
+ *	Copyright (c) 2017, All rights reserved, http://printr.nl
+-->
+
+<header ng-click="vm.selectPrinter()">
+
+    <hgroup class="layout">
+	    <h3 class="layout__item u-fit"><status-icon size="24px" status="vm.printer.status"></status-icon></h3>
+
+		<h3 class="layout__item u-fill printer-title u-textTruncate">{{vm.printer.port}}</h3>
+    </hgroup>
+
+	<section class="layout layout--withoutGutter layout--alignMiddle progress-container" ng-if="vm.printer.status === 'printing' || vm.printer.status === 'paused'" >
+		<progress-bar class="layout__item u-fill" valuenow="{{vm.printer.progress}}" valuemax="100"></progress-bar>
+		<h6 class="layout__item u-fit">{{ ((vm.printer.progress / 100) * 100) | ceil }}%</h6>
+	</section>
+
+
+
+
+
+	<div class="layout layout--smallGutter progressControls" ng-if="vm.type === 'selected'" >
+
+		<div class="layout__item u-1/4 progressControl u-posRelative">
+			<a ng-click="vm.navigate('/monitor');$root.setSidebarInvisible()" class="btn btn--small btn--white md-hide" id="webcam-feed" title="View Live">
+			   <i class="fa fa-video-camera"></i>
+		   </a>
+		   <a ng-click="vm.navigate('/monitor')" class="btn btn--small btn--white sm-and-down-hide" id="webcam-feed" title="View Live">
+			  <i class="fa fa-video-camera"></i>
+		  </a>
+		</div>
+
+		<div class="layout__item u-1/4 progressControl">
+		     <a title="Controls" ng-click="vm.navigate('/control');$root.setSidebarInvisible()" class="btn btn--white btn--small md-hide"><i class="fa fa-arrows"></i></a>
+			 <a title="Controls" ng-click="vm.navigate('/control')" class="btn btn--white btn--small sm-and-down-hide"><i class="fa fa-arrows"></i></a>
+		</div>
+
+		<div class="layout__item u-1/4 progressControl" ng-if="vm.printer.status === 'printing' || vm.printer.status == 'heating'" ng-init="vm.executingCommand = false">
+			<button class="btn btn--small btn--white" ng-click="vm.pausePrint()" title="Pause">
+				<i ng-class="{true: 'fa-refresh fa-spin', false: 'fa-pause'}[vm.executingCommand]" class="fa"></i>
+			</button>
+		</div>
+
+		<div class="layout__item u-1/4 progressControl" ng-if="vm.printer.status === 'paused'" ng-init="vm.executingCommand = false">
+			<button class="btn btn--small btn--white" ng-click="vm.resumePrint()" title="Play">
+				<i ng-class="{true: 'fa-refresh fa-spin', false: 'fa-play'}[vm.executingCommand]" class="fa"></i>
+			</button>
+		</div>
+
+		<div class="layout__item u-1/4 progressControl" ng-if="vm.printer.status === 'printing' || vm.printer.status === 'paused' || vm.printer.status == 'heating'" ng-init="vm.executingCommand = false">
+		     <button class="btn btn--small btn--white stop" ng-class="{true: 'btn--disabled'}[vm.executingCommand]" ng-click="vm.stopPrint()" title="Stop">
+				<i class="fa fa-stop"></i>
+			</button>
+		</div>
+	</div>
+
+</header>

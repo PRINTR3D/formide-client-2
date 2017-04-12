@@ -1,0 +1,14 @@
+<!--
+ *	This code was created for Printr B.V. It is open source under the formide-client package.
+ *	Copyright (c) 2017, All rights reserved, http://printr.nl
+-->
+
+<div
+	role="progress"
+	aria-valuenow="{{vm.valuenow}}"
+	aria-valuemin="0"
+	aria-valuemax="{{::vm.valuemax}}"
+	class="progress"
+	title="Progress {{ ((vm.valuenow / vm.valuemax) * 100) | ceil }}%"
+	style="width: {{ ((vm.valuenow / vm.valuemax) * 100) | ceil }}%;"
+	>{{ ((vm.valuenow / vm.valuemax) * 100) | ceil }}%</div>

@@ -1,0 +1,108 @@
+<!--
+ *	This code was created for Printr B.V.
+ *	Copyright (c) 2017, All rights reserved, http://printr.nl
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta charset="UTF-8">
+	<title>Formide Local</title>
+
+	<script src="./javascripts/application.js"></script>
+	<link rel="stylesheet" href="./stylesheets/application.min.css">
+
+	<link rel="shortcut icon" href="./images/favicon/favicon.ico">
+	<link rel="icon" sizes="16x16 32x32 64x64" href="./images/favicon/favicon.ico">
+	<link rel="icon" type="image/png" sizes="196x196" href="./images/favicon/favicon-192.png">
+	<link rel="icon" type="image/png" sizes="160x160" href="./images/favicon/favicon-160.png">
+	<link rel="icon" type="image/png" sizes="96x96" href="./images/favicon/favicon-96.png">
+	<link rel="icon" type="image/png" sizes="64x64" href="./images/favicon/favicon-64.png">
+	<link rel="icon" type="image/png" sizes="32x32" href="./images/favicon/favicon-32.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="./images/favicon/favicon-16.png">
+
+	<link rel="apple-touch-icon" href="./images/favicon/launcher.png">
+	<link rel="apple-touch-icon" sizes="72x72" href="./images/favicon/launcher_hdpi.png">
+	<link rel="apple-touch-icon" sizes="98x98" href="./images/favicon/launcher_xhdpi.png">
+	<link rel="apple-touch-icon" sizes="144x144" href="./images/favicon/launcher_xxhdpi.png">
+	<link rel="apple-touch-icon" sizes="192x192" href="./images/favicon/launcher_xxxhdpi.png">
+	<link rel="apple-touch-icon" sizes="120x120" href="./images/favicon/Icon-60@2x.png">
+	<link rel="apple-touch-icon" sizes="180x180" href="./images/favicon/Icon-60@3x.png">
+	<link rel="apple-touch-icon" sizes="76x76" href="./images/favicon/Icon-76.png">
+	<link rel="apple-touch-icon" sizes="152x152" href="./images/favicon/Icon-76@2x.png">
+	<link rel="apple-touch-icon" sizes="167x167" href="./images/favicon/Icon-83.5@2x.png">
+
+	<meta name="msapplication-TileColor" content="#FFFFFF">
+	<meta name="msapplication-TileImage" content="./images/favicon/favicon-144.png">
+	<meta name="msapplication-config" content="./images/favicon/browserconfig.xml">
+
+	<meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no" />
+</head>
+<body
+	ng-controller="AppController as app"
+	ng-class="{'sidebar-invisible': app.sidebarInvisible, 'ng-dialog-open--away': app.dialogAway, 'loaded': app.loaded }"
+	ngf-drop
+	ngf-multiple="true"
+	ng-model="app.droppedFiles"
+	file-droppable>
+
+	<loading-screen>
+		<div class="loading-spinner"></div>
+    </loading-screen>
+
+	<div class="layout layout--withoutGutter">
+
+		<main id="main" class="layout__item u-fill" ng-class="{'noScroll': $root.bodyNoScroll || app.sidebarInvisible}">
+
+			<header
+				role="banner"
+				core-header
+				id="main__header"
+				class="header">
+			</header>
+
+			<article
+				core-page-content
+				route-config="app.routeConfig"
+				class="main-page-content"
+				id="main__content">
+	        </article>
+
+		</main>
+
+		<aside
+			core-aside
+			id="sidebar"
+			rel="sidebar"
+			class="layout__item u-fit aside"
+			ng-class="{'noScroll': ($root.bodyNoScroll && !app.sidebarInvisible) || !app.sidebarInvisible}"
+			template="sidebar/componentTemplate.html"
+			ng-if="$root.sidebar">
+		</aside>
+
+	</div>
+
+	<ul class="alert-list list-bare hidden" ng-class="{'visible': app.notifications}">
+		<li alert-box
+			ng-repeat="alert in app.notifications"
+			popup="{{alert.popup}}"
+			alert-id="alert.id"
+			type="{{alert.type}}"
+			title="alert.title"
+			message="alert.message"
+			actions="alert.actions"
+			link="alert.link">
+		</li>
+	</ul>
+
+	<dashboard-webcam
+		ng-if="$root.floatingWebcam && !$root.webcamError"
+		id="floating-webcam"
+		show-close="true"
+		ng-style="$root.floatingWebcamPosition"
+		drag-webcam>
+	</dashboard-webcam>
+
+</body>
+</html>

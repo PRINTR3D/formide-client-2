@@ -1,0 +1,33 @@
+/*
+ *	This code was created for Printr B.V. It is open source under the formide-client package.
+ *	Copyright (c) 2017, All rights reserved, http://printr.nl
+ */
+
+temperature-bar,
+[temperature-bar] {
+	@extend %progress-bar;
+	@include text-small;
+	height: 24px;
+	background-color: $tertiary-color;
+	margin-top: 2px;
+	margin-bottom: 8px;
+	padding: .3rem;
+	text-align: right;
+	color: $secondary-color;
+
+	.progress {
+		@extend %progress;
+		@include text-small;
+		background-color: rgba($primary-color, .6);
+		text-align: right;
+		color: white;
+		padding: 5px;
+	}
+
+	.target {
+		@extend %progress;
+		border-right: 2px solid darken($primary-color, 10);
+		text-indent: -9999px;
+		text-align: left;
+	}
+}

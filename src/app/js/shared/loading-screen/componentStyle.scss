@@ -1,0 +1,60 @@
+
+@-webkit-keyframes rotate-forever {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+@-moz-keyframes rotate-forever {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+@keyframes rotate-forever {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+loading-screen .loading-spinner {
+  animation-duration: 0.75s;
+  animation-iteration-count: infinite;
+  animation-name: rotate-forever;
+  animation-timing-function: linear;
+  height: 64px;
+  width: 64px;
+  border: 8px solid $primary-color;
+  border-right-color: transparent;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+loading-screen .loading-spinner {
+  position: relative;
+  top: 200px;
+  right: auto;
+  bottom: auto;
+  left: auto;
+  margin: -15px 0 -15px;
+}
+
+loading-screen {
+    position: fixed;
+    z-index: 99999;
+    background-color: #F6F6F7;
+    bottom: 0px ;
+    left: 0px ;
+    opacity: 1.0 ;
+    transition: all linear 200ms ;
+    right: 0px ;
+    top: 0px ;
+	text-align: center;
+}
