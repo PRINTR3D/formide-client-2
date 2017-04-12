@@ -179,6 +179,7 @@
 							callback: function() {
 								$api.post('/network/hotspot', {enabled: vm.network.isHotspot})
 								.then(function(response) {
+								  vm.setHotspot = false;
 				  				  $notification.addNotification({
 				  					  title: 'Hotspot Disabled',
 				  					  message: 'Device will no longer emit the Wi-Fi hotspot',
@@ -206,6 +207,7 @@
 			  // if turning on the hotspot
 			  $api.post('/network/hotspot', {enabled: vm.network.isHotspot})
 			  .then(function(response) {
+				  vm.setHotspot = true;
 				  $notification.addNotification({
 					  title: 'Hotspot Enabled',
 					  message: 'Device will now emit the Wi-Fi hotspot',

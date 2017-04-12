@@ -41,8 +41,14 @@
 						<tr class="table__item">
 							<td>Hotspot Mode</td>
 			                <td>
-								<checkbox ng-if="manageDevice.deviceType == 'the_element'" checkbox-model="manageDevice.network.isHotspot" checkbox-callback="manageDevice.setHotspot"></checkbox>
-								<span ng-if="manageDevice.deviceType !== 'the_element'">-</span>
+								<div  ng-click="manageDevice.setHotspot()">
+									<span class="checkbox">
+										<i ng-if="!manageDevice.network.isHotspot" class="fa fa-square-o"></i>
+										<i ng-if="manageDevice.network.isHotspot" class="fa fa-check-square-o"></i>
+									</span>
+								</div>
+
+								<span ng-if="manageDevice.deviceType == 'the_element'">-</span>
 							</td>
 			            </tr>
 			        </tbody>
