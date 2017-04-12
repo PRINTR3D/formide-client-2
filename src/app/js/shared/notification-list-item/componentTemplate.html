@@ -1,0 +1,17 @@
+<!--
+ *	This code was created for Printr B.V. It is open source under the formideos-interface package.
+ *	Copyright (c) 2017, All rights reserved, http://printr.nl
+-->
+
+<header class="layout">
+    <h4 class="layout__item u-4/5 title u-textTruncate" title="{{vm.count}} notifications of '{{vm.title}}'">
+		<span class="count" ng-if="vm.count > 1">{{vm.count}}</span> {{vm.title}} <span class="time">{{vm.updatedAt | timeAgo}}</span>
+	</h4>
+	<span class="layout__item u-1/5 u-textRight"><a class="remove" ng-click="vm.clearSingle(vm.notificationId)"><i class="fa fa-times"></i></a></span>
+</header>
+
+<ng-transclude></ng-transclude>
+
+<article>
+    <p class="description"><small>{{vm.description}}</small></p>
+</article>

@@ -1,0 +1,74 @@
+
+// Define media query breakpoints for formide
+//
+// use in the format:
+//
+// `@include media-query(sm){ [styles here] }`
+//
+// these will be created from your $layout-breakpoints map
+
+$sm-start:	map-get($layout-breakpoints, sm);
+$md-start:	map-get($layout-breakpoints, md);
+
+$xs-end: 	$sm-start - 1px;
+$sm-end: 	$md-start - 1px;
+
+@mixin media-query($bp){
+
+	@each $name, $value in $layout-breakpoints {
+
+	    @if $bp == $name{
+	        @media only screen and (min-width:$value) { @content; }
+	    }
+	}
+
+	@if $bp == xs{
+		@media only screen and (max-width: $xs-end) { @content; }
+	}
+
+    @if $bp == sm-and-down{
+        @media only screen and (max-width:$sm-end) { @content; }
+    }
+
+}
+
+
+// add some classes for hiding content at certain breakpoints
+//
+// use in the format:
+//
+// .sm-hide
+//
+// these will be created from your $layout-breakpoints map
+
+@each $name, $value in $layout-breakpoints {
+
+	.#{$name}-hide {
+	    @include media-query($name) {
+	        display: none !important;
+	        opacity: 0 !important;
+	    }
+	}
+
+}
+
+.xs-hide {
+    @include media-query(xs) {
+        display: none !important;
+        opacity: 0 !important;
+    }
+}
+
+.sm-and-down-hide {
+	@include media-query(sm-and-down) {
+		display: none !important;
+        opacity: 0 !important;
+	}
+}
+
+.md-and-down-hide{
+	@media (max-width: 1399px) {
+		display: none !important;
+		opacity: 0 !important;
+	}
+}

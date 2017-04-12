@@ -1,0 +1,23 @@
+<!--
+ *	This code was created for Printr B.V. It is open source under the formideos-interface package.
+ *	Copyright (c) 2017, All rights reserved, http://printr.nl
+-->
+
+<figure class="layout layout--alignCenter layout--alignMiddle layout--withoutGutter" ng-class="{'webcamLoaded': vm.webcamLoaded, 'webcamError': $root.webcamError}">
+	<div ng-if="vm.showClose" ng-click="$root.floatingWebcam = false; $event.stopPropagation();" class="close">&times;</div>
+	<div ng-show="!$root.webcamError || !vm.webcamLoaded" class="layout__item webcam-container">
+
+		<figcaption ng-if="!$root.webcamError && vm.webcamLoaded" class="pill pill--small">Live <i class="fa fa-circle text-base-red faa-flash animated"></i></figcaption>
+
+		<img draggable="false" ng-show="!$root.webcamError" ng-src="{{vm.webcamPath}}" onError="angular.element(this).scope().$root.webcamError = true;" onLoad="angular.element(this).scope().vm.webcamLoaded = true;"/>
+
+		<div ng-if="$root.webcamError" class="webcam-placeholder">
+			Connect a webcam to your device
+		</div>
+
+	</div>
+
+	<div ng-if="!vm.webcamLoaded && !$root.webcamError && vm.printer.$active.deviceStatus == 'online'" class="webcam-loading layout__item">
+		<span class="loader">Loading<span class="loader__dot">.</span><span class="loader__dot">.</span><span class="loader__dot">.</span></span>
+	</div>
+</figure>

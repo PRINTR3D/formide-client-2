@@ -1,0 +1,89 @@
+/*
+ *	This code was created for Printr B.V. It is open source under the formideos-interface package.
+ *	Copyright (c) 2017, All rights reserved, http://printr.nl
+ */
+
+ core-page-content,
+ [core-page-content] {
+
+	 .nav{
+		 background: white;
+		 padding: 3px 1.5rem 0;
+
+		 @include media-query(xs) {
+			 padding: 0 0.5rem;
+		 }
+
+		 li{
+			 margin-right: 1rem;
+
+			 &:last-child {
+			    margin-right: 0;
+			}
+
+			 a{
+				padding: 10px .2rem;
+				border-bottom: 2px solid;
+				border-bottom-color: transparent;
+				opacity: .6;
+				color: inherit;
+				transition: border .3s ease-in-out, opacity .3s ease-in-out, color .3s ease-in-out;
+
+				&:hover{
+					opacity: 1;
+				    text-decoration: none;
+				    border-bottom-color: #e4e4e4;
+				}
+
+				&.active{
+					opacity: 1;
+					border-bottom-color: $primary-color;
+				}
+			 }
+		 }
+
+		 @include media-query(xs) {
+
+			display: block;
+			position: relative !important;
+		    overflow-x: auto !important;
+			padding: 0 1rem;
+			margin-top: -0.5rem;
+
+			&.open{
+				position: fixed!important;
+			    width: 100%;
+			    background: white;
+				z-index: 9999;
+				box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 2px -2px;
+			}
+
+			li{
+				display: block;
+				width: 100%;
+				margin-top: 5px;
+
+				&:last-child {
+					margin-bottom: 5px;
+				}
+
+				a{
+					width: 100%;
+					border-bottom: 2px solid $tertiary-color;
+					opacity: 1;
+
+					&.active {
+						width: auto;
+						border-bottom: 2px solid $primary-color;
+					}
+				}
+
+				.fa{
+					margin-left: 5px;
+				}
+			}
+		}
+	 }
+
+
+ }

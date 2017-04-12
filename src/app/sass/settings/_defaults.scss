@@ -1,0 +1,111 @@
+
+/**
+	=Settings/Colors
+*/
+
+$baseline: 					24px;
+$global-font-size: 			16px;
+$base-font:					"Open Sans", sans-serif;
+$line-height-ratio:			1.5;
+
+$layout-fractions: 			1 2 3 4 5 6;
+$layout-gutter-size: 		$baseline;
+$layout-breakpoints: 		( md: 1060px, sm: 720px );
+
+$border-radius: 			3px;
+$border-round:				99999px;
+
+$aside-width: 				340px;
+
+$open-sans-path:            "../fonts";
+$fa-font-path:              "../icons";
+
+
+$global-colors: (
+    white: #ffffff,
+
+    black: #000000,
+
+    gray: (
+		base: #e4e4e4,
+		x-dark: #161720,
+		dark: #afb0b9,
+		light: #F3F3F3
+    ),
+
+    blue: (
+		base: #46b1e6,
+		dark: #15709d,
+		light: #46b1e6
+    ),
+
+    red: (
+		base: #e64661,
+		dark: #5d4c40,
+		light: #e64661
+    ),
+
+    green: (
+		base: #61e646,
+		dark: #385142,
+		light: #61e646
+    ),
+
+    orange: (
+		base: #e67b46,
+		dark: #5d4c40
+    ),
+
+	indigo: (
+		base: #e64661,
+		dark: #403B60
+    ),
+
+	purple: (
+		base: #615892,
+		dark: #51383a
+    ),
+
+	yellow: (
+	    base: #fcca00,
+	    dark: #c99700,
+	    light: #fff5cc
+    )
+);
+
+$alert-color: 					#e64661;
+$success-color: 				#61e646;
+$warning-color: 				#fcca00;
+$info-color: 					#e64661;
+$facebook-color: 				#3b5998; //default Facebook color
+$google-color:					#DF4A32; //default Google color
+$twitter-color:					#55acee; //default Twitter color
+
+.text-base-alert-color {
+  color: $alert-color;
+}
+
+
+
+$location: 'local';
+
+
+$body-bg:						#fff;
+$primary-color: 				#615892;
+$dark-primary-color:			#403B60;
+$text-color: 					#161720;
+$secondary-color: 				#afb0b9;
+$tertiary-color: 				#e4e4e4;
+$gradient-dark:					$dark-primary-color;
+$gradient-light:				#908AB1;
+
+$color-links: 					$primary-color;
+
+
+.text-base-text-color {
+	color: $text-color;
+}
+
+.text-base-primary-color {
+	color: $primary-color;
+}

@@ -1,0 +1,59 @@
+<!--
+ *	This code was created for Printr B.V. It is open source under the formideos-interface package.
+ *	Copyright (c) 2017, All rights reserved, http://printr.nl
+-->
+
+<article class="block content content--small">
+	<div class="localLogin">
+
+		<section class="logo logo--large" ng-if="!authLogin.setup">
+			<svg version="1.1" baseProfile="full" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" rel="logo">
+			<linearGradient id="strokeGradient" gradientUnits="userSpaceOnUse" x1="64" y1="127.8776" x2="64" y2="0.1224">
+			   <stop  offset="0" style="stop-color:#2192D2"/>
+			   <stop  offset="1" style="stop-color:#5FC6F3"/>
+			</linearGradient>
+
+			<path style="fill:none;stroke:#46b1e6;stroke-width:5;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;shape-rendering:geometric-precision;" d="
+			   M102.202,59.171c0,0-8.327-11.914-17.334-24.799C74.244,19.174,62.67,2.622,62.67,2.622L33.505,25.107L17.716,91.418l20.031,33.867
+			   l46.678,0.092c0,0,9.292-9.086,16.739-16.37c4.965-4.856,9.12-8.922,9.12-8.922L102.202,59.171z M62.67,2.622l22.198,31.75
+			   L77.732,54.84l-23.434,5.772L62.67,2.622z M60.823,74.021l11.906,3.725L63.038,90.75l-9.523-9.059L60.823,74.021z M53.514,81.691
+			   l-14.556-3.105l15.34-17.974l6.525,13.409L53.514,81.691z M60.823,74.021l-6.525-13.409l23.434-5.772l8.818,30.911l-13.821-8.004
+			   c-0.092-0.057,0.123,0.039,0,0L60.823,74.021z M33.505,25.107L62.67,2.622l-8.372,57.99l-15.34,17.974L17.716,91.418L33.505,25.107z
+			    M17.716,91.418l21.242-12.832l14.556,3.105l9.523,9.059l-1.86,18.547l-23.43,15.988L17.716,91.418z M37.747,125.285l23.43-15.988
+			   l23.248,16.08L37.747,125.285z M84.425,125.378l-23.248-16.08l1.86-18.547l9.691-13.004c0,0,7.225,4.184,13.821,8.004
+			   c5.524,3.199,10.61,6.146,10.61,6.146l4.005,17.11L84.425,125.378z M97.159,91.897L97.159,91.897l-10.61-6.146L77.732,54.84
+			   l7.136-20.469l17.334,24.799l8.082,40.922l-9.12,8.915L97.159,91.897z"/>
+			</svg>
+
+			<h1>Formide Local</h1>
+		</section>
+		<div ng-if="authLogin.setup" class="figure-container">
+			<figure class="onboarding-figure">
+				<img class="main-image" src="./public/assets/images/setup/setup_connect.png" width="250" height="250" alt="Welcome">
+			</figure>
+		</div>
+		<section>
+			<hgroup class="u-textCenter u-margin-top-_5">
+			   <h1>Device Login</h1>
+			</hgroup>
+			<form class="login-fields" ng-submit="authLogin.submitLoginForm()">
+				<input type="text" ng-model="authLogin.user.username" class="text-input" placeholder="Username">
+				<input type="password" ng-model="authLogin.user.password" class="text-input" placeholder="Password">
+				<input type="submit" class="btn btn--primary " value="Sign in" />
+				<span ng-if="authLogin.loading"><i  class="fa fa-2x fa-refresh fa-spin text-base-primary-color u-posAbsolute u-margin-left-1"></i></span>
+				<span ng-if="!authLogin.loading" class="u-margin-left-1 text-base-alert-color">{{ authLogin.errorMessage }}</span>
+			</form>
+
+			<section class="infoBox">
+				<i class="fa fa-info-circle"></i>
+				<p ng-if="authLogin.setup">Log into your device to connect it to Formide. If it is for the first time you can use the following:</p>
+				<p ng-if="!authLogin.setup">Note that you are logging into your device locally. If it is for the first time you can use the following:</p>
+				<p>Username: <strong>admin@local</strong><br/>Password:&nbsp; <strong>admin</strong></p>
+				<p>To use the full suite of features visit <a href="https://platform.formide.com"><strong>Formide</strong></a>
+				</p>
+			</section>
+
+		</section>
+
+	</div>
+</article>

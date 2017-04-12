@@ -1,0 +1,199 @@
+/*
+ *	This code was created for Printr B.V. It is open source under the formideos-interface package.
+ *	Copyright (c) 2017, All rights reserved, http://printr.nl
+ */
+
+ #file-library{
+
+
+	 #files {
+	 	position: relative;
+	 	min-height: 84vh;
+
+	     .ng-slide-animation {
+	         overflow: hidden;
+
+	         & > ng-viewport,
+	         & > [ng-viewport] {
+	             display: block;
+	         }
+	         & > .ng-enter, & > .ng-leave {
+	             animation-duration: .5s;
+	             animation-fill-mode: both;
+	         }
+	         & > .ng-enter,
+	         & > .ng-leave.ng-leave-active {
+	             animation-name: fadeOutLeft;
+	         }
+	         & > .ng-leave,
+	         & > .ng-enter.ng-enter-active {
+	             z-index: 1;
+	             animation-name: fadeInLeft;
+	         }
+	         & > .ng-leave {
+	             position: absolute;
+	             z-index: -1;
+	         }
+	     }
+
+	     figure {
+	         margin-bottom: 0;
+	     }
+	 }
+
+
+	 #listView table {
+
+	 	width: 100%;
+
+	 	th{
+	 		a {
+	 			color: $text-color;
+
+	 			&:hover {
+	 				text-decoration: underline;
+	 			}
+
+	 			i{
+	 				font-size: 0.8rem;
+	 			    top: 6px;
+	 			    right: -16px;
+	 			    position: absolute;
+	 			}
+	 		}
+	 		&.name{
+	 			padding-left: 66px;
+
+	 			&.local{
+	 				padding-left: 0.5rem;
+	 			}
+	 		}
+	 	}
+
+	 	tbody tr{
+	 		cursor: pointer;
+
+	 		&.tr--selected{
+	 			background-color: rgba($secondary-color, .1);
+	 		}
+	 	}
+
+	 	td {
+	 		.icon-container{
+	 			position: relative;
+	 		}
+	 		.icon {
+	 			text-align: center;
+	 			padding: 0 8px;
+	 			min-width: 46px;
+	 			position: absolute;
+	 			top: -4px;
+
+	 			img {
+	 				width: 30px;
+	 	    		height: 30px;
+	 			}
+
+	 			i.folder {
+	 				background-image:
+	 					url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCAxNzkyIDE3OTIiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZD0iTTE2MDAgMTMxMnYtNzA0cTAtNDAtMjgtNjh0LTY4LTI4aC03MDRxLTQwIDAtNjgtMjh0LTI4LTY4di02NHEwLTQwLTI4LTY4dC02OC0yOGgtMzIwcS00MCAwLTY4IDI4dC0yOCA2OHY5NjBxMCA0MCAyOCA2OHQ2OCAyOGgxMjE2cTQwIDAgNjgtMjh0MjgtNjh6bTEyOC03MDR2NzA0cTAgOTItNjYgMTU4dC0xNTggNjZoLTEyMTZxLTkyIDAtMTU4LTY2dC02Ni0xNTh2LTk2MHEwLTkyIDY2LTE1OHQxNTgtNjZoMzIwcTkyIDAgMTU4IDY2dDY2IDE1OHYzMmg2NzJxOTIgMCAxNTggNjZ0NjYgMTU4eiIvPjwvc3ZnPg==);
+	 				background-repeat: no-repeat;
+	 				background-size: contain;
+	 				position: absolute;
+	 				margin-left: -15px;
+	 				width: 30px;
+	 				height: 30px;
+	 			}
+	 		}
+
+	 		&.actions {
+	 			width: 60px;
+	 		}
+
+	 		.name {
+	 			white-space: normal;
+	 			line-height: 25px;
+	 	    	padding: 0 0 0 8px;
+	 			margin-left: 50px;
+	 			display: inline-block;
+
+	 			@include media-query(xs) {
+	 	    		margin-left: 0;
+	 				padding: 0;
+	 	    	}
+
+	 			&.local{
+	 				margin-left: 0;
+	 				padding: 0;
+	 			}
+	 		}
+
+	 	}
+	 }
+
+	 #uploadInvite{
+	 	color: darken($secondary-color, 15%);
+	 	display: inline-block;
+	     width: 100%;
+
+	 	.fa{
+	 		font-size: 1.5rem;
+	 		color: darken($secondary-color, 5%);
+	 		top: 3px;
+	     	position: relative;
+	 	}
+	 	.icon{
+	 		text-align: right;
+	 		margin: 15px 10px 0 0;
+
+	 		@include media-query(sm-and-down) {
+	     		margin: 15px 0 0 0;
+	     	}
+
+	 		.fa{
+	 			font-size: 6rem;
+
+	 			@include media-query(xs) {
+	 	    		font-size: 4rem;
+	 	    	}
+	 		}
+	 	}
+	 	.upload-icon .fa{
+	 		cursor: pointer;
+	 		&:hover {
+	 			color: $primary-color;
+	 		}
+	 	}
+	 	h2{
+	 		margin-top: 0.5rem;
+
+	 		@include media-query(xs) {
+	 			font-size: 1.5rem;
+	 		}
+	 	}
+	 }
+
+	 .animate-show {
+	     -webkit-transition:opacity .2s ease-out;
+	     transition:opacity .2s ease-out;
+	 }
+
+	 .animate-show.ng-hide {
+	     opacity:0;
+	 }
+
+	 .animate-show-long.ng-hide {
+	     opacity:0;
+	 }
+
+	 .drag {
+	   opacity: 0.75;
+	 }
+	 .over {
+	   border: 2px solid darken(color(green),15%) !important;
+	 }
+
+
+
+
+ }

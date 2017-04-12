@@ -1,0 +1,26 @@
+<!--
+ *	This code was created for Printr B.V. It is open source under the formideos-interface package.
+ *	Copyright (c) 2017, All rights reserved, http://printr.nl
+-->
+
+<div
+	role="progressbar"
+	aria-valuenow="{{vm.valuetarget}}"
+	aria-valuemin="0"
+	aria-valuemax="{{::vm.valuemax}}"
+	class="target"
+	title="Target temperature {{vm.valuetarget}}&deg;C"
+	style="width: {{ ((vm.valuetarget / vm.valuemax) * 100) | ceil }}%;"
+	>{{vm.valuetarget}}&deg;C</div>
+
+<div
+	role="progressbar"
+	aria-valuenow="{{vm.valuenow}}"
+	aria-valuemin="0"
+	aria-valuemax="{{::vm.valuemax}}"
+	class="progress"
+	title="Current temperature {{vm.valuenow}}&deg;C"
+	style="width: {{ ((vm.valuenow / vm.valuemax) * 100) | ceil }}%;"
+	>{{vm.valuenow}}&deg;C</div>
+
+Max: {{::vm.valuemax}}&deg;C

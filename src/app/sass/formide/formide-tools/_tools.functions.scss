@@ -1,0 +1,306 @@
+
+$__shade-vals: ("x-dark", "dark", "base", "light");
+$__alpha-stops: (0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1);
+
+// example color(gray, light)
+@function color($name, $properties...) {
+    $n: length($properties);
+    $i: 1;
+
+    $shade-val: "base";
+    $alpha-val: 1;
+
+    @while $i <= $n {
+        $current-property: (nth($properties, $i));
+
+        @if type-of($current-property) == "string" {
+            $shade-val: $current-property;
+        } @else if type-of($current-property) == "number" {
+            $alpha-val: $current-property;
+        }
+
+        $i: $i + 1;
+    }
+
+    @if index($__shade-vals, $shade-val) == null {
+        @warn "Only the following shades are allowed: " + $__shade-vals;
+    }
+
+    @if index($__alpha-stops, $alpha-val) == null {
+        @error "Only alpha values in 0.1 increments are allowed";
+    }
+
+    @if map-has-key($global-colors, $name) {
+        $rgb-val: ();
+
+        @if $name == white or $name == black {
+            $rgb-val: map-get($global-colors, $name);
+        } @else {
+            $rgb-val: map-get(map-get($global-colors, $name), $shade-val);
+        }
+
+        @return rgba($rgb-val, $alpha-val);
+    } @else {
+        @warn "No global color called #{$name} found."
+        + "Are you sure it's in `variables/colors?`";
+    }
+}
+
+// Store the different functions which could alter colors:
+// 1 Key is shorthand to be used in partials, value is map.
+// 2-A First item in map (key: function) is the function name,
+// 2-B Optional second map (key: parameters) is a list of additional values.
+// With these limitations, this function does not support
+// adjust-color, scale-color & change-color.
+$variations: (
+  light: (
+    function: lighten,
+    parameters: 15%
+  ),
+  dark: (
+    function: darken,
+    parameters: 10%
+  ),
+  fade: (
+    function: rgba,
+    parameters: .7
+  ),
+  gray: (
+    function: grayscale
+  ),
+  shade: (
+    function: mix,
+    parameters: white 80%
+  )
+);
+
+/// Slightly lighten a color
+/// @access public
+/// @param {Color} $color - color to tint
+/// @param {Number} $percentage - percentage of `$color` in returned color
+/// @return {Color}
+@function tint($color, $percentage) {
+  @return mix($color, white, $percentage);
+}
+
+/// Slightly darken a color
+/// @access public
+/// @param {Color} $color - color to shade
+/// @param {Number} $percentage - percentage of `$color` in returned color
+/// @return {Color}
+@function shade($color, $percentage) {
+  @return mix($color, black, $percentage);
+}
+
+@function color-variation($color, $variation: false) {
+
+  // Correctly set $color variable:
+  @if map-has-key($colors, $color) {
+    // $color is in $colors, set variable = map-value
+    $color: map-get($colors, $color);
+  } @else {
+    @if type-of($color) != color {
+      // $color is not in $color and $color is not a color
+      @error "Invalid color name: `#{$color}`.";
+    }
+    // $color is a valid color - use it
+  }
+
+  @if $variation {
+    @if not map-has-key($variations, $variation) {
+      // variation is not in $variations
+      @error "Invalid $variation: `#{$variation}`.";
+    } @else {
+      // make it easier to deal with nested map
+      $this-variation: map-get($variations, $variation);
+      // $args = $function, $color
+      $args: join(map-get($this-variation, function), $color);
+      @if map-get($this-variation, parameters) {
+        // $args = $function, $colors, $parameters
+        $args: join($args, map-get($this-variation, parameters));
+      }
+      //@return $args;
+      @return call($args...);
+    }
+  }
+  // no $variation, just return $color
+  @return $color;
+}
+
+// Alias function to make typing easier:
+@function cv($color, $variation:false) {
+  @return color-variation($color, $variation);
+}
+
+@mixin gradient($from, $to) {
+  background: -webkit-gradient(linear, left top, left bottom, from($from), to($to));
+  background: -moz-linear-gradient(top,  $from, $to);
+  filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#{$from}', endColorstr='#{$to}');
+}
+
+@mixin placeholder {
+  ::-webkit-input-placeholder {@content}
+  :-moz-placeholder           {@content}
+  ::-moz-placeholder          {@content}
+  :-ms-input-placeholder      {@content}
+}
+
+@function set-button-text-color($color) {
+    @if (lightness( $color ) > 60) {
+      @return $text-color;
+    }
+    @else {
+      @return #fff;
+    }
+}
+
+// STRIP UNIT
+// It strips the unit of measure and returns it
+@function strip-unit($num) {
+  @return $num / ($num * 0 + 1);
+}
+
+// CONVERT TO REM
+@function convert-to-rem($value, $base-value: $global-font-size)  {
+  $value: strip-unit($value) / strip-unit($base-value) * 1rem;
+  @if ($value == 0rem) { $value: 0; } // Turn 0rem into 0
+  @return $value;
+}
+
+@function rem-calc($values, $base-value: $global-font-size) {
+  $max: length($values);
+
+  @if $max == 1 { @return convert-to-rem(nth($values, 1), $base-value); }
+
+  $remValues: ();
+  @for $i from 1 through $max {
+    $remValues: append($remValues, convert-to-rem(nth($values, $i), $base-value));
+  }
+  @return $remValues;
+}
+
+@function math-pow($number, $exp) {
+    @if (round($exp) != $exp) {
+      @return math-exp($exp * math-ln($number));
+    }
+
+    // Traditional method for integers
+    $value: 1;
+
+    @if $exp > 0 {
+        @for $i from 1 through $exp {
+           $value: $value * $number;
+        }
+    }
+    @else if $exp < 0 {
+        @for $i from 1 through -$exp {
+            $value: $value / $number;
+        }
+    }
+
+    @return $value;
+}
+
+@function math-factorial($value) {
+  @if $value == 0 {
+    @return 1;
+  }
+
+  $result: 1;
+
+  @for $index from 1 through $value {
+    $result: $result * $index;
+  }
+
+  @return $result;
+}
+
+@function math-summation($iteratee, $input, $initial: 0, $limit: 100) {
+  $sum: 0;
+
+  @for $index from $initial to $limit {
+    $sum: $sum + call($iteratee, $input, $index);
+  }
+
+  @return $sum;
+}
+
+@function math-exp-maclaurin($x, $n) {
+  $result: math-pow($x, $n) / math-factorial($n);
+  @return $result;
+}
+@function math-exp($value) {
+  $result: math-summation(math-exp-maclaurin, $value, 0, 100);
+  @return $result;
+}
+
+@function math-ln-maclaurin($x, $n) {
+  $result: (math-pow(-1, $n + 1) / $n) * (math-pow($x - 1, $n));
+  @return $result;
+}
+@function math-ln($value) {
+  $ten-exp: 1;
+  $ln-ten: 2.30258509;
+
+  @while ($value > math-pow(10, $ten-exp)) {
+    $ten-exp: $ten-exp + 1;
+  }
+
+  $value: $value / math-pow(10, $ten-exp);
+
+  $result: math-summation(math-ln-maclaurin, $value, 1, 100);
+
+  @return $result + $ten-exp * $ln-ten;
+}
+
+
+/// Share values for multiple properties
+/// @access public
+/// @group properties
+/// @example scss
+///     @include share(padding-top, padding-bottom, 23px);
+@mixin share($props...) {
+    @for $i from 1 to length($props) {
+        #{nth($props, $i)}: nth($props, -1);
+    }
+}
+
+/// Divide any any number by 4
+/// @access public
+/// @group math
+/// @require n
+/// @param n - number to perform operation on
+/// @return {number}
+@function halve($n) {
+    @return round($n / 2);
+}
+
+/// Divide any any number by 4
+/// @access public
+/// @group math
+/// @require n
+/// @param n - number to perform operation on
+/// @return {number}
+@function quarter($n) {
+    @return round($n / 4);
+}
+
+/// Multiply any number by 2
+/// @access public
+/// @group math
+/// @require n
+/// @param n - number to perform operation on
+/// @return {number}
+@function double($n) {
+    @return round($n * 2);
+}
+
+/// Multiply any number by 4
+/// @access public
+/// @group math
+/// @require n
+/// @param n - number to perform operation on
+/// @return {number}
+@function quadruple($n) {
+    @return round($n * 4);
+}

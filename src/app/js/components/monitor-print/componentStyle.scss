@@ -1,0 +1,49 @@
+/*
+ *	This code was created for Printr B.V. It is open source under the formideos-interface package.
+ *	Copyright (c) 2017, All rights reserved, http://printr.nl
+ */
+
+ #monitor-print{
+
+	 .block--panel{
+		 height: 362px;
+		 overflow: auto;
+		 position: relative;
+	 }
+
+	 .webcam-panel .body{
+	     padding: 0 !important;
+	 	overflow: hidden !important;
+	 }
+
+	 .tune-values{
+	 	printer-controls-fan{
+	 		position: relative;
+	 	}
+
+	 	printer-controls-speed{
+	 		width: 45px;
+	 		height: 45px;
+	 		position: relative;
+	 	}
+
+	 	printer-controls-flow-rate{
+	 		width: 45px;
+	 		height: 45px;
+	 		position: relative;
+	 	}
+
+	 	.tune-header{
+	 		text-align: center;
+	 		margin: 0 0 0.75rem;
+	 	}
+
+	 	.tune-block{
+	 		@extend .block;
+	 		margin-bottom: 0;
+	     	padding: 0.75rem 0 0.5rem;
+	 	}
+	 }
+
+
+ }

@@ -1,0 +1,93 @@
+/*
+ *	This code was created for Printr B.V. It is open source under the formideos-interface package.
+ *	Copyright (c) 2017, All rights reserved, http://printr.nl
+ */
+
+ dashboard-webcam,
+ [dashboard-webcam] {
+
+     figure {
+ 		height: 100%;
+ 		background: white;
+
+ 		.webcam-container{
+			height: 100%;
+			width: 100%;
+ 			z-index: 2;
+
+ 			img{
+ 				height: 100%;
+ 				width: 100%;
+ 			}
+ 		}
+
+         figcaption {
+             background-color: rgba(0, 0, 0, .4);
+             border: none;
+             position: absolute;
+ 			left: 0;
+ 			top: 0;
+             margin: .5rem;
+ 			z-index: 3;
+         }
+
+		 .close{
+ 			position: absolute;
+ 			top: 0;
+ 			right: 10px;
+ 			font-size: 22px;
+ 			cursor: pointer;
+ 			transition: all .3s linear;
+			z-index: 999;
+			text-shadow: #fff 0px 0px 1px,   #fff 0px 0px 1px,   #fff 0px 0px 1px,
+             #fff 0px 0px 1px,   #fff 0px 0px 1px,   #fff 0px 0px 1px;
+
+ 			&:hover{
+ 				transform: scale(1.3);
+ 			}
+ 		}
+
+		 .webcam-placeholder{
+	  		text-align: center;
+	  		z-index: 1;
+	  		font-size: 1.25rem;
+	  		color: $text-color;
+			padding: 0 10%;
+	  	}
+
+		.webcam-loading{
+		   position: absolute;
+		   text-align: center;
+		   z-index: 1;
+		   font-size: 1.25rem;
+		   color: $text-color;
+	   }
+
+		 &.webcamLoaded{
+			 background: black;
+
+			 .webcam-container{
+	  			max-width: 482px;
+	  	    	max-height: 362px;
+				width: auto;
+				height: auto;
+			}
+
+			 .webcam-placeholder{
+		  		color: white;
+		  	}
+		 }
+
+		 &.webcamError{
+			 .webcam-container{
+	  			max-width: 482px;
+	  	    	max-height: 362px;
+				width: auto;
+				height: auto;
+			}
+		 }
+
+     }
+
+
+ }

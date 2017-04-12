@@ -1,0 +1,233 @@
+/*
+ *	This code was created for Printr B.V. It is open source under the formideos-interface package.
+ *	Copyright (c) 2017, All rights reserved, http://printr.nl
+ */
+
+@keyframes bounceOut100 {
+   0% {
+      max-height: 100px;
+   }
+
+   20% {
+     transform: scale3d(.9, .9, .9);
+   }
+
+   50%, 55% {
+     opacity: 1;
+     max-height: 100px;
+     transform: scale3d(1.1, 1.1, 1.1);
+   }
+
+   to {
+     opacity: 0;
+     max-height: 0;
+     transform: scale3d(.3, .3, .3);
+   }
+}
+
+.webcam-feed__icon {
+    color: rgba(255, 255, 255, .8);
+    transition: color .4s ease-in-out;
+
+    &:hover {
+        color: white;
+    }
+}
+
+.webcam-feed {
+
+	position: absolute;
+	top: 35px;
+	left: 5px;
+
+    figure {
+		position: relative;
+	    width: 318px;
+	    height: 240px;
+	    overflow: hidden;
+	    border-radius: $border-radius;
+	    margin: 0;
+	    border: 1px solid rgba(255,255,255,.3);
+		background: $gradient-light;
+		box-shadow: 0 2px 4px rgba(175, 176, 185, 0.1);
+	    z-index: 100;
+
+        figcaption {
+            background-color: rgba(0, 0, 0, .4);
+            border: none;
+            position: absolute;
+			right: 0;
+            margin: .5rem;
+			z-index: 2;
+        }
+    }
+
+	.webcam-placeholder{
+		position: absolute;
+		top: 40%;
+		width: 100%;
+		text-align: center;
+		z-index: -1;
+		font-size: 1.5rem;
+	}
+
+	img[src='./public/assets/images/connectwebcam.png']{
+	    width: 150px;
+		position: relative;
+		z-index: 1;
+	}
+}
+
+
+
+printer-list-item,
+[printer-list-item] {
+	margin-bottom: 0;
+	padding-bottom: 0;
+	border-bottom: 1px solid rgba(white, .3);
+
+	@include media-query(sm) {
+		margin-left: -3%;
+	    margin-right: -3%;
+	}
+
+	header{
+		padding: 1rem .5rem .5rem;
+		cursor: pointer;
+
+		&:hover{
+			background: rgba(255,255,255,0.1);
+		}
+	}
+
+	.printer-details{
+		font-size: 0.95rem;
+		padding: 2px 0;
+	}
+
+	&.selected-printer{
+		min-height: 170px;
+		border: 1px solid rgba(255,255,255,.3);
+		border-radius: $border-radius;
+	    display: table;
+		width: 100%;
+
+		@include media-query(sm) {
+			width: 106%;
+		}
+
+		header{
+			display: table-cell;
+    		vertical-align: middle;
+			cursor: default;
+
+			&:hover{
+				background: transparent;
+			}
+		}
+	}
+
+    h3 {
+        font-weight: 400;
+        color: white;
+
+        &.printer-title {
+	        width: 280px;
+        }
+
+        status-icon {
+            vertical-align: middle;
+            margin-right: .5rem;
+        }
+    }
+
+	h4 {
+		color: rgba(255, 255, 255, .6);
+
+		a {
+			color: inherit;
+		}
+
+        device-status-icon {
+            margin-left: .5rem;
+        }
+	}
+
+	.set-active {
+		background: white;
+        text-align: center;
+        display: block;
+        color: $secondary-color;
+		font-size: 16px;
+        padding: .15rem .5rem;
+        width: 100%;
+        border-radius: $border-radius;
+		cursor: pointer;
+        transition: box-shadow .2s ease-in-out, background-color .2s ease-in-out;
+
+		&.ng-leave,
+		&.ng-show-remove,
+		&.ng-hide-add {
+		    animation: fadeOut .3s;
+		}
+
+		&.ng-enter,
+		&.ng-show-add,
+		&.ng-hide-remove {
+		    animation: bounceIn .3s;
+		}
+
+		&:hover,
+	    &:focus {
+			background-color: rgba(white, .8);
+	    	color: $text-color;
+	    }
+
+	    &:active {
+	        background-color: rgba(white, .6);
+	    }
+	}
+
+	.settings {
+		abbr {
+			margin-right: .5rem;
+			font-weight: 600;
+		}
+	}
+
+	.modelfiles {
+		span:after {
+			content: ',';
+		}
+
+		span:first-child:after {
+			content: '';
+		}
+	}
+
+	.progress-container{
+		progress-bar{
+			margin: 0;
+		}
+		h6{
+			margin-left: 0.5rem;
+			margin-bottom: 0;
+		}
+	}
+
+	.progressControls{
+		margin-top: 12px;
+
+		.btn{
+		    min-width: 100% !important;
+
+			@include media-query(xs) {
+				padding: .5rem !important;
+			}
+
+			&.stop:hover{
+				color: $alert-color !important;
+			}
+		}
+	}
+}

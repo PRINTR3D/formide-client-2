@@ -1,0 +1,164 @@
+/*
+ *	This code was created for Printr B.V. It is open source under the formideos-interface package.
+ *	Copyright (c) 2017, All rights reserved, http://printr.nl
+ */
+
+@-webkit-keyframes ngdialog-flyin {
+  0% {
+    opacity: 0;
+    -webkit-transform: translateY(-40px);
+    transform: translateY(-40px);
+  }
+
+  100% {
+    opacity: 1;
+    -webkit-transform: translateY(0);
+    transform: translateY(0);
+  }
+}
+
+@keyframes ngdialog-flyin {
+  0% {
+    opacity: 0;
+    -webkit-transform: translateY(-40px);
+    -ms-transform: translateY(-40px);
+    transform: translateY(-40px);
+  }
+
+  100% {
+    opacity: 1;
+    -webkit-transform: translateY(0);
+    -ms-transform: translateY(0);
+    transform: translateY(0);
+  }
+}
+
+@-webkit-keyframes ngdialog-flyout {
+  0% {
+    opacity: 1;
+    -webkit-transform: translateY(0);
+    transform: translateY(0);
+  }
+
+  100% {
+    opacity: 0;
+    -webkit-transform: translateY(-40px);
+    transform: translateY(-40px);
+  }
+}
+
+@keyframes ngdialog-flyout {
+  0% {
+    opacity: 1;
+    -webkit-transform: translateY(0);
+    -ms-transform: translateY(0);
+    transform: translateY(0);
+  }
+
+  100% {
+    opacity: 0;
+    -webkit-transform: translateY(-40px);
+    -ms-transform: translateY(-40px);
+    transform: translateY(-40px);
+  }
+}
+
+.ngdialog-open {
+
+}
+
+.ngdialog {
+  padding-top: 1.5rem;
+  padding-bottom: 4rem;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 9999;
+  height: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
+  margin-right: 0;
+
+  @media (min-width:  map-get($layout-breakpoints, sm)) {
+      margin-right: auto;
+  }
+}
+
+.sidebar-invisible {
+	.ngdialog {
+		margin-right: 0;
+		// transition: margin .8s ease-in-out;
+	}
+}
+
+.ngdialog-overlay {
+    top: 0;
+    bottom: 0;
+    left: 0;
+    position: fixed;
+	right: 0;
+    background: rgba($text-color, .5)
+}
+
+.sidebar-invisible {
+    .ngdialog-overlay {
+        right: 0;
+    }
+}
+
+.ngdialog.ngdialog-closing .ngdialog-content {
+  -webkit-animation: ngdialog-flyout .5s;
+  animation: ngdialog-flyout .5s;
+}
+
+.ngdialog .ngdialog-content {
+    @extend .content;
+    @extend .content--medium;
+    background: white;
+    -webkit-animation: ngdialog-flyin .5s;
+    animation: ngdialog-flyin .5s;
+    border-radius: $border-radius;
+    box-shadow: 0 4px 16px rgba($text-color, .3);
+    position: relative;
+}
+
+.ngdialog .ngdialog-close {
+  @include border-radius();
+  cursor: pointer;
+  position: absolute;
+  right: 0;
+  top: 0;
+  z-index: 9999;
+}
+
+.ngdialog .ngdialog-close:before {
+  background: transparent;
+  @include border-radius();
+  color: #bbb;
+  content: '\00D7';
+  font-size: 26px;
+  font-weight: 400;
+  height: 30px;
+  line-height: 26px;
+  position: absolute;
+  right: 3px;
+  text-align: center;
+  top: 3px;
+  width: 30px;
+}
+
+.ngdialog .ngdialog-close:hover:before,
+.ngdialog .ngdialog-close:active:before {
+  color: #777;
+}
+
+.ngdialog-setup {
+    .ngdialog-content {
+        max-width: 448px;
+
+        hgroup {
+            margin-bottom: $baseline;
+        }
+    }
+}

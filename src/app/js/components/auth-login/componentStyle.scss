@@ -1,0 +1,38 @@
+/*
+ *	This code was created for Printr B.V. It is open source under the formideos-interface package.
+ *	Copyright (c) 2017, All rights reserved, http://printr.nl
+ */
+
+.login-fields{
+
+	input{
+		margin-bottom: 1rem;
+	}
+}
+
+.infoBox{
+	background: darken(#F6F6F7, 2%);
+	border: 1px solid #e4e4e4;
+    border-radius: $border-radius;
+    padding: 1rem 1rem 0.5rem;
+	position: relative;
+
+	@include media-query(xs) {
+		width: 100%;
+    	margin-left: 0;
+ 	}
+
+	.fa-info-circle{
+		font-size: 2rem;
+		color: $primary-color;
+	    margin-right: 1rem;
+	    position: absolute;
+
+	}
+
+	p{
+		font-size: 0.9rem;
+		margin-bottom: 1rem;
+		margin-left: 44px;
+	}
+}

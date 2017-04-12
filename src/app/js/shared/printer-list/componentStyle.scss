@@ -1,0 +1,11 @@
+/*
+ *	This code was created for Printr B.V. It is open source under the formideos-interface package.
+ *	Copyright (c) 2017, All rights reserved, http://printr.nl
+ */
+
+printer-list,
+[printer-list] {
+	@extend .list-ui;
+    margin: 0 0 1.5rem 0;
+    list-style: none;
+}

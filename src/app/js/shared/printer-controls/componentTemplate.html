@@ -1,0 +1,183 @@
+<!--
+ *	This code was created for Printr B.V. It is open source under the formideos-interface package.
+ *	Copyright (c) 2017, All rights reserved, http://printr.nl
+-->
+
+<div class="layout xs-hide u-padding-top-1">
+	<section class="layout__item u-3/5 three-axis u-padding-left-0">
+		<div
+		ng-repeat="axis in vm.axis"
+		class="{{::axis.key}}--axis axis"
+		ng-class="{vertical: 'axis--vertical', horizontal:'u-textNoWrap axis--horizontal'}[axis.orientation]">
+			<div class="positive">
+				<abbr title="">+ {{::axis.key}}</abbr>
+
+				<button
+					class="control-button"
+					title="Move {{::axis.key}}-axis {{::item}} mm"
+					style="background-color: rgba(220, 220, 222, {{::vm.setOpacity(item, axis.positive)}})"
+					ng-click="vm.move(axis.key, item)"
+					ng-repeat="item in axis.positive"
+					ng-disabled="vm.disableInput">{{::item}}</button>
+			</div>
+
+			<div class="negative">
+				<abbr title="">- {{::axis.key}}</abbr>
+
+				<button
+					class="control-button"
+					title="Move {{::axis.key}}-axis {{::item}} mm"
+					style="background-color: rgba(220, 220, 222, {{::vm.setOpacity(item, axis.positive)}})"
+					ng-click="vm.move(axis.key, item)"
+					ng-repeat="item in axis.negative"
+					ng-disabled="vm.disableInput">{{::item}}</button>
+			</div>
+		</div>
+	</section>
+
+	<section class="extruder layout__item u-fill">
+		<div
+		ng-repeat="extruder in vm.extruders"
+		ng-init="extruderIndex = $index"
+		class="axis--vertical axis">
+			<div class="positive">
+				<abbr title="">Retract</abbr>
+
+				<button
+					class="control-button"
+					title="Move extruder {{extruderIndex}} {{::item}} mm"
+					ng-style="{'background-color': 'rgba(238, 222, 137, '+vm.setOpacity(item, vm.extruder_settings.extrude)+')'}"
+					ng-click="vm.printerCtrl.extruder(extruderIndex).retract(item)"
+					ng-repeat="item in vm.extruder_settings.retract"
+					ng-disabled="vm.disableInput">{{::item}}</button>
+			</div>
+
+			<abbr title="Extruder {{::extruder.id + 1}}" class="ext">EXT {{::$index + 1}}</abbr>
+
+			<div class="negative">
+				<abbr title="">Extrude</abbr>
+
+				<button
+					class="control-button"
+					title="Move {{extruderIndex}}-axis {{::item}} mm"
+					ng-style="{'background-color': 'rgba(238, 222, 137, '+vm.setOpacity(item, vm.extruder_settings.extrude)+')'}"
+					ng-click="vm.printerCtrl.extruder(extruderIndex).extrude(item)"
+					ng-repeat="item in vm.extruder_settings.extrude | orderBy:item:reverse"
+					ng-disabled="vm.disableInput">{{::item}}</button>
+			</div>
+		</div>
+	</section>
+
+	<section class="layout__item">
+		<div class="layout layout--smallGutter submit-btn-group">
+			<div class="layout__item u-fit">
+				<button ng-click="vm.printerCtrl.home.all()" class="btn btn--tertiary" ng-disabled="vm.disableInput">Home All Axis</button>
+			</div>
+			<div class="layout__item u-fit">
+				<button ng-click="vm.printerCtrl.home.x()" class="btn btn--secondary" ng-disabled="vm.disableInput">Home X-Axis</button>
+			</div>
+			<div class="layout__item u-fit">
+				<button ng-click="vm.printerCtrl.home.y()" class="btn btn--secondary" ng-disabled="vm.disableInput">Home Y-Axis</button>
+			</div>
+			<div class="layout__item u-fit">
+				<button ng-click="vm.printerCtrl.home.z()" class="btn btn--secondary" ng-disabled="vm.disableInput">Home Z-Axis</button>
+			</div>
+		</div>
+	</section>
+
+</div>
+
+<div class="palm-controls sm-hide">
+	<section>
+		<h5>Scale Factor</h5>
+		<div class="u-textCenter">
+			<a ng-click="vm.printerCtrl.home.all()" class="btn btn--large btn--secondary btn--round"><i class="fa fa-home"></i></a> &emsp;
+			<a ng-click="vm.scaleFactor = 0.1" class="btn btn--secondary btn--round btn--large" ng-class="{'btn--tertiary': vm.scaleFactor == 0.1}">0.1</a>
+			<a ng-click="vm.scaleFactor = 1" class="btn btn--secondary btn--round btn--large" ng-class="{'btn--tertiary': vm.scaleFactor == 1}">1</a>
+			<a ng-click="vm.scaleFactor = 10" class="btn btn--secondary btn--round btn--large" ng-class="{'btn--tertiary': vm.scaleFactor == 10}">10</a>
+			<a ng-click="vm.scaleFactor = 100" class="btn btn--secondary btn--round btn--large" ng-class="{'btn--tertiary': vm.scaleFactor == 100}">100</a>
+		</div>
+	</section>
+
+	<br/> <br/>
+
+	<hr class="rule" />
+
+	<center>
+		<section class="three-axis" ng-init="vm.scaleFactor = 10">
+			<div
+			ng-repeat="axis in vm.axis"
+			class="{{::axis.key}}--axis axis"
+			ng-class="{vertical: 'axis--vertical', horizontal:'u-textNoWrap axis--horizontal'}[axis.orientation]">
+				<div class="positive">
+					<abbr title="">+ {{::axis.key}}</abbr>
+
+					<a
+						class="control-button"
+						title="Move {{::axis.key}}-axis {{vm.scaleFactor}} mm"
+						style="background-color: rgb(220, 220, 222)"
+						ng-click="vm.move(axis.key, vm.scaleFactor)">{{vm.scaleFactor}}</a>
+				</div>
+
+				<div class="negative">
+					<abbr title="">- {{::axis.key}}</abbr>
+
+					<a
+						class="control-button"
+						title="Move {{::axis.key}}-axis {{(vm.scaleFactor * -1)}} mm"
+						style="background-color: rgb(220, 220, 222)"
+						ng-click="vm.move(axis.key, (vm.scaleFactor * -1))">{{(vm.scaleFactor * -1)}}</a>
+				</div>
+			</div>
+		</section>
+	</center>
+
+
+	<center>
+		<section class="extruder u-inlineBlock" ng-init="vm.scaleFactor = 10">
+	   		<div
+			ng-repeat="extruder in vm.extruders"
+	   		ng-init="extruderIndex = $index"
+	   		class="axis--vertical axis">
+	   			<div class="positive">
+	   				<abbr title="">Retract</abbr>
+
+	   				<a
+	   					class="control-button"
+	   					title="Move extruder {{extruderIndex}} {{(vm.scaleFactor * -1)}} mm"
+	   					style="background-color: rgb(238, 222, 137)"
+	   					ng-click="vm.printerCtrl.extruder(extruderIndex).retract((vm.scaleFactor * -1))">{{(vm.scaleFactor * -1)}}</a>
+	   			</div>
+
+	   			<abbr title="Extruder {{::extruder.id + 1}}" class="ext">EXT {{::$index + 1}}</abbr>
+
+	   			<div class="negative">
+	   				<abbr title="">Extrude</abbr>
+
+	   				<a
+	   					class="control-button"
+	   					title="Move {{extruderIndex}}-axis {{vm.scaleFactor}} mm"
+	   					style="background-color: rgb(238, 222, 137)"
+	   					ng-click="vm.printerCtrl.extruder(extruderIndex).extrude(vm.scaleFactor)">{{vm.scaleFactor}}</a>
+	   			</div>
+	   		</div>
+	   	</section>
+	</center>
+
+	<div class="layout layout--smallGutter submit-btn-group u-margin-bottom-1">
+		<div class="layout__item u-1/2">
+			<button ng-click="vm.printerCtrl.home.x()" class="btn btn--secondary" ng-disabled="vm.disableInput">Home X-Axis</button>
+		</div>
+		<div class="layout__item u-1/2">
+			<button ng-click="vm.printerCtrl.home.y()" class="btn btn--secondary" ng-disabled="vm.disableInput">Home Y-Axis</button>
+		</div>
+	</div>
+	<div class="layout layout--smallGutter submit-btn-group u-margin-bottom-1">
+		<div class="layout__item u-1/2">
+			<button ng-click="vm.printerCtrl.home.z()" class="btn btn--secondary" ng-disabled="vm.disableInput">Home Z-Axis</button>
+		</div>
+		<div class="layout__item u-1/2">
+			<button ng-click="vm.printerCtrl.home.all()" class="btn btn--primary" ng-disabled="vm.disableInput">Home All Axis</button>
+		</div>
+	</div>
+</div>

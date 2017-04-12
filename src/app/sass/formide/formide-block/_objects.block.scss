@@ -1,0 +1,20 @@
+/*
+ *	This code was created for Printr B.V. It is open source under the formideos-interface package.
+ *	Copyright (c) 2017, All rights reserved, http://printr.nl
+ */
+
+.block {
+	background: white;
+	padding: 1rem;
+	@include border-radius();
+	box-shadow: 0 2px 4px rgba($secondary-color, .1);
+	margin-bottom: halve($baseline);
+	opacity: 1;
+	transition: opacity .5s ease-in-out;
+}
+
+.block--disabled {
+	opacity: .5;
+	cursor: not-allowed !important;
+	user-select: none;
+}

@@ -29,11 +29,14 @@ class UI {
         location: 'local'
       })
     })
+    
+    // index.html
+    this.app.get('/', function (req, res) {
+	    return res.sendFile(path.join(__dirname, 'index.html'))
+    })
 
     // public assets
     this.app.get('/*', function (req, res) {
-      // default to index.html
-      req.params[0] = req.params[0] || 'index.html'
       return res.sendFile(path.join(__dirname, 'public', req.params[0]))
     })
 

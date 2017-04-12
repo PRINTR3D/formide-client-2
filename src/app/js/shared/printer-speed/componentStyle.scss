@@ -1,0 +1,53 @@
+/*
+ *	This code was created for Printr B.V. It is open source under the formideos-interface package.
+ *	Copyright (c) 2017, All rights reserved, http://printr.nl
+ */
+
+printer-speed,
+[printer-speed] {
+    border: 1px solid $secondary-color;
+    border-radius: $border-radius;
+    position: relative;
+
+    .rectangle {
+        animation-name: moveHead;
+        animation-duration: 0.5s;
+        animation-timing-function: linear;
+        animation-iteration-count: infinite;
+
+        transform-origin: 50% 50%;
+
+        border-radius: $border-radius;
+
+        width: 8px;
+        height: 60%;
+        margin: 20% 0;
+        display: block;
+        background: $secondary-color;
+    }
+
+    .frame {
+        height: 2px;
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        margin: 10px 0;
+        background-color: $secondary-color;
+        width: 100%;
+    }
+}
+
+@keyframes moveHead {
+    0% {
+        transform: translate(0, 0);
+    }
+    50% {
+        transform: translate(16px, 0);
+
+    }
+    100% {
+        transform: translate(0, 0);
+    }
+}
