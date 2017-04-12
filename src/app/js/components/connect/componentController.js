@@ -10,9 +10,7 @@
 
  	  var vm = this;
 
-	  //getNetworkStatus();
-
-	  vm.connectSetupStep = 'device-wifi';
+	  getNetworkStatus();
 
 	  function getNetworkStatus() {
 		  $api.get('/network/status')

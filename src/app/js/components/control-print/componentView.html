@@ -6,9 +6,11 @@
 <article id="printer-controls">
 	<h3>Printer Controls</h3>
 
-	<p ng-if="controlPrint.printer.$active.status == 'printing' || controlPrint.printer.$active.status == 'paused'">This printer is currently printing</p>
+	<p ng-if="controlPrint.printer.$active.status == 'printing' || controlPrint.printer.$active.status == 'paused'">Selected Printer is currently printing</p>
 
-	<p ng-if="controlPrint.printer.$active.status == 'heating'">This printer is currently heating</p>
+	<p ng-if="controlPrint.printer.$active.status == 'heating'">Selected Printer is currently heating</p>
+
+	<p ng-if="controlPrint.printer.$active.status == 'offline'">Selected Printer is currently Offline</p>
 
 
 	<div ng-if="controlPrint.printer.$active.status !== 'printing'  && controlPrint.printer.$active.status !== 'paused' && controlPrint.printer.$active.status !== 'heating'">
@@ -79,7 +81,7 @@
 
 
 	<h4 class="u-padding-top-1">Temperatures</h4>
-	<section class="block" ng-class="{'block--disabled': controlPrint.printer.$active.status == 'offline'}">
+	<section class="block block--temperatures" ng-class="{'block--disabled': controlPrint.printer.$active.status == 'offline'}">
 
 		<div class="layout">
 			<div class="layout__item u-1/3-sm" ng-repeat="extruder in controlPrint.printer.$active.extruders">
@@ -133,7 +135,7 @@
 	</section>
 
 	<h4 class="u-padding-top-1">G-code Console</h4>
-	<section class="block" ng-class="{'block--disabled': controlPrint.printer.$active.status == 'offline'}">
+	<section class="block" ng-class="{'block--disabled': controlPrint.printer.$active.status == 'offline' || controlPrint.printer.$active.status == 'printing' || controlPrint.printer.$active.status == 'paused' || controlPrint.printer.$active.status == 'heating'}">
 
 		<div class="console">
 			<div class="header">

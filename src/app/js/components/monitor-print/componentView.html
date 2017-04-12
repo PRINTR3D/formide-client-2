@@ -7,9 +7,9 @@
 
 	<h3>Monitor Print</h3>
 
-	<section ng-if="!monitorPrint.printer.$active.printJob" class="u-margin-bottom-1">
+	<p ng-if="monitorPrint.printer.$active.status !== 'offline' && !monitorPrint.printer.$active.printJob">Selected Printer is not currently printing</p>
 
-	</section>
+	<p ng-if="monitorPrint.printer.$active.status == 'offline'">Selected Printer is currently Offline</p>
 
 	<section id="currently-printing" ng-if="monitorPrint.printer.$active.printJob" class="u-margin-bottom-1">
 

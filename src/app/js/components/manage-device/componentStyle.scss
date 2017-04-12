@@ -84,23 +84,23 @@
 		}
 	 }
 
- }
+	 .layout__item.u-1\/2-sm.pad{
 
- .layout__item.u-1\/2-sm.pad{
+		 padding-top: 1rem;
 
-	 padding-top: 1rem;
+		 &:first-child {
+			 padding-top: 0;
+		 }
 
-	 &:first-child {
-		 padding-top: 0;
-	 }
-
-	 &:nth-child(2) {
-		 padding-top: 0;
-	 }
-
-	@include media-query(xs) {
 		 &:nth-child(2) {
-			 padding-top: 1rem;
+			 padding-top: 0;
+		 }
+
+		@include media-query(xs) {
+			 &:nth-child(2) {
+				 padding-top: 1rem;
+			 }
 		 }
 	 }
+
  }
