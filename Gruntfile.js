@@ -135,12 +135,12 @@ module.exports = function (grunt) {
 					"./node_modules/angular-ui-select/dist/select.min.css",
 					"./node_modules/ng-sortable/dist/ng-sortable.min.css",
 					
-					"./node_modules/suitcss-base/node_modules/normalize.css/normalize.css",
+					"./node_modules/normalize.css/normalize.css",
 					"./node_modules/suitcss-base/lib/base.css",
-					"./node_modules/suitcss-utils/node_modules/suitcss-utils-display/lib/display.css",
-					"./node_modules/suitcss-utils/node_modules/suitcss-utils-layout/lib/layout.css",
-					"./node_modules/suitcss-utils/node_modules/suitcss-utils-position/lib/position.css",
-					"./node_modules/suitcss-utils/node_modules/suitcss-utils-text/lib/text.css",
+					"./node_modules/suitcss-utils-display/lib/display.css",
+					"./node_modules/suitcss-utils-layout/lib/layout.css",
+					"./node_modules/suitcss-utils-position/lib/position.css",
+					"./node_modules/suitcss-utils-text/lib/text.css",
 					
 					"./src/app/sass/formide/formide-tools/*.scss",
 					"./src/app/sass/formide/formide-base/*.scss",
