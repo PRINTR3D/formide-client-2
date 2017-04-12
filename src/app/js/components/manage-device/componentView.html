@@ -77,7 +77,7 @@
 					 <fieldset>
 						<ul class="form-fields">
 							<li>
-								<label class="u-margin-top-1" for="">SSID</label>
+								<label for="">SSID</label>
 								<select class="text-input" ng-options="ssid.ssid as ssid.ssid for ssid in manageDevice.ssids" ng-model="manageDevice.wifi.ssid">
 									 <option value="" disabled selected style="display: none;">Select a SSID</option>
 								</select>
@@ -86,10 +86,37 @@
 								<label for="">Password</label>
 								<input type="password" class="text-input" ng-model="manageDevice.wifi.password"  placeholder="Password">
 							</li>
+							<li>
+							   <a add-new ng-init="manageDevice.toggleAdvanced = false" ng-click="manageDevice.toggleAdvanced = !manageDevice.toggleAdvanced">
+								   <small><i class="fa u-margin-right-_5" ng-class="{true:'fa-minus',false:'fa-plus'}[manageDevice.toggleAdvanced]"></i>Advanced Settings</small>
+							   </a>
+							</li>
+							<li ng-if="manageDevice.toggleAdvanced">
+							   <ul class="advanced-settings">
+								   <li>
+									   <input type="text" class="text-input" placeholder="key_mgmt" ng-model="manageDevice.wifi.key_mgmt">
+								   </li>
+								   <li>
+									   <input type="text" class="text-input" placeholder="eap" ng-model="manageDevice.wifi.eap">
+								   </li>
+								   <li>
+									   <input type="text" class="text-input" placeholder="identity" ng-model="manageDevice.wifi.identity">
+								   </li>
+								   <li>
+									   <input type="text" class="text-input" placeholder="anonymous_identity" ng-model="manageDevice.wifi.anonymous_identity">
+								   </li>
+								   <li>
+									   <input type="text" class="text-input" placeholder="phase1" ng-model="manageDevice.wifi.phase1">
+								   </li>
+								   <li>
+									   <input type="text" class="text-input" placeholder="phase2" ng-model="manageDevice.wifi.phase2">
+								   </li>
+							   </ul>
+							</li>
 						</ul>
 					</fieldset>
 
-					<div class="layout u-margin-bottom-1">
+					<div class="layout">
 						<div class="layout__item u-1/2">
 							<button class="btn btn--primary" ng-click="manageDevice.connectWifi()" ng-disabled="manageDevice.connecting">
 								Connect to Wi-Fi <i ng-if="manageDevice.connecting" class="fa fa-refresh fa-spin"></i>
