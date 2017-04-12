@@ -60,7 +60,7 @@ function foundPrinter(resource, data) {
 		window.ENV.version = response.version || '0.0.0';
 		window.ENV.type = response.environment || 'development';
 		window.ENV.theme = response.theme || 'formide';
-
+		
 		window.PATH.root   = window.location.protocol + '//' + window.location.hostname + ':' + window.location.port;
 		
 		window.PATH.api    = window.location.protocol + '//' + window.location.hostname + ':1337/api';
