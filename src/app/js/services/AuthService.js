@@ -68,13 +68,6 @@
 						factory.logout();
 					});
                 }
-            },
-            function (error) {
-                if(window.DEBUG) {
-                  console.error("Error: %s", "API Request");
-                  console.error(error);
-                }
-                deferred.reject(error);
             });
 
             return deferred.promise;
