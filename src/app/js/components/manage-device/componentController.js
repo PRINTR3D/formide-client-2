@@ -5,7 +5,6 @@
 	  var vm = this;
 
 	  function submitForm(user) {
-		  console.log('user', user);
 		  $api.users.update(user)
 		  .then(function(response) {
 			  $notification.addNotification({
@@ -97,6 +96,11 @@
 	  $api.get('/system/info')
 	  .then(function(response) {
 		  vm.deviceType = response.deviceType;
+	  });
+
+	  $api.get('/auth/validate')
+	  .then(function(response) {
+		  vm.currentUser = response.user.username;
 	  });
 
 	  // private functions

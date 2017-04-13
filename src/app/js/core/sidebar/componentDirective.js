@@ -21,7 +21,7 @@
 
     }
 
-    function MainController($rootScope, $api, $socket, $interval, Printer, $location, ngDialog) {
+    function MainController($rootScope, $interval, Printer, $location) {
         var vm = this;
 
 		vm.showCloudMsg = true;
@@ -156,12 +156,9 @@
 
     MainController.$inject = [
 	    '$rootScope',
-	    '$api',
-	    '$socket',
 	    '$interval',
 	    'Printer',
-		'$location',
-		'ngDialog'
+		'$location'
 	  ];
 
     angular

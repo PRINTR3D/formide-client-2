@@ -124,8 +124,8 @@
 
 					<div class="layout">
 						<div class="layout__item u-1/2">
-							<button class="btn btn--primary" ng-click="manageDevice.connectWifi()" ng-disabled="manageDevice.connecting">
-								Connect to Wi-Fi <i ng-if="manageDevice.connecting" class="fa fa-refresh fa-spin"></i>
+							<button class="btn btn--tertiary" ng-click="manageDevice.connectWifi()" ng-disabled="manageDevice.connecting">
+								Connect <i ng-if="manageDevice.connecting" class="fa fa-refresh fa-spin"></i>
 							</button>
 						</div>
 
@@ -156,8 +156,7 @@
 			                <td data-th="Username">{{user.username}}</td>
 
 			                <td class="table__item__controls u-textRight">
-			    				<a class="btn btn--small btn--tertiary" ng-click="manageDevice.updateModal(user)"><i class="fa fa-pencil"></i></a>
-								<a class="btn btn--small btn--alert" ng-click="manageDevice.deleteUser(user)"><i class="fa fa-trash-o"></i></a>
+								<button class="btn btn--small btn--alert" ng-disabled="user.username == manageDevice.currentUser" ng-click="manageDevice.deleteUser(user)"><i class="fa fa-trash-o"></i></button>
 			                </td>
 			            </tr>
 			        </tbody>

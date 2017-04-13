@@ -1,7 +1,7 @@
 
 (function () {
 
-	function MainController ($auth, $api, $routeParams, $notification, $socket, $interval, $location) {
+	function MainController ($api, $routeParams, $socket, $interval) {
 		var vm = this;
 
 		vm.device = null;
@@ -103,13 +103,10 @@
 	}
 
 	MainController.$inject = [
-		'$auth',
 		'$api',
 		'$routeParams',
-		'$notification',
 		'$socket',
-		'$interval',
-		'$location'
+		'$interval'
 	];
 
 	angular

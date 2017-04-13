@@ -1,7 +1,7 @@
 /*! This code was created for Printr B.V. 
  Copyright (c) 2017, All rights reserved, http://printr.nl */
 
-/*! formide-client-2 - v2.0.5 - 2017-04-12 */
+/*! formide-client-2 - v2.0.5 - 2017-04-13 */
 
 
 
@@ -14819,8 +14819,6 @@ function angularLoaded() {
                         } catch (e) {
                             console.info('No Link-header Found.', e);
                         }
-
-                        // console.log('link header', linkHeader);
                         return deferred.resolve(response.data);
                     },
                     function (error) {
@@ -16097,7 +16095,7 @@ function angularLoaded() {
     return directive;
   }
 
-  function MainController($router, $rootScope, $location, ngDialog, $auth) {
+  function MainController($rootScope, $location, $auth) {
       var vm = this;
 
       vm.mobilenavInvisible = true;
@@ -16130,7 +16128,7 @@ function angularLoaded() {
 
 
   MainController.$inject = [
-    '$router', '$rootScope', '$location', 'ngDialog', '$auth'
+    '$rootScope', '$location', '$auth'
   ];
 
   angular
@@ -16281,7 +16279,7 @@ function angularLoaded() {
 
     }
 
-    function MainController($rootScope, $api, $socket, $interval, Printer, $location, ngDialog) {
+    function MainController($rootScope, $interval, Printer, $location) {
         var vm = this;
 
 		vm.showCloudMsg = true;
@@ -16416,12 +16414,9 @@ function angularLoaded() {
 
     MainController.$inject = [
 	    '$rootScope',
-	    '$api',
-	    '$socket',
 	    '$interval',
 	    'Printer',
-		'$location',
-		'ngDialog'
+		'$location'
 	  ];
 
     angular
@@ -16740,6 +16735,7 @@ function angularLoaded() {
 					  }
 
 					  for (var r = 0; r < resource.extruders.length; r++) {
+						  console.log('Printer.$active.statusTemperatures[i]', i, Printer.$active.statusTemperatures[i]);
 						  if (vm.chart.data[r*2+b]) vm.chart.data[r*2+b].push(Printer.$active.statusTemperatures[i].extruders[r].temp);
 						  if (vm.chart.data[r*2+b+1]) vm.chart.data[r*2+b+1].push(Printer.$active.statusTemperatures[i].extruders[r].targetTemp);
 					  }
@@ -18279,7 +18275,7 @@ function angularLoaded() {
  */
 
 (function () {
-function MainController ($timeout, $auth, $location, $rootScope, $api) {
+function MainController ($timeout, $auth, $location, $rootScope) {
 		var vm = this;
 
 		if (window.localStorage.getItem("formide:setup")) {
@@ -18323,7 +18319,7 @@ function MainController ($timeout, $auth, $location, $rootScope, $api) {
 	}
 
 	MainController.$inject = [
-		'$timeout', '$auth', '$location', '$rootScope', '$api'
+		'$timeout', '$auth', '$location', '$rootScope'
 	];
 
 	angular
@@ -18342,7 +18338,7 @@ function MainController ($timeout, $auth, $location, $rootScope, $api) {
 
  (function () {
 
-   function MainController($api, $auth, $location, $timeout, $notification) {
+   function MainController($api, $location, $timeout, $notification) {
 
  	  var vm = this;
 
@@ -18442,7 +18438,7 @@ function MainController ($timeout, $auth, $location, $rootScope, $api) {
    }
 
    MainController.$inject = [
-	   '$api', '$auth', '$location', '$timeout', '$notification'
+	   '$api', '$location', '$timeout', '$notification'
    ];
 
 
@@ -18461,7 +18457,7 @@ function MainController ($timeout, $auth, $location, $rootScope, $api) {
 
  (function () {
 
-   function MainController($rootScope, $api, $auth, printerCtrl, Printer, $socket, $interval, $timeout, $location, $document) {
+   function MainController($rootScope, printerCtrl, Printer, $socket, $timeout, $location, $document) {
 
  	  var vm = this;
 
@@ -18597,7 +18593,7 @@ function MainController ($timeout, $auth, $location, $rootScope, $api) {
    }
 
    MainController.$inject = [
- 	  '$rootScope', '$api', '$auth', 'printerCtrl', 'Printer', '$socket', '$interval', '$timeout', '$location', '$document'
+ 	  '$rootScope', 'printerCtrl', 'Printer', '$socket', '$timeout', '$location', '$document'
    ];
 
 
@@ -18698,7 +18694,7 @@ function MainController($rootScope, $api, Upload, File, printerCtrl, Printer, $l
 
 (function () {
 
-	function MainController ($auth, $api, $routeParams, $notification, $socket, $interval, $location) {
+	function MainController ($api, $routeParams, $socket, $interval) {
 		var vm = this;
 
 		vm.device = null;
@@ -18800,13 +18796,10 @@ function MainController($rootScope, $api, Upload, File, printerCtrl, Printer, $l
 	}
 
 	MainController.$inject = [
-		'$auth',
 		'$api',
 		'$routeParams',
-		'$notification',
 		'$socket',
-		'$interval',
-		'$location'
+		'$interval'
 	];
 
 	angular
@@ -18824,7 +18817,6 @@ function MainController($rootScope, $api, Upload, File, printerCtrl, Printer, $l
 	  var vm = this;
 
 	  function submitForm(user) {
-		  console.log('user', user);
 		  $api.users.update(user)
 		  .then(function(response) {
 			  $notification.addNotification({
@@ -18916,6 +18908,11 @@ function MainController($rootScope, $api, Upload, File, printerCtrl, Printer, $l
 	  $api.get('/system/info')
 	  .then(function(response) {
 		  vm.deviceType = response.deviceType;
+	  });
+
+	  $api.get('/auth/validate')
+	  .then(function(response) {
+		  vm.currentUser = response.user.username;
 	  });
 
 	  // private functions
@@ -19209,7 +19206,7 @@ function MainController($rootScope, $api, Upload, File, printerCtrl, Printer, $l
  */
 
 (function () {
-function MainController($router, $routeParams, $timeout, $location, $auth) {
+function MainController($routeParams, $timeout, $location) {
 		var vm = this;
 
 		// private functions
@@ -19239,7 +19236,7 @@ function MainController($router, $routeParams, $timeout, $location, $auth) {
 	}
 
 	MainController.$inject = [
-		'$router', '$routeParams', '$timeout', '$location', '$auth'
+		'$routeParams', '$timeout', '$location'
 	];
 
 	MainController.$routeConfig = [
@@ -19280,7 +19277,7 @@ function MainController($router, $routeParams, $timeout, $location, $auth) {
 
 (function () {
 
-  function MainController($rootScope, Printer, $timeout, $socket, $location) {
+  function MainController($rootScope, Printer, $socket, $location) {
 	  var vm = this;
 
 	  vm.webcamBtn = {
@@ -19346,7 +19343,7 @@ function MainController($router, $routeParams, $timeout, $location, $auth) {
   }
 
   MainController.$inject = [
-	  '$rootScope', 'Printer', '$timeout', '$socket', '$location'
+	  '$rootScope', 'Printer', '$socket', '$location'
   ];
 
 
@@ -19852,7 +19849,7 @@ function foundPrinter(resource, data) {
 
 
   $templateCache.put('manage-device/componentView.html',
-    "<article id=manage-device><header class=layout><div class=\"layout__item u-1/2\"><h3>Manage Device</h3></div><div class=\"u-textRight layout__item u-1/2\"><a class=\"btn btn--tertiary\" ng-click=\"manage.navigate('/manage/device/update')\">Update Device</a></div></header><div class=layout><div class=\"layout__item u-1/2-sm pad\"><h4>Network</h4><section class=block><table class=\"table--formide network-table\"><tbody><tr class=table__item><td>Connected to</td><td>{{manageDevice.network.network || '-'}}</td></tr><tr class=table__item><td>Internal IP Address</td><td>{{manageDevice.network.ip || '-'}}</td></tr><tr class=table__item><td>Public IP Address</td><td>{{manageDevice.network.publicIp || '-'}}</td></tr><tr class=table__item><td>Mac Address</td><td>{{manageDevice.network.mac || '-'}}</td></tr><tr class=table__item><td>Hotspot Mode</td><td><div ng-if=\"manageDevice.deviceType === 'the_element'\" ng-click=manageDevice.setHotspot()><span class=checkbox><i ng-if=!manageDevice.network.isHotspot class=\"fa fa-square-o\"></i> <i ng-if=manageDevice.network.isHotspot class=\"fa fa-check-square-o\"></i></span></div><span ng-if=\"manageDevice.deviceType !== 'the_element'\">-</span></td></tr></tbody></table></section></div><div class=\"layout__item u-1/2-sm pad\"><h4>Storage</h4><section class=block><div class=\"container layout layout--withoutGutter layout--alignMiddle layout--alignCenter u-margin-top-1 u-margin-bottom-1\"><div class=\"storageChart layout__item u-fill\"><canvas id=doughnut height=230 width=230 class=\"chart chart-doughnut\" chart-data=manageDevice.chart.data chart-labels=manageDevice.chart.labels chart-dataset-override=manageDevice.chart.datasetOverride chart-options=manageDevice.chart.options></canvas><div class=label><h3>{{manageDevice.storage.percentageUsedRnd}}%<br><small>used</small></h3></div><div class=info><h3>of {{manageDevice.diskspace.total | smartbytes:1}}</h3></div></div></div></section></div><div class=\"layout__item u-1/2-sm pad connect\"><h4>Connect</h4><section class=block><form role=form><fieldset><ul class=form-fields><li><label for=\"\">SSID</label><select class=text-input ng-options=\"ssid.ssid as ssid.ssid for ssid in manageDevice.ssids\" ng-model=manageDevice.wifi.ssid><option value=\"\" disabled selected style=\"display: none\">Select a SSID</option></select></li><li><label for=\"\">Password</label><input type=password class=text-input ng-model=manageDevice.wifi.password placeholder=Password></li><li><a add-new ng-init=\"manageDevice.toggleAdvanced = false\" ng-click=\"manageDevice.toggleAdvanced = !manageDevice.toggleAdvanced\"><small><i class=\"fa u-margin-right-_5\" ng-class=\"{true:'fa-minus',false:'fa-plus'}[manageDevice.toggleAdvanced]\"></i>Advanced Settings</small></a></li><li ng-if=manageDevice.toggleAdvanced><ul class=advanced-settings><li><input class=text-input placeholder=key_mgmt ng-model=manageDevice.wifi.key_mgmt></li><li><input class=text-input placeholder=eap ng-model=manageDevice.wifi.eap></li><li><input class=text-input placeholder=identity ng-model=manageDevice.wifi.identity></li><li><input class=text-input placeholder=anonymous_identity ng-model=manageDevice.wifi.anonymous_identity></li><li><input class=text-input placeholder=phase1 ng-model=manageDevice.wifi.phase1></li><li><input class=text-input placeholder=phase2 ng-model=manageDevice.wifi.phase2></li></ul></li></ul></fieldset><div class=layout><div class=\"layout__item u-1/2\"><button class=\"btn btn--primary\" ng-click=manageDevice.connectWifi() ng-disabled=manageDevice.connecting>Connect to Wi-Fi <i ng-if=manageDevice.connecting class=\"fa fa-refresh fa-spin\"></i></button></div><div class=\"u-textRight layout__item u-1/2\"><button class=\"btn btn--secondary\" ng-click=manageDevice.resetWifi()>Reset Wi-Fi</button></div></div></form></section></div><div class=\"layout__item u-1/2-sm pad\"><h4>Users</h4><section class=block><table class=\"table--formide table--formide--responsive\"><thead><tr><th>Username</th><th></th></tr></thead><tbody><tr ng-repeat=\"user in manageDevice.users\" class=table__item><td data-th=Username>{{user.username}}</td><td class=\"table__item__controls u-textRight\"><a class=\"btn btn--small btn--tertiary\" ng-click=manageDevice.updateModal(user)><i class=\"fa fa-pencil\"></i></a> <a class=\"btn btn--small btn--alert\" ng-click=manageDevice.deleteUser(user)><i class=\"fa fa-trash-o\"></i></a></td></tr></tbody></table><button class=\"btn btn--tertiary\" ng-click=manageDevice.createModal()>Add User</button></section></div></div></article><script type=text/ng-template id=settingsModal><form role=\"form\">\n" +
+    "<article id=manage-device><header class=layout><div class=\"layout__item u-1/2\"><h3>Manage Device</h3></div><div class=\"u-textRight layout__item u-1/2\"><a class=\"btn btn--tertiary\" ng-click=\"manage.navigate('/manage/device/update')\">Update Device</a></div></header><div class=layout><div class=\"layout__item u-1/2-sm pad\"><h4>Network</h4><section class=block><table class=\"table--formide network-table\"><tbody><tr class=table__item><td>Connected to</td><td>{{manageDevice.network.network || '-'}}</td></tr><tr class=table__item><td>Internal IP Address</td><td>{{manageDevice.network.ip || '-'}}</td></tr><tr class=table__item><td>Public IP Address</td><td>{{manageDevice.network.publicIp || '-'}}</td></tr><tr class=table__item><td>Mac Address</td><td>{{manageDevice.network.mac || '-'}}</td></tr><tr class=table__item><td>Hotspot Mode</td><td><div ng-if=\"manageDevice.deviceType === 'the_element'\" ng-click=manageDevice.setHotspot()><span class=checkbox><i ng-if=!manageDevice.network.isHotspot class=\"fa fa-square-o\"></i> <i ng-if=manageDevice.network.isHotspot class=\"fa fa-check-square-o\"></i></span></div><span ng-if=\"manageDevice.deviceType !== 'the_element'\">-</span></td></tr></tbody></table></section></div><div class=\"layout__item u-1/2-sm pad\"><h4>Storage</h4><section class=block><div class=\"container layout layout--withoutGutter layout--alignMiddle layout--alignCenter u-margin-top-1 u-margin-bottom-1\"><div class=\"storageChart layout__item u-fill\"><canvas id=doughnut height=230 width=230 class=\"chart chart-doughnut\" chart-data=manageDevice.chart.data chart-labels=manageDevice.chart.labels chart-dataset-override=manageDevice.chart.datasetOverride chart-options=manageDevice.chart.options></canvas><div class=label><h3>{{manageDevice.storage.percentageUsedRnd}}%<br><small>used</small></h3></div><div class=info><h3>of {{manageDevice.diskspace.total | smartbytes:1}}</h3></div></div></div></section></div><div class=\"layout__item u-1/2-sm pad connect\"><h4>Connect</h4><section class=block><form role=form><fieldset><ul class=form-fields><li><label for=\"\">SSID</label><select class=text-input ng-options=\"ssid.ssid as ssid.ssid for ssid in manageDevice.ssids\" ng-model=manageDevice.wifi.ssid><option value=\"\" disabled selected style=\"display: none\">Select a SSID</option></select></li><li><label for=\"\">Password</label><input type=password class=text-input ng-model=manageDevice.wifi.password placeholder=Password></li><li><a add-new ng-init=\"manageDevice.toggleAdvanced = false\" ng-click=\"manageDevice.toggleAdvanced = !manageDevice.toggleAdvanced\"><small><i class=\"fa u-margin-right-_5\" ng-class=\"{true:'fa-minus',false:'fa-plus'}[manageDevice.toggleAdvanced]\"></i>Advanced Settings</small></a></li><li ng-if=manageDevice.toggleAdvanced><ul class=advanced-settings><li><input class=text-input placeholder=key_mgmt ng-model=manageDevice.wifi.key_mgmt></li><li><input class=text-input placeholder=eap ng-model=manageDevice.wifi.eap></li><li><input class=text-input placeholder=identity ng-model=manageDevice.wifi.identity></li><li><input class=text-input placeholder=anonymous_identity ng-model=manageDevice.wifi.anonymous_identity></li><li><input class=text-input placeholder=phase1 ng-model=manageDevice.wifi.phase1></li><li><input class=text-input placeholder=phase2 ng-model=manageDevice.wifi.phase2></li></ul></li></ul></fieldset><div class=layout><div class=\"layout__item u-1/2\"><button class=\"btn btn--tertiary\" ng-click=manageDevice.connectWifi() ng-disabled=manageDevice.connecting>Connect <i ng-if=manageDevice.connecting class=\"fa fa-refresh fa-spin\"></i></button></div><div class=\"u-textRight layout__item u-1/2\"><button class=\"btn btn--secondary\" ng-click=manageDevice.resetWifi()>Reset Wi-Fi</button></div></div></form></section></div><div class=\"layout__item u-1/2-sm pad\"><h4>Users</h4><section class=block><table class=\"table--formide table--formide--responsive\"><thead><tr><th>Username</th><th></th></tr></thead><tbody><tr ng-repeat=\"user in manageDevice.users\" class=table__item><td data-th=Username>{{user.username}}</td><td class=\"table__item__controls u-textRight\"><button class=\"btn btn--small btn--alert\" ng-disabled=\"user.username == manageDevice.currentUser\" ng-click=manageDevice.deleteUser(user)><i class=\"fa fa-trash-o\"></i></button></td></tr></tbody></table><button class=\"btn btn--tertiary\" ng-click=manageDevice.createModal()>Add User</button></section></div></div></article><script type=text/ng-template id=settingsModal><form role=\"form\">\n" +
     "\t\t <fieldset>\n" +
     "            <ul class=\"form-fields\">\n" +
     "                <li>\n" +

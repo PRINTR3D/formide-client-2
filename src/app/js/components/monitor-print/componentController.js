@@ -5,7 +5,7 @@
 
 (function () {
 
-  function MainController($rootScope, Printer, $timeout, $socket, $location) {
+  function MainController($rootScope, Printer, $socket, $location) {
 	  var vm = this;
 
 	  vm.webcamBtn = {
@@ -71,7 +71,7 @@
   }
 
   MainController.$inject = [
-	  '$rootScope', 'Printer', '$timeout', '$socket', '$location'
+	  '$rootScope', 'Printer', '$socket', '$location'
   ];
 
 

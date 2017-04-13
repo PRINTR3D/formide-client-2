@@ -7,7 +7,7 @@
 (function () {
 	'use strict';
 
-	function MainController($router, $routeParams, $timeout, $location, $auth) {
+	function MainController($routeParams, $timeout, $location) {
 		var vm = this;
 
 		// private functions
@@ -37,7 +37,7 @@
 	}
 
 	MainController.$inject = [
-		'$router', '$routeParams', '$timeout', '$location', '$auth'
+		'$routeParams', '$timeout', '$location'
 	];
 
 	MainController.$routeConfig = [
