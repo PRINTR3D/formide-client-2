@@ -265,6 +265,8 @@
 									}, 15000)
 								}
 
+								getNetwork(true);
+
 							}, function(e) {
 								$notification.addNotification({
 									title: e.statusName,

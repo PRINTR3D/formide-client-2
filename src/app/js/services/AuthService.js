@@ -75,7 +75,6 @@
                   console.error(error);
                 }
                 deferred.reject(error);
-				factory.logout();
             });
 
             return deferred.promise;

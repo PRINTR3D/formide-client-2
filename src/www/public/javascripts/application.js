@@ -15146,7 +15146,6 @@ function angularLoaded() {
                   console.error(error);
                 }
                 deferred.reject(error);
-				factory.logout();
             });
 
             return deferred.promise;
@@ -16207,13 +16206,11 @@ function angularLoaded() {
 
 	                            $auth.checkLoggedin()
 								.then(function (access_token) {
+				 				   $rootScope.isLoggedIn = true;
 
-				 				   if (access_token.length > 0) {
-				 					   $rootScope.isLoggedIn = true;
-				 				   }
-				 				   else {
-				 					   $rootScope.isLoggedIn = false;
-				 				   }
+								   if (window.localStorage.getItem("formide:setup")) {
+							 		  window.localStorage.removeItem("formide:setup")
+							 	  }
 								}, function (error) {
 								   $rootScope.isLoggedIn = false;
 								});
@@ -16229,17 +16226,16 @@ function angularLoaded() {
 			$location.path(route);
 		}
 
-		function logOut(){
-			window.localStorage.removeItem('formide.auth:token');
-			navigate('/login');
-		}
+		function logout(){
+  		  $auth.logout()
+  	  }
 
 
 		// exports
 		angular.extend(vm, {
 			routes: routes || {},
 			navigate: navigate,
-			logOut: logOut
+			logout: logout
 		});
   }
 
@@ -18342,10 +18338,6 @@ function MainController ($timeout, $auth, $location, $rootScope) {
 
  	  var vm = this;
 
-	  if (window.localStorage.getItem("formide:setup") && $rootScope.isLoggedIn) {
-		  window.localStorage.removeItem("formide:setup")
-	  }
-
 	  getNetworkStatus();
 
 	  function getNetworkStatus() {
@@ -19132,6 +19124,8 @@ function MainController($rootScope, $api, Upload, File, printerCtrl, Printer, $l
 										window.stop();
 									}, 15000)
 								}
+
+								getNetwork(true);
 
 							}, function(e) {
 								$notification.addNotification({
@@ -20013,7 +20007,7 @@ function foundPrinter(resource, data) {
 
 
   $templateCache.put('page-content/componentTemplate.html',
-    "<ul class=\"list-inline nav xs-hide\"><li ng-repeat=\"route in vm.routes\" ng-if=\"route.loggedIn === undefined || (route.loggedIn && $root.isLoggedIn) || (!route.loggedIn && !$root.isLoggedIn)\"><a ng-class=\"{ active: route.nav.active}\" ng-click=vm.navigate(route.path) title=\"{{ ::route.nav.name }}\">{{ ::route.nav.name }}</a></li></ul><ul class=\"list-inline u-textNoWrap nav sm-hide\" ng-class=\"{'open': vm.showMobileNav}\"><li ng-repeat=\"route in vm.routes | filter: {nav: {active: true}}\" ng-if=\"route.loggedIn === undefined || (route.loggedIn && $root.isLoggedIn) || (!route.loggedIn && !$root.isLoggedIn)\"><a class=active ng-click=\"vm.navigate(route.path); vm.showMobileNav = !vm.showMobileNav;\" title=\"{{ ::route.nav.name }}\">{{ ::route.nav.name }} <span ng-if=!vm.showMobileNav><i class=\"fa fa-angle-down\"></i></span> <span ng-if=vm.showMobileNav><i class=\"fa fa-angle-up\"></i></span></a></li><li ng-repeat=\"route in vm.routes | filter: {nav: {active: false}}\" ng-if=\"vm.showMobileNav && (route.loggedIn === undefined || (route.loggedIn && $root.isLoggedIn) || (!route.loggedIn && !$root.isLoggedIn))\"><a ng-click=\"vm.navigate(route.path); vm.showMobileNav = false\">{{::route.nav.name}}</a></li><li ng-if=\"vm.showMobileNav && $root.isLoggedIn\"><a ng-click=vm.logOut()>Log Out</a></li></ul><div class=\"fade inner-page-content\"><div class=layout><div class=\"layout__item inner-page-section\"><div ng-viewport=mainView></div></div></div></div>"
+    "<ul class=\"list-inline nav xs-hide\"><li ng-repeat=\"route in vm.routes\" ng-if=\"route.loggedIn === undefined || (route.loggedIn && $root.isLoggedIn) || (!route.loggedIn && !$root.isLoggedIn)\"><a ng-class=\"{ active: route.nav.active}\" ng-click=vm.navigate(route.path) title=\"{{ ::route.nav.name }}\">{{ ::route.nav.name }}</a></li></ul><ul class=\"list-inline u-textNoWrap nav sm-hide\" ng-class=\"{'open': vm.showMobileNav}\"><li ng-repeat=\"route in vm.routes | filter: {nav: {active: true}}\" ng-if=\"route.loggedIn === undefined || (route.loggedIn && $root.isLoggedIn) || (!route.loggedIn && !$root.isLoggedIn)\"><a class=active ng-click=\"vm.navigate(route.path); vm.showMobileNav = !vm.showMobileNav;\" title=\"{{ ::route.nav.name }}\">{{ ::route.nav.name }} <span ng-if=!vm.showMobileNav><i class=\"fa fa-angle-down\"></i></span> <span ng-if=vm.showMobileNav><i class=\"fa fa-angle-up\"></i></span></a></li><li ng-repeat=\"route in vm.routes | filter: {nav: {active: false}}\" ng-if=\"vm.showMobileNav && (route.loggedIn === undefined || (route.loggedIn && $root.isLoggedIn) || (!route.loggedIn && !$root.isLoggedIn))\"><a ng-click=\"vm.navigate(route.path); vm.showMobileNav = false\">{{::route.nav.name}}</a></li><li ng-if=\"vm.showMobileNav && $root.isLoggedIn\"><a ng-click=vm.logout()>Log Out</a></li></ul><div class=\"fade inner-page-content\"><div class=layout><div class=\"layout__item inner-page-section\"><div ng-viewport=mainView></div></div></div></div>"
   );
 
 
