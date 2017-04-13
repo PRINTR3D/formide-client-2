@@ -14721,17 +14721,13 @@ function angularLoaded() {
         function getAccessToken() {
             var deferred = $q.defer();
 
-                $timeout(function () {
-                    var auth_url = window.PATH.api;
-
-                    if(window.localStorage.getItem('formide.auth:token')) {
-                        deferred.resolve(window.localStorage.getItem('formide.auth:token'));
-                    }
-                    else {
-                        if (window.DEBUG) console.log("No token found, resolving empty string.");
-						deferred.resolve('');
-                    }
-                }, 100);
+            if(window.localStorage.getItem('formide.auth:token')) {
+                deferred.resolve(window.localStorage.getItem('formide.auth:token'));
+            }
+            else {
+                if (window.DEBUG) console.log("No token found, resolving empty string.");
+				deferred.resolve('');
+            }
 
             return deferred.promise;
         }
