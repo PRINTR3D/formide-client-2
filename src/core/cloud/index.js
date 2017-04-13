@@ -100,14 +100,21 @@ class Cloud {
     // on disconnect try reconnecting when server did not ban client
     this.cloud.on('disconnect', function () {
 	    client.logger.log('Cloud disconnected, trying to reconnect...', 'warning')
-	    setTimeout(() => {
-	    	  if (self.cloud.connected === false) {
-	    	  	  self.cloud.connect() // re-connect
-		    } else {
-	    	  	  self.cloud.disconnect() // trigger another disconnect event
-		    }
-	    }, 5000)
+	    self.cloud.connect() // re-connect
     })
+	  
+	  this.cloud.on('connect_timeout', function () {
+		  self.cloud.connect() // re-connect
+	  })
+	  
+	  // check every 10 seconds if we still have an active connection
+	  setInterval(() => {
+		  if (self.cloud.connected === false) {
+			  self.cloud.connect() // re-connect
+		  } else {
+		  	  client.logger.log('We are still connected', 'info')
+		  }
+	  }, 10000)
   }
 
   getDeviceToken () {
