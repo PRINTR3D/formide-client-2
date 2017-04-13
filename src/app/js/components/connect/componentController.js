@@ -78,8 +78,9 @@
 			  vm.connectURL = response.redirectURI;
 
 		  }, function(e){
+			  if (window.DEBUG) console.log("Wi-Fi error", e);
 			  vm.connecting = false;
-			  vm.connectingError = e.message;
+			  vm.connectingError = 'Failed to connect, please try again';
 		  });
 	  }
 

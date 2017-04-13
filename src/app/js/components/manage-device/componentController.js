@@ -1,18 +1,18 @@
 
 (function () {
 
-  function UpdateController ($api, $rootScope, $scope, $notification) {
-	  var vm = this;
+	function UpdateController ($api, $rootScope, $scope, $notification) {
+		var vm = this;
 
-	  function submitForm(user) {
-		  $api.users.update(user)
-		  .then(function(response) {
-			  $notification.addNotification({
-				  title: 'Settings Saved',
-				  message: 'Device Settings Saved',
-				  channel: 'system',
-				  type: 'success'
-			  });
+		function submitForm(user) {
+		$api.users.update(user)
+		.then(function(response) {
+			$notification.addNotification({
+				title: 'Settings Saved',
+				message: 'Device Settings Saved',
+				channel: 'system',
+				type: 'success'
+			});
 
 			  $rootScope.$emit("modal.user.saved", true);
 			  return true;
@@ -24,133 +24,143 @@
 				  type: 'error'
 			  });
 			  $rootScope.$emit("modal.user.saved", true);
-		  });
-	  }
+			});
+		}
 
-	  angular.extend(vm, {
-		  submitForm: submitForm,
-		  user: $scope.ngDialogData
-	  });
-  }
+		angular.extend(vm, {
+			submitForm: submitForm,
+			user: $scope.ngDialogData
+		});
+	}
 
-  function CreateController ($api, $rootScope, $scope, $notification) {
-	  var vm = this;
+	function CreateController ($api, $rootScope, $scope, $notification) {
+		var vm = this;
 
-	  var user = {};
+		var user = {};
 
-	  function submitForm(user) {
+		function submitForm(user) {
 		  $api.users.create(user)
 		  .then(function(data, status, headers, config) {
 			  $rootScope.$emit("modal.user.saved", true);
 			  return true;
 		  });
-	  }
+		}
 
-	  angular.extend(vm, {
+		angular.extend(vm, {
 		  submitForm: submitForm,
 		  user: user
-	  });
-  }
+		});
+	}
 
 
-  function MainController ($auth, $api, $rootScope, ngDialog, $notification, $timeout, $location) {
-	  var vm = this;
+	function MainController ($auth, $api, $rootScope, ngDialog, $notification, $timeout, $location) {
+		var vm = this;
 
-	  vm.wifi = {};
-	  vm.chart = {};
-	  vm.storage = {};
-	  vm.network = {};
+		vm.wifi = {};
+		vm.chart = {};
+		vm.storage = {};
+		vm.network = {};
 
-	  vm.chart.options = {
-		  cutoutPercentage: 80,
-		  tooltips: {enabled: false},
-		  animation: {animateRotate: false},
-		  responsive: true,
-		  maintainAspectRatio: false,
-	  }
+		vm.chart.options = {
+			cutoutPercentage: 80,
+			tooltips: {enabled: false},
+			animation: {animateRotate: false},
+			responsive: true,
+			maintainAspectRatio: false,
+		}
 
-	  var color1 = "#615892";
-	  var color2 = "#e4e4e4";
+		var color1 = "#615892";
+		var color2 = "#e4e4e4";
 
-	  vm.chart.datasetOverride = {
-		  backgroundColor: [
-			color1, color2
-		  ],
-		  hoverBackgroundColor: [
-			color1, color2
-		  ],
-		  borderColor: [
-			'#FFF', '#FFF'
-		  ],
-		  hoverBorderColor: [
-		  	'#FFF', '#FFF'
-		  ],
-		  borderWidth: [
-			2, 2
-		  ],
-		  hoverBorderWidth: [
-			2, 2
-		  ]
-	  };
+		vm.chart.datasetOverride = {
+			backgroundColor: [
+				color1, color2
+			],
+			hoverBackgroundColor: [
+				color1, color2
+			],
+			borderColor: [
+				'#FFF', '#FFF'
+			],
+			hoverBorderColor: [
+				'#FFF', '#FFF'
+			],
+			borderWidth: [
+				2, 2
+			],
+			hoverBorderWidth: [
+				2, 2
+			]
+		};
 
-	  $api.get('/system/info')
-	  .then(function(response) {
-		  vm.deviceType = response.deviceType;
-	  });
+		$api.get('/system/info')
+		.then(function(response) {
+			vm.deviceType = response.deviceType;
+		});
 
-	  $api.get('/auth/validate')
-	  .then(function(response) {
-		  vm.currentUser = response.user.username;
-	  });
+		$api.get('/auth/validate')
+		.then(function(response) {
+		  	vm.currentUser = response.user.username;
+		});
 
-	  // private functions
-	  function getUsers() {
-		  $api.users.query()
-		  .then(function(response) {
-			  vm.users = response;
-		  });
-	  }
+		// private functions
+		function getUsers() {
+			$api.users.query()
+			.then(function(response) {
+				vm.users = response;
+			});
+		}
 
-	  function getDiskspace() {
-		  $api.get('/storage/diskspace')
-		  .then(function(response) {
-			  vm.diskspace = response;
+		function getDiskspace() {
+		  	$api.get('/storage/diskspace')
+		  	.then(function(response) {
+			  	vm.diskspace = response;
 
-			  vm.storage.percentageUsed = (((vm.diskspace.total - vm.diskspace.free) / vm.diskspace.total) * 100).toFixed(2);
+				vm.storage.percentageUsed = (((vm.diskspace.total - vm.diskspace.free) / vm.diskspace.total) * 100).toFixed(2);
 
-			  vm.storage.percentageLeft = ((vm.diskspace.free / vm.diskspace.total) * 100).toFixed(2);
+				vm.storage.percentageLeft = ((vm.diskspace.free / vm.diskspace.total) * 100).toFixed(2);
 
-			  vm.storage.percentageUsedRnd = Math.round(vm.storage.percentageUsed);
+				vm.storage.percentageUsedRnd = Math.round(vm.storage.percentageUsed);
 
-			  vm.chart.labels = ["", ""];
-			  vm.chart.data = [vm.storage.percentageUsed, vm.storage.percentageLeft];
-		  });
-	  }
+				vm.chart.labels = ["", ""];
+				vm.chart.data = [vm.storage.percentageUsed, vm.storage.percentageLeft];
+		  	});
+		}
 
-	  function getNetwork() {
+		function getNetwork(reset) {
+
+		  reset = reset || false;
+
 		  $api.get('/network/status')
 		  .then(function(response) {
 			  vm.network = response;
 
-			  if (vm.network.isConnected && !vm.network.ip) {
+			  if (!reset && vm.network.isConnected && !vm.network.ip) {
+				  // ip info can take longer to come through
 				  $timeout(function () {
 					  getNetwork();
 				  }, 2000);
 			  }
+			  else if (reset && vm.network.isConnected) {
+				  // if wifi has been reset, keep fatching until device says it is no longer connected
+				  $timeout(function () {
+					  getNetwork(true);
+				  }, 2000);
+			  }
 		  });
-	  }
+		}
 
-	  function getSSIDs() {
-		  $api.get('/network/list')
-		  .then(function(response) {
-			  vm.ssids = response;
-		  });
-	  }
+		function getSSIDs() {
+		  	$api.get('/network/list')
+		  	.then(function(response) {
+			  	vm.ssids = response;
+		  	});
+		}
 
 
-	  // public functions
+		// public functions
 
-	  function setHotspot() {
+		function setHotspot() {
 		  var localIp = vm.network.ip;
 
 		  if (!localIp && vm.setHotspot) {
@@ -162,6 +172,7 @@
 				  duration: -1,
 				  type: 'error'
 			  });
+
 		  }else if (vm.setHotspot) {
 			  // if turning off the hotspot
 			  $notification.addNotification({
@@ -182,23 +193,22 @@
 							callback: function() {
 								$api.post('/network/hotspot', {enabled: vm.network.isHotspot})
 								.then(function(response) {
-								  vm.setHotspot = false;
-				  				  $notification.addNotification({
-				  					  title: 'Hotspot Disabled',
-				  					  message: 'Device will no longer emit the Wi-Fi hotspot',
-				  					  channel: 'system',
-				  					  type: 'success'
-				  				  });
+									vm.setHotspot = false;
+									$notification.addNotification({
+										title: 'Hotspot Disabled',
+										message: 'Device will no longer emit the Wi-Fi hotspot',
+										channel: 'system',
+										type: 'success'
+									});
 
-	  							  if ($location.$$host == '10.20.30.40') {
-  									//navigate to the deive ip
-  									window.location = 'http://'+localIp+':8080';
-  									$timeout(function () {
-  										window.stop();
-  									}, 15000)
-
-	  							  }
-				  			    });
+									if ($location.$$host == '10.20.30.40') {
+										//navigate to the deive ip
+										window.location = 'http://'+localIp+':8080';
+										$timeout(function () {
+											window.stop();
+										}, 15000)
+									}
+								});
 
 								return true;
 							}
@@ -219,168 +229,196 @@
 				  });
 			  });
 		  }
-	  }
+		}
 
-	  function resetWifi() {
+		function resetWifi() {
 
-		  $api.post('/network/reset')
-		  .then(function(response) {
-			  $notification.addNotification({
-				  title: 'Settings Reset',
-				  message: 'Wi-Fi settings reset',
-				  channel: 'system',
-				  type: 'success'
-			  });
+			$notification.addNotification({
+				title: 'Wi-Fi Reset',
+				message: 'After reseting your Wi-Fi you will need to connect to your device at http://10.20.30.40 via the device hotstop',
+				type: 'error',
+				duration: -1,
+				actions: [
+					{
+						title: 'Cancel',
+						callback: function() {
+							console.log('abort!');
+							return true;
+						}
+					},
+					{
+						title: 'Continue',
+						callback: function() {
+							$api.post('/network/reset')
+							.then(function(response) {
+								$notification.addNotification({
+									title: 'Settings Reset',
+									message: 'Wi-Fi settings reset',
+									channel: 'system',
+									type: 'success'
+								});
 
-			  getNetwork();
-		  }, function(e) {
-			  $notification.addNotification({
-				  title: e.statusName,
-				  message: e.message,
-				  channel: 'system',
-				  type: 'error'
-			  });
-		  });
+								if ($location.$$host != '10.20.30.40') {
+									window.location = 'http://10.20.30.40';
+										$timeout(function () {
+										window.stop();
+									}, 15000)
+								}
 
-	  }
+							}, function(e) {
+								$notification.addNotification({
+									title: e.statusName,
+									message: e.message,
+									channel: 'system',
+									type: 'error'
+								});
+							});
 
-	  function connectWifi() {
-		  vm.connecting = true;
-
-		  $api.post('/network/connect', {ssid: vm.wifi.ssid, password: vm.wifi.password})
-		  .then(function(response) {
-			  $notification.addNotification({
-				  title: 'Settings Saved',
-				  message: 'Wi-Fi Settings Saved',
-				  channel: 'system',
-				  type: 'success'
-			  });
-			  vm.connecting = false;
-			  getNetwork();
-
-		  }, function(e) {
-			  vm.connecting = false;
-			  getNetwork();
-
-			  $timeout(function () {
-				  if (!vm.network.ip) {
-					  $notification.addNotification({
-						  title: e.statusName,
-						  message: e.message,
-						  channel: 'system',
-						  type: 'error'
-					  });
-				  }
-			  }, 5000);
-		  });
-	  }
-
-	  function updateModal(user) {
-		  ngDialog.open({
-			  template: 'settingsModal',
-			  controller: 'ModalUsersUpdateController',
-			  controllerAs: 'modal',
-			  className: 'ngdialog-connect',
-			  data: user
-		  });
-	  };
-
-	  function createModal() {
-		  ngDialog.open({
-			  template: 'settingsModal',
-			  controller: 'ModalUsersCreateController',
-			  className: 'ngdialog-connect',
-			  controllerAs: 'modal'
-		  });
-	  };
-
-	  function deleteUser(user) {
-
-		  $notification.addNotification({
-			title: 'Delete ' + user.email,
-			message: 'Are you sure?',
-			type: 'error',
-			duration: -1,
-			actions: [
-				{
-					title: 'Cancel',
-					callback: function() {
-						console.log('abort!');
-						return true;
+							return true;
+						}
 					}
-				},
-				{
-					title: 'Confirm',
-					callback: function() {
-						$api.users.delete({id: user.id})
-						  .then(function(response) {
-							  init();
-						  }, function(e) {
-							  $notification.addNotification({
-								  title: e.statusName,
-								  message: e.message,
-								  channel: 'system',
-								  type: 'error'
+				],
+				popup: true
+			});
+		}
+
+		function connectWifi() {
+			vm.connecting = true;
+
+			$api.post('/network/connect', {ssid: vm.wifi.ssid, password: vm.wifi.password})
+			.then(function(response) {
+				$notification.addNotification({
+				  	title: 'Settings Saved',
+				  	message: 'Wi-Fi Settings Saved',
+				  	channel: 'system',
+				  	type: 'success'
+				});
+				vm.connecting = false;
+				getNetwork();
+
+			}, function(e) {
+				vm.connecting = false;
+				getNetwork();
+
+				$timeout(function () {
+					if (!vm.network.ip) {
+						$notification.addNotification({
+							title: e.statusName,
+							message: e.message,
+							channel: 'system',
+							type: 'error'
+						});
+					}
+				}, 5000);
+			});
+		}
+
+		function updateModal(user) {
+		  	ngDialog.open({
+			  	template: 'settingsModal',
+			  	controller: 'ModalUsersUpdateController',
+			  	controllerAs: 'modal',
+			  	className: 'ngdialog-connect',
+			  	data: user
+		  	});
+		};
+
+		function createModal() {
+		  	ngDialog.open({
+			  	template: 'settingsModal',
+			  	controller: 'ModalUsersCreateController',
+			  	className: 'ngdialog-connect',
+			  	controllerAs: 'modal'
+		  	});
+		};
+
+		function deleteUser(user) {
+
+			$notification.addNotification({
+				title: 'Delete ' + user.email,
+				message: 'Are you sure?',
+				type: 'error',
+				duration: -1,
+				actions: [
+					{
+						title: 'Cancel',
+						callback: function() {
+							console.log('abort!');
+							return true;
+						}
+					},
+					{
+						title: 'Confirm',
+						callback: function() {
+							$api.users.delete({id: user.id})
+							  .then(function(response) {
+								  init();
+							  }, function(e) {
+								  $notification.addNotification({
+									  title: e.statusName,
+									  message: e.message,
+									  channel: 'system',
+									  type: 'error'
+								  });
 							  });
-						  });
-						return true;
+							return true;
+						}
 					}
-				}
-			],
-			popup: true
+				],
+				popup: true
+			});
+		}
+
+		var manageDevice_userSaved = $rootScope.$on("modal.user.saved", function (event, data) {
+		  	init();
+		  	event.stopPropagation();
 		});
-	  }
 
-	  var manageDevice_userSaved = $rootScope.$on("modal.user.saved", function (event, data) {
-		  init();
-		  event.stopPropagation();
-	  });
+		function init() {
+			getUsers();
+			getDiskspace();
+			getSSIDs();
+			getNetwork();
+		}
 
-	  function init() {
-		  getUsers();
-		  getDiskspace();
-		  getSSIDs();
-		  getNetwork();
-	  }
+		init();
 
-	  init();
+		var manageDevice_clearUp = $rootScope.$on('$locationChangeSuccess', function(event){
+			if ($location.path() !== '/manage/device') {
+				manageDevice_userSaved();
+				manageDevice_clearUp();
+			}
+		})
 
-	  var manageDevice_clearUp = $rootScope.$on('$locationChangeSuccess', function(event){
-		  if ($location.path() !== '/manage/device') {
-			  manageDevice_userSaved();
-			  manageDevice_clearUp();
-		  }
-	  })
+		// exports
+		angular.extend(vm, {
+			getUsers: getUsers,
+			updateModal: updateModal,
+			createModal: createModal,
+			deleteUser: deleteUser,
+			connectWifi: connectWifi,
+			resetWifi: resetWifi,
+			setHotspot: setHotspot
+		});
+	}
 
-	  // exports
-	  angular.extend(vm, {
-		  getUsers: getUsers,
-		  updateModal: updateModal,
-		  createModal: createModal,
-		  deleteUser: deleteUser,
-		  connectWifi: connectWifi,
-		  resetWifi: resetWifi,
-		  setHotspot: setHotspot
-	  });
-  }
+	MainController.$inject = [
+		'$auth', '$api', '$rootScope', 'ngDialog', '$notification', '$timeout', '$location'
+	];
 
-  MainController.$inject = [
-	  '$auth', '$api', '$rootScope', 'ngDialog', '$notification', '$timeout', '$location'
-  ];
+	UpdateController.$inject = [
+		'$api', '$rootScope', '$scope', '$notification'
+	];
 
-  UpdateController.$inject = [
-	  '$api', '$rootScope', '$scope', '$notification'
-  ];
+	CreateController.$inject = [
+		'$api', '$rootScope', '$notification'
+	];
 
-  CreateController.$inject = [
-	  '$api', '$rootScope', '$notification'
-  ];
-
-  angular
-    .module('components.manageDevice', [
-      //
-    ])
-    .controller('ManageDeviceController', MainController)
+	angular
+	.module('components.manageDevice', [
+		//
+	])
+	.controller('ManageDeviceController', MainController)
 	.controller('ModalUsersUpdateController', UpdateController)
 	.controller('ModalUsersCreateController', CreateController);
 })();
