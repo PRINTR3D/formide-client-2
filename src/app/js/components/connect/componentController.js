@@ -6,7 +6,7 @@
 
  (function () {
 
-   function MainController($api, $location, $timeout, $notification, $rootScope) {
+   function MainController($api, $location, $timeout, $notification, $rootScope, $http) {
 
  	  var vm = this;
 
@@ -107,14 +107,20 @@
 
 		  vm.connecting = true;
 		  vm.connectingError = false;
-		  window.location = vm.connectURL;
 
-		  $timeout(function () {
-			  window.stop();
+		  $http.get('https://api.formide.com/')
+  		  .then(function(response) {
+			  if (response.status == 200) {
+				  window.location = vm.connectURL;
+			  }
+			  else {
+				  vm.connecting = false;
+		  		  vm.connectingError = "Ensure that you are connected to the Internet and try again";
+			  }
+		  }, function(e){
 			  vm.connecting = false;
-			  vm.connectingError = "Ensure that you are connected to the Internet";
-			  vm.connectURL = response.redirectURI;
-		  }, 15000);
+			  vm.connectingError = "Ensure that you are connected to the Internet and try again";
+		  });
 	  }
 
 
@@ -126,7 +132,7 @@
    }
 
    MainController.$inject = [
-	   '$api', '$location', '$timeout', '$notification', '$rootScope'
+	   '$api', '$location', '$timeout', '$notification', '$rootScope', '$http'
    ];
 
 
