@@ -163,17 +163,17 @@
 		function setHotspot() {
 		  var localIp = vm.network.ip;
 
-		  if (!localIp && vm.setHotspot) {
-			  // if turned off the hotspot and no IP avalible
+		  if (!localIp && vm.network.isHotspot) {
+			  // if turning off the hotspot and no IP avalible
 			  $notification.addNotification({
 				  title: 'Hotspot Reset',
-				  message: 'You cannot turn on the device hotspot if it is not connected to a network',
+				  message: 'You cannot turn off the device hotspot if it is not connected to a network',
 				  channel: 'system',
 				  duration: -1,
 				  type: 'error'
 			  });
 
-		  }else if (vm.setHotspot) {
+		  }else if (vm.network.isHotspot) {
 			  // if turning off the hotspot
 			  $notification.addNotification({
 					title: 'Hotspot Reset',
@@ -191,9 +191,9 @@
 						{
 							title: 'Continue',
 							callback: function() {
+								vm.network.isHotspot = false;
 								$api.post('/network/hotspot', {enabled: vm.network.isHotspot})
 								.then(function(response) {
-									vm.setHotspot = false;
 									$notification.addNotification({
 										title: 'Hotspot Disabled',
 										message: 'Device will no longer emit the Wi-Fi hotspot',
@@ -218,9 +218,9 @@
 				});
 		  }else {
 			  // if turning on the hotspot
+			  vm.network.isHotspot = true;
 			  $api.post('/network/hotspot', {enabled: vm.network.isHotspot})
 			  .then(function(response) {
-				  vm.setHotspot = true;
 				  $notification.addNotification({
 					  title: 'Hotspot Enabled',
 					  message: 'Device will now emit the Wi-Fi hotspot',
@@ -309,7 +309,7 @@
 							channel: 'system',
 							type: 'error'
 						});
-					} 
+					}
 				}, 5000);
 			});
 		}
