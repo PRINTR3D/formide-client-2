@@ -55,6 +55,7 @@
 				  type: 'success'
 			  });
 			  vm.connecting = false;
+			  vm.connectSetupStep = '';
 			  getNetworkStatus();
 		  }, function(e) {
 			  vm.wifiError = e.message;

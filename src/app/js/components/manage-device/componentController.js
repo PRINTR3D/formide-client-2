@@ -131,10 +131,9 @@
 		  $api.get('/network/status')
 		  .then(function(response) {
 			  vm.network = response;
-			  vm.wifi.ssid = vm.network.network;
 
-			  if (!vm.network.ip) {
-				  setTimeout(function () {
+			  if (vm.network.isConnected && !vm.network.ip) {
+				  $timeout(function () {
 					  getNetwork();
 				  }, 2000);
 			  }

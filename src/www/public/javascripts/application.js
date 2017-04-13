@@ -18387,6 +18387,7 @@ function MainController ($timeout, $auth, $location, $rootScope) {
 				  type: 'success'
 			  });
 			  vm.connecting = false;
+			  vm.connectSetupStep = '';
 			  getNetworkStatus();
 		  }, function(e) {
 			  vm.wifiError = e.message;
@@ -18943,10 +18944,9 @@ function MainController($rootScope, $api, Upload, File, printerCtrl, Printer, $l
 		  $api.get('/network/status')
 		  .then(function(response) {
 			  vm.network = response;
-			  vm.wifi.ssid = vm.network.network;
 
-			  if (!vm.network.ip) {
-				  setTimeout(function () {
+			  if (vm.network.isConnected && !vm.network.ip) {
+				  $timeout(function () {
 					  getNetwork();
 				  }, 2000);
 			  }
