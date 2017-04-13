@@ -135,13 +135,13 @@
 		  .then(function(response) {
 			  vm.network = response;
 
-			  if (!reset && vm.network.isConnected && !vm.network.ip) {
+			  if (!reset && vm.network.isConnected && !vm.network.publicIp) {
 				  // ip info can take longer to come through
 				  $timeout(function () {
 					  getNetwork();
 				  }, 2000);
 			  }
-			  else if (reset && !vm.network.ip) {
+			  else if (reset && vm.network.publicIp) {
 				  // if wifi has been reset, keep fatching until device says it is no longer connected
 				  $timeout(function () {
 					  getNetwork(true);
@@ -378,10 +378,10 @@
 		});
 
 		function init() {
+			getNetwork();
 			getUsers();
 			getDiskspace();
 			getSSIDs();
-			getNetwork();
 		}
 
 		init();
