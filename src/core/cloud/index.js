@@ -103,10 +103,6 @@ class Cloud {
 	    self.cloud.connect() // re-connect
     })
 	  
-	  this.cloud.on('connect_timeout', function () {
-		  self.cloud.connect() // re-connect
-	  })
-	  
 	  // check every 10 seconds if we still have an active connection
 	  setInterval(() => {
 		  if (self.cloud.connected === false) {
