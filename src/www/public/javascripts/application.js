@@ -18338,7 +18338,7 @@ function MainController ($timeout, $auth, $location, $rootScope) {
 
  (function () {
 
-   function MainController($api, $location, $timeout, $notification) {
+   function MainController($api, $location, $timeout, $notification, $rootScope) {
 
  	  var vm = this;
 
@@ -18394,8 +18394,23 @@ function MainController ($timeout, $auth, $location, $rootScope) {
 			  vm.connectSetupStep = '';
 			  getNetworkStatus();
 		  }, function(e) {
-			  vm.wifiError = e.message;
-			  vm.connecting = false;
+			  if (window.DEBUG) console.log("Wi-Fi error", e);
+
+			  $timeout(function () {
+				  // make sure it wasn't just a linux error
+				  $api.get('/network/status')
+				  .then(function(network) {
+
+					  if (network.ip) {
+						  vm.wifiError = 'Failed to connect, please try again';
+					  }
+					  else {
+						  vm.connectSetupStep = '';
+						  getNetworkStatus();
+					  }
+					  vm.connecting = false;
+				  });
+			  }, 5000);
 		  });
 	  }
 
@@ -18414,9 +18429,8 @@ function MainController ($timeout, $auth, $location, $rootScope) {
 			  vm.connectURL = response.redirectURI;
 
 		  }, function(e){
-			  if (window.DEBUG) console.log("Wi-Fi error", e);
+			  vm.connectingError = e.message;
 			  vm.connecting = false;
-			  vm.connectingError = 'Failed to connect, please try again';
 		  });
 	  }
 
@@ -18444,7 +18458,7 @@ function MainController ($timeout, $auth, $location, $rootScope) {
    }
 
    MainController.$inject = [
-	   '$api', '$location', '$timeout', '$notification'
+	   '$api', '$location', '$timeout', '$notification', '$rootScope'
    ];
 
 
@@ -18617,7 +18631,7 @@ function MainController ($timeout, $auth, $location, $rootScope) {
 */
 
 (function () {
-function MainController($rootScope, $api, Upload, File, printerCtrl, Printer, $location) {
+function MainController($rootScope, $api, Upload, File, printerCtrl, Printer, $location, $notification) {
 
 		var vm = this;
 
@@ -18659,6 +18673,17 @@ function MainController($rootScope, $api, Upload, File, printerCtrl, Printer, $l
 					Upload.upload(data)
 					.then(function (response) {
 						File.resource.$add(response.data.file);
+					}, function (response) {
+
+						$notification.addNotification({
+							title: 'File Upload Failed',
+							message: response.data.message,
+							channel: 'system',
+							type: 'error'
+						});
+
+					}, function (evt) {
+						console.log('uploadProgress', parseInt(100 * evt.loaded / evt.total));
 					});
 				}
 
@@ -18686,7 +18711,7 @@ function MainController($rootScope, $api, Upload, File, printerCtrl, Printer, $l
 	}
 
 	MainController.$inject = [
-		'$rootScope', '$api', 'Upload', 'File', 'printerCtrl', 'Printer', '$location'
+		'$rootScope', '$api', 'Upload', 'File', 'printerCtrl', 'Printer', '$location', '$notification'
 	];
 
 	angular
@@ -18959,7 +18984,7 @@ function MainController($rootScope, $api, Upload, File, printerCtrl, Printer, $l
 					  getNetwork();
 				  }, 2000);
 			  }
-			  else if (reset && vm.network.isConnected) {
+			  else if (reset && !vm.network.ip) {
 				  // if wifi has been reset, keep fatching until device says it is no longer connected
 				  $timeout(function () {
 					  getNetwork(true);
@@ -19119,6 +19144,7 @@ function MainController($rootScope, $api, Upload, File, printerCtrl, Printer, $l
 				getNetwork();
 
 				$timeout(function () {
+					// make sure it wasn't just a linux error
 					if (!vm.network.ip) {
 						$notification.addNotification({
 							title: e.statusName,
@@ -19126,7 +19152,7 @@ function MainController($rootScope, $api, Upload, File, printerCtrl, Printer, $l
 							channel: 'system',
 							type: 'error'
 						});
-					}
+					} 
 				}, 5000);
 			});
 		}

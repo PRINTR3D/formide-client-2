@@ -6,7 +6,7 @@
 (function () {
 'use strict';
 
-	function MainController($rootScope, $api, Upload, File, printerCtrl, Printer, $location) {
+	function MainController($rootScope, $api, Upload, File, printerCtrl, Printer, $location, $notification) {
 
 		var vm = this;
 
@@ -48,6 +48,17 @@
 					Upload.upload(data)
 					.then(function (response) {
 						File.resource.$add(response.data.file);
+					}, function (response) {
+
+						$notification.addNotification({
+							title: 'File Upload Failed',
+							message: response.data.message,
+							channel: 'system',
+							type: 'error'
+						});
+
+					}, function (evt) {
+						console.log('uploadProgress', parseInt(100 * evt.loaded / evt.total));
 					});
 				}
 
@@ -75,7 +86,7 @@
 	}
 
 	MainController.$inject = [
-		'$rootScope', '$api', 'Upload', 'File', 'printerCtrl', 'Printer', '$location'
+		'$rootScope', '$api', 'Upload', 'File', 'printerCtrl', 'Printer', '$location', '$notification'
 	];
 
 	angular

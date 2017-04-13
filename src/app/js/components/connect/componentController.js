@@ -6,7 +6,7 @@
 
  (function () {
 
-   function MainController($api, $location, $timeout, $notification) {
+   function MainController($api, $location, $timeout, $notification, $rootScope) {
 
  	  var vm = this;
 
@@ -62,8 +62,23 @@
 			  vm.connectSetupStep = '';
 			  getNetworkStatus();
 		  }, function(e) {
-			  vm.wifiError = e.message;
-			  vm.connecting = false;
+			  if (window.DEBUG) console.log("Wi-Fi error", e);
+
+			  $timeout(function () {
+				  // make sure it wasn't just a linux error
+				  $api.get('/network/status')
+				  .then(function(network) {
+
+					  if (network.ip) {
+						  vm.wifiError = 'Failed to connect, please try again';
+					  }
+					  else {
+						  vm.connectSetupStep = '';
+						  getNetworkStatus();
+					  }
+					  vm.connecting = false;
+				  });
+			  }, 5000);
 		  });
 	  }
 
@@ -82,9 +97,8 @@
 			  vm.connectURL = response.redirectURI;
 
 		  }, function(e){
-			  if (window.DEBUG) console.log("Wi-Fi error", e);
+			  vm.connectingError = e.message;
 			  vm.connecting = false;
-			  vm.connectingError = 'Failed to connect, please try again';
 		  });
 	  }
 
@@ -112,7 +126,7 @@
    }
 
    MainController.$inject = [
-	   '$api', '$location', '$timeout', '$notification'
+	   '$api', '$location', '$timeout', '$notification', '$rootScope'
    ];
 
 

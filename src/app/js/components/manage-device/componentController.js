@@ -141,7 +141,7 @@
 					  getNetwork();
 				  }, 2000);
 			  }
-			  else if (reset && vm.network.isConnected) {
+			  else if (reset && !vm.network.ip) {
 				  // if wifi has been reset, keep fatching until device says it is no longer connected
 				  $timeout(function () {
 					  getNetwork(true);
@@ -301,6 +301,7 @@
 				getNetwork();
 
 				$timeout(function () {
+					// make sure it wasn't just a linux error
 					if (!vm.network.ip) {
 						$notification.addNotification({
 							title: e.statusName,
@@ -308,7 +309,7 @@
 							channel: 'system',
 							type: 'error'
 						});
-					}
+					} 
 				}, 5000);
 			});
 		}
