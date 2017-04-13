@@ -15012,4 +15012,10 @@ temperature-bar .target,
   padding-top: 1rem;
 }
 
+/* line 8833, tmp/application.scss */
+#monitor-print .webcam-panel {
+  padding: 0 !important;
+  overflow: hidden !important;
+}
+
 /*# sourceMappingURL=application.css.map */
