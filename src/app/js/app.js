@@ -177,6 +177,10 @@ function foundPrinter(resource, data) {
 				var access_token = window.localStorage.getItem('formide.auth:token');
 				var uploadUrl = window.PATH.api + '/storage';
 
+				$rootScope.fileUploading = true;
+
+				var count = 0;
+
 				for (var i = 0; i < files.length; i++) {
 					var file = files[i];
 
@@ -191,6 +195,32 @@ function foundPrinter(resource, data) {
 					Upload.upload(data)
 					.then(function (response) {
 						File.resource.$add(response.data.file);
+
+						$notification.addNotification({
+							title: 'File Upload',
+							message: response.data.file.filename + ' successfully uploaded',
+							channel: 'system',
+							type: 'success'
+						});
+
+						count ++;
+						if (count == files.length) {
+							$rootScope.fileUploading = false;
+						}
+
+					}, function (response) {
+
+						$notification.addNotification({
+							title: 'File Upload Failed',
+							message: response.data.message,
+							channel: 'system',
+							type: 'error'
+						});
+
+						$rootScope.fileUploading = false;
+
+					}, function (evt) {
+						console.log('uploadProgress', parseInt(100 * evt.loaded / evt.total));
 					});
 				}
 

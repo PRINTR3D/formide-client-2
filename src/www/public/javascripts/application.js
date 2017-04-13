@@ -18665,6 +18665,10 @@ function MainController($rootScope, $api, Upload, File, printerCtrl, Printer, $l
 
 			if(files && files.length > 0 && !$rootScope.fileUploading) {
 
+				$rootScope.fileUploading = true;
+
+				var count = 0;
+
 				for (var i = 0; i < files.length; i++) {
 					var file = files[i];
 
@@ -18679,6 +18683,19 @@ function MainController($rootScope, $api, Upload, File, printerCtrl, Printer, $l
 					Upload.upload(data)
 					.then(function (response) {
 						File.resource.$add(response.data.file);
+
+						$notification.addNotification({
+							title: 'File Upload',
+							message: response.data.file.filename + ' successfully uploaded',
+							channel: 'system',
+							type: 'success'
+						});
+
+						count ++;
+						if (count == files.length) {
+							$rootScope.fileUploading = false;
+						}
+
 					}, function (response) {
 
 						$notification.addNotification({
@@ -18687,6 +18704,8 @@ function MainController($rootScope, $api, Upload, File, printerCtrl, Printer, $l
 							channel: 'system',
 							type: 'error'
 						});
+
+						$rootScope.fileUploading = false;
 
 					}, function (evt) {
 						console.log('uploadProgress', parseInt(100 * evt.loaded / evt.total));
@@ -19609,6 +19628,10 @@ function foundPrinter(resource, data) {
 				var access_token = window.localStorage.getItem('formide.auth:token');
 				var uploadUrl = window.PATH.api + '/storage';
 
+				$rootScope.fileUploading = true;
+
+				var count = 0;
+
 				for (var i = 0; i < files.length; i++) {
 					var file = files[i];
 
@@ -19623,6 +19646,32 @@ function foundPrinter(resource, data) {
 					Upload.upload(data)
 					.then(function (response) {
 						File.resource.$add(response.data.file);
+
+						$notification.addNotification({
+							title: 'File Upload',
+							message: response.data.file.filename + ' successfully uploaded',
+							channel: 'system',
+							type: 'success'
+						});
+
+						count ++;
+						if (count == files.length) {
+							$rootScope.fileUploading = false;
+						}
+
+					}, function (response) {
+
+						$notification.addNotification({
+							title: 'File Upload Failed',
+							message: response.data.message,
+							channel: 'system',
+							type: 'error'
+						});
+
+						$rootScope.fileUploading = false;
+
+					}, function (evt) {
+						console.log('uploadProgress', parseInt(100 * evt.loaded / evt.total));
 					});
 				}
 
@@ -19914,7 +19963,7 @@ function foundPrinter(resource, data) {
 
 
   $templateCache.put('file-library/componentView.html',
-    "<article id=file-library><header class=layout><div class=\"layout__item u-1/2\"><h3>Library</h3></div><div class=\"u-textRight layout__item u-1/2\"><button class=\"btn btn--tertiary\" ng-disabled=$root.fileUploading ngf-multiple=true ngf-select=fileLibrary.upload($files) ngf-pattern=\"'text/*'\">Upload G-code</button></div></header><section ng-if=\"fileLibrary.files.length > 0\" id=listView class=block><table class=\"table--formide table--formide--responsive\"><thead><tr><th>Name</th><th>Created</th><th>Size</th><th>Actions</th></tr></thead><tbody><tr ng-repeat=\"file in fileLibrary.files\" class=table__item><td data-th=Name class=name>{{file.filename | removeFiletype | removeDashes | title}}</td><td data-th=Created>{{file.updatedAt | timeAgo}}</td><td ng-if=\"file.filetype !== 'folder'\" data-th=Size>{{ file.filesize | smartbytes:1 }}</td><td ng-if=\"file.filetype === 'folder' && file.children != 1\" data-th=Size>{{ file.children }} items</td><td ng-if=\"file.filetype === 'folder' && file.children == 1\" data-th=Size>1 item</td><td class=\"actions table__item__controls\"><button class=\"btn btn--small btn--tertiary btn--slice\" ng-click=fileLibrary.print(file); title=Print ng-disabled=\"fileLibrary.printer.$active.status !== 'online'\">Print</button> <button class=\"btn btn--small btn--alert\" ng-click=fileLibrary.removeMultiple([file]) title=Details><i class=\"fa fa-trash-o\"></i></button></td></tr></tbody></table><div ng-if=!fileLibrary.files.$resolved class=\"u-textCenter u-margin-top-1 u-margin-bottom-1\"><i class=\"fa fa-refresh fa-spin fa-2x text-base-primary-color\"></i></div></section><section class=animate-show ng-show=\"fileLibrary.files.length == 0 && fileLibrary.files.$resolved\" id=uploadInvite><div class=\"layout layout--alignCenter u-margin-top-3\"><div class=\"icon layout__item u-fit\"><i class=\"fa fa-files-o\"></i></div><div class=\"layout__item u-fit\"><h2 class=xs-hide>Drag your G-codes here</h2><p class=xs-hide>Or add them by using the upload button</p><h2 class=\"sm-hide u-textCenter\">Upload G-codes</h2><p class=\"sm-hide u-textCenter\">Add files using the upload button</p></div></div></section></article>"
+    "<article id=file-library><header class=layout><div class=\"layout__item u-1/2\"><h3>Library</h3></div><div class=\"u-textRight layout__item u-1/2\"><button class=\"btn btn--tertiary\" ng-disabled=$root.fileUploading ngf-multiple=true ngf-select=fileLibrary.upload($files) ngf-pattern=\"'text/*'\">Upload G-code <i ng-if=$root.fileUploading class=\"fa fa-refresh fa-spin\"></i></button></div></header><section ng-if=\"fileLibrary.files.length > 0\" id=listView class=block><table class=\"table--formide table--formide--responsive\"><thead><tr><th>Name</th><th>Created</th><th>Size</th><th>Actions</th></tr></thead><tbody><tr ng-repeat=\"file in fileLibrary.files\" class=table__item><td data-th=Name class=name>{{file.filename | removeFiletype | removeDashes | title}}</td><td data-th=Created>{{file.updatedAt | timeAgo}}</td><td ng-if=\"file.filetype !== 'folder'\" data-th=Size>{{ file.filesize | smartbytes:1 }}</td><td ng-if=\"file.filetype === 'folder' && file.children != 1\" data-th=Size>{{ file.children }} items</td><td ng-if=\"file.filetype === 'folder' && file.children == 1\" data-th=Size>1 item</td><td class=\"actions table__item__controls\"><button class=\"btn btn--small btn--tertiary btn--slice\" ng-click=fileLibrary.print(file); title=Print ng-disabled=\"fileLibrary.printer.$active.status !== 'online'\">Print</button> <button class=\"btn btn--small btn--alert\" ng-click=fileLibrary.removeMultiple([file]) title=Details><i class=\"fa fa-trash-o\"></i></button></td></tr></tbody></table><div ng-if=!fileLibrary.files.$resolved class=\"u-textCenter u-margin-top-1 u-margin-bottom-1\"><i class=\"fa fa-refresh fa-spin fa-2x text-base-primary-color\"></i></div></section><section class=animate-show ng-show=\"fileLibrary.files.length == 0 && fileLibrary.files.$resolved\" id=uploadInvite><div class=\"layout layout--alignCenter u-margin-top-3\"><div class=\"icon layout__item u-fit\"><i class=\"fa fa-files-o\"></i></div><div class=\"layout__item u-fit\"><h2 class=xs-hide>Drag your G-codes here</h2><p class=xs-hide>Or add them by using the upload button</p><h2 class=\"sm-hide u-textCenter\">Upload G-codes</h2><p class=\"sm-hide u-textCenter\">Add files using the upload button</p></div></div></section></article>"
   );
 
 
