@@ -115,6 +115,7 @@
 					  }
 
 					  for (var r = 0; r < resource.extruders.length; r++) {
+						  console.log('Printer.$active.statusTemperatures[i]', i, Printer.$active.statusTemperatures[i]);
 						  if (vm.chart.data[r*2+b]) vm.chart.data[r*2+b].push(Printer.$active.statusTemperatures[i].extruders[r].temp);
 						  if (vm.chart.data[r*2+b+1]) vm.chart.data[r*2+b+1].push(Printer.$active.statusTemperatures[i].extruders[r].targetTemp);
 					  }

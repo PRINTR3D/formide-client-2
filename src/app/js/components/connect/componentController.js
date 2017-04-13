@@ -6,7 +6,7 @@
 
  (function () {
 
-   function MainController($api, $auth, $location, $timeout, $notification) {
+   function MainController($api, $location, $timeout, $notification) {
 
  	  var vm = this;
 
@@ -16,7 +16,7 @@
 		  $api.get('/network/status')
 		  .then(function(status) {
 			  if (status.isConnected && status.publicIp) {
-				  vm.connectSetupStep = 'connect-formide';
+				  getConnectCode();
 			  }
 			  else if (status.isConnected) {
 			  	  vm.connectSetupStep = 'network-no-internet';
@@ -63,33 +63,38 @@
 	  }
 
 
+	  function getConnectCode(){
+		  vm.connectSetupStep = 'connect-formide';
+
+		  vm.connecting = true;
+		  vm.connectingError = false;
+
+		  $api
+		  .get('/system/cloud/code')
+		  .then(function(response) {
+
+			  vm.connecting = false;
+			  vm.connectURL = response.redirectURI;
+
+		  }, function(e){
+			  vm.connecting = false;
+			  vm.connectingError = e.message;
+		  });
+	  }
+
+
 	  function connectToFormide(){
 
-		  if (vm.connectURL) {
-			  window.location = vm.connectURL;
-	  	  }
-	  	  else {
-  			  vm.connecting = true;
-  			  vm.connectingError = false;
+		  vm.connecting = true;
+		  vm.connectingError = false;
+		  window.location = vm.connectURL;
 
-  			  $api
-  			  .get('/system/cloud/code')
-  			  .then(function(response) {
-
-				  window.location = response.redirectURI;
-
-  				  $timeout(function () {
-  					  window.stop();
-  					  vm.connecting = false;
-  					  vm.connectingError = "Ensure that you are connected to the Internet";
-  					  vm.connectURL = response.redirectURI;
-  				  }, 15000)
-
-  			  }, function(e){
-  				  vm.connecting = false;
-  				  vm.connectingError = e.message;
-  			  });
-	  	  }
+		  $timeout(function () {
+			  window.stop();
+			  vm.connecting = false;
+			  vm.connectingError = "Ensure that you are connected to the Internet";
+			  vm.connectURL = response.redirectURI;
+		  }, 15000);
 	  }
 
 
@@ -101,7 +106,7 @@
    }
 
    MainController.$inject = [
-	   '$api', '$auth', '$location', '$timeout', '$notification'
+	   '$api', '$location', '$timeout', '$notification'
    ];
 
 

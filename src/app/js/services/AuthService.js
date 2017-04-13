@@ -42,22 +42,10 @@
             return deferred.promise;
         };
 
-        factory.getLoginURL = function () {
-            return $api
-            .get('/auth/login', {}, auth_url)
-            .then(function( response )
-            {
-                return response;
-            });
-        };
-
         factory.logout = function () {
             var promise = $api
-            .get('/auth/logout', {}, auth_url)
-            .then(function(response)
-            {
-                window.localStorage.removeItem("formide.auth:token");
-            });
+            window.localStorage.removeItem("formide.auth:token");
+            $location.path('/login');
 
             return promise;
         };
@@ -69,6 +57,7 @@
             .then(function(access_token) {
                 if(access_token.length < 1) {
                     deferred.reject("Not loggedin");
+					factory.logout();
                 }
                 else {
 					$api.get('/auth/validate')
@@ -76,6 +65,7 @@
 						deferred.resolve(access_token);
 					}, function(err) {
 						deferred.reject("access_token invalid");
+						factory.logout();
 					});
                 }
             },
@@ -84,8 +74,8 @@
                   console.error("Error: %s", "API Request");
                   console.error(error);
                 }
-
                 deferred.reject(error);
+				factory.logout();
             });
 
             return deferred.promise;

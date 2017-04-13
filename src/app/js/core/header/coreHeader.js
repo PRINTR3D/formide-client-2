@@ -20,7 +20,7 @@
     return directive;
   }
 
-  function MainController($router, $rootScope, $location, ngDialog, $auth) {
+  function MainController($rootScope, $location, $auth) {
       var vm = this;
 
       vm.mobilenavInvisible = true;
@@ -39,22 +39,21 @@
 		  vm.mobilenavInvisible = vm.mobilenavInvisible ? false : true;
       }
 
-	  function logOut(){
-		  window.localStorage.removeItem('formide.auth:token');
-		  navigate('/login');
+	  function logout(){
+		  $auth.logout()
 	  }
 
       // exports
       angular.extend(vm, {
       	toggleMobilenav: toggleMobilenav,
 		navigate: navigate,
-		logOut: logOut
+		logout: logout
       });
   }
 
 
   MainController.$inject = [
-    '$router', '$rootScope', '$location', 'ngDialog', '$auth'
+    '$rootScope', '$location', '$auth'
   ];
 
   angular

@@ -5,7 +5,6 @@
 	  var vm = this;
 
 	  function submitForm(user) {
-		  console.log('user', user);
 		  $api.users.update(user)
 		  .then(function(response) {
 			  $notification.addNotification({
@@ -99,6 +98,11 @@
 		  vm.deviceType = response.deviceType;
 	  });
 
+	  $api.get('/auth/validate')
+	  .then(function(response) {
+		  vm.currentUser = response.user.username;
+	  });
+
 	  // private functions
 	  function getUsers() {
 		  $api.users.query()
@@ -179,23 +183,25 @@
 							callback: function() {
 								$api.post('/network/hotspot', {enabled: vm.network.isHotspot})
 								.then(function(response) {
+								  vm.setHotspot = false;
 				  				  $notification.addNotification({
 				  					  title: 'Hotspot Disabled',
 				  					  message: 'Device will no longer emit the Wi-Fi hotspot',
 				  					  channel: 'system',
 				  					  type: 'success'
 				  				  });
-				  			  });
 
-								console.log('setHotspot debug', $location.$$host, localIp);
-								if ($location.$$host == '10.20.30.40') {
-									//navigate to the deive ip
-									window.location = 'http://'+localIp+':8080';
-									$timeout(function () {
-										window.stop();
-									}, 15000)
-									return true;
-								}
+	  							  if ($location.$$host == '10.20.30.40') {
+  									//navigate to the deive ip
+  									window.location = 'http://'+localIp+':8080';
+  									$timeout(function () {
+  										window.stop();
+  									}, 15000)
+
+	  							  }
+				  			    });
+
+								return true;
 							}
 						}
 					],
@@ -205,6 +211,7 @@
 			  // if turning on the hotspot
 			  $api.post('/network/hotspot', {enabled: vm.network.isHotspot})
 			  .then(function(response) {
+				  vm.setHotspot = true;
 				  $notification.addNotification({
 					  title: 'Hotspot Enabled',
 					  message: 'Device will now emit the Wi-Fi hotspot',

@@ -14917,17 +14917,18 @@ temperature-bar .target,
 }
 
 /* line 8744, tmp/application.scss */
-#manage-device checkbox .checkbox {
+#manage-device .checkbox {
   margin-left: 0;
+  cursor: pointer;
 }
 
-/* line 8746, tmp/application.scss */
-#manage-device checkbox .checkbox i {
+/* line 8747, tmp/application.scss */
+#manage-device .checkbox i {
   padding-left: 0;
 }
 
 @media only screen and (max-width: 719px) {
-  /* line 8753, tmp/application.scss */
+  /* line 8754, tmp/application.scss */
   #manage-device .connect {
     -ms-flex-order: -1;
         order: -1;
@@ -14936,23 +14937,23 @@ temperature-bar .target,
   }
 }
 
-/* line 8760, tmp/application.scss */
+/* line 8761, tmp/application.scss */
 #manage-device .layout__item.u-1\/2-sm.pad {
   padding-top: 1rem;
 }
 
-/* line 8764, tmp/application.scss */
+/* line 8765, tmp/application.scss */
 #manage-device .layout__item.u-1\/2-sm.pad:first-child {
   padding-top: 0;
 }
 
-/* line 8768, tmp/application.scss */
+/* line 8769, tmp/application.scss */
 #manage-device .layout__item.u-1\/2-sm.pad:nth-child(2) {
   padding-top: 0;
 }
 
 @media only screen and (max-width: 719px) {
-  /* line 8773, tmp/application.scss */
+  /* line 8774, tmp/application.scss */
   #manage-device .layout__item.u-1\/2-sm.pad:nth-child(2) {
     padding-top: 1rem;
   }
@@ -14962,51 +14963,51 @@ temperature-bar .target,
  *	This code was created for Printr B.V. It is open source under the formide-client package.
  *	Copyright (c) 2017, All rights reserved, http://printr.nl
  */
-/* line 8788, tmp/application.scss */
+/* line 8789, tmp/application.scss */
 #monitor-print .block--panel {
   height: 362px;
   overflow: auto;
   position: relative;
 }
 
-/* line 8794, tmp/application.scss */
+/* line 8795, tmp/application.scss */
 #monitor-print .webcam-panel .body {
   padding: 0 !important;
   overflow: hidden !important;
 }
 
-/* line 8800, tmp/application.scss */
+/* line 8801, tmp/application.scss */
 #monitor-print .tune-values printer-controls-fan {
   position: relative;
 }
 
-/* line 8804, tmp/application.scss */
+/* line 8805, tmp/application.scss */
 #monitor-print .tune-values printer-controls-speed {
   width: 45px;
   height: 45px;
   position: relative;
 }
 
-/* line 8810, tmp/application.scss */
+/* line 8811, tmp/application.scss */
 #monitor-print .tune-values printer-controls-flow-rate {
   width: 45px;
   height: 45px;
   position: relative;
 }
 
-/* line 8816, tmp/application.scss */
+/* line 8817, tmp/application.scss */
 #monitor-print .tune-values .tune-header {
   text-align: center;
   margin: 0 0 0.75rem;
 }
 
-/* line 8821, tmp/application.scss */
+/* line 8822, tmp/application.scss */
 #monitor-print .tune-values .tune-block {
   margin-bottom: 0;
   padding: 0.75rem 0 0.5rem;
 }
 
-/* line 8828, tmp/application.scss */
+/* line 8829, tmp/application.scss */
 #monitor-print .layout__item.u-1\/2-sm.pad {
   padding-top: 1rem;
 }

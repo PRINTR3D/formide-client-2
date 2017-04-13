@@ -128,8 +128,6 @@
                         } catch (e) {
                             console.info('No Link-header Found.', e);
                         }
-
-                        // console.log('link header', linkHeader);
                         return deferred.resolve(response.data);
                     },
                     function (error) {

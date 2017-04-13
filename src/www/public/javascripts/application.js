@@ -1,7 +1,7 @@
 /*! This code was created for Printr B.V. 
  Copyright (c) 2017, All rights reserved, http://printr.nl */
 
-/*! formide-client-2 - v2.0.5 - 2017-04-12 */
+/*! formide-client-2 - v2.0.5 - 2017-04-13 */
 
 
 
@@ -14819,8 +14819,6 @@ function angularLoaded() {
                         } catch (e) {
                             console.info('No Link-header Found.', e);
                         }
-
-                        // console.log('link header', linkHeader);
                         return deferred.resolve(response.data);
                     },
                     function (error) {
@@ -15115,22 +15113,10 @@ function angularLoaded() {
             return deferred.promise;
         };
 
-        factory.getLoginURL = function () {
-            return $api
-            .get('/auth/login', {}, auth_url)
-            .then(function( response )
-            {
-                return response;
-            });
-        };
-
         factory.logout = function () {
             var promise = $api
-            .get('/auth/logout', {}, auth_url)
-            .then(function(response)
-            {
-                window.localStorage.removeItem("formide.auth:token");
-            });
+            window.localStorage.removeItem("formide.auth:token");
+            $location.path('/login');
 
             return promise;
         };
@@ -15142,6 +15128,7 @@ function angularLoaded() {
             .then(function(access_token) {
                 if(access_token.length < 1) {
                     deferred.reject("Not loggedin");
+					factory.logout();
                 }
                 else {
 					$api.get('/auth/validate')
@@ -15149,6 +15136,7 @@ function angularLoaded() {
 						deferred.resolve(access_token);
 					}, function(err) {
 						deferred.reject("access_token invalid");
+						factory.logout();
 					});
                 }
             },
@@ -15157,8 +15145,8 @@ function angularLoaded() {
                   console.error("Error: %s", "API Request");
                   console.error(error);
                 }
-
                 deferred.reject(error);
+				factory.logout();
             });
 
             return deferred.promise;
@@ -15206,7 +15194,32 @@ function angularLoaded() {
 		}
 
 
-        var file_single = function (file, cb) {
+		var file_load = function (file) {
+
+            var promise = $q(function (resolve, reject) {
+                try {
+                    factory.resource =  factory.endpoint.query({}, function (response) {
+
+						factory.init = init;
+
+				        try {
+				            init();
+				        } catch (err) {
+				            if (window.DEBUG) console.error(err);
+				        }
+
+	                	resolve(response);
+                    });
+                } catch (e) {
+                    if (window.DEBUG) console.error(e);
+                    reject(e);
+                }
+            });
+
+            return promise;
+        }
+
+        var file_single = function (file) {
 
             var promise = $q(function (resolve, reject) {
                 try {
@@ -15214,10 +15227,6 @@ function angularLoaded() {
                         filename: file.filename
                     }, function (response) {
 	                	resolve(response);
-
-						if(typeof cb == "function") {
-						    cb(response);
-						}
                     });
                 } catch (e) {
                     if (window.DEBUG) console.error(e);
@@ -15248,32 +15257,34 @@ function angularLoaded() {
             return promise;
         }
 
-		var file_remove = function (file, cb) {
+		var file_remove = function (file) {
 
-            try {
-                factory.endpoint.delete({
-                    filename: file.filename
-                }, function (response) {
+			var promise = $q(function (resolve, reject) {
+	            try {
+	                factory.endpoint.delete({
+	                    filename: file.filename
+	                }, function (response) {
 
-					for (var i = 0; i < factory.resource.length; i++) {
-						if(factory.resource[i].filename === file.filename) {
-							factory.resource.splice(i, 1);
-							break;
+						for (var i = 0; i < factory.resource.length; i++) {
+							if(factory.resource[i].filename === file.filename) {
+								factory.resource.splice(i, 1);
+								break;
+							}
 						}
-					}
 
-					if(typeof cb == "function") {
-					    cb();
-					}
-				});
+						resolve(response);
+					});
 
 
-            } catch (e) {
-                console.error(e);
-            }
+	            } catch (e) {
+	                if (window.DEBUG) console.error(e);
+					reject(e);
+	            }
+			});
+
+			return promise;
 
         }
-
 
 		var file_add = function (file, cb) {
 
@@ -15286,10 +15297,11 @@ function angularLoaded() {
 
 
         var init = function () {
+			factory.resource.$load 		= file_load;
             factory.resource.$remove 	= file_remove;
             factory.resource.$single 	= file_single;
-			factory.resource.$add 		= file_add;
 			factory.resource.$download 	= file_download;
+			factory.resource.$add 		= file_add;
         }
 
         factory.init = init;
@@ -16001,7 +16013,7 @@ function angularLoaded() {
 
 		factory.authenticate = function () {
 
-			$api.getAccessToken()
+			$auth.checkLoggedin()
 			.then(function(access_token) {
 				if(access_token.length < 1) {
 					if (window.DEBUG) console.info("Not loggedin, could not connect to sockets.");
@@ -16083,7 +16095,7 @@ function angularLoaded() {
     return directive;
   }
 
-  function MainController($router, $rootScope, $location, ngDialog, $auth) {
+  function MainController($rootScope, $location, $auth) {
       var vm = this;
 
       vm.mobilenavInvisible = true;
@@ -16102,22 +16114,21 @@ function angularLoaded() {
 		  vm.mobilenavInvisible = vm.mobilenavInvisible ? false : true;
       }
 
-	  function logOut(){
-		  window.localStorage.removeItem('formide.auth:token');
-		  navigate('/login');
+	  function logout(){
+		  $auth.logout()
 	  }
 
       // exports
       angular.extend(vm, {
       	toggleMobilenav: toggleMobilenav,
 		navigate: navigate,
-		logOut: logOut
+		logout: logout
       });
   }
 
 
   MainController.$inject = [
-    '$router', '$rootScope', '$location', 'ngDialog', '$auth'
+    '$rootScope', '$location', '$auth'
   ];
 
   angular
@@ -16202,11 +16213,9 @@ function angularLoaded() {
 				 				   }
 				 				   else {
 				 					   $rootScope.isLoggedIn = false;
-									   navigate('/login');
 				 				   }
 								}, function (error) {
 								   $rootScope.isLoggedIn = false;
-								   navigate('/login');
 								});
 	                        }
 	                    }
@@ -16270,7 +16279,7 @@ function angularLoaded() {
 
     }
 
-    function MainController($rootScope, $api, $socket, $interval, Printer, $location, ngDialog) {
+    function MainController($rootScope, $interval, Printer, $location) {
         var vm = this;
 
 		vm.showCloudMsg = true;
@@ -16405,12 +16414,9 @@ function angularLoaded() {
 
     MainController.$inject = [
 	    '$rootScope',
-	    '$api',
-	    '$socket',
 	    '$interval',
 	    'Printer',
-		'$location',
-		'ngDialog'
+		'$location'
 	  ];
 
     angular
@@ -16729,6 +16735,7 @@ function angularLoaded() {
 					  }
 
 					  for (var r = 0; r < resource.extruders.length; r++) {
+						  console.log('Printer.$active.statusTemperatures[i]', i, Printer.$active.statusTemperatures[i]);
 						  if (vm.chart.data[r*2+b]) vm.chart.data[r*2+b].push(Printer.$active.statusTemperatures[i].extruders[r].temp);
 						  if (vm.chart.data[r*2+b+1]) vm.chart.data[r*2+b+1].push(Printer.$active.statusTemperatures[i].extruders[r].targetTemp);
 					  }
@@ -18268,7 +18275,7 @@ function angularLoaded() {
  */
 
 (function () {
-function MainController ($timeout, $auth, $location, $rootScope, $api) {
+function MainController ($timeout, $auth, $location, $rootScope) {
 		var vm = this;
 
 		if (window.localStorage.getItem("formide:setup")) {
@@ -18312,7 +18319,7 @@ function MainController ($timeout, $auth, $location, $rootScope, $api) {
 	}
 
 	MainController.$inject = [
-		'$timeout', '$auth', '$location', '$rootScope', '$api'
+		'$timeout', '$auth', '$location', '$rootScope'
 	];
 
 	angular
@@ -18331,7 +18338,7 @@ function MainController ($timeout, $auth, $location, $rootScope, $api) {
 
  (function () {
 
-   function MainController($api, $auth, $location, $timeout, $notification) {
+   function MainController($api, $location, $timeout, $notification) {
 
  	  var vm = this;
 
@@ -18341,7 +18348,7 @@ function MainController ($timeout, $auth, $location, $rootScope, $api) {
 		  $api.get('/network/status')
 		  .then(function(status) {
 			  if (status.isConnected && status.publicIp) {
-				  vm.connectSetupStep = 'connect-formide';
+				  getConnectCode();
 			  }
 			  else if (status.isConnected) {
 			  	  vm.connectSetupStep = 'network-no-internet';
@@ -18388,33 +18395,38 @@ function MainController ($timeout, $auth, $location, $rootScope, $api) {
 	  }
 
 
+	  function getConnectCode(){
+		  vm.connectSetupStep = 'connect-formide';
+
+		  vm.connecting = true;
+		  vm.connectingError = false;
+
+		  $api
+		  .get('/system/cloud/code')
+		  .then(function(response) {
+
+			  vm.connecting = false;
+			  vm.connectURL = response.redirectURI;
+
+		  }, function(e){
+			  vm.connecting = false;
+			  vm.connectingError = e.message;
+		  });
+	  }
+
+
 	  function connectToFormide(){
 
-		  if (vm.connectURL) {
-			  window.location = vm.connectURL;
-	  	  }
-	  	  else {
-  			  vm.connecting = true;
-  			  vm.connectingError = false;
+		  vm.connecting = true;
+		  vm.connectingError = false;
+		  window.location = vm.connectURL;
 
-  			  $api
-  			  .get('/system/cloud/code')
-  			  .then(function(response) {
-
-				  window.location = response.redirectURI;
-
-  				  $timeout(function () {
-  					  window.stop();
-  					  vm.connecting = false;
-  					  vm.connectingError = "Ensure that you are connected to the Internet";
-  					  vm.connectURL = response.redirectURI;
-  				  }, 15000)
-
-  			  }, function(e){
-  				  vm.connecting = false;
-  				  vm.connectingError = e.message;
-  			  });
-	  	  }
+		  $timeout(function () {
+			  window.stop();
+			  vm.connecting = false;
+			  vm.connectingError = "Ensure that you are connected to the Internet";
+			  vm.connectURL = response.redirectURI;
+		  }, 15000);
 	  }
 
 
@@ -18426,7 +18438,7 @@ function MainController ($timeout, $auth, $location, $rootScope, $api) {
    }
 
    MainController.$inject = [
-	   '$api', '$auth', '$location', '$timeout', '$notification'
+	   '$api', '$location', '$timeout', '$notification'
    ];
 
 
@@ -18445,7 +18457,7 @@ function MainController ($timeout, $auth, $location, $rootScope, $api) {
 
  (function () {
 
-   function MainController($rootScope, $api, $auth, printerCtrl, Printer, $socket, $interval, $timeout, $location, $document) {
+   function MainController($rootScope, printerCtrl, Printer, $socket, $timeout, $location, $document) {
 
  	  var vm = this;
 
@@ -18581,7 +18593,7 @@ function MainController ($timeout, $auth, $location, $rootScope, $api) {
    }
 
    MainController.$inject = [
- 	  '$rootScope', '$api', '$auth', 'printerCtrl', 'Printer', '$socket', '$interval', '$timeout', '$location', '$document'
+ 	  '$rootScope', 'printerCtrl', 'Printer', '$socket', '$timeout', '$location', '$document'
    ];
 
 
@@ -18607,7 +18619,10 @@ function MainController($rootScope, $api, Upload, File, printerCtrl, Printer, $l
 		var uploadUrl = window.PATH.api + '/storage';
 
 		File.resource.$promise.then(function (devices) {
-			vm.files = File.resource;
+			File.resource.$load()
+			.then(function (response) {
+				vm.files = File.resource;
+			});
 		});
 
 		function navigate(route){
@@ -18648,9 +18663,7 @@ function MainController($rootScope, $api, Upload, File, printerCtrl, Printer, $l
 		function removeMultiple(files) {
 			for (var i = 0; i < files.length; i++) {
 				var file = files[i];
-				File.resource.$remove(file, function(response){
-					vm.files = File.resource;
-				});
+				File.resource.$remove(file);
 			}
 		}
 
@@ -18681,7 +18694,7 @@ function MainController($rootScope, $api, Upload, File, printerCtrl, Printer, $l
 
 (function () {
 
-	function MainController ($auth, $api, $routeParams, $notification, $socket, $interval, $location) {
+	function MainController ($api, $routeParams, $socket, $interval) {
 		var vm = this;
 
 		vm.device = null;
@@ -18783,13 +18796,10 @@ function MainController($rootScope, $api, Upload, File, printerCtrl, Printer, $l
 	}
 
 	MainController.$inject = [
-		'$auth',
 		'$api',
 		'$routeParams',
-		'$notification',
 		'$socket',
-		'$interval',
-		'$location'
+		'$interval'
 	];
 
 	angular
@@ -18807,7 +18817,6 @@ function MainController($rootScope, $api, Upload, File, printerCtrl, Printer, $l
 	  var vm = this;
 
 	  function submitForm(user) {
-		  console.log('user', user);
 		  $api.users.update(user)
 		  .then(function(response) {
 			  $notification.addNotification({
@@ -18901,6 +18910,11 @@ function MainController($rootScope, $api, Upload, File, printerCtrl, Printer, $l
 		  vm.deviceType = response.deviceType;
 	  });
 
+	  $api.get('/auth/validate')
+	  .then(function(response) {
+		  vm.currentUser = response.user.username;
+	  });
+
 	  // private functions
 	  function getUsers() {
 		  $api.users.query()
@@ -18981,23 +18995,25 @@ function MainController($rootScope, $api, Upload, File, printerCtrl, Printer, $l
 							callback: function() {
 								$api.post('/network/hotspot', {enabled: vm.network.isHotspot})
 								.then(function(response) {
+								  vm.setHotspot = false;
 				  				  $notification.addNotification({
 				  					  title: 'Hotspot Disabled',
 				  					  message: 'Device will no longer emit the Wi-Fi hotspot',
 				  					  channel: 'system',
 				  					  type: 'success'
 				  				  });
-				  			  });
 
-								console.log('setHotspot debug', $location.$$host, localIp);
-								if ($location.$$host == '10.20.30.40') {
-									//navigate to the deive ip
-									window.location = 'http://'+localIp+':8080';
-									$timeout(function () {
-										window.stop();
-									}, 15000)
-									return true;
-								}
+	  							  if ($location.$$host == '10.20.30.40') {
+  									//navigate to the deive ip
+  									window.location = 'http://'+localIp+':8080';
+  									$timeout(function () {
+  										window.stop();
+  									}, 15000)
+
+	  							  }
+				  			    });
+
+								return true;
 							}
 						}
 					],
@@ -19007,6 +19023,7 @@ function MainController($rootScope, $api, Upload, File, printerCtrl, Printer, $l
 			  // if turning on the hotspot
 			  $api.post('/network/hotspot', {enabled: vm.network.isHotspot})
 			  .then(function(response) {
+				  vm.setHotspot = true;
 				  $notification.addNotification({
 					  title: 'Hotspot Enabled',
 					  message: 'Device will now emit the Wi-Fi hotspot',
@@ -19189,7 +19206,7 @@ function MainController($rootScope, $api, Upload, File, printerCtrl, Printer, $l
  */
 
 (function () {
-function MainController($router, $routeParams, $timeout, $location, $auth) {
+function MainController($routeParams, $timeout, $location) {
 		var vm = this;
 
 		// private functions
@@ -19219,7 +19236,7 @@ function MainController($router, $routeParams, $timeout, $location, $auth) {
 	}
 
 	MainController.$inject = [
-		'$router', '$routeParams', '$timeout', '$location', '$auth'
+		'$routeParams', '$timeout', '$location'
 	];
 
 	MainController.$routeConfig = [
@@ -19260,7 +19277,7 @@ function MainController($router, $routeParams, $timeout, $location, $auth) {
 
 (function () {
 
-  function MainController($rootScope, Printer, $timeout, $socket, $location) {
+  function MainController($rootScope, Printer, $socket, $location) {
 	  var vm = this;
 
 	  vm.webcamBtn = {
@@ -19326,7 +19343,7 @@ function MainController($router, $routeParams, $timeout, $location, $auth) {
   }
 
   MainController.$inject = [
-	  '$rootScope', 'Printer', '$timeout', '$socket', '$location'
+	  '$rootScope', 'Printer', '$socket', '$location'
   ];
 
 
@@ -19400,9 +19417,9 @@ function foundPrinter(resource, data) {
 		window.ENV.version = response.version || '0.0.0';
 		window.ENV.type = response.environment || 'development';
 		window.ENV.theme = response.theme || 'formide';
-		
+
 		window.PATH.root   = window.location.protocol + '//' + window.location.hostname + ':' + window.location.port;
-		
+
 		window.PATH.api    = window.location.protocol + '//' + window.location.hostname + ':1337/api';
 		window.PATH.socket = window.location.protocol + '//' + window.location.hostname + ':1337';
 		window.PATH.images = window.location.protocol + '//' + window.location.hostname + ':1337/api/db/files';
@@ -19812,7 +19829,7 @@ function foundPrinter(resource, data) {
 
 
   $templateCache.put('connect/componentView.html',
-    "<article id=connect><h3>Connect your Device to Formide</h3><section class=block><div class=layout><div class=\"layout__item u-fit-sm xs-hide\"><div class=figure-container><figure class=onboarding-figure><img class=main-image src=./images/setup/setup_connect.png width=250 height=250 alt=Welcome></figure></div></div><div class=\"layout__item u-fill\"><fieldset class=settings ng-switch=connect.connectSetupStep><section ng-switch-when=device-wifi><ul class=form-fields><li class=u-margin-bottom-1><h3>Select a network to connect to</h3><select class=text-input ng-options=\"ssid.ssid as ssid.ssid for ssid in connect.ssids\" ng-model=connect.wifi.ssid><option value=\"\" disabled selected style=\"display: none\">Select a SSID</option></select></li><li><input type=password class=text-input ng-model=connect.wifi.password placeholder=Password></li><li><a add-new ng-init=\"connect.toggleAdvanced = false\" ng-click=\"connect.toggleAdvanced = !connect.toggleAdvanced\"><small><i class=\"fa u-margin-right-_5\" ng-class=\"{true:'fa-minus',false:'fa-plus'}[connect.toggleAdvanced]\"></i>Advanced Settings</small></a></li><li ng-if=connect.toggleAdvanced><ul class=advanced-settings><li><input class=text-input placeholder=key_mgmt ng-model=connect.wifi.key_mgmt></li><li><input class=text-input placeholder=eap ng-model=connect.wifi.eap></li><li><input class=text-input placeholder=identity ng-model=connect.wifi.identity></li><li><input class=text-input placeholder=anonymous_identity ng-model=connect.wifi.anonymous_identity></li><li><input class=text-input placeholder=phase1 ng-model=connect.wifi.phase1></li><li><input class=text-input placeholder=phase2 ng-model=connect.wifi.phase2></li></ul></li><li><div class=\"layout layout--withoutGutter layout--alignMiddle u-margin-top-2\"><div class=\"layout__item u-fit\"><button class=\"btn btn--primary\" ng-click=connect.connectWifi() ng-disabled=connect.connecting>Connect to Wi-Fi <i ng-if=connect.connecting class=\"fa fa-refresh fa-spin\"></i></button></div><div class=\"layout__item u-fill u-margin-left-1\">This may take up to a minute</div><div ng-if=connect.wifiError class=layout__item><div class=\"text-base-alert-color u-margin-top-1\" ng-bind-html=connect.wifiError></div></div></div></li><li class=u-margin-top-3><a add-new ng-init=\"connect.toggleFAQ = false\" ng-click=\"connect.toggleFAQ = !connect.toggleFAQ\"><small><i class=\"fa u-margin-right-_5\" ng-class=\"{true:'fa-minus',false:'fa-plus'}[connect.toggleFAQ]\"></i>Frequently Asked Questions</small></a></li><li ng-if=connect.toggleFAQ><ul class=faqs><li><div class=faqTitle>What should I do if my network is not listed?</div><div class=faqBody>Make sure the router or access point is turned on, and that it is within range of the element. If it is, check that your network type is supported.</div></li><li><div class=faqTitle>What type of networks are supported?</div><div class=faqBody>The Wi-Fi network you select has to be a WPA-2 secured network (a common router security standard for homes and offices) or an open network. We also support enterprise networks that use the 802.11x protocol using a custom config.</div></li><li><div class=faqTitle>I get \"Failed to connect to ...\", what should I do?</div><div class=faqBody>This usually means you've entered a wrong password or connecting to the router took longer than expected. You can just try again.</div></li></ul></li></ul></section><section ng-switch-when=custom-device-wifi class=u-margin-top-3><h3>Custom Device</h3><p>Your device is not connected to Wi-Fi. Ensure that it is before trying to link your device to formide.</p></section><section ng-switch-when=network-no-internet class=u-margin-top-3><h3>No Internet</h3><p>The network your device is connected to does not have access to the Internet. Ensure that it has before trying to link your device to formide.</p></section><section ng-switch-when=connect-formide><h3>Connect to Formide</h3><p class=u-margin-top-2>Before clicking Connect to Formide, ensure that your computer is connected to the Internet.</p><p>If this is a custom device, such as a Raspberry Pi, it must first be whitelisted. You can request this via <a class=anchor__link href=\"mailto:hello@formide.com?subject=I would like to whitelist my device\">Email</a>.</p><div class=\"layout layout--withoutGutter layout--alignMiddle u-margin-top-2\"><button class=\"btn btn--primary\" ng-click=connect.connectToFormide() ng-disabled=connect.connecting><span ng-if=!connect.connectURL>Connect <i ng-if=connect.connecting class=\"fa fa-refresh fa-spin\"></i></span> <span ng-if=connect.connectURL>Go to Formide</span></button><div ng-if=connect.connectingError><div class=\"text-base-alert-color u-margin-top-1\" ng-bind-html=connect.connectingError></div></div></div></section><section ng-switch-default class=\"u-margin-top-3 u-textCenter\"><i class=\"fa fa-refresh fa-spin fa-3x text-base-primary-color\"></i></section></fieldset></div></div></section></article>"
+    "<article id=connect><h3>Connect your Device to Formide</h3><section class=block><div class=layout><div class=\"layout__item u-fit-sm xs-hide\"><div class=figure-container><figure class=onboarding-figure><img class=main-image src=./images/setup/setup_connect.png width=250 height=250 alt=Welcome></figure></div></div><div class=\"layout__item u-fill\"><fieldset class=settings ng-switch=connect.connectSetupStep><section ng-switch-when=device-wifi><ul class=form-fields><li class=u-margin-bottom-1><h3>Select a network to connect to</h3><select class=text-input ng-options=\"ssid.ssid as ssid.ssid for ssid in connect.ssids\" ng-model=connect.wifi.ssid><option value=\"\" disabled selected style=\"display: none\">Select a SSID</option></select></li><li><input type=password class=text-input ng-model=connect.wifi.password placeholder=Password></li><li><a add-new ng-init=\"connect.toggleAdvanced = false\" ng-click=\"connect.toggleAdvanced = !connect.toggleAdvanced\"><small><i class=\"fa u-margin-right-_5\" ng-class=\"{true:'fa-minus',false:'fa-plus'}[connect.toggleAdvanced]\"></i>Advanced Settings</small></a></li><li ng-if=connect.toggleAdvanced><ul class=advanced-settings><li><input class=text-input placeholder=key_mgmt ng-model=connect.wifi.key_mgmt></li><li><input class=text-input placeholder=eap ng-model=connect.wifi.eap></li><li><input class=text-input placeholder=identity ng-model=connect.wifi.identity></li><li><input class=text-input placeholder=anonymous_identity ng-model=connect.wifi.anonymous_identity></li><li><input class=text-input placeholder=phase1 ng-model=connect.wifi.phase1></li><li><input class=text-input placeholder=phase2 ng-model=connect.wifi.phase2></li></ul></li><li><div class=\"layout layout--withoutGutter layout--alignMiddle u-margin-top-2\"><div class=\"layout__item u-fit\"><button class=\"btn btn--primary\" ng-click=connect.connectWifi() ng-disabled=connect.connecting>Connect to Wi-Fi <i ng-if=connect.connecting class=\"fa fa-refresh fa-spin\"></i></button></div><div class=\"layout__item u-fill u-margin-left-1\">This may take up to a minute</div><div ng-if=connect.wifiError class=layout__item><div class=\"text-base-alert-color u-margin-top-1\" ng-bind-html=connect.wifiError></div></div></div></li><li class=u-margin-top-3><a add-new ng-init=\"connect.toggleFAQ = false\" ng-click=\"connect.toggleFAQ = !connect.toggleFAQ\"><small><i class=\"fa u-margin-right-_5\" ng-class=\"{true:'fa-minus',false:'fa-plus'}[connect.toggleFAQ]\"></i>Frequently Asked Questions</small></a></li><li ng-if=connect.toggleFAQ><ul class=faqs><li><div class=faqTitle>What should I do if my network is not listed?</div><div class=faqBody>Make sure the router or access point is turned on, and that it is within range of the element. If it is, check that your network type is supported.</div></li><li><div class=faqTitle>What type of networks are supported?</div><div class=faqBody>The Wi-Fi network you select has to be a WPA-2 secured network (a common router security standard for homes and offices) or an open network. We also support enterprise networks that use the 802.11x protocol using a custom config.</div></li><li><div class=faqTitle>I get \"Failed to connect to ...\", what should I do?</div><div class=faqBody>This usually means you've entered a wrong password or connecting to the router took longer than expected. You can just try again.</div></li></ul></li></ul></section><section ng-switch-when=custom-device-wifi class=u-margin-top-3><h3>Custom Device</h3><p>Your device is not connected to Wi-Fi. Ensure that it is before trying to link your device to formide.</p></section><section ng-switch-when=network-no-internet class=u-margin-top-3><h3>No Internet</h3><p>The network your device is connected to does not have access to the Internet. Ensure that it has before trying to link your device to formide.</p></section><section ng-switch-when=connect-formide><h3>Connect to Formide</h3><p class=u-margin-top-2>Before continuing, ensure that your computer is connected to the Internet.</p><p>If this is a custom device, such as a Raspberry Pi, it must first be whitelisted. You can request this via <a class=anchor__link href=\"mailto:hello@formide.com?subject=I would like to whitelist my device\">Email</a>.</p><div class=\"layout layout--withoutGutter layout--alignMiddle u-margin-top-2\"><button class=\"btn btn--primary\" ng-click=connect.connectToFormide() ng-disabled=connect.connecting><span ng-if=!connect.connectURL><i ng-if=connect.connecting class=\"fa fa-refresh fa-spin\"></i></span> <span ng-if=connect.connectURL>Connect <i ng-if=connect.connecting class=\"fa fa-refresh fa-spin\"></i></span></button><div ng-if=connect.connectingError><div class=\"text-base-alert-color u-margin-top-1\" ng-bind-html=connect.connectingError></div></div></div></section><section ng-switch-default class=\"u-margin-top-3 u-textCenter\"><i class=\"fa fa-refresh fa-spin fa-3x text-base-primary-color\"></i></section></fieldset></div></div></section></article>"
   );
 
 
@@ -19832,7 +19849,7 @@ function foundPrinter(resource, data) {
 
 
   $templateCache.put('manage-device/componentView.html',
-    "<article id=manage-device><header class=layout><div class=\"layout__item u-1/2\"><h3>Manage Device</h3></div><div class=\"u-textRight layout__item u-1/2\"><a class=\"btn btn--tertiary\" ng-click=\"manage.navigate('/manage/device/update')\">Update Device</a></div></header><div class=layout><div class=\"layout__item u-1/2-sm pad\"><h4>Network</h4><section class=block><table class=\"table--formide network-table\"><tbody><tr class=table__item><td>Connected to</td><td>{{manageDevice.network.network || '-'}}</td></tr><tr class=table__item><td>Internal IP Address</td><td>{{manageDevice.network.ip || '-'}}</td></tr><tr class=table__item><td>Public IP Address</td><td>{{manageDevice.network.publicIp || '-'}}</td></tr><tr class=table__item><td>Mac Address</td><td>{{manageDevice.network.mac || '-'}}</td></tr><tr class=table__item><td>Hotspot Mode</td><td><checkbox ng-if=\"manageDevice.deviceType == 'the_element'\" checkbox-model=manageDevice.network.isHotspot checkbox-callback=manageDevice.setHotspot></checkbox><span ng-if=\"manageDevice.deviceType !== 'the_element'\">-</span></td></tr></tbody></table></section></div><div class=\"layout__item u-1/2-sm pad\"><h4>Storage</h4><section class=block><div class=\"container layout layout--withoutGutter layout--alignMiddle layout--alignCenter u-margin-top-1 u-margin-bottom-1\"><div class=\"storageChart layout__item u-fill\"><canvas id=doughnut height=230 width=230 class=\"chart chart-doughnut\" chart-data=manageDevice.chart.data chart-labels=manageDevice.chart.labels chart-dataset-override=manageDevice.chart.datasetOverride chart-options=manageDevice.chart.options></canvas><div class=label><h3>{{manageDevice.storage.percentageUsedRnd}}%<br><small>used</small></h3></div><div class=info><h3>of {{manageDevice.diskspace.total | smartbytes:1}}</h3></div></div></div></section></div><div class=\"layout__item u-1/2-sm pad connect\"><h4>Connect</h4><section class=block><form role=form><fieldset><ul class=form-fields><li><label for=\"\">SSID</label><select class=text-input ng-options=\"ssid.ssid as ssid.ssid for ssid in manageDevice.ssids\" ng-model=manageDevice.wifi.ssid><option value=\"\" disabled selected style=\"display: none\">Select a SSID</option></select></li><li><label for=\"\">Password</label><input type=password class=text-input ng-model=manageDevice.wifi.password placeholder=Password></li><li><a add-new ng-init=\"manageDevice.toggleAdvanced = false\" ng-click=\"manageDevice.toggleAdvanced = !manageDevice.toggleAdvanced\"><small><i class=\"fa u-margin-right-_5\" ng-class=\"{true:'fa-minus',false:'fa-plus'}[manageDevice.toggleAdvanced]\"></i>Advanced Settings</small></a></li><li ng-if=manageDevice.toggleAdvanced><ul class=advanced-settings><li><input class=text-input placeholder=key_mgmt ng-model=manageDevice.wifi.key_mgmt></li><li><input class=text-input placeholder=eap ng-model=manageDevice.wifi.eap></li><li><input class=text-input placeholder=identity ng-model=manageDevice.wifi.identity></li><li><input class=text-input placeholder=anonymous_identity ng-model=manageDevice.wifi.anonymous_identity></li><li><input class=text-input placeholder=phase1 ng-model=manageDevice.wifi.phase1></li><li><input class=text-input placeholder=phase2 ng-model=manageDevice.wifi.phase2></li></ul></li></ul></fieldset><div class=layout><div class=\"layout__item u-1/2\"><button class=\"btn btn--primary\" ng-click=manageDevice.connectWifi() ng-disabled=manageDevice.connecting>Connect to Wi-Fi <i ng-if=manageDevice.connecting class=\"fa fa-refresh fa-spin\"></i></button></div><div class=\"u-textRight layout__item u-1/2\"><button class=\"btn btn--secondary\" ng-click=manageDevice.resetWifi()>Reset Wi-Fi</button></div></div></form></section></div><div class=\"layout__item u-1/2-sm pad\"><h4>Users</h4><section class=block><table class=\"table--formide table--formide--responsive\"><thead><tr><th>Username</th><th></th></tr></thead><tbody><tr ng-repeat=\"user in manageDevice.users\" class=table__item><td data-th=Username>{{user.username}}</td><td class=\"table__item__controls u-textRight\"><a class=\"btn btn--small btn--tertiary\" ng-click=manageDevice.updateModal(user)><i class=\"fa fa-pencil\"></i></a> <a class=\"btn btn--small btn--alert\" ng-click=manageDevice.deleteUser(user)><i class=\"fa fa-trash-o\"></i></a></td></tr></tbody></table><button class=\"btn btn--tertiary\" ng-click=manageDevice.createModal()>Add User</button></section></div></div></article><script type=text/ng-template id=settingsModal><form role=\"form\">\n" +
+    "<article id=manage-device><header class=layout><div class=\"layout__item u-1/2\"><h3>Manage Device</h3></div><div class=\"u-textRight layout__item u-1/2\"><a class=\"btn btn--tertiary\" ng-click=\"manage.navigate('/manage/device/update')\">Update Device</a></div></header><div class=layout><div class=\"layout__item u-1/2-sm pad\"><h4>Network</h4><section class=block><table class=\"table--formide network-table\"><tbody><tr class=table__item><td>Connected to</td><td>{{manageDevice.network.network || '-'}}</td></tr><tr class=table__item><td>Internal IP Address</td><td>{{manageDevice.network.ip || '-'}}</td></tr><tr class=table__item><td>Public IP Address</td><td>{{manageDevice.network.publicIp || '-'}}</td></tr><tr class=table__item><td>Mac Address</td><td>{{manageDevice.network.mac || '-'}}</td></tr><tr class=table__item><td>Hotspot Mode</td><td><div ng-if=\"manageDevice.deviceType === 'the_element'\" ng-click=manageDevice.setHotspot()><span class=checkbox><i ng-if=!manageDevice.network.isHotspot class=\"fa fa-square-o\"></i> <i ng-if=manageDevice.network.isHotspot class=\"fa fa-check-square-o\"></i></span></div><span ng-if=\"manageDevice.deviceType !== 'the_element'\">-</span></td></tr></tbody></table></section></div><div class=\"layout__item u-1/2-sm pad\"><h4>Storage</h4><section class=block><div class=\"container layout layout--withoutGutter layout--alignMiddle layout--alignCenter u-margin-top-1 u-margin-bottom-1\"><div class=\"storageChart layout__item u-fill\"><canvas id=doughnut height=230 width=230 class=\"chart chart-doughnut\" chart-data=manageDevice.chart.data chart-labels=manageDevice.chart.labels chart-dataset-override=manageDevice.chart.datasetOverride chart-options=manageDevice.chart.options></canvas><div class=label><h3>{{manageDevice.storage.percentageUsedRnd}}%<br><small>used</small></h3></div><div class=info><h3>of {{manageDevice.diskspace.total | smartbytes:1}}</h3></div></div></div></section></div><div class=\"layout__item u-1/2-sm pad connect\"><h4>Connect</h4><section class=block><form role=form><fieldset><ul class=form-fields><li><label for=\"\">SSID</label><select class=text-input ng-options=\"ssid.ssid as ssid.ssid for ssid in manageDevice.ssids\" ng-model=manageDevice.wifi.ssid><option value=\"\" disabled selected style=\"display: none\">Select a SSID</option></select></li><li><label for=\"\">Password</label><input type=password class=text-input ng-model=manageDevice.wifi.password placeholder=Password></li><li><a add-new ng-init=\"manageDevice.toggleAdvanced = false\" ng-click=\"manageDevice.toggleAdvanced = !manageDevice.toggleAdvanced\"><small><i class=\"fa u-margin-right-_5\" ng-class=\"{true:'fa-minus',false:'fa-plus'}[manageDevice.toggleAdvanced]\"></i>Advanced Settings</small></a></li><li ng-if=manageDevice.toggleAdvanced><ul class=advanced-settings><li><input class=text-input placeholder=key_mgmt ng-model=manageDevice.wifi.key_mgmt></li><li><input class=text-input placeholder=eap ng-model=manageDevice.wifi.eap></li><li><input class=text-input placeholder=identity ng-model=manageDevice.wifi.identity></li><li><input class=text-input placeholder=anonymous_identity ng-model=manageDevice.wifi.anonymous_identity></li><li><input class=text-input placeholder=phase1 ng-model=manageDevice.wifi.phase1></li><li><input class=text-input placeholder=phase2 ng-model=manageDevice.wifi.phase2></li></ul></li></ul></fieldset><div class=layout><div class=\"layout__item u-1/2\"><button class=\"btn btn--tertiary\" ng-click=manageDevice.connectWifi() ng-disabled=manageDevice.connecting>Connect <i ng-if=manageDevice.connecting class=\"fa fa-refresh fa-spin\"></i></button></div><div class=\"u-textRight layout__item u-1/2\"><button class=\"btn btn--secondary\" ng-click=manageDevice.resetWifi()>Reset Wi-Fi</button></div></div></form></section></div><div class=\"layout__item u-1/2-sm pad\"><h4>Users</h4><section class=block><table class=\"table--formide table--formide--responsive\"><thead><tr><th>Username</th><th></th></tr></thead><tbody><tr ng-repeat=\"user in manageDevice.users\" class=table__item><td data-th=Username>{{user.username}}</td><td class=\"table__item__controls u-textRight\"><button class=\"btn btn--small btn--alert\" ng-disabled=\"user.username == manageDevice.currentUser\" ng-click=manageDevice.deleteUser(user)><i class=\"fa fa-trash-o\"></i></button></td></tr></tbody></table><button class=\"btn btn--tertiary\" ng-click=manageDevice.createModal()>Add User</button></section></div></div></article><script type=text/ng-template id=settingsModal><form role=\"form\">\n" +
     "\t\t <fieldset>\n" +
     "            <ul class=\"form-fields\">\n" +
     "                <li>\n" +
@@ -19867,7 +19884,7 @@ function foundPrinter(resource, data) {
 (function () { angular.module('templateCache.core', []).run(['$templateCache', function($templateCache) {'use strict';  'use strict';
 
   $templateCache.put('header/componentTemplate.html',
-    "<div class=header__content><div class=\"layout layout--withoutGutter layout--alignMiddle\"><ul class=\"list-inline layout__item u-fill navigation-container\"><li class=navigation-home><a class=header__item ng-click=\"vm.navigate('/formide')\"><img src=./images/logo_small.png alt=\"\" class=\"formide-logo\"><div class=logo_element>Formide Local</div></a></li></ul><ul class=\"list-inline layout__item u-fit\" ng-if=$root.isLoggedIn><li class=\"u-margin-right-1_5 xs-hide\"><button class=btn ng-click=vm.logOut()>Log Out</button></li><li class=sidebarToggle><a class=sm-and-down-hide ng-click=\"$root.setSidebarInvisible(); vm.scrollToTop()\"><img ng-src=\"{{$root.sidebarInvisible ? './images/hamburger_collapse.svg' : './images/hamburger_expand.svg'}}\"></a> <a class=md-hide ng-click=\"$root.setSidebarInvisible(); vm.scrollToTop()\"><img ng-src=\"{{$root.sidebarInvisible ? './images/hamburger_expand.svg' : './images/hamburger_collapse.svg'}}\"></a></li></ul></div></div>"
+    "<div class=header__content><div class=\"layout layout--withoutGutter layout--alignMiddle\"><ul class=\"list-inline layout__item u-fill navigation-container\"><li class=navigation-home><a class=header__item ng-click=\"vm.navigate('/formide')\"><img src=./images/logo_small.png alt=\"\" class=\"formide-logo\"><div class=logo_element>Formide Local</div></a></li></ul><ul class=\"list-inline layout__item u-fit\" ng-if=$root.isLoggedIn><li class=\"u-margin-right-1_5 xs-hide\"><button class=btn ng-click=vm.logout()>Log Out</button></li><li class=sidebarToggle><a class=sm-and-down-hide ng-click=\"$root.setSidebarInvisible(); vm.scrollToTop()\"><img ng-src=\"{{$root.sidebarInvisible ? './images/hamburger_collapse.svg' : './images/hamburger_expand.svg'}}\"></a> <a class=md-hide ng-click=\"$root.setSidebarInvisible(); vm.scrollToTop()\"><img ng-src=\"{{$root.sidebarInvisible ? './images/hamburger_expand.svg' : './images/hamburger_collapse.svg'}}\"></a></li></ul></div></div>"
   );
 
 

@@ -14,7 +14,10 @@
 		var uploadUrl = window.PATH.api + '/storage';
 
 		File.resource.$promise.then(function (devices) {
-			vm.files = File.resource;
+			File.resource.$load()
+			.then(function (response) {
+				vm.files = File.resource;
+			});
 		});
 
 		function navigate(route){
@@ -55,9 +58,7 @@
 		function removeMultiple(files) {
 			for (var i = 0; i < files.length; i++) {
 				var file = files[i];
-				File.resource.$remove(file, function(response){
-					vm.files = File.resource;
-				});
+				File.resource.$remove(file);
 			}
 		}
 

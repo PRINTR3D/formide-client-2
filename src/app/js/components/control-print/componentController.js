@@ -5,7 +5,7 @@
 
  (function () {
 
-   function MainController($rootScope, $api, $auth, printerCtrl, Printer, $socket, $interval, $timeout, $location, $document) {
+   function MainController($rootScope, printerCtrl, Printer, $socket, $timeout, $location, $document) {
 
  	  var vm = this;
 
@@ -141,7 +141,7 @@
    }
 
    MainController.$inject = [
- 	  '$rootScope', '$api', '$auth', 'printerCtrl', 'Printer', '$socket', '$interval', '$timeout', '$location', '$document'
+ 	  '$rootScope', 'printerCtrl', 'Printer', '$socket', '$timeout', '$location', '$document'
    ];
 
 
