@@ -18342,6 +18342,10 @@ function MainController ($timeout, $auth, $location, $rootScope) {
 
  	  var vm = this;
 
+	  if (window.localStorage.getItem("formide:setup") && $rootScope.isLoggedIn) {
+		  window.localStorage.removeItem("formide:setup")
+	  }
+
 	  getNetworkStatus();
 
 	  function getNetworkStatus() {
