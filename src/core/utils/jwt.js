@@ -2,7 +2,7 @@
 
 const JWT = require('jsonwebtoken')
 const SECRET = process.env.JWT_SECRET || 'secret'
-const EXPIRY = 60 * 60 * 24 * 31 // 1 month
+const EXPIRY = 60 * 60 * 24 * 365 * 2 // 2 years
 
 /**
  * Sign a new JWT token

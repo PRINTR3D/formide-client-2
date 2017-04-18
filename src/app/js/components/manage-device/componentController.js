@@ -201,7 +201,7 @@
 							title: 'Continue',
 							callback: function() {
 								vm.hotspotResolved = false;
-								$api.post('/network/hotspot', {enabled: vm.network.isHotspot})
+								$api.post('/network/hotspot', {enabled: false})
 								.then(function(response) {
 									vm.network.isHotspot = false;
 									vm.hotspotResolved = true;
@@ -230,7 +230,7 @@
 		  }else {
 			  // if turning on the hotspot
 			  vm.hotspotResolved = false;
-			  $api.post('/network/hotspot', {enabled: vm.network.isHotspot})
+			  $api.post('/network/hotspot', {enabled: true})
 			  .then(function(response) {
 				  vm.network.isHotspot = true;
 				  vm.hotspotResolved = true;
