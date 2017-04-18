@@ -19038,8 +19038,8 @@ function MainController($rootScope, $api, Upload, File, printerCtrl, Printer, $l
 			  // if turning off the hotspot
 			  $notification.addNotification({
 					title: 'Hotspot Reset',
-					message: 'Disabling the device hotspot will cause it to no longer emit the Wi-Fi hotspot. Once disabled you will need to connect to it via the device IP on port 8080.',
-					type: 'error',
+					message: 'Disabling the device hotspot will cause it to no longer emit the Wi-Fi hotspot. Once disabled you will need to connect to it via the device IP on port 8080 on the network ' + vm.network.network,
+					type: 'info',
 					duration: -1,
 					actions: [
 						{
@@ -19053,6 +19053,41 @@ function MainController($rootScope, $api, Upload, File, printerCtrl, Printer, $l
 							title: 'Continue',
 							callback: function() {
 								vm.hotspotResolved = false;
+
+								if ($location.$$host == '10.20.30.40') {
+									// if connected to device via hotspot, navigate to the deive ip
+									var redirectInterval = $interval(function () {
+										$http.get('http://'+localIp+':8080')
+							    		.then(function(response) {
+							  				if (response.status == 200) {
+							  					window.location = 'http://'+localIp+':8080';
+							  				}
+							  		  	});
+									}, 1000);
+
+									$timeout(function () {
+										//if redirect fails, show prompt
+										$interval.cancel(redirectInterval);
+
+										$notification.addNotification({
+						  					title: 'Hotspot Reset',
+						  					message: 'Ensure that you are on the network ' + vm.network.network + ', before conneting to the device IP on port 8080.',
+						  					type: 'error',
+						  					duration: -1,
+						  					actions: [
+						  						{
+						  							title: 'Connect',
+						  							callback: function() {
+						  								window.location = 'http://'+localIp+':8080';
+						  								return false;
+						  							}
+						  						}
+											],
+											popup: true
+										});
+									}, 20000);
+								}
+
 								$api.post('/network/hotspot', {enabled: false})
 								.then(function(response) {
 									vm.network.isHotspot = false;
@@ -19063,14 +19098,6 @@ function MainController($rootScope, $api, Upload, File, printerCtrl, Printer, $l
 										channel: 'system',
 										type: 'success'
 									});
-
-									if ($location.$$host == '10.20.30.40') {
-										//navigate to the deive ip
-										window.location = 'http://'+localIp+':8080';
-										$timeout(function () {
-											window.stop();
-										}, 15000)
-									}
 								});
 
 								return true;
@@ -19100,8 +19127,8 @@ function MainController($rootScope, $api, Upload, File, printerCtrl, Printer, $l
 
 			$notification.addNotification({
 				title: 'Wi-Fi Reset',
-				message: 'After reseting your Wi-Fi you will need to connect to your device at http://10.20.30.40 via the device hotspot',
-				type: 'error',
+				message: 'Resetting the Wi-Fi will disconnect the device from the network it is connected to.',
+				type: 'info',
 				duration: -1,
 				actions: [
 					{
@@ -19116,18 +19143,35 @@ function MainController($rootScope, $api, Upload, File, printerCtrl, Printer, $l
 						callback: function() {
 							$api.post('/network/reset')
 							.then(function(response) {
-								$notification.addNotification({
-									title: 'Settings Reset',
-									message: 'Wi-Fi settings reset',
-									channel: 'system',
-									type: 'success'
-								});
+								if ($location.$$host != '10.20.30.40' && vm.deviceType === 'the_element') {
 
-								if ($location.$$host != '10.20.30.40') {
-									window.location = 'http://10.20.30.40';
-										$timeout(function () {
-										window.stop();
-									}, 15000)
+									$timeout(function () {
+										$notification.addNotification({
+						  					title: 'Wi-Fi Successfully Reset',
+						  					message: 'To continue using Formide locally on your device, connect to the device hotspot network and click Continue.',
+						  					type: 'success',
+											channel: 'system',
+						  					duration: -1,
+						  					actions: [
+						  						{
+						  							title: 'Continue',
+						  							callback: function() {
+						  								window.location = 'http://10.20.30.40';
+						  								return false;
+						  							}
+						  						}
+											],
+											popup: true
+										});
+									}, 1000);
+								}
+								else {
+									$notification.addNotification({
+										title: 'Settings Reset',
+										message: 'Wi-Fi settings reset',
+										channel: 'system',
+										type: 'success'
+									});
 								}
 
 								getNetwork(true);
