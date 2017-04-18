@@ -11,7 +11,7 @@
 		</div>
 
 		<div class="u-textRight layout__item u-1/2">
-			<button class="btn btn--tertiary" ng-disabled="$root.fileUploading" ngf-multiple="true" ngf-select="fileLibrary.upload($files)" ngf-pattern="'text/*'">Upload G-code</button>
+			<button class="btn btn--tertiary" ng-disabled="$root.fileUploading" ngf-multiple="true" ngf-select="fileLibrary.upload($files)" ngf-pattern="'text/*'">Upload G-code <i ng-if="$root.fileUploading" class="fa fa-refresh fa-spin"></i></button>
 		</div>
 	</header>
 

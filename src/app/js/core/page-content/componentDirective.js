@@ -66,13 +66,11 @@
 
 	                            $auth.checkLoggedin()
 								.then(function (access_token) {
+				 				   $rootScope.isLoggedIn = true;
 
-				 				   if (access_token.length > 0) {
-				 					   $rootScope.isLoggedIn = true;
-				 				   }
-				 				   else {
-				 					   $rootScope.isLoggedIn = false;
-				 				   }
+								   if (window.localStorage.getItem("formide:setup")) {
+							 		  window.localStorage.removeItem("formide:setup")
+							 	  }
 								}, function (error) {
 								   $rootScope.isLoggedIn = false;
 								});
@@ -88,17 +86,16 @@
 			$location.path(route);
 		}
 
-		function logOut(){
-			window.localStorage.removeItem('formide.auth:token');
-			navigate('/login');
-		}
+		function logout(){
+  		  $auth.logout()
+  	  }
 
 
 		// exports
 		angular.extend(vm, {
 			routes: routes || {},
 			navigate: navigate,
-			logOut: logOut
+			logout: logout
 		});
   }
 

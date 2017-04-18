@@ -6,7 +6,7 @@
 
  (function () {
 
-   function MainController($api, $location, $timeout, $notification) {
+   function MainController($api, $location, $timeout, $notification, $rootScope, $http) {
 
  	  var vm = this;
 
@@ -55,10 +55,26 @@
 				  type: 'success'
 			  });
 			  vm.connecting = false;
+			  vm.connectSetupStep = '';
 			  getNetworkStatus();
 		  }, function(e) {
-			  vm.wifiError = e.message;
-			  vm.connecting = false;
+			  if (window.DEBUG) console.log("Wi-Fi error", e);
+
+			  $timeout(function () {
+				  // make sure it wasn't just a linux error
+				  $api.get('/network/status')
+				  .then(function(network) {
+
+					  if (network.ip) {
+						  vm.wifiError = 'Failed to connect, please try again';
+					  }
+					  else {
+						  vm.connectSetupStep = '';
+						  getNetworkStatus();
+					  }
+					  vm.connecting = false;
+				  });
+			  }, 5000);
 		  });
 	  }
 
@@ -77,8 +93,8 @@
 			  vm.connectURL = response.redirectURI;
 
 		  }, function(e){
-			  vm.connecting = false;
 			  vm.connectingError = e.message;
+			  vm.connecting = false;
 		  });
 	  }
 
@@ -87,14 +103,20 @@
 
 		  vm.connecting = true;
 		  vm.connectingError = false;
-		  window.location = vm.connectURL;
 
-		  $timeout(function () {
-			  window.stop();
+		  $http.get('https://api.formide.com/')
+  		  .then(function(response) {
+			  if (response.status == 200) {
+				  window.location = vm.connectURL;
+			  }
+			  else {
+				  vm.connecting = false;
+		  		  vm.connectingError = "Ensure that you are connected to the Internet and try again";
+			  }
+		  }, function(e){
 			  vm.connecting = false;
-			  vm.connectingError = "Ensure that you are connected to the Internet";
-			  vm.connectURL = response.redirectURI;
-		  }, 15000);
+			  vm.connectingError = "Ensure that you are connected to the Internet and try again";
+		  });
 	  }
 
 
@@ -106,7 +128,7 @@
    }
 
    MainController.$inject = [
-	   '$api', '$location', '$timeout', '$notification'
+	   '$api', '$location', '$timeout', '$notification', '$rootScope', '$http'
    ];
 
 

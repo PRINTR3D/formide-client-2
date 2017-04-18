@@ -20,7 +20,7 @@
 		<div class="layout__item u-1/2-sm pad">
 			<h4>Network</h4>
 			<section class="block">
-				<table class="table--formide network-table">
+				<table ng-if="manageDevice.networkResolved" class="table--formide network-table">
 			        <tbody>
 			            <tr class="table__item">
 							<td>Connected to</td>
@@ -41,18 +41,24 @@
 						<tr class="table__item">
 							<td>Hotspot Mode</td>
 			                <td>
-								<div ng-if="manageDevice.deviceType === 'the_element'" ng-click="manageDevice.setHotspot()">
+								<div ng-if="manageDevice.deviceType === 'the_element' && manageDevice.hotspotResolved" ng-click="manageDevice.setHotspot()">
 									<span class="checkbox">
 										<i ng-if="!manageDevice.network.isHotspot" class="fa fa-square-o"></i>
 										<i ng-if="manageDevice.network.isHotspot" class="fa fa-check-square-o"></i>
 									</span>
 								</div>
 
+								<i ng-if="!manageDevice.hotspotResolved" class="fa fa-refresh fa-spin text-base-primary-color"></i>
+
 								<span ng-if="manageDevice.deviceType !== 'the_element'">-</span>
 							</td>
 			            </tr>
 			        </tbody>
 				</table>
+
+				<div ng-if="!manageDevice.networkResolved" class="u-margin-top-3 u-textCenter">
+					<i class="fa fa-refresh fa-spin fa-2x text-base-primary-color"></i>
+				</div>
 			</section>
 		</div>
 
@@ -84,13 +90,22 @@
 						<ul class="form-fields">
 							<li>
 								<label for="">SSID</label>
-								<select class="text-input" ng-options="ssid.ssid as ssid.ssid for ssid in manageDevice.ssids" ng-model="manageDevice.wifi.ssid">
-									 <option value="" disabled selected style="display: none;">Select a SSID</option>
-								</select>
+								<div class="layout layout--smallGutter">
+									<div class="layout__item u-fill">
+										<select class="text-input" ng-options="ssid.ssid as ssid.ssid for ssid in manageDevice.ssids" ng-model="manageDevice.wifi.ssid">
+											 <option value="" disabled selected style="display: none;">Select a SSID</option>
+										</select>
+									</div>
+									<div class="layout__item u-fit">
+					                    <a ng-click="manageDevice.getSSIDs()" title="Refresh list">
+											<i class="fa fa-refresh" ng-class="{ 'fa-spin': manageDevice.refreshingSSIDs === true }"></i>
+										</a>
+									</div>
+								</div>
 							</li>
 							<li>
 								<label for="">Password</label>
-								<input type="password" class="text-input" ng-model="manageDevice.wifi.password"  placeholder="Password">
+								<input type="password" class="text-input" ng-model="manageDevice.wifi.password"  placeholder="Password" on-enter="manageDevice.connectWifi()">
 							</li>
 							<li>
 							   <a add-new ng-init="manageDevice.toggleAdvanced = false" ng-click="manageDevice.toggleAdvanced = !manageDevice.toggleAdvanced">
@@ -100,22 +115,22 @@
 							<li ng-if="manageDevice.toggleAdvanced">
 							   <ul class="advanced-settings">
 								   <li>
-									   <input type="text" class="text-input" placeholder="key_mgmt" ng-model="manageDevice.wifi.key_mgmt">
+									   <input type="text" class="text-input" placeholder="key_mgmt" ng-model="manageDevice.wifi.key_mgmt" on-enter="manageDevice.connectWifi()">
 								   </li>
 								   <li>
-									   <input type="text" class="text-input" placeholder="eap" ng-model="manageDevice.wifi.eap">
+									   <input type="text" class="text-input" placeholder="eap" ng-model="manageDevice.wifi.eap" on-enter="manageDevice.connectWifi()">
 								   </li>
 								   <li>
-									   <input type="text" class="text-input" placeholder="identity" ng-model="manageDevice.wifi.identity">
+									   <input type="text" class="text-input" placeholder="identity" ng-model="manageDevice.wifi.identity" on-enter="manageDevice.connectWifi()">
 								   </li>
 								   <li>
-									   <input type="text" class="text-input" placeholder="anonymous_identity" ng-model="manageDevice.wifi.anonymous_identity">
+									   <input type="text" class="text-input" placeholder="anonymous_identity" ng-model="manageDevice.wifi.anonymous_identity" on-enter="manageDevice.connectWifi()">
 								   </li>
 								   <li>
-									   <input type="text" class="text-input" placeholder="phase1" ng-model="manageDevice.wifi.phase1">
+									   <input type="text" class="text-input" placeholder="phase1" ng-model="manageDevice.wifi.phase1" on-enter="manageDevice.connectWifi()">
 								   </li>
 								   <li>
-									   <input type="text" class="text-input" placeholder="phase2" ng-model="manageDevice.wifi.phase2">
+									   <input type="text" class="text-input" placeholder="phase2" ng-model="manageDevice.wifi.phase2" on-enter="manageDevice.connectWifi()">
 								   </li>
 							   </ul>
 							</li>
@@ -124,13 +139,13 @@
 
 					<div class="layout">
 						<div class="layout__item u-1/2">
-							<button class="btn btn--tertiary" ng-click="manageDevice.connectWifi()" ng-disabled="manageDevice.connecting">
-								Connect <i ng-if="manageDevice.connecting" class="fa fa-refresh fa-spin"></i>
-							</button>
+							<button class="btn btn--secondary" ng-click="manageDevice.resetWifi()">Reset Wi-Fi</button>
 						</div>
 
 						<div class="u-textRight layout__item u-1/2">
-							<button class="btn btn--secondary" ng-click="manageDevice.resetWifi()">Reset Wi-Fi</button>
+							<button class="btn btn--tertiary" ng-click="manageDevice.connectWifi()" ng-disabled="manageDevice.connecting">
+								Connect <i ng-if="manageDevice.connecting" class="fa fa-refresh fa-spin"></i>
+							</button>
 						</div>
 					</div>
 

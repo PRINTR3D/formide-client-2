@@ -215,6 +215,9 @@
 						reject('Could not set an active printer!');
 					}
 				}
+				else {
+					factory.$active.status = 'offline';
+				}
 			});
 
 			return promise;
