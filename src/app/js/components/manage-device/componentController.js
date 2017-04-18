@@ -53,7 +53,7 @@
 	}
 
 
-	function MainController ($auth, $api, $rootScope, ngDialog, $notification, $timeout, $location) {
+	function MainController ($auth, $api, $rootScope, ngDialog, $notification, $timeout, $location, $interval, $http) {
 		var vm = this;
 
 		vm.wifi = {};
@@ -153,6 +153,7 @@
 				else {
 					vm.network = response;
 					vm.networkResolved = true;
+					getSSIDs()
 				}
 			});
 		}
@@ -170,9 +171,9 @@
 		// public functions
 
 		function setHotspot() {
-		  var localIp = vm.network.ip;
+			var localIp = vm.network.ip;
 
-		  if (!localIp && vm.network.isHotspot) {
+			if (!localIp && vm.network.isHotspot) {
 			  // if turning off the hotspot and no IP avalible
 			  $notification.addNotification({
 				  title: 'Hotspot Reset',
@@ -182,11 +183,11 @@
 				  type: 'error'
 			  });
 
-		  }else if (vm.network.isHotspot) {
+			}else if (vm.network.isHotspot) {
 			  // if turning off the hotspot
 			  $notification.addNotification({
 					title: 'Hotspot Reset',
-					message: 'Disabling the device hotspot will cause it to no longer emit the Wi-Fi hotspot. Once disabled you will need to connect to it via the device IP on port 8080 on the network ' + vm.network.network,
+					message: 'Disabling the device hotspot will cause it to no longer emit the Wi-Fi hotspot. Once disabled you will need to connect to it via http://'+localIp+':8080 on the network ' + vm.network.network,
 					type: 'info',
 					duration: -1,
 					actions: [
@@ -217,23 +218,9 @@
 										//if redirect fails, show prompt
 										$interval.cancel(redirectInterval);
 
-										$notification.addNotification({
-						  					title: 'Hotspot Reset',
-						  					message: 'Ensure that you are on the network ' + vm.network.network + ', before conneting to the device IP on port 8080.',
-						  					type: 'error',
-						  					duration: -1,
-						  					actions: [
-						  						{
-						  							title: 'Connect',
-						  							callback: function() {
-						  								window.location = 'http://'+localIp+':8080';
-						  								return false;
-						  							}
-						  						}
-											],
-											popup: true
-										});
-									}, 20000);
+										hotspotRedirectNotification();
+
+									}, 15000);
 								}
 
 								$api.post('/network/hotspot', {enabled: false})
@@ -254,22 +241,54 @@
 					],
 					popup: true
 				});
-		  }else {
-			  // if turning on the hotspot
-			  vm.hotspotResolved = false;
-			  $api.post('/network/hotspot', {enabled: true})
-			  .then(function(response) {
-				  vm.network.isHotspot = true;
-				  vm.hotspotResolved = true;
-				  $notification.addNotification({
-					  title: 'Hotspot Enabled',
-					  message: 'Device will now emit the Wi-Fi hotspot',
-					  channel: 'system',
-					  type: 'success'
-				  });
-			  });
-		  }
+			}else {
+				// if turning on the hotspot
+				vm.hotspotResolved = false;
+				$api.post('/network/hotspot', {enabled: true})
+				.then(function(response) {
+					vm.network.isHotspot = true;
+					vm.hotspotResolved = true;
+					$notification.addNotification({
+						title: 'Hotspot Enabled',
+						message: 'Device will now emit the Wi-Fi hotspot',
+						channel: 'system',
+						type: 'success'
+					});
+				});
+			}
 		}
+
+		function hotspotRedirectNotification(){
+			$notification.addNotification({
+				title: 'Hotspot Reset',
+				message: 'To continue using Formide locally on your device, ensure that you are on the network ' + vm.network.network + ', and click Continue',
+				type: 'info',
+				duration: -1,
+				actions: [
+					{
+						title: 'Continue',
+						callback: function() {
+							// check if ip can be reached
+							$http.get('http://'+vm.network.ip+':8080')
+							.then(function(response) {
+								if (response.status == 200) {
+									return true;
+									window.location = 'http://'+vm.network.ip+':8080';
+								}
+								else {
+									return true;
+									$timeout(function () {
+										hotspotRedirectNotification();
+									}, 1000);
+								}
+							});
+						}
+					}
+				],
+				popup: true
+			});
+		}
+
 
 		function resetWifi() {
 
@@ -291,27 +310,9 @@
 						callback: function() {
 							$api.post('/network/reset')
 							.then(function(response) {
-								if ($location.$$host != '10.20.30.40' && vm.deviceType === 'the_element') {
 
-									$timeout(function () {
-										$notification.addNotification({
-						  					title: 'Wi-Fi Successfully Reset',
-						  					message: 'To continue using Formide locally on your device, connect to the device hotspot network and click Continue.',
-						  					type: 'success',
-											channel: 'system',
-						  					duration: -1,
-						  					actions: [
-						  						{
-						  							title: 'Continue',
-						  							callback: function() {
-						  								window.location = 'http://10.20.30.40';
-						  								return false;
-						  							}
-						  						}
-											],
-											popup: true
-										});
-									}, 1000);
+								if ($location.$$host != '10.20.30.40' && vm.deviceType === 'the_element') {
+									resetWifiRedirectNotification();
 								}
 								else {
 									$notification.addNotification({
@@ -340,6 +341,39 @@
 				popup: true
 			});
 		}
+
+		function resetWifiRedirectNotification(){
+			$notification.addNotification({
+				title: 'Wi-Fi Reset',
+				message: 'To continue using Formide locally on your device, connect to the device hotspot network and click Continue.',
+				type: 'info',
+				channel: 'system',
+				duration: -1,
+				actions: [
+					{
+						title: 'Continue',
+						callback: function() {
+							// check if ip can be reached
+							$http.get('http://10.20.30.40')
+							.then(function(response) {
+								if (response.status == 200) {
+									return true;
+									window.location = 'http://10.20.30.40';
+								}
+								else {
+									return true;
+									$timeout(function () {
+										resetWifiRedirectNotification();
+									}, 1000);
+								}
+							});
+						}
+					}
+				],
+				popup: true
+			});
+		}
+
 
 		function connectWifi() {
 			vm.connecting = true;
@@ -439,7 +473,6 @@
 			getNetwork();
 			getUsers();
 			getDiskspace();
-			getSSIDs();
 		}
 
 		init();
@@ -465,7 +498,7 @@
 	}
 
 	MainController.$inject = [
-		'$auth', '$api', '$rootScope', 'ngDialog', '$notification', '$timeout', '$location'
+		'$auth', '$api', '$rootScope', 'ngDialog', '$notification', '$timeout', '$location', '$interval', '$http'
 	];
 
 	UpdateController.$inject = [
