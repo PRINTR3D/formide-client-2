@@ -1,7 +1,7 @@
 /*! This code was created for Printr B.V. 
  Copyright (c) 2017, All rights reserved, http://printr.nl */
 
-/*! formide-client-2 - v2.0.5 - 2017-04-13 */
+/*! formide-client-2 - v2.0.5 - 2017-04-18 */
 
 
 
@@ -18910,6 +18910,8 @@ function MainController($rootScope, $api, Upload, File, printerCtrl, Printer, $l
 		vm.storage = {};
 		vm.network = {};
 
+		vm.hotspotResolved = true;
+
 		vm.chart.options = {
 			cutoutPercentage: 80,
 			tooltips: {enabled: false},
@@ -18978,31 +18980,38 @@ function MainController($rootScope, $api, Upload, File, printerCtrl, Printer, $l
 
 		function getNetwork(reset) {
 
-		  reset = reset || false;
+			reset = reset || false;
 
-		  $api.get('/network/status')
-		  .then(function(response) {
-			  vm.network = response;
+			vm.network = {};
+			vm.networkResolved = false;
 
-			  if (!reset && vm.network.isConnected && !vm.network.publicIp) {
-				  // ip info can take longer to come through
-				  $timeout(function () {
-					  getNetwork();
-				  }, 2000);
-			  }
-			  else if (reset && vm.network.publicIp) {
-				  // if wifi has been reset, keep fatching until device says it is no longer connected
-				  $timeout(function () {
-					  getNetwork(true);
-				  }, 2000);
-			  }
-		  });
+			$api.get('/network/status')
+			.then(function(response) {
+				if (!reset && vm.network.isConnected && !vm.network.publicIp) {
+					// ip info can take longer to come through
+					$timeout(function () {
+						getNetwork();
+					}, 2000);
+				}
+				else if (reset && vm.network.publicIp) {
+					// if wifi has been reset, keep fatching until device says it is no longer connected
+					$timeout(function () {
+						getNetwork(true);
+					}, 2000);
+				}
+				else {
+					vm.network = response;
+					vm.networkResolved = true;
+				}
+			});
 		}
 
 		function getSSIDs() {
+			vm.refreshingSSIDs = true;
 		  	$api.get('/network/list')
 		  	.then(function(response) {
 			  	vm.ssids = response;
+				vm.refreshingSSIDs = false;
 		  	});
 		}
 
@@ -19040,9 +19049,11 @@ function MainController($rootScope, $api, Upload, File, printerCtrl, Printer, $l
 						{
 							title: 'Continue',
 							callback: function() {
-								vm.network.isHotspot = false;
+								vm.hotspotResolved = false;
 								$api.post('/network/hotspot', {enabled: vm.network.isHotspot})
 								.then(function(response) {
+									vm.network.isHotspot = false;
+									vm.hotspotResolved = true;
 									$notification.addNotification({
 										title: 'Hotspot Disabled',
 										message: 'Device will no longer emit the Wi-Fi hotspot',
@@ -19067,9 +19078,11 @@ function MainController($rootScope, $api, Upload, File, printerCtrl, Printer, $l
 				});
 		  }else {
 			  // if turning on the hotspot
-			  vm.network.isHotspot = true;
+			  vm.hotspotResolved = false;
 			  $api.post('/network/hotspot', {enabled: vm.network.isHotspot})
 			  .then(function(response) {
+				  vm.network.isHotspot = true;
+				  vm.hotspotResolved = true;
 				  $notification.addNotification({
 					  title: 'Hotspot Enabled',
 					  message: 'Device will now emit the Wi-Fi hotspot',
@@ -19084,7 +19097,7 @@ function MainController($rootScope, $api, Upload, File, printerCtrl, Printer, $l
 
 			$notification.addNotification({
 				title: 'Wi-Fi Reset',
-				message: 'After reseting your Wi-Fi you will need to connect to your device at http://10.20.30.40 via the device hotstop',
+				message: 'After reseting your Wi-Fi you will need to connect to your device at http://10.20.30.40 via the device hotspot',
 				type: 'error',
 				duration: -1,
 				actions: [
@@ -19145,6 +19158,7 @@ function MainController($rootScope, $api, Upload, File, printerCtrl, Printer, $l
 				  	type: 'success'
 				});
 				vm.connecting = false;
+				vm.wifi.password = null;
 				getNetwork();
 
 			}, function(e) {
@@ -19250,7 +19264,8 @@ function MainController($rootScope, $api, Upload, File, printerCtrl, Printer, $l
 			deleteUser: deleteUser,
 			connectWifi: connectWifi,
 			resetWifi: resetWifi,
-			setHotspot: setHotspot
+			setHotspot: setHotspot,
+			getSSIDs: getSSIDs
 		});
 	}
 
@@ -19956,7 +19971,7 @@ function foundPrinter(resource, data) {
 
 
   $templateCache.put('manage-device/componentView.html',
-    "<article id=manage-device><header class=layout><div class=\"layout__item u-1/2\"><h3>Manage Device</h3></div><div class=\"u-textRight layout__item u-1/2\"><a class=\"btn btn--tertiary\" ng-click=\"manage.navigate('/manage/device/update')\">Update Device</a></div></header><div class=layout><div class=\"layout__item u-1/2-sm pad\"><h4>Network</h4><section class=block><table class=\"table--formide network-table\"><tbody><tr class=table__item><td>Connected to</td><td>{{manageDevice.network.network || '-'}}</td></tr><tr class=table__item><td>Internal IP Address</td><td>{{manageDevice.network.ip || '-'}}</td></tr><tr class=table__item><td>Public IP Address</td><td>{{manageDevice.network.publicIp || '-'}}</td></tr><tr class=table__item><td>Mac Address</td><td>{{manageDevice.network.mac || '-'}}</td></tr><tr class=table__item><td>Hotspot Mode</td><td><div ng-if=\"manageDevice.deviceType === 'the_element'\" ng-click=manageDevice.setHotspot()><span class=checkbox><i ng-if=!manageDevice.network.isHotspot class=\"fa fa-square-o\"></i> <i ng-if=manageDevice.network.isHotspot class=\"fa fa-check-square-o\"></i></span></div><span ng-if=\"manageDevice.deviceType !== 'the_element'\">-</span></td></tr></tbody></table></section></div><div class=\"layout__item u-1/2-sm pad\"><h4>Storage</h4><section class=block><div class=\"container layout layout--withoutGutter layout--alignMiddle layout--alignCenter u-margin-top-1 u-margin-bottom-1\"><div class=\"storageChart layout__item u-fill\"><canvas id=doughnut height=230 width=230 class=\"chart chart-doughnut\" chart-data=manageDevice.chart.data chart-labels=manageDevice.chart.labels chart-dataset-override=manageDevice.chart.datasetOverride chart-options=manageDevice.chart.options></canvas><div class=label><h3>{{manageDevice.storage.percentageUsedRnd}}%<br><small>used</small></h3></div><div class=info><h3>of {{manageDevice.diskspace.total | smartbytes:1}}</h3></div></div></div></section></div><div class=\"layout__item u-1/2-sm pad connect\"><h4>Connect</h4><section class=block><form role=form><fieldset><ul class=form-fields><li><label for=\"\">SSID</label><select class=text-input ng-options=\"ssid.ssid as ssid.ssid for ssid in manageDevice.ssids\" ng-model=manageDevice.wifi.ssid><option value=\"\" disabled selected style=\"display: none\">Select a SSID</option></select></li><li><label for=\"\">Password</label><input type=password class=text-input ng-model=manageDevice.wifi.password placeholder=Password on-enter=manageDevice.connectWifi()></li><li><a add-new ng-init=\"manageDevice.toggleAdvanced = false\" ng-click=\"manageDevice.toggleAdvanced = !manageDevice.toggleAdvanced\"><small><i class=\"fa u-margin-right-_5\" ng-class=\"{true:'fa-minus',false:'fa-plus'}[manageDevice.toggleAdvanced]\"></i>Advanced Settings</small></a></li><li ng-if=manageDevice.toggleAdvanced><ul class=advanced-settings><li><input class=text-input placeholder=key_mgmt ng-model=manageDevice.wifi.key_mgmt on-enter=manageDevice.connectWifi()></li><li><input class=text-input placeholder=eap ng-model=manageDevice.wifi.eap on-enter=manageDevice.connectWifi()></li><li><input class=text-input placeholder=identity ng-model=manageDevice.wifi.identity on-enter=manageDevice.connectWifi()></li><li><input class=text-input placeholder=anonymous_identity ng-model=manageDevice.wifi.anonymous_identity on-enter=manageDevice.connectWifi()></li><li><input class=text-input placeholder=phase1 ng-model=manageDevice.wifi.phase1 on-enter=manageDevice.connectWifi()></li><li><input class=text-input placeholder=phase2 ng-model=manageDevice.wifi.phase2 on-enter=manageDevice.connectWifi()></li></ul></li></ul></fieldset><div class=layout><div class=\"layout__item u-1/2\"><button class=\"btn btn--secondary\" ng-click=manageDevice.resetWifi()>Reset Wi-Fi</button></div><div class=\"u-textRight layout__item u-1/2\"><button class=\"btn btn--tertiary\" ng-click=manageDevice.connectWifi() ng-disabled=manageDevice.connecting>Connect <i ng-if=manageDevice.connecting class=\"fa fa-refresh fa-spin\"></i></button></div></div></form></section></div><div class=\"layout__item u-1/2-sm pad\"><h4>Users</h4><section class=block><table class=\"table--formide table--formide--responsive\"><thead><tr><th>Username</th><th></th></tr></thead><tbody><tr ng-repeat=\"user in manageDevice.users\" class=table__item><td data-th=Username>{{user.username}}</td><td class=\"table__item__controls u-textRight\"><button class=\"btn btn--small btn--alert\" ng-disabled=\"user.username == manageDevice.currentUser\" ng-click=manageDevice.deleteUser(user)><i class=\"fa fa-trash-o\"></i></button></td></tr></tbody></table><button class=\"btn btn--tertiary\" ng-click=manageDevice.createModal()>Add User</button></section></div></div></article><script type=text/ng-template id=settingsModal><form role=\"form\">\n" +
+    "<article id=manage-device><header class=layout><div class=\"layout__item u-1/2\"><h3>Manage Device</h3></div><div class=\"u-textRight layout__item u-1/2\"><a class=\"btn btn--tertiary\" ng-click=\"manage.navigate('/manage/device/update')\">Update Device</a></div></header><div class=layout><div class=\"layout__item u-1/2-sm pad\"><h4>Network</h4><section class=block><table ng-if=manageDevice.networkResolved class=\"table--formide network-table\"><tbody><tr class=table__item><td>Connected to</td><td>{{manageDevice.network.network || '-'}}</td></tr><tr class=table__item><td>Internal IP Address</td><td>{{manageDevice.network.ip || '-'}}</td></tr><tr class=table__item><td>Public IP Address</td><td>{{manageDevice.network.publicIp || '-'}}</td></tr><tr class=table__item><td>Mac Address</td><td>{{manageDevice.network.mac || '-'}}</td></tr><tr class=table__item><td>Hotspot Mode</td><td><div ng-if=\"manageDevice.deviceType === 'the_element' && manageDevice.hotspotResolved\" ng-click=manageDevice.setHotspot()><span class=checkbox><i ng-if=!manageDevice.network.isHotspot class=\"fa fa-square-o\"></i> <i ng-if=manageDevice.network.isHotspot class=\"fa fa-check-square-o\"></i></span></div><i ng-if=!manageDevice.hotspotResolved class=\"fa fa-refresh fa-spin\"></i> <span ng-if=\"manageDevice.deviceType !== 'the_element'\">-</span></td></tr></tbody></table><div ng-if=!manageDevice.networkResolved class=\"u-margin-top-3 u-textCenter\"><i class=\"fa fa-refresh fa-spin fa-2x text-base-primary-color\"></i></div></section></div><div class=\"layout__item u-1/2-sm pad\"><h4>Storage</h4><section class=block><div class=\"container layout layout--withoutGutter layout--alignMiddle layout--alignCenter u-margin-top-1 u-margin-bottom-1\"><div class=\"storageChart layout__item u-fill\"><canvas id=doughnut height=230 width=230 class=\"chart chart-doughnut\" chart-data=manageDevice.chart.data chart-labels=manageDevice.chart.labels chart-dataset-override=manageDevice.chart.datasetOverride chart-options=manageDevice.chart.options></canvas><div class=label><h3>{{manageDevice.storage.percentageUsedRnd}}%<br><small>used</small></h3></div><div class=info><h3>of {{manageDevice.diskspace.total | smartbytes:1}}</h3></div></div></div></section></div><div class=\"layout__item u-1/2-sm pad connect\"><h4>Connect</h4><section class=block><form role=form><fieldset><ul class=form-fields><li><label for=\"\">SSID</label><div class=\"layout layout--smallGutter\"><div class=\"layout__item u-fill\"><select class=text-input ng-options=\"ssid.ssid as ssid.ssid for ssid in manageDevice.ssids\" ng-model=manageDevice.wifi.ssid><option value=\"\" disabled selected style=\"display: none\">Select a SSID</option></select></div><div class=\"layout__item u-fit\"><a ng-click=manageDevice.getSSIDs() title=\"Refresh list\"><i class=\"fa fa-refresh\" ng-class=\"{ 'fa-spin': manageDevice.refreshingSSIDs === true }\"></i></a></div></div></li><li><label for=\"\">Password</label><input type=password class=text-input ng-model=manageDevice.wifi.password placeholder=Password on-enter=manageDevice.connectWifi()></li><li><a add-new ng-init=\"manageDevice.toggleAdvanced = false\" ng-click=\"manageDevice.toggleAdvanced = !manageDevice.toggleAdvanced\"><small><i class=\"fa u-margin-right-_5\" ng-class=\"{true:'fa-minus',false:'fa-plus'}[manageDevice.toggleAdvanced]\"></i>Advanced Settings</small></a></li><li ng-if=manageDevice.toggleAdvanced><ul class=advanced-settings><li><input class=text-input placeholder=key_mgmt ng-model=manageDevice.wifi.key_mgmt on-enter=manageDevice.connectWifi()></li><li><input class=text-input placeholder=eap ng-model=manageDevice.wifi.eap on-enter=manageDevice.connectWifi()></li><li><input class=text-input placeholder=identity ng-model=manageDevice.wifi.identity on-enter=manageDevice.connectWifi()></li><li><input class=text-input placeholder=anonymous_identity ng-model=manageDevice.wifi.anonymous_identity on-enter=manageDevice.connectWifi()></li><li><input class=text-input placeholder=phase1 ng-model=manageDevice.wifi.phase1 on-enter=manageDevice.connectWifi()></li><li><input class=text-input placeholder=phase2 ng-model=manageDevice.wifi.phase2 on-enter=manageDevice.connectWifi()></li></ul></li></ul></fieldset><div class=layout><div class=\"layout__item u-1/2\"><button class=\"btn btn--secondary\" ng-click=manageDevice.resetWifi()>Reset Wi-Fi</button></div><div class=\"u-textRight layout__item u-1/2\"><button class=\"btn btn--tertiary\" ng-click=manageDevice.connectWifi() ng-disabled=manageDevice.connecting>Connect <i ng-if=manageDevice.connecting class=\"fa fa-refresh fa-spin\"></i></button></div></div></form></section></div><div class=\"layout__item u-1/2-sm pad\"><h4>Users</h4><section class=block><table class=\"table--formide table--formide--responsive\"><thead><tr><th>Username</th><th></th></tr></thead><tbody><tr ng-repeat=\"user in manageDevice.users\" class=table__item><td data-th=Username>{{user.username}}</td><td class=\"table__item__controls u-textRight\"><button class=\"btn btn--small btn--alert\" ng-disabled=\"user.username == manageDevice.currentUser\" ng-click=manageDevice.deleteUser(user)><i class=\"fa fa-trash-o\"></i></button></td></tr></tbody></table><button class=\"btn btn--tertiary\" ng-click=manageDevice.createModal()>Add User</button></section></div></div></article><script type=text/ng-template id=settingsModal><form role=\"form\">\n" +
     "\t\t <fieldset>\n" +
     "            <ul class=\"form-fields\">\n" +
     "                <li>\n" +

@@ -61,6 +61,8 @@
 		vm.storage = {};
 		vm.network = {};
 
+		vm.hotspotResolved = true;
+
 		vm.chart.options = {
 			cutoutPercentage: 80,
 			tooltips: {enabled: false},
@@ -129,31 +131,38 @@
 
 		function getNetwork(reset) {
 
-		  reset = reset || false;
+			reset = reset || false;
 
-		  $api.get('/network/status')
-		  .then(function(response) {
-			  vm.network = response;
+			vm.network = {};
+			vm.networkResolved = false;
 
-			  if (!reset && vm.network.isConnected && !vm.network.publicIp) {
-				  // ip info can take longer to come through
-				  $timeout(function () {
-					  getNetwork();
-				  }, 2000);
-			  }
-			  else if (reset && vm.network.publicIp) {
-				  // if wifi has been reset, keep fatching until device says it is no longer connected
-				  $timeout(function () {
-					  getNetwork(true);
-				  }, 2000);
-			  }
-		  });
+			$api.get('/network/status')
+			.then(function(response) {
+				if (!reset && vm.network.isConnected && !vm.network.publicIp) {
+					// ip info can take longer to come through
+					$timeout(function () {
+						getNetwork();
+					}, 2000);
+				}
+				else if (reset && vm.network.publicIp) {
+					// if wifi has been reset, keep fatching until device says it is no longer connected
+					$timeout(function () {
+						getNetwork(true);
+					}, 2000);
+				}
+				else {
+					vm.network = response;
+					vm.networkResolved = true;
+				}
+			});
 		}
 
 		function getSSIDs() {
+			vm.refreshingSSIDs = true;
 		  	$api.get('/network/list')
 		  	.then(function(response) {
 			  	vm.ssids = response;
+				vm.refreshingSSIDs = false;
 		  	});
 		}
 
@@ -191,9 +200,11 @@
 						{
 							title: 'Continue',
 							callback: function() {
-								vm.network.isHotspot = false;
+								vm.hotspotResolved = false;
 								$api.post('/network/hotspot', {enabled: vm.network.isHotspot})
 								.then(function(response) {
+									vm.network.isHotspot = false;
+									vm.hotspotResolved = true;
 									$notification.addNotification({
 										title: 'Hotspot Disabled',
 										message: 'Device will no longer emit the Wi-Fi hotspot',
@@ -218,9 +229,11 @@
 				});
 		  }else {
 			  // if turning on the hotspot
-			  vm.network.isHotspot = true;
+			  vm.hotspotResolved = false;
 			  $api.post('/network/hotspot', {enabled: vm.network.isHotspot})
 			  .then(function(response) {
+				  vm.network.isHotspot = true;
+				  vm.hotspotResolved = true;
 				  $notification.addNotification({
 					  title: 'Hotspot Enabled',
 					  message: 'Device will now emit the Wi-Fi hotspot',
@@ -235,7 +248,7 @@
 
 			$notification.addNotification({
 				title: 'Wi-Fi Reset',
-				message: 'After reseting your Wi-Fi you will need to connect to your device at http://10.20.30.40 via the device hotstop',
+				message: 'After reseting your Wi-Fi you will need to connect to your device at http://10.20.30.40 via the device hotspot',
 				type: 'error',
 				duration: -1,
 				actions: [
@@ -296,6 +309,7 @@
 				  	type: 'success'
 				});
 				vm.connecting = false;
+				vm.wifi.password = null;
 				getNetwork();
 
 			}, function(e) {
@@ -401,7 +415,8 @@
 			deleteUser: deleteUser,
 			connectWifi: connectWifi,
 			resetWifi: resetWifi,
-			setHotspot: setHotspot
+			setHotspot: setHotspot,
+			getSSIDs: getSSIDs
 		});
 	}
 
