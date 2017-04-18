@@ -334,10 +334,9 @@ function foundPrinter(resource, data) {
 		 * Receive printer finished message
 		 */
 		$socket.socket.on('printer.finished', function (data) {
-			console.log('finished');
 			$notification.addNotification({
-			    title: data.title,
-			    message: data.message,
+			    title: 'Print Finished',
+			    message: 'The current print has finished',
 				channel: 'printer',
 			    type: 'success',
 				save: true
