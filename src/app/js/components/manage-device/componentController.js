@@ -153,7 +153,7 @@
 				else {
 					vm.network = response;
 					vm.networkResolved = true;
-					getSSIDs()
+					getSSIDs();
 				}
 			});
 		}
@@ -272,8 +272,8 @@
 							$http.get('http://'+vm.network.ip+':8080')
 							.then(function(response) {
 								if (response.status == 200) {
-									return true;
 									window.location = 'http://'+vm.network.ip+':8080';
+									return true;
 								}
 								else {
 									return true;
@@ -357,8 +357,8 @@
 							$http.get('http://10.20.30.40')
 							.then(function(response) {
 								if (response.status == 200) {
-									return true;
 									window.location = 'http://10.20.30.40';
+									return true;
 								}
 								else {
 									return true;
