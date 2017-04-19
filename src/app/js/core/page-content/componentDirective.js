@@ -20,7 +20,7 @@
 		return directive;
 	}
 
-	function MainController($router, $rootScope, $auth, $location, ngDialog) {
+	function MainController($router, $rootScope, $auth, $location, ngDialog, Sidebar) {
 		var vm = this;
 
 		var routes = [];
@@ -56,7 +56,7 @@
 				if (route == 'login') {
 					$rootScope.isLoggedIn = false;
 					ngDialog.closeAll();
-					$rootScope.setSidebarHide();
+					Sidebar.setHide();
 				}
 				else {
 					for (var i in routes) {
@@ -101,7 +101,7 @@
 
 
   MainController.$inject = [
-	  '$router', '$rootScope', '$auth', '$location', 'ngDialog'
+	  '$router', '$rootScope', '$auth', '$location', 'ngDialog', 'Sidebar'
   ];
 
   angular

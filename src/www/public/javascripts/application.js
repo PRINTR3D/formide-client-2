@@ -1,7 +1,7 @@
 /*! This code was created for Printr B.V. 
  Copyright (c) 2017, All rights reserved, http://printr.nl */
 
-/*! formide-client-2 - v2.0.5 - 2017-04-18 */
+/*! formide-client-2 - v2.0.5 - 2017-04-19 */
 
 
 
@@ -14034,7 +14034,8 @@ module.services = angular.module('module.services', [
     'service.printer',
     'service.notification',
     'service.socket',
-    'service.file'
+    'service.file',
+	'service.sidebar'
 ]);
 ;
 // Source: ./src/app/js/modules/SharedModule.js
@@ -14042,11 +14043,8 @@ var module = module || {};
 
 module.shared = angular.module('module.shared', [
     'shared.printerFan',
-    'shared.selectionList',
-    'shared.selectionBlock',
     'shared.addNew',
     'shared.progressBar',
-    'shared.temperatureBar',
     'shared.printerControls',
     'shared.printerList',
     'shared.printerListItem',
@@ -15077,9 +15075,6 @@ function angularLoaded() {
 
         window.AUTH                 = window.AUTH || {};
 
-        window.PATH.login           = window.PATH.login || window.PATH.root + '/login';
-        window.PATH.root 		    = window.PATH.root || window.location.protocol + '//' + window.location.hostname + ':' + window.location.port;
-
         var auth_url = window.PATH.api;
 
         factory.login = function (username, password) {
@@ -15721,8 +15716,8 @@ function angularLoaded() {
 *	Copyright (c) 2017, All rights reserved, http://printr.nl
 */
 
-	(function () {
-		function MainService($socket, $q, $api, $rootScope, $timeout, $filter, $interval) {
+(function () {
+	function MainService($socket, $q, $api, $rootScope, $timeout, $filter, $interval) {
 		var factory = {
 			resource: [],
 			$active: {
@@ -15733,18 +15728,28 @@ function angularLoaded() {
 
 		try {
 
-		var resource = $api.resource('/printer');
+			var resource = $api.resource('/printer');
 
-		factory.endpoint = resource;
+			factory.endpoint = resource;
 
-		factory.resource = resource.query(function () {
-			factory.$setActive();
-		});
+			factory.resource = resource.query(function () {
+				factory.$setActive();
+			});
 
 		} catch (err) {
 			if (window.DEBUG) console.error(err);
 		}
 
+
+		function foundPrinter(resource, data) {
+			for (var i in resource) {
+				var printer = resource[i];
+
+				if (printer.port === data.port) return true;
+			}
+
+			return false;
+		}
 
 		function updateResource(resource, type) {
 			// update printer statuses on event
@@ -15888,7 +15893,7 @@ function angularLoaded() {
 		}
 
 
-		factory.$setActive = function (params, cb) {
+		factory.$setActive = function (params) {
 			var params = params || {};
 
 			var promise = $q(function (resolve, reject) {
@@ -15946,8 +15951,7 @@ function angularLoaded() {
 	}
 
 	angular.module('service.printer', [])
-	.factory('Printer', ['$socket', '$q', '$api', '$rootScope',
-	'$timeout', '$filter', '$interval', MainService]);
+	.factory('Printer', ['$socket', '$q', '$api', '$rootScope', '$timeout', '$filter', '$interval', MainService]);
 
 })();
 ;
@@ -15958,22 +15962,38 @@ function angularLoaded() {
  */
 
 (function () {
-    function MainService($rootScope, $timeout) {
+    function MainService() {
         var factory = {};
 
+		factory.invisible = (window.localStorage.getItem("formide.sidebar:invisible") === 'true');
+
         factory.setSidebar = function(controller, template, width) {
-            $rootScope.sidebar = {
-                width: width || 360,
+            factory.sidebar = {
+                width: width || 340,
                 controller: controller || 'SidebarController',
                 template: template || 'sidebar/componentTemplate.html'
             };
         }
 
+		factory.setInvisible = function () {
+			window.scrollTo(0, 0);
+			factory.invisible = factory.invisible ? false : true;
+			window.localStorage.setItem("formide.sidebar:invisible", factory.invisible);
+		};
+
+		factory.setHide = function () {
+			factory.sidebar = false;
+		};
+
+		factory.setShow = function () {
+			factory.sidebar = true;
+		};
+
         return factory;
     }
 
     angular.module('service.sidebar', [])
-        .factory('$sidebar', ['$rootScope', '$timeout', MainService]);
+        .factory('Sidebar', [MainService]);
 
 })();
 ;
@@ -16065,68 +16085,63 @@ function angularLoaded() {
 ;
 // Source: ./src/app/js/core/header/coreHeader.js
 /*
- *	This code was created for Printr B.V. It is open source under the formide-client package.
- *	Copyright (c) 2017, All rights reserved, http://printr.nl
- */
+*	This code was created for Printr B.V. It is open source under the formide-client package.
+*	Copyright (c) 2017, All rights reserved, http://printr.nl
+*/
 
 (function () {
-  function coreHeader() {
-    var directive = {
-        restrict: 'EA',
-        templateUrl: 'header/componentTemplate.html',
-        scope: {
-            maxWidth: '@'
-        },
-        transclude: true,
-        controller: MainController,
-        controllerAs: 'vm',
-        bindToController: true
-    };
+	function coreHeader() {
+		var directive = {
+			restrict: 'EA',
+			templateUrl: 'header/componentTemplate.html',
+			scope: {
+				maxWidth: '@'
+			},
+			transclude: true,
+			controller: MainController,
+			controllerAs: 'vm',
+			bindToController: true
+		};
 
-    return directive;
-  }
+		return directive;
+	}
 
-  function MainController($rootScope, $location, $auth) {
-      var vm = this;
+	function MainController($rootScope, $location, $auth, Sidebar) {
+		var vm = this;
 
-      vm.mobilenavInvisible = true;
+		vm.mobilenavInvisible = true;
 
-      vm.maxWidth = vm.maxWidth || 896;
+		vm.maxWidth = vm.maxWidth || 896;
 
-      // private functions
+		// private functions
 
-      // public functions
-	  function navigate(route){
-		  $location.path(route);
-	  }
+		// public functions
+		function navigate(route){
+			$location.path(route);
+		}
 
-      function toggleMobilenav() {
-		  $rootScope.bodyNoScroll = !$rootScope.bodyNoScroll;
-		  vm.mobilenavInvisible = vm.mobilenavInvisible ? false : true;
-      }
+		function logout(){
+			$auth.logout()
+		}
 
-	  function logout(){
-		  $auth.logout()
-	  }
-
-      // exports
-      angular.extend(vm, {
-      	toggleMobilenav: toggleMobilenav,
-		navigate: navigate,
-		logout: logout
-      });
-  }
+		// exports
+		angular.extend(vm, {
+			navigate: navigate,
+			logout: logout,
+			sidebar: Sidebar
+		});
+	}
 
 
-  MainController.$inject = [
-    '$rootScope', '$location', '$auth'
-  ];
+	MainController.$inject = [
+		'$rootScope', '$location', '$auth', 'Sidebar'
+	];
 
-  angular
-    .module('core.header', [
-      //
-    ])
-    .directive('coreHeader', coreHeader);
+	angular
+	.module('core.header', [
+		//
+	])
+	.directive('coreHeader', coreHeader);
 })();
 ;
 // Source: ./src/app/js/core/page-content/componentDirective.js
@@ -16152,7 +16167,7 @@ function angularLoaded() {
 		return directive;
 	}
 
-	function MainController($router, $rootScope, $auth, $location, ngDialog) {
+	function MainController($router, $rootScope, $auth, $location, ngDialog, Sidebar) {
 		var vm = this;
 
 		var routes = [];
@@ -16188,7 +16203,7 @@ function angularLoaded() {
 				if (route == 'login') {
 					$rootScope.isLoggedIn = false;
 					ngDialog.closeAll();
-					$rootScope.setSidebarHide();
+					Sidebar.setHide();
 				}
 				else {
 					for (var i in routes) {
@@ -16233,7 +16248,7 @@ function angularLoaded() {
 
 
   MainController.$inject = [
-	  '$router', '$rootScope', '$auth', '$location', 'ngDialog'
+	  '$router', '$rootScope', '$auth', '$location', 'ngDialog', 'Sidebar'
   ];
 
   angular
@@ -16267,7 +16282,7 @@ function angularLoaded() {
 
     }
 
-    function MainController($rootScope, $interval, Printer, $location) {
+    function MainController($rootScope, $interval, Printer, $location, Sidebar) {
         var vm = this;
 
 		vm.showCloudMsg = true;
@@ -16357,45 +16372,13 @@ function angularLoaded() {
 			}
 		}
 
-        var printerSortFunction = function (printer) {
-            switch (printer.status) {
-            case 'printing':
-                return 1
-                break;
-
-            case 'heating':
-                return 2
-                break;
-
-            case 'paused':
-                return 3
-                break;
-
-            case 'online':
-                return 4
-                break;
-
-                //   case 'stopping':
-                //       return 5
-                //       break;
-
-            case 'connecting':
-                return 6
-                break;
-
-            default:
-                return 7
-                break;
-            }
-        }
-
 
         // exports
         angular.extend(vm, {
-            printerSortFunction: printerSortFunction,
             setVisible: setVisible,
 			printerSetupDialog: printerSetupDialog,
-			navigate: navigate
+			navigate: navigate,
+			sidebar: Sidebar
         });
     }
 
@@ -16404,7 +16387,8 @@ function angularLoaded() {
 	    '$rootScope',
 	    '$interval',
 	    'Printer',
-		'$location'
+		'$location',
+		'Sidebar'
 	  ];
 
     angular
@@ -16723,7 +16707,6 @@ function angularLoaded() {
 					  }
 
 					  for (var r = 0; r < resource.extruders.length; r++) {
-						  console.log('Printer.$active.statusTemperatures[i]', i, Printer.$active.statusTemperatures[i]);
 						  if (vm.chart.data[r*2+b]) vm.chart.data[r*2+b].push(Printer.$active.statusTemperatures[i].extruders[r].temp);
 						  if (vm.chart.data[r*2+b+1]) vm.chart.data[r*2+b+1].push(Printer.$active.statusTemperatures[i].extruders[r].targetTemp);
 					  }
@@ -17045,10 +17028,6 @@ function angularLoaded() {
  *	Copyright (c) 2017, All rights reserved, http://printr.nl
  */
 
-/*
- *  Component for creating a file list item.
- */
-
 (function () {
   function loadingScreen($timeout) {
       return({
@@ -17250,7 +17229,6 @@ function angularLoaded() {
 		vm.wait = true;
         vm.clicked = false;
         vm.printer = Printer.$active;
-		vm.imagesRootLocation = window.PATH.images;
 
 
 		$timeout(function () {
@@ -17784,7 +17762,7 @@ function angularLoaded() {
     return directive;
   }
 
-  function MainController($timeout, $location, $rootScope, Printer, printerCtrl, $notification) {
+  function MainController($timeout, $location, $rootScope, Printer, printerCtrl, $notification, Sidebar) {
       var vm = this;
 
       vm.printer.status = vm.printer.status || 'offline';
@@ -17848,13 +17826,14 @@ function angularLoaded() {
 		resumePrint: resumePrint,
 		stopPrint: stopPrint,
 		navigate: navigate,
-		selectPrinter: selectPrinter
+		selectPrinter: selectPrinter,
+		sidebar: Sidebar
       });
   }
 
 
   MainController.$inject = [
-    '$timeout', '$location', '$rootScope', 'Printer', 'printerCtrl', '$notification'
+    '$timeout', '$location', '$rootScope', 'Printer', 'printerCtrl', '$notification', 'Sidebar'
   ];
 
   angular
@@ -18035,116 +18014,6 @@ function angularLoaded() {
     .directive('progressBar', progressBar);
 })();
 ;
-// Source: ./src/app/js/shared/selection-block/componentDirective.js
-/*
- *	This code was created for Printr B.V. It is open source under the formide-client package.
- *	Copyright (c) 2017, All rights reserved, http://printr.nl
- */
-
-/*
- * Component for creating a block that can be selected.
- */
-
-(function () {
-  function selectionBlock() {
-    var directive = {
-        restrict: 'EA',
-        templateUrl: 'selection-block/componentTemplate.html',
-        scope: {
-            currentItem: '@',
-            ngModel: '='
-        },
-        transclude: true,
-        controller: MainController,
-        controllerAs: 'vm',
-        bindToController: true
-    };
-
-    return directive;
-  }
-
-  function MainController() {
-      var vm = this;
-
-      // private functions
-
-      // public functions
-      vm.item = JSON.parse(vm.currentItem);
-
-    //   vm.ngModel =
-
-      // exports
-      angular.extend(vm, {
-        //
-      });
-  }
-
-
-  MainController.$inject = [
-    //
-  ];
-
-  angular
-    .module('shared.selectionBlock', [
-      //
-    ])
-    .directive('selectionBlock', selectionBlock);
-})();
-;
-// Source: ./src/app/js/shared/selection-list/componentDirective.js
-/*
- *	This code was created for Printr B.V. It is open source under the formide-client package.
- *	Copyright (c) 2017, All rights reserved, http://printr.nl
- */
-
-/*
- * Component for creating a selection list.
- */
-
-(function () {
-  function selectionList() {
-    var directive = {
-        restrict: 'EA',
-        templateUrl: 'selection-list/componentTemplate.html',
-        scope: {
-            extruders: '=',
-            ngModel : '=',
-            name: '@'
-        },
-        transclude: true,
-        controller: MainController,
-        controllerAs: 'vm',
-        bindToController: true
-    };
-
-    return directive;
-  }
-
-  function MainController() {
-      var vm = this;
-
-      // private functions
-
-      // public functions
-
-      // exports
-      angular.extend(vm, {
-        //extruders: extruders
-      });
-  }
-
-
-  MainController.$inject = [
-    //
-  ];
-
-  angular
-    .module('shared.selectionList', [
-      //
-    ])
-    .directive('selectionList', selectionList);
-})();
-;
 // Source: ./src/app/js/shared/status-icon/componentDirective.js
 /*
  *	This code was created for Printr B.V. It is open source under the formide-client package.
@@ -18205,57 +18074,6 @@ function angularLoaded() {
     .directive('statusIcon', statusIcon);
 })();
 ;
-// Source: ./src/app/js/shared/temperature-bar/componentDirective.js
-/*
- *	This code was created for Printr B.V. It is open source under the formide-client package.
- *	Copyright (c) 2017, All rights reserved, http://printr.nl
- */
-
-/*
- * Similar to progress-bar, creates a temperature bar based on a current-, target- and max value.
- */
-
-(function () {
-  function temperatureBar() {
-    var directive = {
-        restrict: 'EA',
-        templateUrl: 'temperature-bar/componentTemplate.html',
-        scope: {
-            valuenow: '@',
-            valuetarget: '@',
-            valuemax: '@'
-        },
-        controller: MainController,
-        controllerAs: 'vm',
-        bindToController: true
-    };
-
-    return directive;
-  }
-
-  function MainController() {
-      var vm = this;
-
-      // private functions
-
-      // exports
-      angular.extend(vm, {
-        //
-      });
-  }
-
-
-  MainController.$inject = [
-    //
-  ];
-
-  angular
-    .module('shared.temperatureBar', [
-      //
-    ])
-    .directive('temperatureBar', temperatureBar);
-})();
-;
 // Source: ./src/app/js/components/auth-login/componentController.js
 /*
  *	This code was created for Printr B.V. It is open source under the formide-client package.
@@ -18263,7 +18081,7 @@ function angularLoaded() {
  */
 
 (function () {
-function MainController ($timeout, $auth, $location, $rootScope) {
+function MainController ($timeout, $auth, $location, $rootScope, Sidebar) {
 		var vm = this;
 
 		if (window.localStorage.getItem("formide:setup")) {
@@ -18288,7 +18106,7 @@ function MainController ($timeout, $auth, $location, $rootScope) {
 					window.localStorage.setItem('formide.auth:token', result.token);
 					$timeout(function() {
 						window.location.href = window.location.protocol + '//' + window.location.hostname + ':' + window.location.port;
-						$rootScope.setSidebarShow();
+						Sidebar.setShow();
 					}, 1000);
 
 	            },
@@ -18307,7 +18125,7 @@ function MainController ($timeout, $auth, $location, $rootScope) {
 	}
 
 	MainController.$inject = [
-		'$timeout', '$auth', '$location', '$rootScope'
+		'$timeout', '$auth', '$location', '$rootScope', 'Sidebar'
 	];
 
 	angular
@@ -18461,158 +18279,158 @@ function MainController ($timeout, $auth, $location, $rootScope) {
 ;
 // Source: ./src/app/js/components/control-print/componentController.js
 /*
- *	This code was created for Printr B.V. It is open source under the formide-client package.
- *	Copyright (c) 2017, All rights reserved, http://printr.nl
- */
+*	This code was created for Printr B.V. It is open source under the formide-client package.
+*	Copyright (c) 2017, All rights reserved, http://printr.nl
+*/
 
- (function () {
+(function () {
 
-   function MainController($rootScope, printerCtrl, Printer, $socket, $timeout, $location, $document) {
+	function MainController($rootScope, printerCtrl, Printer, $socket, $timeout, $location, $document) {
 
- 	  var vm = this;
+		var vm = this;
 
- 	  vm.targetTempExt = [];
+		vm.targetTempExt = [];
 
- 	  vm.tuneGcode = {
- 		  printSpeed: 'M220 S',
- 		  flowRate: 	'M221 S',
- 		  fanSpeed:	'M106 S',
- 		  extTemp:	'M104 S',
- 		  bedTemp:	'M140 S'
- 	  }
+		vm.tuneGcode = {
+			printSpeed: 'M220 S',
+			flowRate: 	'M221 S',
+			fanSpeed:	'M106 S',
+			extTemp:	'M104 S',
+			bedTemp:	'M140 S'
+		}
 
- 	  var updateTuneValues = true;
+		var updateTuneValues = true;
 
- 	  // private functions
+		// private functions
 
- 	  Printer.resource.$promise.then(function (data) {
- 		  vm.maxExtTemp = Printer.$active.maxTemperature || 450;
- 		  vm.maxBedTemp = Printer.$active.maxBedTemperature || 100;
- 	  });
+		Printer.resource.$promise.then(function (data) {
+			vm.maxExtTemp = Printer.$active.maxTemperature || 450;
+			vm.maxBedTemp = Printer.$active.maxBedTemperature || 100;
+		});
 
- 	  var printControls_printerUpdated = $rootScope.$on("formide.printer:updated", function () {
- 		  vm.maxExtTemp = Printer.$active.maxTemperature || 450;
- 		  vm.maxBedTemp = Printer.$active.maxBedTemperature || 100;
- 	  });
+		var printControls_printerUpdated = $rootScope.$on("formide.printer:updated", function () {
+			vm.maxExtTemp = Printer.$active.maxTemperature || 450;
+			vm.maxBedTemp = Printer.$active.maxBedTemperature || 100;
+		});
 
- 	  // set tune values from status
- 	  $socket.socket.on('printer.status', function (resource) {
- 		  if (updateTuneValues) {
- 			  vm.printSpeed = Printer.$active.speedMultiplier;
- 			  vm.flowRate = 	Printer.$active.flowRate;
- 			  vm.fanSpeed = 	Printer.$active.fanSpeed;
- 		  }
- 	  });
+		// set tune values from status
+		$socket.socket.on('printer.status', function (resource) {
+			if (updateTuneValues) {
+				vm.printSpeed = Printer.$active.speedMultiplier;
+				vm.flowRate = 	Printer.$active.flowRate;
+				vm.fanSpeed = 	Printer.$active.fanSpeed;
+			}
+		});
 
- 	  var timer;
+		var timer;
 
- 	  // if tune values are updated, wait 10 seconds before allowing updating from status to continue
- 	  var printControls_printerTune = $rootScope.$on('formide.printer:tune', function () {
- 		  updateTuneValues = false;
- 		  $timeout.cancel(timer);
- 		  timer = $timeout(function () {updateTuneValues = true}, 10000);
- 	  });
+		// if tune values are updated, wait 10 seconds before allowing updating from status to continue
+		var printControls_printerTune = $rootScope.$on('formide.printer:tune', function () {
+			updateTuneValues = false;
+			$timeout.cancel(timer);
+			timer = $timeout(function () {updateTuneValues = true}, 10000);
+		});
 
- 	  // public functions
+		// public functions
 
- 	  function navigate(route){
- 		  $location.path(route);
- 	  }
+		function navigate(route){
+			$location.path(route);
+		}
 
- 	  function runConsoleCommands() {
+		function runConsoleCommands() {
 
-		  if (vm.customCommands[vm.customCommands.length - 1].toUpperCase() == 'CLEAR') {
-			  // clear the console
-			  vm.customCommands = [];
-		  }
-		  else {
-			  // send all commands since the last '-> SENT'
-			  var i = vm.customCommands.lastIndexOf('-> SENT') + 1;
-	 		  for(i; i < vm.customCommands.length; i++) {
-				  var command = vm.customCommands[i].toUpperCase();
-	 			  printerCtrl.gcode(command);
-	 		  }
+		if (vm.customCommands[vm.customCommands.length - 1].toUpperCase() == 'CLEAR') {
+			// clear the console
+			vm.customCommands = [];
+		}
+		else {
+			// send all commands since the last '-> SENT'
+			var i = vm.customCommands.lastIndexOf('-> SENT') + 1;
+			for(i; i < vm.customCommands.length; i++) {
+				var command = vm.customCommands[i].toUpperCase();
+				printerCtrl.gcode(command);
+			}
 
-			  // add '-> SENT' feedback
-			  var temp = angular.copy(vm.customCommands);
-			  temp.push('-> SENT');
-			  temp.push('');
-			  vm.customCommands = temp;
-		  }
+			// add '-> SENT' feedback
+			var temp = angular.copy(vm.customCommands);
+				temp.push('-> SENT');
+				temp.push('');
+				vm.customCommands = temp;
+			}
 
-		  // scroll textarea up
-		  var element = angular.element($document[0].querySelector('#console-textarea'));
-		  $timeout(function(){
-			  element[0].scrollTop = element[0].scrollHeight;
-		  });
- 	  }
+			// scroll textarea up
+			var element = angular.element($document[0].querySelector('#console-textarea'));
+				$timeout(function(){
+				element[0].scrollTop = element[0].scrollHeight;
+			});
+		}
 
- 	  function runExtruderCommand(index){
+		function runExtruderCommand(index){
 
- 		  if ( checkValue(vm.targetTempExt[index]) && (Printer.$active.status == 'printing' || Printer.$active.status == 'paused' || Printer.$active.status == 'heating') ) {
- 			  if (index > 0) {
- 				  printerCtrl.tune(vm.tuneGcode.extTemp + vm.targetTempExt[index] + ' T'+index);
- 			  }
- 			  else {
- 				  printerCtrl.tune(vm.tuneGcode.extTemp + vm.targetTempExt[index]);
- 			  }
- 		  }
- 		  else if (checkValue(vm.targetTempExt[index])) {
- 			  printerCtrl.extruder(index).temperature(vm.targetTempExt[index]);
- 		  }
- 	  }
+			if ( checkValue(vm.targetTempExt[index]) && (Printer.$active.status == 'printing' || Printer.$active.status == 'paused' || Printer.$active.status == 'heating') ) {
+				if (index > 0) {
+					printerCtrl.tune(vm.tuneGcode.extTemp + vm.targetTempExt[index] + ' T'+index);
+				}
+				else {
+					printerCtrl.tune(vm.tuneGcode.extTemp + vm.targetTempExt[index]);
+				}
+			}
+			else if (checkValue(vm.targetTempExt[index])) {
+				printerCtrl.extruder(index).temperature(vm.targetTempExt[index]);
+			}
+		}
 
- 	  function runBedCommand(){
+		function runBedCommand(){
 
- 		  if (checkValue(vm.targetTempBed) && (Printer.$active.status == 'printing' || Printer.$active.status == 'paused' || Printer.$active.status == 'heating') ) {
- 			  printerCtrl.tune(vm.tuneGcode.bedTemp + vm.targetTempBed);
- 		  }
- 		  else if (checkValue(vm.targetTempBed)) {
- 			  printerCtrl.bed.temperature(vm.targetTempBed);
- 		  }
- 	  }
+			if (checkValue(vm.targetTempBed) && (Printer.$active.status == 'printing' || Printer.$active.status == 'paused' || Printer.$active.status == 'heating') ) {
+				printerCtrl.tune(vm.tuneGcode.bedTemp + vm.targetTempBed);
+			}
+			else if (checkValue(vm.targetTempBed)) {
+				printerCtrl.bed.temperature(vm.targetTempBed);
+			}
+		}
 
- 	  function checkValue(value){
- 		  if (typeof value !== 'undefined' && value != null) {
- 			  return true;
- 		  }else {
- 			  return false;
- 		  }
- 	  }
-
-
- 	  var printControls_clearUp = $rootScope.$on('$locationChangeSuccess', function(event){
- 		  if ($location.path() !== '/print/controls') {
- 			  printControls_printerUpdated();
- 			  printControls_printerTune();
- 			  printControls_clearUp();
- 		  }
- 	  })
+		function checkValue(value){
+			if (typeof value !== 'undefined' && value != null) {
+				return true;
+			}else {
+				return false;
+			}
+		}
 
 
- 	  // exports
- 	  angular.extend(vm, {
- 		  printerCtrl: printerCtrl,
- 		  printer: Printer,
- 		  runConsoleCommands: runConsoleCommands,
- 		  runExtruderCommand: runExtruderCommand,
- 		  runBedCommand: runBedCommand,
- 		  checkValue: checkValue,
- 		  navigate: navigate
- 	  });
-   }
-
-   MainController.$inject = [
- 	  '$rootScope', 'printerCtrl', 'Printer', '$socket', '$timeout', '$location', '$document'
-   ];
+		var printControls_clearUp = $rootScope.$on('$locationChangeSuccess', function(event){
+			if ($location.path() !== '/print/controls') {
+				printControls_printerUpdated();
+				printControls_printerTune();
+				printControls_clearUp();
+			}
+		})
 
 
-   angular
-     .module('components.controlPrint', [
-       //
-     ])
-     .controller('ControlPrintController', MainController)
- })();
+		// exports
+		angular.extend(vm, {
+			printerCtrl: printerCtrl,
+			printer: Printer,
+			runConsoleCommands: runConsoleCommands,
+			runExtruderCommand: runExtruderCommand,
+			runBedCommand: runBedCommand,
+			checkValue: checkValue,
+			navigate: navigate
+		});
+	}
+
+	MainController.$inject = [
+		'$rootScope', 'printerCtrl', 'Printer', '$socket', '$timeout', '$location', '$document'
+	];
+
+
+	angular
+	.module('components.controlPrint', [
+		//
+	])
+	.controller('ControlPrintController', MainController)
+})();
 ;
 // Source: ./src/app/js/components/file-library/componentController.js
 /*
@@ -18744,27 +18562,26 @@ function MainController($rootScope, $api, Upload, File, printerCtrl, Printer, $l
 		vm.updateResponse = '';
 
 		// store the interval promise in this variable
-	   var promise;
+		var promise;
 
-	   // starts the interval
-	   var start = function() {
-		 // stops any running interval to avoid two intervals running at the same time
-		 stop();
+		// starts the interval
+		var start = function() {
+			// stops any running interval to avoid two intervals running at the same time
+			stop();
 
-		 promise = $interval(function() {
-			if(vm.valuenow < 99) {
-				 vm.valuenow++;
-			}
-		 }, 6000); //10 minutes in total
-	   };
+			promise = $interval(function() {
+				if(vm.valuenow < 99) {
+					vm.valuenow++;
+				}
+			}, 6000); //10 minutes in total
+		};
 
-	   // stops the interval
-	   var stop = function() {
-		 $interval.cancel(promise);
-	   };
+		// stops the interval
+		var stop = function() {
+			$interval.cancel(promise);
+		};
 
-	   // starting the interval by default
-
+		// starting the interval by default
 		vm.valuenow = 0;
 
 		// public functions
@@ -18843,10 +18660,10 @@ function MainController($rootScope, $api, Upload, File, printerCtrl, Printer, $l
 	];
 
 	angular
-	  .module('components.manageDeviceUpdate', [
-	  	//
-	  ])
-	  .controller('ManageDeviceUpdateController', MainController)
+	.module('components.manageDeviceUpdate', [
+		//
+	])
+	.controller('ManageDeviceUpdateController', MainController)
 })();
 ;
 // Source: ./src/app/js/components/manage-device/componentController.js
@@ -18899,8 +18716,8 @@ function MainController($rootScope, $api, Upload, File, printerCtrl, Printer, $l
 		}
 
 		angular.extend(vm, {
-		  submitForm: submitForm,
-		  user: user
+			submitForm: submitForm,
+			user: user
 		});
 	}
 
@@ -19026,14 +18843,14 @@ function MainController($rootScope, $api, Upload, File, printerCtrl, Printer, $l
 			var localIp = vm.network.ip;
 
 			if (!localIp && vm.network.isHotspot) {
-			  // if turning off the hotspot and no IP avalible
-			  $notification.addNotification({
-				  title: 'Hotspot Reset',
-				  message: 'You cannot turn off the device hotspot if it is not connected to a network',
-				  channel: 'system',
-				  duration: -1,
-				  type: 'error'
-			  });
+				// if turning off the hotspot and no IP avalible
+				$notification.addNotification({
+					title: 'Hotspot Reset',
+					message: 'You cannot turn off the device hotspot if it is not connected to a network',
+					channel: 'system',
+					duration: -1,
+					type: 'error'
+				});
 
 			}else if (vm.network.isHotspot) {
 			  // if turning off the hotspot
@@ -19443,87 +19260,41 @@ function MainController($routeParams, $timeout, $location) {
 ;
 // Source: ./src/app/js/components/monitor-print/componentController.js
 /*
- *	This code was created for Printr B.V. It is open source under the formide-client package.
- *	Copyright (c) 2017, All rights reserved, http://printr.nl
- */
+*	This code was created for Printr B.V. It is open source under the formide-client package.
+*	Copyright (c) 2017, All rights reserved, http://printr.nl
+*/
 
 (function () {
 
-  function MainController($rootScope, Printer, $socket, $location) {
-	  var vm = this;
+	function MainController($rootScope, Printer, $socket, $location) {
+		var vm = this;
 
-	  vm.webcamBtn = {
-		  title: 'Overlay',
-		  action: showFloatingWebcam
-	  }
+		$socket.socket.on('printer.status', function (resource) {
+			vm.printSpeed = 	Printer.$active.speedMultiplier;
+			vm.flowRate = 	Printer.$active.flowRate;
+			vm.fanSpeed = 	Printer.$active.fanSpeed;
+		});
 
-	  $socket.socket.on('printer.status', function (resource) {
-		  vm.printSpeed = 	Printer.$active.speedMultiplier;
-		  vm.flowRate = 	Printer.$active.flowRate;
-		  vm.fanSpeed = 	Printer.$active.fanSpeed;
-	  });
+		function navigate(route){
+			$location.path(route);
+		}
 
+		// exports
+		angular.extend(vm, {
+			printer: Printer
+		});
+	}
 
-	  function navigate(route){
-		  $location.path(route);
-	  }
-
-	  function showFloatingWebcam(){
-		  $rootScope.floatingWebcam = !$rootScope.floatingWebcam;
-
-		  if ($rootScope.floatingWebcam) {
-
-			  var width = '325';
-			  var height = '235';
-
-			  var webcamPosition = JSON.parse(window.localStorage.getItem('formide.webcam:position'));
-
-			  if (webcamPosition) {
-
-				  var x = webcamPosition.x;
-				  var y = webcamPosition.y;
-
-				  var maxX = window.innerWidth;
-				  var maxY = window.innerHeight;
-
-				  if (x < 0) x = 0;
-				  if (x > maxX - width) x = maxX - width;
-				  if (y < 0) y = 0;
-				  if (y > maxY - height) y = maxY - height;
-
-				  $rootScope.floatingWebcamPosition = {
-					  'top': y + 'px',
-					  'left': x + 'px',
-					  'width': width + 'px',
-					  'height': height + 'px'
-				  }
-
-			  }else {
-				  $rootScope.floatingWebcamPosition = {
-					  'width': width + 'px',
-					  'height': height + 'px'
-				  }
-
-			  }
-		  }
-	  }
-
-	  // exports
-	  angular.extend(vm, {
-		  printer: Printer
-	  });
-  }
-
-  MainController.$inject = [
-	  '$rootScope', 'Printer', '$socket', '$location'
-  ];
+	MainController.$inject = [
+		'$rootScope', 'Printer', '$socket', '$location'
+	];
 
 
-  angular
-    .module('components.monitorPrint', [
-      //
-    ])
-    .controller('MonitorPrintController', MainController)
+	angular
+	.module('components.monitorPrint', [
+		//
+	])
+	.controller('MonitorPrintController', MainController)
 })();
 ;
 // Source: ./src/app/js/app.js
@@ -19532,136 +19303,16 @@ function MainController($routeParams, $timeout, $location) {
  *	Copyright (c) 2017, All rights reserved, http://printr.nl
  */
 
-function foundPrinter(resource, data) {
-	for (var i in resource) {
-		var printer = resource[i];
-
-		if (printer.port === data.port) return true;
-	}
-
-	return false;
-}
-
 (function () {
 
-	var logoutTitle;
-	var env = null;
+	angular.element(document).ready(function () {
+		angular.bootstrap(document, ['app']);
+		angularLoaded();
+	});
 
-	if (!localStorage.getItem('formide:env')) {
-		getEnv(function(env) {
-			setEnv(env);
-		});
-	}
-	else {
-		// try to load env from local storage, otherwise call again
-		try {
-			env = localStorage.getItem('formide:env');
-			setEnv(env);
-			getEnv();
-		}
-		catch (e) {
-			getEnv(function(env) {
-				setEnv(env);
-			});
-		}
-	}
+	function MainController($scope, $rootScope, $location, $api, $http,
+		$socket, $notification, $timeout, Printer, Upload, File, Sidebar) {
 
-	function getEnv(callback) {
-		httpGetAsync(window.PATH.root + '/api/env', function(envResponse) {
-			localStorage.setItem('formide:env', envResponse);
-
-			if (callback && typeof(callback) == "function"){
-				return callback(envResponse);
-			}
-		});
-	}
-
-
-	function setEnv(response) {
-		try {
-			var response = JSON.parse(response);
-		} catch (e) {
-			var response = {};
-			console.error(e);
-		}
-
-		window.ENV.name = response.name || 'local-interface';
-		window.ENV.version = response.version || '0.0.0';
-		window.ENV.type = response.environment || 'development';
-		window.ENV.theme = response.theme || 'formide';
-
-		window.PATH.root   = window.location.protocol + '//' + window.location.hostname + ':' + window.location.port;
-
-		window.PATH.api    = window.location.protocol + '//' + window.location.hostname + ':1337/api';
-		window.PATH.socket = window.location.protocol + '//' + window.location.hostname + ':1337';
-		window.PATH.images = window.location.protocol + '//' + window.location.hostname + ':1337/api/db/files';
-
-		logoutTitle = 'Logout';
-
-		angular.element(document).ready(function () {
-			angular.bootstrap(document, ['app']);
-			angularLoaded();
-		});
-
-		if(!localStorage.getItem('formide.viewer:settings')){
-
-			var colors = [
-				{
-					r: 70,
-					g: 97,
-					b: 230
-				},
-				{
-					r: 203,
-					g: 70,
-					b: 230
-				},
-				{
-					r: 230,
-					g: 70,
-					b: 97
-				},
-				{
-					r: 230,
-					g: 203,
-					b: 70
-				},
-				{
-					r: 97,
-					g: 230,
-					b: 70
-				},
-				{
-					r: 70,
-					g: 230,
-					b: 203
-				},
-				{
-					r: 114,
-					g: 115,
-					b: 128
-				},
-				{
-					r: 56,
-					g: 58,
-					b: 81
-				}
-			];
-
-			var settings = {};
-
-			settings.defaultModelColor = colors[
-				Math.floor(Math.random() *
-					colors.length)];
-
-			localStorage.setItem('formide.viewer:settings', JSON.stringify(settings));
-		}
-
-	}
-
-	function MainController($scope, $rootScope, $router, $location, $api, $http,
-		$socket, $notification, ngDialog, $timeout, Printer,
-		Upload, File, $routeParams, $interval, $window) {
 		var vm = this;
 
 		var device_setup = $location.search().setup;
@@ -19675,23 +19326,15 @@ function foundPrinter(resource, data) {
 		vm.unknownPrinter = false;
 		vm.loaded = false;
 
-		vm.theme = window.ENV.theme;
-
 		$timeout(function () {
 			vm.loaded = true;
 		}, 200);
 
 		$rootScope.bodyNoScroll = false;
 
-		$rootScope.floatingWebcam = false;
-
 		$rootScope.pageOffsetHeight = 0;
 
-		$rootScope.sidebar = {
-			width: 340,
-			controller: 'SidebarController',
-			template: 'sidebar/componentTemplate.html'
-		};
+		Sidebar.setSidebar()
 
 		$rootScope.fileUploading = false;
 
@@ -19756,42 +19399,6 @@ function foundPrinter(resource, data) {
 			}
 		});
 
-		vm.sidebarInvisible = (window.localStorage.getItem("formide.sidebar:invisible") === 'true');
-
-		$rootScope.sidebarInvisible = vm.sidebarInvisible;
-
-		vm.setSidebarInvisible = function () {
-			window.scrollTo(0, 0);
-			vm.sidebarInvisible = vm.sidebarInvisible ? false : true;
-			window.localStorage.setItem("formide.sidebar:invisible", vm.sidebarInvisible);
-			$rootScope.$emit('trigger.resize', true);
-			$rootScope.sidebarInvisible = vm.sidebarInvisible;
-		};
-
-		$rootScope.setSidebarInvisible = vm.setSidebarInvisible;
-
-		vm.setSidebarHide = function () {
-			$rootScope.sidebar = false;
-		};
-
-		$rootScope.setSidebarHide = vm.setSidebarHide;
-
-		vm.setSidebarShow = function () {
-			$rootScope.sidebar = true;
-		};
-
-		$rootScope.setSidebarShow = vm.setSidebarShow;
-
-		vm.printers = [];
-		vm.activeRoute = 'landing';
-
-		var urlParams = $location.search();
-
-		// exports
-		angular.extend(vm, {
-			routeConfig: MainController.$routeConfig,
-			notifications: $notification.active
-		});
 
 		$rootScope.$on("formide.device:updated", function () {
 			$socket.reconnect();
@@ -19905,6 +19512,13 @@ function foundPrinter(resource, data) {
 				]
 			});
 		});
+
+		// exports
+		angular.extend(vm, {
+			routeConfig: MainController.$routeConfig,
+			notifications: $notification.active,
+			sidebar: Sidebar
+		});
 	}
 
 	function componentLoaderConfig($componentLoaderProvider) {
@@ -19919,9 +19533,8 @@ function foundPrinter(resource, data) {
 	];
 
 	MainController.$inject = [
-		'$scope', '$rootScope', '$router', '$location', '$api', '$http',
-		'$socket', '$notification', 'ngDialog', '$timeout', 'Printer',
-		'Upload', 'File', '$routeParams', '$interval', '$window'
+		'$scope', '$rootScope', '$location', '$api', '$http', '$socket',
+		'$notification', '$timeout', 'Printer', 'Upload', 'File', 'Sidebar'
 	];
 
 	MainController.$routeConfig = [
@@ -20085,7 +19698,7 @@ function foundPrinter(resource, data) {
 (function () { angular.module('templateCache.core', []).run(['$templateCache', function($templateCache) {'use strict';  'use strict';
 
   $templateCache.put('header/componentTemplate.html',
-    "<div class=header__content><div class=\"layout layout--withoutGutter layout--alignMiddle\"><ul class=\"list-inline layout__item u-fill navigation-container\"><li class=navigation-home><a class=header__item ng-click=\"vm.navigate('/formide')\"><img src=./images/logo_small.png alt=\"\" class=\"formide-logo\"><div class=logo_element>Formide Local</div></a></li></ul><ul class=\"list-inline layout__item u-fit\" ng-if=$root.isLoggedIn><li class=\"u-margin-right-1_5 xs-hide\"><button class=btn ng-click=vm.logout()>Log Out</button></li><li class=sidebarToggle><a class=sm-and-down-hide ng-click=\"$root.setSidebarInvisible(); vm.scrollToTop()\"><img ng-src=\"{{$root.sidebarInvisible ? './images/hamburger_collapse.svg' : './images/hamburger_expand.svg'}}\"></a> <a class=md-hide ng-click=\"$root.setSidebarInvisible(); vm.scrollToTop()\"><img ng-src=\"{{$root.sidebarInvisible ? './images/hamburger_expand.svg' : './images/hamburger_collapse.svg'}}\"></a></li></ul></div></div>"
+    "<div class=header__content><div class=\"layout layout--withoutGutter layout--alignMiddle\"><ul class=\"list-inline layout__item u-fill navigation-container\"><li class=navigation-home><a class=header__item ng-click=\"vm.navigate('/formide')\"><img src=./images/logo_small.png alt=\"\" class=\"formide-logo\"><div class=logo_element>Formide Local</div></a></li></ul><ul class=\"list-inline layout__item u-fit\" ng-if=$root.isLoggedIn><li class=\"u-margin-right-1_5 xs-hide\"><button class=btn ng-click=vm.logout()>Log Out</button></li><li class=sidebarToggle><a class=sm-and-down-hide ng-click=\"vm.sidebar.setInvisible(); vm.scrollToTop()\"><img ng-src=\"{{vm.sidebar.invisible ? './images/hamburger_collapse.svg' : './images/hamburger_expand.svg'}}\"></a> <a class=md-hide ng-click=\"vm.sidebar.setInvisible(); vm.scrollToTop()\"><img ng-src=\"{{vm.sidebar.invisible ? './images/hamburger_expand.svg' : './images/hamburger_collapse.svg'}}\"></a></li></ul></div></div>"
   );
 
 
@@ -20095,7 +19708,7 @@ function foundPrinter(resource, data) {
 
 
   $templateCache.put('sidebar/componentTemplate.html',
-    "<article class=main-sidebar-content><section class=\"sm-hide sidebar-header\"><div ng-if=\"route.loggedIn === undefined || (route.loggedIn && vm.isLoggedIn) || (!route.loggedIn && !vm.isLoggedIn)\" class=hide--sidebar ng-click=$root.setSidebarInvisible()><img src=./images/hamburger_expand.svg alt=\"\"></div><h3 class=title>Printers</h3></section><section class=fade id=sidebar-printers><h3 class=\"xs-hide title\">Printers</h3><div ng-if=\"vm.resolved && vm.printer < 1\" class=u-textCenter><h3>No Printers Connected</h3></div><div ng-if=\"vm.resolved && vm.printer.length > 0\"><h4>Selected Printer</h4><ul printer-list ng-if=vm.printerActive><li printer-list-item printer=vm.printerActive type=selected class=selected-printer></li></ul><p ng-if=!vm.printerActive class=selected-printer-message>You currently have no selected printer<br>Click on a printer below to select it</p><br></div><div ng-if=\"vm.resolved && vm.printer.length > 0\"><h4>Printers</h4><ul printer-list><li printer-list-item ng-repeat=\"printer in vm.printer\" type=offline printer=printer></li></ul></div><div ng-if=!vm.resolved class=u-textCenter><i class=\"fa fa-refresh fa-spin fa-3x\"></i></div></section></article><div ng-if=\"vm.unknownPrinter || vm.slicingInProgress\" class=\"btn-container xs-hide\"><div ng-if=\"vm.unknownPrinter && !vm.slicingInProgress\" ng-click=vm.printerSetupDialog() class=setup-printer><div class=layout><span class=\"layout__item u-1/6\"><i class=\"fa fa-2x fa-bell\"></i></span> <small class=\"layout__item u-5/6\">An unknown printer has been detected, click to set up this printer!</small></div></div><div ng-if=vm.slicingInProgress class=slicer-progress><svg xmlns=http://www.w3.org/2000/svg width=100% height=80px viewbox=\"0 0 32 32\" preserveaspectratio=\"xMaxYMid slice\"><defs><clippath id=mask><circle cx=16 cy=16 r=\"16\"></clippath></defs><path fill=none stroke=#CE6E3E stroke-width=.2 opacity=.1 d=\" M-32 4 C-24 4 -24 28 -16 28 C-8 28 -8 4 0 4 C8 4 8 28 16 28 C24 28 24 8 32 8 \"><animatetransform attributename=transform type=translate values=\" 0 0; 32 0 \" dur=6s repeatcount=\"indefinite\"></path><path fill=none stroke=#CE6E3E stroke-width=.2 opacity=.3 d=\" M-32 12 C-24 12 -24 20 -16 20 C-8 20 -8 12 0 12 C8 12 8 20 16 20 C24 20 24 12 32 12 \"><animatetransform attributename=transform type=translate values=\" 0 0; 32 0 \" dur=3s repeatcount=\"indefinite\"></path><path fill=none stroke=#CE6E3E stroke-width=.2 opacity=.5 d=\" M-32 8 C-24 8 -24 24 -16 24 C-8 24 -8 8 0 8 C8 8 8 24 16 24 C24 24 24 8 32 8 \"><animatetransform attributename=transform type=translate values=\" 0 0; 32 0 \" dur=2s repeatcount=\"indefinite\"></path></svg><h6 class=loader>Slicing in progress <span class=loader__dot>.</span><span class=loader__dot>.</span><span class=loader__dot>.</span></h6><div ng-style={opacity:vm.setVisible($index)} ng-repeat=\"message in vm.sliceMessages\"><small>{{message | title}}</small></div></div></div><ng-transclude></ng-transclude><script type=text/ng-template id=formideConnect><formide-connect></formide-connect></script>"
+    "<article class=main-sidebar-content><section class=\"sm-hide sidebar-header\"><div ng-if=\"route.loggedIn === undefined || (route.loggedIn && vm.isLoggedIn) || (!route.loggedIn && !vm.isLoggedIn)\" class=hide--sidebar ng-click=vm.sidebar.setInvisible()><img src=./images/hamburger_expand.svg alt=\"\"></div><h3 class=title>Printers</h3></section><section class=fade id=sidebar-printers><h3 class=\"xs-hide title\">Printers</h3><div ng-if=\"vm.resolved && vm.printer < 1\" class=u-textCenter><h3>No Printers Connected</h3></div><div ng-if=\"vm.resolved && vm.printer.length > 0\"><h4>Selected Printer</h4><ul printer-list ng-if=vm.printerActive><li printer-list-item printer=vm.printerActive type=selected class=selected-printer></li></ul><p ng-if=!vm.printerActive class=selected-printer-message>You currently have no selected printer<br>Click on a printer below to select it</p><br></div><div ng-if=\"vm.resolved && vm.printer.length > 0\"><h4>Printers</h4><ul printer-list><li printer-list-item ng-repeat=\"printer in vm.printer\" type=offline printer=printer></li></ul></div><div ng-if=!vm.resolved class=u-textCenter><i class=\"fa fa-refresh fa-spin fa-3x\"></i></div></section></article><div ng-if=\"vm.unknownPrinter || vm.slicingInProgress\" class=\"btn-container xs-hide\"><div ng-if=\"vm.unknownPrinter && !vm.slicingInProgress\" ng-click=vm.printerSetupDialog() class=setup-printer><div class=layout><span class=\"layout__item u-1/6\"><i class=\"fa fa-2x fa-bell\"></i></span> <small class=\"layout__item u-5/6\">An unknown printer has been detected, click to set up this printer!</small></div></div><div ng-if=vm.slicingInProgress class=slicer-progress><svg xmlns=http://www.w3.org/2000/svg width=100% height=80px viewbox=\"0 0 32 32\" preserveaspectratio=\"xMaxYMid slice\"><defs><clippath id=mask><circle cx=16 cy=16 r=\"16\"></clippath></defs><path fill=none stroke=#CE6E3E stroke-width=.2 opacity=.1 d=\" M-32 4 C-24 4 -24 28 -16 28 C-8 28 -8 4 0 4 C8 4 8 28 16 28 C24 28 24 8 32 8 \"><animatetransform attributename=transform type=translate values=\" 0 0; 32 0 \" dur=6s repeatcount=\"indefinite\"></path><path fill=none stroke=#CE6E3E stroke-width=.2 opacity=.3 d=\" M-32 12 C-24 12 -24 20 -16 20 C-8 20 -8 12 0 12 C8 12 8 20 16 20 C24 20 24 12 32 12 \"><animatetransform attributename=transform type=translate values=\" 0 0; 32 0 \" dur=3s repeatcount=\"indefinite\"></path><path fill=none stroke=#CE6E3E stroke-width=.2 opacity=.5 d=\" M-32 8 C-24 8 -24 24 -16 24 C-8 24 -8 8 0 8 C8 8 8 24 16 24 C24 24 24 8 32 8 \"><animatetransform attributename=transform type=translate values=\" 0 0; 32 0 \" dur=2s repeatcount=\"indefinite\"></path></svg><h6 class=loader>Slicing in progress <span class=loader__dot>.</span><span class=loader__dot>.</span><span class=loader__dot>.</span></h6><div ng-style={opacity:vm.setVisible($index)} ng-repeat=\"message in vm.sliceMessages\"><small>{{message | title}}</small></div></div></div><ng-transclude></ng-transclude><script type=text/ng-template id=formideConnect><formide-connect></formide-connect></script>"
   );
 }]); })();
 (function () { angular.module('templateCache.shared', []).run(['$templateCache', function($templateCache) {'use strict';  'use strict';
@@ -20121,7 +19734,7 @@ function foundPrinter(resource, data) {
 
 
   $templateCache.put('dashboard-webcam/componentTemplate.html',
-    "<figure class=\"layout layout--alignCenter layout--alignMiddle layout--withoutGutter\" ng-class=\"{'webcamLoaded': vm.webcamLoaded, 'webcamError': $root.webcamError}\"><div ng-if=vm.showClose ng-click=\"$root.floatingWebcam = false; $event.stopPropagation();\" class=close>&times;</div><div ng-show=\"!$root.webcamError || !vm.webcamLoaded\" class=\"layout__item webcam-container\"><figcaption ng-if=\"!$root.webcamError && vm.webcamLoaded\" class=\"pill pill--small\">Live <i class=\"fa fa-circle text-base-red faa-flash animated\"></i></figcaption><img draggable=false ng-show=!$root.webcamError ng-src={{vm.webcamPath}} onerror=\"angular.element(this).scope().$root.webcamError = true\" onload=\"angular.element(this).scope().vm.webcamLoaded = true\"><div ng-if=$root.webcamError class=webcam-placeholder>Connect a webcam to your device</div></div><div ng-if=\"!vm.webcamLoaded && !$root.webcamError && vm.printer.$active.deviceStatus == 'online'\" class=\"webcam-loading layout__item\"><span class=loader>Loading<span class=loader__dot>.</span><span class=loader__dot>.</span><span class=loader__dot>.</span></span></div></figure>"
+    "<figure class=\"layout layout--alignCenter layout--alignMiddle layout--withoutGutter\" ng-class=\"{'webcamLoaded': vm.webcamLoaded, 'webcamError': $root.webcamError}\"><div ng-if=vm.showClose ng-click=$event.stopPropagation(); class=close>&times;</div><div ng-show=\"!$root.webcamError || !vm.webcamLoaded\" class=\"layout__item webcam-container\"><figcaption ng-if=\"!$root.webcamError && vm.webcamLoaded\" class=\"pill pill--small\">Live <i class=\"fa fa-circle text-base-red faa-flash animated\"></i></figcaption><img draggable=false ng-show=!$root.webcamError ng-src={{vm.webcamPath}} onerror=\"angular.element(this).scope().$root.webcamError = true\" onload=\"angular.element(this).scope().vm.webcamLoaded = true\"><div ng-if=$root.webcamError class=webcam-placeholder>Connect a webcam to your device</div></div><div ng-if=\"!vm.webcamLoaded && !$root.webcamError && vm.printer.$active.deviceStatus == 'online'\" class=\"webcam-loading layout__item\"><span class=loader>Loading<span class=loader__dot>.</span><span class=loader__dot>.</span><span class=loader__dot>.</span></span></div></figure>"
   );
 
 
@@ -20171,7 +19784,7 @@ function foundPrinter(resource, data) {
 
 
   $templateCache.put('printer-list-item/componentTemplate.html',
-    "<header ng-click=vm.selectPrinter()><hgroup class=layout><h3 class=\"layout__item u-fit\"><status-icon size=24px status=vm.printer.status></status-icon></h3><h3 class=\"layout__item u-fill printer-title u-textTruncate\">{{vm.printer.port}}</h3></hgroup><section class=\"layout layout--withoutGutter layout--alignMiddle progress-container\" ng-if=\"vm.printer.status === 'printing' || vm.printer.status === 'paused'\"><progress-bar class=\"layout__item u-fill\" valuenow={{vm.printer.progress}} valuemax=100></progress-bar><h6 class=\"layout__item u-fit\">{{ ((vm.printer.progress / 100) * 100) | ceil }}%</h6></section><div class=\"layout layout--smallGutter progressControls\" ng-if=\"vm.type === 'selected'\"><div class=\"layout__item u-1/4 progressControl u-posRelative\"><a ng-click=\"vm.navigate('/monitor');$root.setSidebarInvisible()\" class=\"btn btn--small btn--white md-hide\" id=webcam-feed title=\"View Live\"><i class=\"fa fa-video-camera\"></i></a> <a ng-click=\"vm.navigate('/monitor')\" class=\"btn btn--small btn--white sm-and-down-hide\" id=webcam-feed title=\"View Live\"><i class=\"fa fa-video-camera\"></i></a></div><div class=\"layout__item u-1/4 progressControl\"><a title=Controls ng-click=\"vm.navigate('/control');$root.setSidebarInvisible()\" class=\"btn btn--white btn--small md-hide\"><i class=\"fa fa-arrows\"></i></a> <a title=Controls ng-click=\"vm.navigate('/control')\" class=\"btn btn--white btn--small sm-and-down-hide\"><i class=\"fa fa-arrows\"></i></a></div><div class=\"layout__item u-1/4 progressControl\" ng-if=\"vm.printer.status === 'printing' || vm.printer.status == 'heating'\" ng-init=\"vm.executingCommand = false\"><button class=\"btn btn--small btn--white\" ng-click=vm.pausePrint() title=Pause><i ng-class=\"{true: 'fa-refresh fa-spin', false: 'fa-pause'}[vm.executingCommand]\" class=fa></i></button></div><div class=\"layout__item u-1/4 progressControl\" ng-if=\"vm.printer.status === 'paused'\" ng-init=\"vm.executingCommand = false\"><button class=\"btn btn--small btn--white\" ng-click=vm.resumePrint() title=Play><i ng-class=\"{true: 'fa-refresh fa-spin', false: 'fa-play'}[vm.executingCommand]\" class=fa></i></button></div><div class=\"layout__item u-1/4 progressControl\" ng-if=\"vm.printer.status === 'printing' || vm.printer.status === 'paused' || vm.printer.status == 'heating'\" ng-init=\"vm.executingCommand = false\"><button class=\"btn btn--small btn--white stop\" ng-class=\"{true: 'btn--disabled'}[vm.executingCommand]\" ng-click=vm.stopPrint() title=Stop><i class=\"fa fa-stop\"></i></button></div></div></header>"
+    "<header ng-click=vm.selectPrinter()><hgroup class=layout><h3 class=\"layout__item u-fit\"><status-icon size=24px status=vm.printer.status></status-icon></h3><h3 class=\"layout__item u-fill printer-title u-textTruncate\">{{vm.printer.port}}</h3></hgroup><section class=\"layout layout--withoutGutter layout--alignMiddle progress-container\" ng-if=\"vm.printer.status === 'printing' || vm.printer.status === 'paused'\"><progress-bar class=\"layout__item u-fill\" valuenow={{vm.printer.progress}} valuemax=100></progress-bar><h6 class=\"layout__item u-fit\">{{ ((vm.printer.progress / 100) * 100) | ceil }}%</h6></section><div class=\"layout layout--smallGutter progressControls\" ng-if=\"vm.type === 'selected'\"><div class=\"layout__item u-1/4 progressControl u-posRelative\"><a ng-click=\"vm.navigate('/monitor');vm.sidebar.setInvisible()\" class=\"btn btn--small btn--white md-hide\" id=webcam-feed title=\"View Live\"><i class=\"fa fa-video-camera\"></i></a> <a ng-click=\"vm.navigate('/monitor')\" class=\"btn btn--small btn--white sm-and-down-hide\" id=webcam-feed title=\"View Live\"><i class=\"fa fa-video-camera\"></i></a></div><div class=\"layout__item u-1/4 progressControl\"><a title=Controls ng-click=\"vm.navigate('/control');vm.sidebar.setInvisible()\" class=\"btn btn--white btn--small md-hide\"><i class=\"fa fa-arrows\"></i></a> <a title=Controls ng-click=\"vm.navigate('/control')\" class=\"btn btn--white btn--small sm-and-down-hide\"><i class=\"fa fa-arrows\"></i></a></div><div class=\"layout__item u-1/4 progressControl\" ng-if=\"vm.printer.status === 'printing' || vm.printer.status == 'heating'\" ng-init=\"vm.executingCommand = false\"><button class=\"btn btn--small btn--white\" ng-click=vm.pausePrint() title=Pause><i ng-class=\"{true: 'fa-refresh fa-spin', false: 'fa-pause'}[vm.executingCommand]\" class=fa></i></button></div><div class=\"layout__item u-1/4 progressControl\" ng-if=\"vm.printer.status === 'paused'\" ng-init=\"vm.executingCommand = false\"><button class=\"btn btn--small btn--white\" ng-click=vm.resumePrint() title=Play><i ng-class=\"{true: 'fa-refresh fa-spin', false: 'fa-play'}[vm.executingCommand]\" class=fa></i></button></div><div class=\"layout__item u-1/4 progressControl\" ng-if=\"vm.printer.status === 'printing' || vm.printer.status === 'paused' || vm.printer.status == 'heating'\" ng-init=\"vm.executingCommand = false\"><button class=\"btn btn--small btn--white stop\" ng-class=\"{true: 'btn--disabled'}[vm.executingCommand]\" ng-click=vm.stopPrint() title=Stop><i class=\"fa fa-stop\"></i></button></div></div></header>"
   );
 
 
@@ -20190,22 +19803,7 @@ function foundPrinter(resource, data) {
   );
 
 
-  $templateCache.put('selection-block/componentTemplate.html',
-    "<label class=block-selection title=\"Select {{::vm.item.name}}\" ng-class=\"{'active': vm.ngModel.id == vm.item.id}\"><h4 class=\"u-textTruncate text-base-primary-color\"><input type=radio name=sliceSettings.{{::vm.item.name}} ng-value=vm.item ng-checked=\"vm.ngModel.id == vm.item.id\" ng-model=\"vm.ngModel\"> {{::vm.item.name}}</h4><ng-transclude></ng-transclude></label>"
-  );
-
-
-  $templateCache.put('selection-list/componentTemplate.html',
-    "<label ng-repeat=\"extruder in vm.extruders track by $index\"><input type=radio name=settings.{{vm.name}}.use ng-value=$index ng-model=vm.ngModel> <abbr title=\"Extruder {{$index + 1}}\">EXT {{$index + 1}}</abbr></label><label ng-if=!vm.extruders title=\"Please select a material for atleast one of your extruders first.\">None selected</label>"
-  );
-
-
   $templateCache.put('status-icon/componentTemplate.html',
     "<div title=\"Printer is {{vm.status | title}}\" ng-class=\"{'online': vm.status == 'online', 'printing': vm.status == 'printing', 'heating': vm.status == 'heating', 'connecting': vm.status == 'connecting', 'paused': vm.status == 'paused', 'error': vm.status == 'error', 'offline': vm.status == 'offline'}\"><i ng-if=\"vm.status == 'connecting'\" class=\"fa fa-refresh fa-spin\"></i> <i ng-if=\"vm.status == 'heating'\" class=\"fa fa-fire\"></i> <i ng-if=\"vm.status == 'paused'\" class=\"fa fa-pause\"></i> <i ng-if=\"vm.status == 'error'\" class=\"fa fa-exclamation\"></i> <i ng-if=\"vm.status == 'printing'\" class=\"fa fa-play\"></i> <svg width=20px height=20px viewbox=\"0 0 24 24\" version=1.1 xmlns=http://www.w3.org/2000/svg xmlns:xlink=http://www.w3.org/1999/xlink xmlns:sketch=http://www.bohemiancoding.com/sketch/ns><defs><circle id=circle cx=12 cy=12 r=12></circle></defs><mask id=mask fill=white><use xlink:href=#circle></use></mask><use id=Mask class=circle-stroke stroke-width=2 fill=transparent xlink:href=#circle></use></svg></div>"
-  );
-
-
-  $templateCache.put('temperature-bar/componentTemplate.html',
-    "<div role=progressbar aria-valuenow={{vm.valuetarget}} aria-valuemin=0 aria-valuemax={{::vm.valuemax}} class=target title=\"Target temperature {{vm.valuetarget}}&deg;C\" style=\"width: {{ ((vm.valuetarget / vm.valuemax) * 100) | ceil }}%\">{{vm.valuetarget}}&deg;C</div><div role=progressbar aria-valuenow={{vm.valuenow}} aria-valuemin=0 aria-valuemax={{::vm.valuemax}} class=progress title=\"Current temperature {{vm.valuenow}}&deg;C\" style=\"width: {{ ((vm.valuenow / vm.valuemax) * 100) | ceil }}%\">{{vm.valuenow}}&deg;C</div>Max: {{::vm.valuemax}}&deg;C"
   );
 }]); })();

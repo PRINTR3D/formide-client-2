@@ -3,136 +3,16 @@
  *	Copyright (c) 2017, All rights reserved, http://printr.nl
  */
 
-function foundPrinter(resource, data) {
-	for (var i in resource) {
-		var printer = resource[i];
-
-		if (printer.port === data.port) return true;
-	}
-
-	return false;
-}
-
 (function () {
 
-	var logoutTitle;
-	var env = null;
+	angular.element(document).ready(function () {
+		angular.bootstrap(document, ['app']);
+		angularLoaded();
+	});
 
-	if (!localStorage.getItem('formide:env')) {
-		getEnv(function(env) {
-			setEnv(env);
-		});
-	}
-	else {
-		// try to load env from local storage, otherwise call again
-		try {
-			env = localStorage.getItem('formide:env');
-			setEnv(env);
-			getEnv();
-		}
-		catch (e) {
-			getEnv(function(env) {
-				setEnv(env);
-			});
-		}
-	}
+	function MainController($scope, $rootScope, $location, $api, $http,
+		$socket, $notification, $timeout, Printer, Upload, File, Sidebar) {
 
-	function getEnv(callback) {
-		httpGetAsync(window.PATH.root + '/api/env', function(envResponse) {
-			localStorage.setItem('formide:env', envResponse);
-
-			if (callback && typeof(callback) == "function"){
-				return callback(envResponse);
-			}
-		});
-	}
-
-
-	function setEnv(response) {
-		try {
-			var response = JSON.parse(response);
-		} catch (e) {
-			var response = {};
-			console.error(e);
-		}
-
-		window.ENV.name = response.name || 'local-interface';
-		window.ENV.version = response.version || '0.0.0';
-		window.ENV.type = response.environment || 'development';
-		window.ENV.theme = response.theme || 'formide';
-
-		window.PATH.root   = window.location.protocol + '//' + window.location.hostname + ':' + window.location.port;
-
-		window.PATH.api    = window.location.protocol + '//' + window.location.hostname + ':1337/api';
-		window.PATH.socket = window.location.protocol + '//' + window.location.hostname + ':1337';
-		window.PATH.images = window.location.protocol + '//' + window.location.hostname + ':1337/api/db/files';
-
-		logoutTitle = 'Logout';
-
-		angular.element(document).ready(function () {
-			angular.bootstrap(document, ['app']);
-			angularLoaded();
-		});
-
-		if(!localStorage.getItem('formide.viewer:settings')){
-
-			var colors = [
-				{
-					r: 70,
-					g: 97,
-					b: 230
-				},
-				{
-					r: 203,
-					g: 70,
-					b: 230
-				},
-				{
-					r: 230,
-					g: 70,
-					b: 97
-				},
-				{
-					r: 230,
-					g: 203,
-					b: 70
-				},
-				{
-					r: 97,
-					g: 230,
-					b: 70
-				},
-				{
-					r: 70,
-					g: 230,
-					b: 203
-				},
-				{
-					r: 114,
-					g: 115,
-					b: 128
-				},
-				{
-					r: 56,
-					g: 58,
-					b: 81
-				}
-			];
-
-			var settings = {};
-
-			settings.defaultModelColor = colors[
-				Math.floor(Math.random() *
-					colors.length)];
-
-			localStorage.setItem('formide.viewer:settings', JSON.stringify(settings));
-		}
-
-	}
-
-	function MainController($scope, $rootScope, $router, $location, $api, $http,
-		$socket, $notification, ngDialog, $timeout, Printer,
-		Upload, File, $routeParams, $interval, $window) {
 		var vm = this;
 
 		var device_setup = $location.search().setup;
@@ -146,23 +26,15 @@ function foundPrinter(resource, data) {
 		vm.unknownPrinter = false;
 		vm.loaded = false;
 
-		vm.theme = window.ENV.theme;
-
 		$timeout(function () {
 			vm.loaded = true;
 		}, 200);
 
 		$rootScope.bodyNoScroll = false;
 
-		$rootScope.floatingWebcam = false;
-
 		$rootScope.pageOffsetHeight = 0;
 
-		$rootScope.sidebar = {
-			width: 340,
-			controller: 'SidebarController',
-			template: 'sidebar/componentTemplate.html'
-		};
+		Sidebar.setSidebar()
 
 		$rootScope.fileUploading = false;
 
@@ -227,42 +99,6 @@ function foundPrinter(resource, data) {
 			}
 		});
 
-		vm.sidebarInvisible = (window.localStorage.getItem("formide.sidebar:invisible") === 'true');
-
-		$rootScope.sidebarInvisible = vm.sidebarInvisible;
-
-		vm.setSidebarInvisible = function () {
-			window.scrollTo(0, 0);
-			vm.sidebarInvisible = vm.sidebarInvisible ? false : true;
-			window.localStorage.setItem("formide.sidebar:invisible", vm.sidebarInvisible);
-			$rootScope.$emit('trigger.resize', true);
-			$rootScope.sidebarInvisible = vm.sidebarInvisible;
-		};
-
-		$rootScope.setSidebarInvisible = vm.setSidebarInvisible;
-
-		vm.setSidebarHide = function () {
-			$rootScope.sidebar = false;
-		};
-
-		$rootScope.setSidebarHide = vm.setSidebarHide;
-
-		vm.setSidebarShow = function () {
-			$rootScope.sidebar = true;
-		};
-
-		$rootScope.setSidebarShow = vm.setSidebarShow;
-
-		vm.printers = [];
-		vm.activeRoute = 'landing';
-
-		var urlParams = $location.search();
-
-		// exports
-		angular.extend(vm, {
-			routeConfig: MainController.$routeConfig,
-			notifications: $notification.active
-		});
 
 		$rootScope.$on("formide.device:updated", function () {
 			$socket.reconnect();
@@ -376,6 +212,13 @@ function foundPrinter(resource, data) {
 				]
 			});
 		});
+
+		// exports
+		angular.extend(vm, {
+			routeConfig: MainController.$routeConfig,
+			notifications: $notification.active,
+			sidebar: Sidebar
+		});
 	}
 
 	function componentLoaderConfig($componentLoaderProvider) {
@@ -390,9 +233,8 @@ function foundPrinter(resource, data) {
 	];
 
 	MainController.$inject = [
-		'$scope', '$rootScope', '$router', '$location', '$api', '$http',
-		'$socket', '$notification', 'ngDialog', '$timeout', 'Printer',
-		'Upload', 'File', '$routeParams', '$interval', '$window'
+		'$scope', '$rootScope', '$location', '$api', '$http', '$socket',
+		'$notification', '$timeout', 'Printer', 'Upload', 'File', 'Sidebar'
 	];
 
 	MainController.$routeConfig = [

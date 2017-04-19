@@ -3,8 +3,8 @@
 *	Copyright (c) 2017, All rights reserved, http://printr.nl
 */
 
-	(function () {
-		function MainService($socket, $q, $api, $rootScope, $timeout, $filter, $interval) {
+(function () {
+	function MainService($socket, $q, $api, $rootScope, $timeout, $filter, $interval) {
 		var factory = {
 			resource: [],
 			$active: {
@@ -15,18 +15,28 @@
 
 		try {
 
-		var resource = $api.resource('/printer');
+			var resource = $api.resource('/printer');
 
-		factory.endpoint = resource;
+			factory.endpoint = resource;
 
-		factory.resource = resource.query(function () {
-			factory.$setActive();
-		});
+			factory.resource = resource.query(function () {
+				factory.$setActive();
+			});
 
 		} catch (err) {
 			if (window.DEBUG) console.error(err);
 		}
 
+
+		function foundPrinter(resource, data) {
+			for (var i in resource) {
+				var printer = resource[i];
+
+				if (printer.port === data.port) return true;
+			}
+
+			return false;
+		}
 
 		function updateResource(resource, type) {
 			// update printer statuses on event
@@ -170,7 +180,7 @@
 		}
 
 
-		factory.$setActive = function (params, cb) {
+		factory.$setActive = function (params) {
 			var params = params || {};
 
 			var promise = $q(function (resolve, reject) {
@@ -228,7 +238,6 @@
 	}
 
 	angular.module('service.printer', [])
-	.factory('Printer', ['$socket', '$q', '$api', '$rootScope',
-	'$timeout', '$filter', '$interval', MainService]);
+	.factory('Printer', ['$socket', '$q', '$api', '$rootScope', '$timeout', '$filter', '$interval', MainService]);
 
 })();

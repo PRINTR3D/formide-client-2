@@ -5,7 +5,7 @@
 <article class="main-sidebar-content">
 
 	<section class="sm-hide sidebar-header" >
-		<div ng-if="route.loggedIn === undefined || (route.loggedIn && vm.isLoggedIn) || (!route.loggedIn && !vm.isLoggedIn)" class="hide--sidebar" ng-click="$root.setSidebarInvisible()">
+		<div ng-if="route.loggedIn === undefined || (route.loggedIn && vm.isLoggedIn) || (!route.loggedIn && !vm.isLoggedIn)" class="hide--sidebar" ng-click="vm.sidebar.setInvisible()">
 			<img src="./images/hamburger_expand.svg" alt="">
 		</div>
 

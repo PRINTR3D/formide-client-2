@@ -26,11 +26,11 @@
 			</li>
 
 		    <li class="sidebarToggle">
-	            <a class="sm-and-down-hide" ng-click="$root.setSidebarInvisible(); vm.scrollToTop()">
-					<img ng-src="{{$root.sidebarInvisible ? './images/hamburger_collapse.svg' : './images/hamburger_expand.svg'}}"/>
+	            <a class="sm-and-down-hide" ng-click="vm.sidebar.setInvisible(); vm.scrollToTop()">
+					<img ng-src="{{vm.sidebar.invisible ? './images/hamburger_collapse.svg' : './images/hamburger_expand.svg'}}"/>
 	            </a>
-				<a class="md-hide" ng-click="$root.setSidebarInvisible(); vm.scrollToTop()">
-					<img ng-src="{{$root.sidebarInvisible ? './images/hamburger_expand.svg' : './images/hamburger_collapse.svg'}}"/>
+				<a class="md-hide" ng-click="vm.sidebar.setInvisible(); vm.scrollToTop()">
+					<img ng-src="{{vm.sidebar.invisible ? './images/hamburger_expand.svg' : './images/hamburger_collapse.svg'}}"/>
 	            </a>
 		    </li>
 		</ul>

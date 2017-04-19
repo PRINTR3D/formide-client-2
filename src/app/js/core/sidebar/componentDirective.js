@@ -21,7 +21,7 @@
 
     }
 
-    function MainController($rootScope, $interval, Printer, $location) {
+    function MainController($rootScope, $interval, Printer, $location, Sidebar) {
         var vm = this;
 
 		vm.showCloudMsg = true;
@@ -111,45 +111,13 @@
 			}
 		}
 
-        var printerSortFunction = function (printer) {
-            switch (printer.status) {
-            case 'printing':
-                return 1
-                break;
-
-            case 'heating':
-                return 2
-                break;
-
-            case 'paused':
-                return 3
-                break;
-
-            case 'online':
-                return 4
-                break;
-
-                //   case 'stopping':
-                //       return 5
-                //       break;
-
-            case 'connecting':
-                return 6
-                break;
-
-            default:
-                return 7
-                break;
-            }
-        }
-
 
         // exports
         angular.extend(vm, {
-            printerSortFunction: printerSortFunction,
             setVisible: setVisible,
 			printerSetupDialog: printerSetupDialog,
-			navigate: navigate
+			navigate: navigate,
+			sidebar: Sidebar
         });
     }
 
@@ -158,7 +126,8 @@
 	    '$rootScope',
 	    '$interval',
 	    'Printer',
-		'$location'
+		'$location',
+		'Sidebar'
 	  ];
 
     angular
