@@ -1,8 +1,10 @@
 'use strict'
 
+// modules
 const assert = require('assert')
 const path = require('path')
 const express = require('express')
+const cors = require('cors')
 
 class UI {
 
@@ -14,7 +16,13 @@ class UI {
 
     const self = this
 
+    // express app
     this.app = express()
+    
+    // use CORS headers
+    this.app.use(cors())
+    
+    // server
     this.server = require('http').Server(this.app)
     this.server.listen(client.config.http.www, function () {
       client.logger.log(`www running on port ${self.server.address().port}`, 'info')
