@@ -16,7 +16,7 @@
 		});
 	}
 
-	function MainService(socketFactory, $api, $auth, $interval) {
+	function MainService(socketFactory, $auth) {
 		var factory = {};
 
 		var access_token = window.localStorage.getItem('formide.auth:token');
@@ -80,5 +80,5 @@
 
 	angular.module('service.socket', [])
 		.run(['$socket', MainRun])
-		.factory('$socket', ['socketFactory', '$api', '$auth', '$interval', MainService]);
+		.factory('$socket', ['socketFactory', '$auth', MainService]);
 })();

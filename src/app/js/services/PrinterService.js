@@ -4,7 +4,7 @@
 */
 
 (function () {
-	function MainService($socket, $q, $api, $rootScope, $timeout, $filter, $interval) {
+	function MainService($socket, $q, $api, $rootScope, $timeout, $interval) {
 		var factory = {
 			resource: [],
 			$active: {
@@ -150,7 +150,7 @@
 
 			$timeout(function () {
 
-				if (factory.$active &&
+				if (factory.$active && factory.$active.status !== 'offline' &&
 					factory.$active.port == resource.port &&
 					(resource.status !== 'offline' || resource.status !== 'connecting') ) {
 
@@ -238,6 +238,6 @@
 	}
 
 	angular.module('service.printer', [])
-	.factory('Printer', ['$socket', '$q', '$api', '$rootScope', '$timeout', '$filter', '$interval', MainService]);
+	.factory('Printer', ['$socket', '$q', '$api', '$rootScope', '$timeout', '$interval', MainService]);
 
 })();

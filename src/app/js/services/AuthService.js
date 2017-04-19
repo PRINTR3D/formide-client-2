@@ -5,7 +5,7 @@
 
 (function () {
 
-    function MainService($http, $api, $q, $timeout, $router, $location, $timeout, $rootScope) {
+    function MainService($api, $q, $location, $rootScope) {
         var factory = {};
 
         window.AUTH                 = window.AUTH || {};
@@ -79,6 +79,6 @@
     }
 
     angular.module('service.auth', [])
-        .factory('$auth', ['$http', '$api', '$q', '$timeout', '$router', '$location', '$timeout', '$rootScope', MainService]);
+        .factory('$auth', ['$api', '$q', '$location', '$rootScope', MainService]);
 
 })();

@@ -33,7 +33,7 @@
 		});
 	}
 
-	function CreateController ($api, $rootScope, $scope, $notification) {
+	function CreateController ($api, $rootScope) {
 		var vm = this;
 
 		var user = {};
@@ -53,7 +53,7 @@
 	}
 
 
-	function MainController ($auth, $api, $rootScope, ngDialog, $notification, $timeout, $location, $interval, $http) {
+	function MainController ($api, $rootScope, ngDialog, $notification, $timeout, $location, $http) {
 		var vm = this;
 
 		vm.wifi = {};
@@ -477,11 +477,11 @@
 	}
 
 	MainController.$inject = [
-		'$auth', '$api', '$rootScope', 'ngDialog', '$notification', '$timeout', '$location', '$interval', '$http'
+		'$api', '$rootScope', 'ngDialog', '$notification', '$timeout', '$location', '$http'
 	];
 
 	UpdateController.$inject = [
-		'$api', '$rootScope', '$scope', '$notification'
+		'$api', '$rootScope'
 	];
 
 	CreateController.$inject = [

@@ -20,10 +20,8 @@
 			window.localStorage.setItem('formide:setup', device_setup);
 			$location.search('setup', null);
 		}
+		
 
-		vm.setupLocation = window.PATH.setup;
-
-		vm.unknownPrinter = false;
 		vm.loaded = false;
 
 		$timeout(function () {

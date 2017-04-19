@@ -5,7 +5,7 @@
 
 (function () {
 
-	function MainController($rootScope, Printer, $socket, $location) {
+	function MainController(Printer, $socket, $location) {
 		var vm = this;
 
 		$socket.socket.on('printer.status', function (resource) {
@@ -25,7 +25,7 @@
 	}
 
 	MainController.$inject = [
-		'$rootScope', 'Printer', '$socket', '$location'
+		'Printer', '$socket', '$location'
 	];
 
 

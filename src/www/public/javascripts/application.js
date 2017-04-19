@@ -14715,7 +14715,7 @@ function angularLoaded() {
         return links;
     }
 
-    function MainService($http, $location, $resource, $q, $timeout, $notification) {
+    function MainService($http, $resource, $q) {
         function getAccessToken() {
             var deferred = $q.defer();
 
@@ -15054,7 +15054,7 @@ function angularLoaded() {
     }
 
     angular.module('service.api', [])
-        .factory('$api', ['$http', '$location', '$resource', '$q', '$timeout', '$notification',
+        .factory('$api', ['$http', '$resource', '$q',
             MainService])
         .config(function ($httpProvider) {
             $httpProvider.defaults.headers.post['Content-Type'] =
@@ -15070,7 +15070,7 @@ function angularLoaded() {
 
 (function () {
 
-    function MainService($http, $api, $q, $timeout, $router, $location, $timeout, $rootScope) {
+    function MainService($api, $q, $location, $rootScope) {
         var factory = {};
 
         window.AUTH                 = window.AUTH || {};
@@ -15144,7 +15144,7 @@ function angularLoaded() {
     }
 
     angular.module('service.auth', [])
-        .factory('$auth', ['$http', '$api', '$q', '$timeout', '$router', '$location', '$timeout', '$rootScope', MainService]);
+        .factory('$auth', ['$api', '$q', '$location', '$rootScope', MainService]);
 
 })();
 ;
@@ -15155,7 +15155,7 @@ function angularLoaded() {
  */
 
 (function () {
-    function MainService($api, $q, $filter) {
+    function MainService($api, $q) {
 
 		var factory = {
 			resource: [],
@@ -15299,7 +15299,7 @@ function angularLoaded() {
     }
 
     angular.module('service.file', [])
-        .factory('File', ['$api', '$q', '$filter',
+        .factory('File', ['$api', '$q',
             MainService]);
 
 })();
@@ -15717,7 +15717,7 @@ function angularLoaded() {
 */
 
 (function () {
-	function MainService($socket, $q, $api, $rootScope, $timeout, $filter, $interval) {
+	function MainService($socket, $q, $api, $rootScope, $timeout, $interval) {
 		var factory = {
 			resource: [],
 			$active: {
@@ -15863,7 +15863,7 @@ function angularLoaded() {
 
 			$timeout(function () {
 
-				if (factory.$active &&
+				if (factory.$active && factory.$active.status !== 'offline' &&
 					factory.$active.port == resource.port &&
 					(resource.status !== 'offline' || resource.status !== 'connecting') ) {
 
@@ -15951,7 +15951,7 @@ function angularLoaded() {
 	}
 
 	angular.module('service.printer', [])
-	.factory('Printer', ['$socket', '$q', '$api', '$rootScope', '$timeout', '$filter', '$interval', MainService]);
+	.factory('Printer', ['$socket', '$q', '$api', '$rootScope', '$timeout', '$interval', MainService]);
 
 })();
 ;
@@ -16016,7 +16016,7 @@ function angularLoaded() {
 		});
 	}
 
-	function MainService(socketFactory, $api, $auth, $interval) {
+	function MainService(socketFactory, $auth) {
 		var factory = {};
 
 		var access_token = window.localStorage.getItem('formide.auth:token');
@@ -16080,7 +16080,7 @@ function angularLoaded() {
 
 	angular.module('service.socket', [])
 		.run(['$socket', MainRun])
-		.factory('$socket', ['socketFactory', '$api', '$auth', '$interval', MainService]);
+		.factory('$socket', ['socketFactory', '$auth', MainService]);
 })();
 ;
 // Source: ./src/app/js/core/header/coreHeader.js
@@ -16106,7 +16106,7 @@ function angularLoaded() {
 		return directive;
 	}
 
-	function MainController($rootScope, $location, $auth, Sidebar) {
+	function MainController($location, $auth, Sidebar) {
 		var vm = this;
 
 		vm.mobilenavInvisible = true;
@@ -16134,7 +16134,7 @@ function angularLoaded() {
 
 
 	MainController.$inject = [
-		'$rootScope', '$location', '$auth', 'Sidebar'
+		'$location', '$auth', 'Sidebar'
 	];
 
 	angular
@@ -16282,7 +16282,7 @@ function angularLoaded() {
 
     }
 
-    function MainController($rootScope, $interval, Printer, $location, Sidebar) {
+    function MainController($rootScope, Printer, $location, Sidebar) {
         var vm = this;
 
 		vm.showCloudMsg = true;
@@ -16320,63 +16320,11 @@ function angularLoaded() {
 			vm.printerActive = null;
 		});
 
-        vm.slicingInProgress = false;
 
-        vm.unknownPrinter = false;
-
-		vm.onboarding = $rootScope.onboarding;
-
-        vm.activeSliceMessage = 0;
-
-        vm.sliceMessages = [
-            'Sharpening katana swords',
-            'Calculating polygons',
-            'Repairing Models',
-            'We are testing your patience',
-            'Would you like fries with that?',
-            'It is still faster than you could draw it',
-            'Reticulating Spines', //A Simcity 3000 Joke
-            'Reconfiguring the office coffee machine',
-            'Prepare for awesomeness!',
-            'Adjusting Bell Curves',
-            'Applying Feng Shui',
-            'Building Data Trees',
-            'Calculating Inverse Probability Matrices',
-            'Computing Optimal Bin Packing',
-            'Deciding What Message to Display Next',
-            'Dicing Models',
-            'Integrating Curves',
-            'Synthesizing Gravity',
-            'Synthesizing Wavelets'
-        ];
-
-        function setVisible (index) {
-            if (index == vm.activeSliceMessage) {
-               return("1") ;
-            } else {
-               return("0") ;
-            }
-        }
-
-        $interval(function() {
-            vm.activeSliceMessage = Math.floor(Math.random() * vm.sliceMessages.length);
-        }, 2000);
-
-		function printerSetupDialog(){
-			if (vm.unknownPrinter) {
-				$rootScope.printerSetupDialog(vm.unknownPrinter.device, vm.unknownPrinter.port, true);
-				vm.unknownPrinter = false;
-			}
-			else {
-				$rootScope.printerSetupDialog();
-			}
-		}
 
 
         // exports
         angular.extend(vm, {
-            setVisible: setVisible,
-			printerSetupDialog: printerSetupDialog,
 			navigate: navigate,
 			sidebar: Sidebar
         });
@@ -16385,7 +16333,6 @@ function angularLoaded() {
 
     MainController.$inject = [
 	    '$rootScope',
-	    '$interval',
 	    'Printer',
 		'$location',
 		'Sidebar'
@@ -18081,7 +18028,7 @@ function angularLoaded() {
  */
 
 (function () {
-function MainController ($timeout, $auth, $location, $rootScope, Sidebar) {
+function MainController ($timeout, $auth, $location, Sidebar) {
 		var vm = this;
 
 		if (window.localStorage.getItem("formide:setup")) {
@@ -18125,7 +18072,7 @@ function MainController ($timeout, $auth, $location, $rootScope, Sidebar) {
 	}
 
 	MainController.$inject = [
-		'$timeout', '$auth', '$location', '$rootScope', 'Sidebar'
+		'$timeout', '$auth', '$location', 'Sidebar'
 	];
 
 	angular
@@ -18144,7 +18091,7 @@ function MainController ($timeout, $auth, $location, $rootScope, Sidebar) {
 
  (function () {
 
-   function MainController($api, $location, $timeout, $notification, $rootScope, $http) {
+   function MainController($api, $location, $timeout, $notification, $http) {
 
  	  var vm = this;
 
@@ -18266,7 +18213,7 @@ function MainController ($timeout, $auth, $location, $rootScope, Sidebar) {
    }
 
    MainController.$inject = [
-	   '$api', '$location', '$timeout', '$notification', '$rootScope', '$http'
+	   '$api', '$location', '$timeout', '$notification', '$http'
    ];
 
 
@@ -18702,7 +18649,7 @@ function MainController($rootScope, $api, Upload, File, printerCtrl, Printer, $l
 		});
 	}
 
-	function CreateController ($api, $rootScope, $scope, $notification) {
+	function CreateController ($api, $rootScope) {
 		var vm = this;
 
 		var user = {};
@@ -18722,7 +18669,7 @@ function MainController($rootScope, $api, Upload, File, printerCtrl, Printer, $l
 	}
 
 
-	function MainController ($auth, $api, $rootScope, ngDialog, $notification, $timeout, $location, $interval, $http) {
+	function MainController ($api, $rootScope, ngDialog, $notification, $timeout, $location, $http) {
 		var vm = this;
 
 		vm.wifi = {};
@@ -19146,11 +19093,11 @@ function MainController($rootScope, $api, Upload, File, printerCtrl, Printer, $l
 	}
 
 	MainController.$inject = [
-		'$auth', '$api', '$rootScope', 'ngDialog', '$notification', '$timeout', '$location', '$interval', '$http'
+		'$api', '$rootScope', 'ngDialog', '$notification', '$timeout', '$location', '$http'
 	];
 
 	UpdateController.$inject = [
-		'$api', '$rootScope', '$scope', '$notification'
+		'$api', '$rootScope'
 	];
 
 	CreateController.$inject = [
@@ -19245,7 +19192,7 @@ function MainController($routeParams, $timeout, $location) {
 
 (function () {
 
-	function MainController($rootScope, Printer, $socket, $location) {
+	function MainController(Printer, $socket, $location) {
 		var vm = this;
 
 		$socket.socket.on('printer.status', function (resource) {
@@ -19265,7 +19212,7 @@ function MainController($routeParams, $timeout, $location) {
 	}
 
 	MainController.$inject = [
-		'$rootScope', 'Printer', '$socket', '$location'
+		'Printer', '$socket', '$location'
 	];
 
 
@@ -19299,10 +19246,8 @@ function MainController($routeParams, $timeout, $location) {
 			window.localStorage.setItem('formide:setup', device_setup);
 			$location.search('setup', null);
 		}
+		
 
-		vm.setupLocation = window.PATH.setup;
-
-		vm.unknownPrinter = false;
 		vm.loaded = false;
 
 		$timeout(function () {
@@ -19687,7 +19632,7 @@ function MainController($routeParams, $timeout, $location) {
 
 
   $templateCache.put('sidebar/componentTemplate.html',
-    "<article class=main-sidebar-content><section class=\"sm-hide sidebar-header\"><div ng-if=\"route.loggedIn === undefined || (route.loggedIn && vm.isLoggedIn) || (!route.loggedIn && !vm.isLoggedIn)\" class=hide--sidebar ng-click=vm.sidebar.setInvisible()><img src=./images/hamburger_expand.svg alt=\"\"></div><h3 class=title>Printers</h3></section><section class=fade id=sidebar-printers><h3 class=\"xs-hide title\">Printers</h3><div ng-if=\"vm.resolved && vm.printer < 1\" class=u-textCenter><h3>No Printers Connected</h3></div><div ng-if=\"vm.resolved && vm.printer.length > 0\"><h4>Selected Printer</h4><ul printer-list ng-if=vm.printerActive><li printer-list-item printer=vm.printerActive type=selected class=selected-printer></li></ul><p ng-if=!vm.printerActive class=selected-printer-message>You currently have no selected printer<br>Click on a printer below to select it</p><br></div><div ng-if=\"vm.resolved && vm.printer.length > 0\"><h4>Printers</h4><ul printer-list><li printer-list-item ng-repeat=\"printer in vm.printer\" type=offline printer=printer></li></ul></div><div ng-if=!vm.resolved class=u-textCenter><i class=\"fa fa-refresh fa-spin fa-3x\"></i></div></section></article><div ng-if=\"vm.unknownPrinter || vm.slicingInProgress\" class=\"btn-container xs-hide\"><div ng-if=\"vm.unknownPrinter && !vm.slicingInProgress\" ng-click=vm.printerSetupDialog() class=setup-printer><div class=layout><span class=\"layout__item u-1/6\"><i class=\"fa fa-2x fa-bell\"></i></span> <small class=\"layout__item u-5/6\">An unknown printer has been detected, click to set up this printer!</small></div></div><div ng-if=vm.slicingInProgress class=slicer-progress><svg xmlns=http://www.w3.org/2000/svg width=100% height=80px viewbox=\"0 0 32 32\" preserveaspectratio=\"xMaxYMid slice\"><defs><clippath id=mask><circle cx=16 cy=16 r=\"16\"></clippath></defs><path fill=none stroke=#CE6E3E stroke-width=.2 opacity=.1 d=\" M-32 4 C-24 4 -24 28 -16 28 C-8 28 -8 4 0 4 C8 4 8 28 16 28 C24 28 24 8 32 8 \"><animatetransform attributename=transform type=translate values=\" 0 0; 32 0 \" dur=6s repeatcount=\"indefinite\"></path><path fill=none stroke=#CE6E3E stroke-width=.2 opacity=.3 d=\" M-32 12 C-24 12 -24 20 -16 20 C-8 20 -8 12 0 12 C8 12 8 20 16 20 C24 20 24 12 32 12 \"><animatetransform attributename=transform type=translate values=\" 0 0; 32 0 \" dur=3s repeatcount=\"indefinite\"></path><path fill=none stroke=#CE6E3E stroke-width=.2 opacity=.5 d=\" M-32 8 C-24 8 -24 24 -16 24 C-8 24 -8 8 0 8 C8 8 8 24 16 24 C24 24 24 8 32 8 \"><animatetransform attributename=transform type=translate values=\" 0 0; 32 0 \" dur=2s repeatcount=\"indefinite\"></path></svg><h6 class=loader>Slicing in progress <span class=loader__dot>.</span><span class=loader__dot>.</span><span class=loader__dot>.</span></h6><div ng-style={opacity:vm.setVisible($index)} ng-repeat=\"message in vm.sliceMessages\"><small>{{message | title}}</small></div></div></div><ng-transclude></ng-transclude><script type=text/ng-template id=formideConnect><formide-connect></formide-connect></script>"
+    "<article class=main-sidebar-content><section class=\"sm-hide sidebar-header\"><div ng-if=\"route.loggedIn === undefined || (route.loggedIn && vm.isLoggedIn) || (!route.loggedIn && !vm.isLoggedIn)\" class=hide--sidebar ng-click=vm.sidebar.setInvisible()><img src=./images/hamburger_expand.svg alt=\"\"></div><h3 class=title>Printers</h3></section><section class=fade id=sidebar-printers><h3 class=\"xs-hide title\">Printers</h3><div ng-if=\"vm.resolved && vm.printer < 1\" class=u-textCenter><h3>No Printers Connected</h3></div><div ng-if=\"vm.resolved && vm.printer.length > 0\"><h4>Selected Printer</h4><ul printer-list ng-if=vm.printerActive><li printer-list-item printer=vm.printerActive type=selected class=selected-printer></li></ul><p ng-if=!vm.printerActive class=selected-printer-message>You currently have no selected printer<br>Click on a printer below to select it</p><br></div><div ng-if=\"vm.resolved && vm.printer.length > 0\"><h4>Printers</h4><ul printer-list><li printer-list-item ng-repeat=\"printer in vm.printer\" type=offline printer=printer></li></ul></div><div ng-if=!vm.resolved class=u-textCenter><i class=\"fa fa-refresh fa-spin fa-3x\"></i></div></section></article>"
   );
 }]); })();
 (function () { angular.module('templateCache.shared', []).run(['$templateCache', function($templateCache) {'use strict';  'use strict';
