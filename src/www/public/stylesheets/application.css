@@ -5888,7 +5888,7 @@ a.anchor__link:focus::after {
  *	Copyright (c) 2017, All rights reserved, http://printr.nl
  */
 /* line 3043, tmp/application.scss */
-.block, .block-selection, #monitor-print .tune-values .tune-block {
+.block, #monitor-print .tune-values .tune-block {
   background: white;
   padding: 1rem;
   border-radius: 3px;
@@ -8104,7 +8104,7 @@ disabled look for disabled choices in the results dropdown
 }
 
 /* line 4728, tmp/application.scss */
-.list-ui, .list-inline, .list-tabs, notification-list, printer-list, selection-list {
+.list-ui, .list-inline, .list-tabs, notification-list, printer-list {
   margin: 0;
   padding: 0;
   list-style: none;
@@ -8122,13 +8122,13 @@ disabled look for disabled choices in the results dropdown
 }
 
 /* line 4743, tmp/application.scss */
-.list-ui .list-ui__item, .list-inline .list-ui__item, .list-tabs .list-ui__item, notification-list .list-ui__item, printer-list .list-ui__item, selection-list .list-ui__item {
+.list-ui .list-ui__item, .list-inline .list-ui__item, .list-tabs .list-ui__item, notification-list .list-ui__item, printer-list .list-ui__item {
   padding: 1rem;
   border-bottom: 1px solid #e4e4e4;
 }
 
 /* line 4747, tmp/application.scss */
-.list-ui .list-ui__item:first-child, .list-inline .list-ui__item:first-child, .list-tabs .list-ui__item:first-child, notification-list .list-ui__item:first-child, printer-list .list-ui__item:first-child, selection-list .list-ui__item:first-child {
+.list-ui .list-ui__item:first-child, .list-inline .list-ui__item:first-child, .list-tabs .list-ui__item:first-child, notification-list .list-ui__item:first-child, printer-list .list-ui__item:first-child {
   border-top: 1px solid #e4e4e4;
 }
 
@@ -11935,548 +11935,11 @@ alert-box ul.list,
   margin-top: 0.5rem;
 }
 
-/* line 6636, tmp/application.scss */
-.fade.ng-leave,
-.fade.ng-show-remove,
-.fade.ng-hide-add {
-  animation: fadeOut .3s;
-}
-
-/* line 6642, tmp/application.scss */
-.fade.ng-enter,
-.fade.ng-show-add,
-.fade.ng-hide-remove {
-  animation: fadeIn 1s;
-}
-
-/* line 6648, tmp/application.scss */
-.fade-left.ng-leave,
-.fade-left.ng-show-remove,
-.fade-left.ng-hide-add {
-  animation: fadeOutLeft .3s;
-}
-
-/* line 6654, tmp/application.scss */
-.fade-left.ng-enter,
-.fade-left.ng-show-add,
-.fade-left.ng-hide-remove {
-  animation: fadeInLeft .3s;
-}
-
-/* line 6660, tmp/application.scss */
-.fade-right.ng-leave,
-.fade-right.ng-show-remove,
-.fade-right.ng-hide-add {
-  animation: fadeOutRight .3s;
-}
-
-/* line 6666, tmp/application.scss */
-.fade-right.ng-enter,
-.fade-right.ng-show-add,
-.fade-right.ng-hide-remove {
-  animation: fadeInRight .3s;
-}
-
-/* line 6672, tmp/application.scss */
-.zoom.ng-leave,
-.zoom.ng-show-remove,
-.zoom.ng-hide-add {
-  animation: zoomOut .3s;
-}
-
-/* line 6678, tmp/application.scss */
-.zoom.ng-enter,
-.zoom.ng-show-add,
-.zoom.ng-hide-remove {
-  animation: zoomIn .3s;
-}
-
-/* line 6684, tmp/application.scss */
-.bounce.ng-leave,
-.bounce.ng-show-remove,
-.bounce.ng-hide-add {
-  animation: bounceOut .3s;
-}
-
-/* line 6690, tmp/application.scss */
-.bounce.ng-enter,
-.bounce.ng-show-add,
-.bounce.ng-hide-remove {
-  animation: bounceIn .3s;
-}
-
-/* line 6698, tmp/application.scss */
-.list-ui--animated > li.ng-enter {
-  animation: fadeInLeft 1s;
-}
-
-/* line 6701, tmp/application.scss */
-.list-ui--animated > li.ng-enter-stagger {
-  animation-delay: .3s;
-  animation-duration: 0s;
-}
-
-/* line 6705, tmp/application.scss */
-.list-ui--animated > li.ng-leave {
-  animation: bounceOut 1s;
-}
-
-/*!
- * font-awesome-animation - v0.0.7
- * https://github.com/l-lin/font-awesome-animation
- * License: MIT
- */
-
-@keyframes wrench {
-  0% {
-    transform: rotate(-12deg);
-  }
-  8% {
-    transform: rotate(12deg);
-  }
-  10% {
-    transform: rotate(24deg);
-  }
-  18%, 20% {
-    transform: rotate(-24deg);
-  }
-  28%, 30% {
-    transform: rotate(24deg);
-  }
-  38%, 40% {
-    transform: rotate(-24deg);
-  }
-  48%, 50% {
-    transform: rotate(24deg);
-  }
-  58%, 60% {
-    transform: rotate(-24deg);
-  }
-  68% {
-    transform: rotate(24deg);
-  }
-  100%, 75% {
-    transform: rotate(0deg);
-  }
-}
-
-/* line 6717, tmp/application.scss */
-.faa-parent.animated-hover:hover > .faa-wrench, .faa-wrench.animated, .faa-wrench.logo.logo--large, .faa-wrench.animated-hover:hover {
-  animation: wrench 2.5s ease infinite;
-  transform-origin-x: 90%;
-  transform-origin-y: 35%;
-  transform-origin-z: initial;
-}
-
-/* line 6717, tmp/application.scss */
-.faa-parent.animated-hover:hover > .faa-wrench.faa-fast, .faa-wrench.animated-hover.faa-fast:hover, .faa-wrench.animated.faa-fast, .faa-wrench.faa-fast.logo.logo--large {
-  animation: wrench 1.2s ease infinite;
-}
-
-/* line 6717, tmp/application.scss */
-.faa-parent.animated-hover:hover > .faa-wrench.faa-slow, .faa-wrench.animated-hover.faa-slow:hover, .faa-wrench.animated.faa-slow, .faa-wrench.faa-slow.logo.logo--large {
-  animation: wrench 3.7s ease infinite;
-}
-
-@keyframes ring {
-  0% {
-    transform: rotate(-15deg);
-  }
-  2% {
-    transform: rotate(15deg);
-  }
-  4% {
-    transform: rotate(-18deg);
-  }
-  6% {
-    transform: rotate(18deg);
-  }
-  8% {
-    transform: rotate(-22deg);
-  }
-  10% {
-    transform: rotate(22deg);
-  }
-  12% {
-    transform: rotate(-18deg);
-  }
-  14% {
-    transform: rotate(18deg);
-  }
-  16% {
-    transform: rotate(-12deg);
-  }
-  18% {
-    transform: rotate(12deg);
-  }
-  100%, 20% {
-    transform: rotate(0deg);
-  }
-}
-
-/* line 6717, tmp/application.scss */
-.faa-parent.animated-hover:hover > .faa-ring, .faa-ring.animated, .faa-ring.logo.logo--large, .faa-ring.animated-hover:hover {
-  animation: ring 2s ease infinite;
-  transform-origin-x: 50%;
-  transform-origin-y: 0;
-  transform-origin-z: initial;
-}
-
-/* line 6717, tmp/application.scss */
-.faa-parent.animated-hover:hover > .faa-ring.faa-fast, .faa-ring.animated-hover.faa-fast:hover, .faa-ring.animated.faa-fast, .faa-ring.faa-fast.logo.logo--large {
-  animation: ring 1s ease infinite;
-}
-
-/* line 6717, tmp/application.scss */
-.faa-parent.animated-hover:hover > .faa-ring.faa-slow, .faa-ring.animated-hover.faa-slow:hover, .faa-ring.animated.faa-slow, .faa-ring.faa-slow.logo.logo--large {
-  animation: ring 3s ease infinite;
-}
-
-@keyframes vertical {
-  0% {
-    transform: translate(0, -3px);
-  }
-  4% {
-    transform: translate(0, 3px);
-  }
-  8% {
-    transform: translate(0, -3px);
-  }
-  12% {
-    transform: translate(0, 3px);
-  }
-  16% {
-    transform: translate(0, -3px);
-  }
-  20% {
-    transform: translate(0, 3px);
-  }
-  100%, 22% {
-    transform: translate(0, 0);
-  }
-}
-
-/* line 6717, tmp/application.scss */
-.faa-parent.animated-hover:hover > .faa-vertical, .faa-vertical.animated, .faa-vertical.logo.logo--large, .faa-vertical.animated-hover:hover {
-  animation: vertical 2s ease infinite;
-}
-
-/* line 6717, tmp/application.scss */
-.faa-parent.animated-hover:hover > .faa-vertical.faa-fast, .faa-vertical.animated-hover.faa-fast:hover, .faa-vertical.animated.faa-fast, .faa-vertical.faa-fast.logo.logo--large {
-  animation: vertical 1s ease infinite;
-}
-
-/* line 6717, tmp/application.scss */
-.faa-parent.animated-hover:hover > .faa-vertical.faa-slow, .faa-vertical.animated-hover.faa-slow:hover, .faa-vertical.animated.faa-slow, .faa-vertical.faa-slow.logo.logo--large {
-  animation: vertical 4s ease infinite;
-}
-
-@keyframes horizontal {
-  0% {
-    transform: translate(0, 0);
-  }
-  6% {
-    transform: translate(5px, 0);
-  }
-  12% {
-    transform: translate(0, 0);
-  }
-  18% {
-    transform: translate(5px, 0);
-  }
-  24% {
-    transform: translate(0, 0);
-  }
-  30% {
-    transform: translate(5px, 0);
-  }
-  100%, 36% {
-    transform: translate(0, 0);
-  }
-}
-
-/* line 6717, tmp/application.scss */
-.faa-horizontal.animated, .faa-horizontal.logo.logo--large, .faa-horizontal.animated-hover:hover, .faa-parent.animated-hover:hover > .faa-horizontal {
-  animation: horizontal 2s ease infinite;
-}
-
-/* line 6717, tmp/application.scss */
-.faa-horizontal.animated-hover.faa-fast:hover, .faa-horizontal.animated.faa-fast, .faa-horizontal.faa-fast.logo.logo--large, .faa-parent.animated-hover:hover > .faa-horizontal.faa-fast {
-  animation: horizontal 1s ease infinite;
-}
-
-/* line 6717, tmp/application.scss */
-.faa-horizontal.animated-hover.faa-slow:hover, .faa-horizontal.animated.faa-slow, .faa-horizontal.faa-slow.logo.logo--large, .faa-parent.animated-hover:hover > .faa-horizontal.faa-slow {
-  animation: horizontal 3s ease infinite;
-}
-
-@keyframes flash {
-  0%, 100%, 50% {
-    opacity: 1;
-  }
-  25%, 75% {
-    opacity: 0;
-  }
-}
-
-/* line 6717, tmp/application.scss */
-.faa-flash.animated, .faa-flash.logo.logo--large, .faa-flash.animated-hover:hover, .faa-parent.animated-hover:hover > .faa-flash {
-  animation: flash 2s ease infinite;
-}
-
-/* line 6717, tmp/application.scss */
-.faa-flash.animated-hover.faa-fast:hover, .faa-flash.animated.faa-fast, .faa-flash.faa-fast.logo.logo--large, .faa-parent.animated-hover:hover > .faa-flash.faa-fast {
-  animation: flash 1s ease infinite;
-}
-
-/* line 6717, tmp/application.scss */
-.faa-flash.animated-hover.faa-slow:hover, .faa-flash.animated.faa-slow, .faa-flash.faa-slow.logo.logo--large, .faa-parent.animated-hover:hover > .faa-flash.faa-slow {
-  animation: flash 3s ease infinite;
-}
-
-@keyframes bounce {
-  0%, 10%, 100%, 20%, 50%, 80% {
-    transform: translateY(0);
-  }
-  40%, 60% {
-    transform: translateY(-15px);
-  }
-}
-
-/* line 6717, tmp/application.scss */
-.faa-bounce.animated, .faa-bounce.logo.logo--large, .faa-bounce.animated-hover:hover, .faa-parent.animated-hover:hover > .faa-bounce {
-  animation: bounce 2s ease infinite;
-}
-
-/* line 6717, tmp/application.scss */
-.faa-bounce.animated-hover.faa-fast:hover, .faa-bounce.animated.faa-fast, .faa-bounce.faa-fast.logo.logo--large, .faa-parent.animated-hover:hover > .faa-bounce.faa-fast {
-  animation: bounce 1s ease infinite;
-}
-
-/* line 6717, tmp/application.scss */
-.faa-bounce.animated-hover.faa-slow:hover, .faa-bounce.animated.faa-slow, .faa-bounce.faa-slow.logo.logo--large, .faa-parent.animated-hover:hover > .faa-bounce.faa-slow {
-  animation: bounce 3s ease infinite;
-}
-
-@keyframes spin {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(359deg);
-  }
-}
-
-/* line 6717, tmp/application.scss */
-.faa-parent.animated-hover:hover > .faa-spin, .faa-spin.animated, .faa-spin.logo.logo--large, .faa-spin.animated-hover:hover {
-  animation: spin 1.5s linear infinite;
-}
-
-/* line 6717, tmp/application.scss */
-.faa-parent.animated-hover:hover > .faa-spin.faa-fast, .faa-spin.animated-hover.faa-fast:hover, .faa-spin.animated.faa-fast, .faa-spin.faa-fast.logo.logo--large {
-  animation: spin .7s linear infinite;
-}
-
-/* line 6717, tmp/application.scss */
-.faa-parent.animated-hover:hover > .faa-spin.faa-slow, .faa-spin.animated-hover.faa-slow:hover, .faa-spin.animated.faa-slow, .faa-spin.faa-slow.logo.logo--large {
-  animation: spin 2.2s linear infinite;
-}
-
-@keyframes float {
-  0% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-6px);
-  }
-  100% {
-    transform: translateY(0);
-  }
-}
-
-/* line 6717, tmp/application.scss */
-.faa-float.animated, .faa-float.logo.logo--large, .faa-float.animated-hover:hover, .faa-parent.animated-hover:hover > .faa-float {
-  animation: float 2s linear infinite;
-}
-
-/* line 6717, tmp/application.scss */
-.faa-float.animated-hover.faa-fast:hover, .faa-float.animated.faa-fast, .faa-float.faa-fast.logo.logo--large, .faa-parent.animated-hover:hover > .faa-float.faa-fast {
-  animation: float 1s linear infinite;
-}
-
-/* line 6717, tmp/application.scss */
-.faa-float.animated-hover.faa-slow:hover, .faa-float.animated.faa-slow, .faa-float.faa-slow.logo.logo--large, .faa-parent.animated-hover:hover > .faa-float.faa-slow {
-  animation: float 3s linear infinite;
-}
-
-@keyframes pulse {
-  0% {
-    transform: scale(1.1);
-  }
-  50% {
-    transform: scale(0.8);
-  }
-  100% {
-    transform: scale(1.1);
-  }
-}
-
-/* line 6717, tmp/application.scss */
-.faa-parent.animated-hover:hover > .faa-pulse, .faa-pulse.animated, .faa-pulse.logo.logo--large, .faa-pulse.animated-hover:hover {
-  animation: pulse 2s linear infinite;
-}
-
-/* line 6717, tmp/application.scss */
-.faa-parent.animated-hover:hover > .faa-pulse.faa-fast, .faa-pulse.animated-hover.faa-fast:hover, .faa-pulse.animated.faa-fast, .faa-pulse.faa-fast.logo.logo--large {
-  animation: pulse 1s linear infinite;
-}
-
-/* line 6717, tmp/application.scss */
-.faa-parent.animated-hover:hover > .faa-pulse.faa-slow, .faa-pulse.animated-hover.faa-slow:hover, .faa-pulse.animated.faa-slow, .faa-pulse.faa-slow.logo.logo--large {
-  animation: pulse 3s linear infinite;
-}
-
-/* line 6717, tmp/application.scss */
-.faa-parent.animated-hover:hover > .faa-shake, .faa-shake.animated, .faa-shake.logo.logo--large, .faa-shake.animated-hover:hover {
-  animation: wrench 2.5s ease infinite;
-}
-
-/* line 6717, tmp/application.scss */
-.faa-parent.animated-hover:hover > .faa-shake.faa-fast, .faa-shake.animated-hover.faa-fast:hover, .faa-shake.animated.faa-fast, .faa-shake.faa-fast.logo.logo--large {
-  animation: wrench 1.2s ease infinite;
-}
-
-/* line 6717, tmp/application.scss */
-.faa-parent.animated-hover:hover > .faa-shake.faa-slow, .faa-shake.animated-hover.faa-slow:hover, .faa-shake.animated.faa-slow, .faa-shake.faa-slow.logo.logo--large {
-  animation: wrench 3.7s ease infinite;
-}
-
-@keyframes tada {
-  0% {
-    transform: scale(1);
-  }
-  10%, 20% {
-    transform: scale(0.9) rotate(-8deg);
-  }
-  30%, 50%, 70% {
-    transform: scale(1.3) rotate(8deg);
-  }
-  40%, 60% {
-    transform: scale(1.3) rotate(-8deg);
-  }
-  100%, 80% {
-    transform: scale(1) rotate(0);
-  }
-}
-
-/* line 6717, tmp/application.scss */
-.faa-parent.animated-hover:hover > .faa-tada, .faa-tada.animated, .faa-tada.logo.logo--large, .faa-tada.animated-hover:hover {
-  animation: tada 2s linear infinite;
-}
-
-/* line 6717, tmp/application.scss */
-.faa-parent.animated-hover:hover > .faa-tada.faa-fast, .faa-tada.animated-hover.faa-fast:hover, .faa-tada.animated.faa-fast, .faa-tada.faa-fast.logo.logo--large {
-  animation: tada 1s linear infinite;
-}
-
-/* line 6717, tmp/application.scss */
-.faa-parent.animated-hover:hover > .faa-tada.faa-slow, .faa-tada.animated-hover.faa-slow:hover, .faa-tada.animated.faa-slow, .faa-tada.faa-slow.logo.logo--large {
-  animation: tada 3s linear infinite;
-}
-
-@keyframes passing {
-  0% {
-    transform: translateX(-50%);
-    opacity: 0;
-  }
-  50% {
-    transform: translateX(0%);
-    opacity: 1;
-  }
-  100% {
-    transform: translateX(50%);
-    opacity: 0;
-  }
-}
-
-/* line 6717, tmp/application.scss */
-.faa-parent.animated-hover:hover > .faa-passing, .faa-passing.animated, .faa-passing.logo.logo--large, .faa-passing.animated-hover:hover {
-  animation: passing 2s linear infinite;
-}
-
-/* line 6717, tmp/application.scss */
-.faa-parent.animated-hover:hover > .faa-passing.faa-fast, .faa-passing.animated-hover.faa-fast:hover, .faa-passing.animated.faa-fast, .faa-passing.faa-fast.logo.logo--large {
-  animation: passing 1s linear infinite;
-}
-
-/* line 6717, tmp/application.scss */
-.faa-parent.animated-hover:hover > .faa-passing.faa-slow, .faa-passing.animated-hover.faa-slow:hover, .faa-passing.animated.faa-slow, .faa-passing.faa-slow.logo.logo--large {
-  animation: passing 3s linear infinite;
-}
-
-@keyframes passing-reverse {
-  0% {
-    transform: translateX(50%);
-    opacity: 0;
-  }
-  50% {
-    transform: translateX(0%);
-    opacity: 1;
-  }
-  100% {
-    transform: translateX(-50%);
-    opacity: 0;
-  }
-}
-
-/* line 6717, tmp/application.scss */
-.faa-parent.animated-hover:hover > .faa-passing-reverse, .faa-passing-reverse.animated, .faa-passing-reverse.logo.logo--large, .faa-passing-reverse.animated-hover:hover {
-  animation: passing-reverse 2s linear infinite;
-}
-
-/* line 6717, tmp/application.scss */
-.faa-parent.animated-hover:hover > .faa-passing-reverse.faa-fast, .faa-passing-reverse.animated-hover.faa-fast:hover, .faa-passing-reverse.animated.faa-fast, .faa-passing-reverse.faa-fast.logo.logo--large {
-  animation: passing-reverse 1s linear infinite;
-}
-
-/* line 6717, tmp/application.scss */
-.faa-parent.animated-hover:hover > .faa-passing-reverse.faa-slow, .faa-passing-reverse.animated-hover.faa-slow:hover, .faa-passing-reverse.animated.faa-slow, .faa-passing-reverse.faa-slow.logo.logo--large {
-  animation: passing-reverse 3s linear infinite;
-}
-
-@keyframes burst {
-  0% {
-    opacity: .6;
-  }
-  50% {
-    transform: scale(1.8);
-    opacity: 0;
-  }
-  100% {
-    opacity: 0;
-  }
-}
-
-/* line 6717, tmp/application.scss */
-.faa-burst.animated, .faa-burst.logo.logo--large, .faa-burst.animated-hover:hover, .faa-parent.animated-hover:hover > .faa-burst {
-  animation: burst 2s infinite linear;
-}
-
-/* line 6717, tmp/application.scss */
-.faa-burst.animated-hover.faa-fast:hover, .faa-burst.animated.faa-fast, .faa-burst.faa-fast.logo.logo--large, .faa-parent.animated-hover:hover > .faa-burst.faa-fast {
-  animation: burst 1s infinite linear;
-}
-
-/* line 6717, tmp/application.scss */
-.faa-burst.animated-hover.faa-slow:hover, .faa-burst.animated.faa-slow, .faa-burst.faa-slow.logo.logo--large, .faa-parent.animated-hover:hover > .faa-burst.faa-slow {
-  animation: burst 3s infinite linear;
-}
-
 /*
  *	This code was created for Printr B.V. It is open source under the formide-client package.
  *	Copyright (c) 2017, All rights reserved, http://printr.nl
  */
-/* line 6724, tmp/application.scss */
+/* line 6641, tmp/application.scss */
 checkbox,
 [checkbox],
 .checkbox-container {
@@ -12484,7 +11947,7 @@ checkbox,
   display: inline-block;
 }
 
-/* line 6730, tmp/application.scss */
+/* line 6647, tmp/application.scss */
 checkbox .disabled,
 [checkbox] .disabled,
 .checkbox-container .disabled {
@@ -12492,7 +11955,7 @@ checkbox .disabled,
   cursor: default;
 }
 
-/* line 6735, tmp/application.scss */
+/* line 6652, tmp/application.scss */
 checkbox .checkbox,
 [checkbox] .checkbox,
 .checkbox-container .checkbox {
@@ -12505,7 +11968,7 @@ checkbox .checkbox,
   display: inline-block;
 }
 
-/* line 6744, tmp/application.scss */
+/* line 6661, tmp/application.scss */
 checkbox .checkbox i,
 [checkbox] .checkbox i,
 .checkbox-container .checkbox i {
@@ -12517,7 +11980,7 @@ checkbox .checkbox i,
  *	This code was created for Printr B.V. It is open source under the formide-client package.
  *	Copyright (c) 2017, All rights reserved, http://printr.nl
  */
-/* line 6760, tmp/application.scss */
+/* line 6677, tmp/application.scss */
 dashboard-temperatures .container,
 [dashboard-temperatures] .container {
   margin-top: 1rem;
@@ -12530,14 +11993,14 @@ dashboard-temperatures .container,
  *	This code was created for Printr B.V. It is open source under the formide-client package.
  *	Copyright (c) 2017, All rights reserved, http://printr.nl
  */
-/* line 6777, tmp/application.scss */
+/* line 6694, tmp/application.scss */
 dashboard-webcam figure,
 [dashboard-webcam] figure {
   height: 100%;
   background: white;
 }
 
-/* line 6781, tmp/application.scss */
+/* line 6698, tmp/application.scss */
 dashboard-webcam figure .webcam-container,
 [dashboard-webcam] figure .webcam-container {
   height: 100%;
@@ -12545,14 +12008,14 @@ dashboard-webcam figure .webcam-container,
   z-index: 2;
 }
 
-/* line 6786, tmp/application.scss */
+/* line 6703, tmp/application.scss */
 dashboard-webcam figure .webcam-container img,
 [dashboard-webcam] figure .webcam-container img {
   height: 100%;
   width: 100%;
 }
 
-/* line 6792, tmp/application.scss */
+/* line 6709, tmp/application.scss */
 dashboard-webcam figure figcaption,
 [dashboard-webcam] figure figcaption {
   background-color: rgba(0, 0, 0, 0.4);
@@ -12564,7 +12027,7 @@ dashboard-webcam figure figcaption,
   z-index: 3;
 }
 
-/* line 6802, tmp/application.scss */
+/* line 6719, tmp/application.scss */
 dashboard-webcam figure .close,
 [dashboard-webcam] figure .close {
   position: absolute;
@@ -12577,13 +12040,13 @@ dashboard-webcam figure .close,
   text-shadow: #fff 0px 0px 1px,   #fff 0px 0px 1px,   #fff 0px 0px 1px, #fff 0px 0px 1px,   #fff 0px 0px 1px,   #fff 0px 0px 1px;
 }
 
-/* line 6813, tmp/application.scss */
+/* line 6730, tmp/application.scss */
 dashboard-webcam figure .close:hover,
 [dashboard-webcam] figure .close:hover {
   transform: scale(1.3);
 }
 
-/* line 6818, tmp/application.scss */
+/* line 6735, tmp/application.scss */
 dashboard-webcam figure .webcam-placeholder,
 [dashboard-webcam] figure .webcam-placeholder {
   text-align: center;
@@ -12593,7 +12056,7 @@ dashboard-webcam figure .webcam-placeholder,
   padding: 0 10%;
 }
 
-/* line 6826, tmp/application.scss */
+/* line 6743, tmp/application.scss */
 dashboard-webcam figure .webcam-loading,
 [dashboard-webcam] figure .webcam-loading {
   position: absolute;
@@ -12603,13 +12066,13 @@ dashboard-webcam figure .webcam-loading,
   color: #161720;
 }
 
-/* line 6834, tmp/application.scss */
+/* line 6751, tmp/application.scss */
 dashboard-webcam figure.webcamLoaded,
 [dashboard-webcam] figure.webcamLoaded {
   background: black;
 }
 
-/* line 6837, tmp/application.scss */
+/* line 6754, tmp/application.scss */
 dashboard-webcam figure.webcamLoaded .webcam-container,
 [dashboard-webcam] figure.webcamLoaded .webcam-container {
   max-width: 482px;
@@ -12618,13 +12081,13 @@ dashboard-webcam figure.webcamLoaded .webcam-container,
   height: auto;
 }
 
-/* line 6844, tmp/application.scss */
+/* line 6761, tmp/application.scss */
 dashboard-webcam figure.webcamLoaded .webcam-placeholder,
 [dashboard-webcam] figure.webcamLoaded .webcam-placeholder {
   color: white;
 }
 
-/* line 6850, tmp/application.scss */
+/* line 6767, tmp/application.scss */
 dashboard-webcam figure.webcamError .webcam-container,
 [dashboard-webcam] figure.webcamError .webcam-container {
   max-width: 482px;
@@ -12633,7 +12096,7 @@ dashboard-webcam figure.webcamError .webcam-container,
   height: auto;
 }
 
-/* line 6865, tmp/application.scss */
+/* line 6782, tmp/application.scss */
 .file-dragover:before {
   content: '';
   width: 100%;
@@ -12647,7 +12110,7 @@ dashboard-webcam figure.webcamError .webcam-container,
   z-index: 999999;
 }
 
-/* line 6877, tmp/application.scss */
+/* line 6794, tmp/application.scss */
 .file-dragover:after {
   content: 'Release to upload files to the library';
   color: black;
@@ -12659,13 +12122,13 @@ dashboard-webcam figure.webcamError .webcam-container,
   text-align: center;
 }
 
-/* line 6890, tmp/application.scss */
+/* line 6807, tmp/application.scss */
 .list-tabs {
   border-bottom: 1px solid #e4e4e4;
   margin-bottom: 24px;
 }
 
-/* line 6896, tmp/application.scss */
+/* line 6813, tmp/application.scss */
 .list-tabs li {
   margin-bottom: -1px;
   padding: .5rem 1rem;
@@ -12676,7 +12139,7 @@ dashboard-webcam figure.webcamError .webcam-container,
   margin-right: 5px;
 }
 
-/* line 6905, tmp/application.scss */
+/* line 6822, tmp/application.scss */
 .list-tabs li.active {
   border-bottom: 1px solid white;
   color: #161720;
@@ -12692,7 +12155,7 @@ dashboard-webcam figure.webcamError .webcam-container,
   }
 }
 
-/* line 6939, tmp/application.scss */
+/* line 6856, tmp/application.scss */
 loading-screen .loading-spinner {
   animation-duration: 0.75s;
   animation-iteration-count: infinite;
@@ -12706,7 +12169,7 @@ loading-screen .loading-spinner {
   display: inline-block;
 }
 
-/* line 6952, tmp/application.scss */
+/* line 6869, tmp/application.scss */
 loading-screen .loading-spinner {
   position: relative;
   top: 200px;
@@ -12716,7 +12179,7 @@ loading-screen .loading-spinner {
   margin: -15px 0 -15px;
 }
 
-/* line 6961, tmp/application.scss */
+/* line 6878, tmp/application.scss */
 loading-screen {
   position: fixed;
   z-index: 99999;
@@ -12734,7 +12197,7 @@ loading-screen {
  *	This code was created for Printr B.V. It is open source under the formide-client package.
  *	Copyright (c) 2017, All rights reserved, http://printr.nl
  */
-/* line 6979, tmp/application.scss */
+/* line 6896, tmp/application.scss */
 notification-list-item,
 [notification-list-item] {
   padding-bottom: .5rem;
@@ -12742,7 +12205,7 @@ notification-list-item,
   border-bottom: 1px solid rgba(255, 255, 255, 0.3);
 }
 
-/* line 6986, tmp/application.scss */
+/* line 6903, tmp/application.scss */
 notification-list-item .title,
 [notification-list-item] .title {
   color: white;
@@ -12750,7 +12213,7 @@ notification-list-item .title,
   font-size: 1.1rem;
 }
 
-/* line 6993, tmp/application.scss */
+/* line 6910, tmp/application.scss */
 notification-list-item .title .time,
 [notification-list-item] .title .time {
   font-size: 14px;
@@ -12760,7 +12223,7 @@ notification-list-item .title .time,
   margin-left: .5rem;
 }
 
-/* line 7000, tmp/application.scss */
+/* line 6917, tmp/application.scss */
 notification-list-item .remove,
 [notification-list-item] .remove {
   display: block;
@@ -12769,13 +12232,13 @@ notification-list-item .remove,
   transition: opacity .2s ease-in-out;
 }
 
-/* line 7006, tmp/application.scss */
+/* line 6923, tmp/application.scss */
 notification-list-item .remove:hover,
 [notification-list-item] .remove:hover {
   opacity: 1;
 }
 
-/* line 7011, tmp/application.scss */
+/* line 6928, tmp/application.scss */
 notification-list-item .count,
 [notification-list-item] .count {
   background: rgba(227, 48, 78, 0.9);
@@ -12791,14 +12254,14 @@ notification-list-item .count,
   position: relative;
 }
 
-/* line 7023, tmp/application.scss */
+/* line 6940, tmp/application.scss */
 notification-list-item .description,
 [notification-list-item] .description {
   color: rgba(255, 255, 255, 0.8);
   margin-bottom: 0;
 }
 
-/* line 7030, tmp/application.scss */
+/* line 6947, tmp/application.scss */
 notification-list-item small abbr, notification-list-item .pill abbr, notification-list-item .loz abbr, notification-list-item .tag abbr, notification-list-item formide-button.btn--pill abbr, notification-list-item
 .btn.btn--pill abbr,
 [notification-list-item] small abbr,
@@ -12820,12 +12283,12 @@ notification-list-item small abbr, notification-list-item .pill abbr, notificati
  *	This code was created for Printr B.V. It is open source under the formide-client package.
  *	Copyright (c) 2017, All rights reserved, http://printr.nl
  */
-/* line 7056, tmp/application.scss */
+/* line 6973, tmp/application.scss */
 .list-inline--delimited > li + li:before {
   content: " |";
 }
 
-/* line 7067, tmp/application.scss */
+/* line 6984, tmp/application.scss */
 queue-list-item div figure,
 [queue-list-item] div figure {
   width: 100%;
@@ -12836,59 +12299,59 @@ queue-list-item div figure,
   margin: -16px 0;
 }
 
-/* line 7075, tmp/application.scss */
+/* line 6992, tmp/application.scss */
 queue-list-item div figure img,
 [queue-list-item] div figure img {
   width: 100%;
 }
 
-/* line 7081, tmp/application.scss */
+/* line 6998, tmp/application.scss */
 queue-list-item header,
 [queue-list-item] header {
   display: inline-block;
 }
 
-/* line 7084, tmp/application.scss */
+/* line 7001, tmp/application.scss */
 queue-list-item header hgroup,
 [queue-list-item] header hgroup {
   margin-bottom: 0;
 }
 
-/* line 7088, tmp/application.scss */
+/* line 7005, tmp/application.scss */
 queue-list-item header .added,
 [queue-list-item] header .added {
   text-align: left;
 }
 
 @media only screen and (min-width: 720px) {
-  /* line 7088, tmp/application.scss */
+  /* line 7005, tmp/application.scss */
   queue-list-item header .added,
   [queue-list-item] header .added {
     text-align: right;
   }
 }
 
-/* line 7097, tmp/application.scss */
+/* line 7014, tmp/application.scss */
 queue-list-item .queue-item-name,
 [queue-list-item] .queue-item-name {
   margin: 0.5rem 0;
 }
 
 @media only screen and (max-width: 719px) {
-  /* line 7097, tmp/application.scss */
+  /* line 7014, tmp/application.scss */
   queue-list-item .queue-item-name,
   [queue-list-item] .queue-item-name {
     margin-bottom: 1rem;
   }
 }
 
-/* line 7106, tmp/application.scss */
+/* line 7023, tmp/application.scss */
 queue-list-item footer p,
 [queue-list-item] footer p {
   margin-bottom: 0;
 }
 
-/* line 7111, tmp/application.scss */
+/* line 7028, tmp/application.scss */
 queue-list-item .btn--alignment,
 [queue-list-item] .btn--alignment {
   display: block;
@@ -12896,7 +12359,7 @@ queue-list-item .btn--alignment,
 }
 
 @media only screen and (min-width: 720px) {
-  /* line 7111, tmp/application.scss */
+  /* line 7028, tmp/application.scss */
   queue-list-item .btn--alignment,
   [queue-list-item] .btn--alignment {
     width: 200px;
@@ -12905,14 +12368,14 @@ queue-list-item .btn--alignment,
   }
 }
 
-/* line 7122, tmp/application.scss */
+/* line 7039, tmp/application.scss */
 queue-list-item .expected-printing-time,
 [queue-list-item] .expected-printing-time {
   margin-top: -0.5rem;
 }
 
 @media only screen and (max-width: 719px) {
-  /* line 7122, tmp/application.scss */
+  /* line 7039, tmp/application.scss */
   queue-list-item .expected-printing-time,
   [queue-list-item] .expected-printing-time {
     margin-bottom: .5rem;
@@ -12920,7 +12383,7 @@ queue-list-item .expected-printing-time,
 }
 
 @media only screen and (max-width: 719px) {
-  /* line 7134, tmp/application.scss */
+  /* line 7051, tmp/application.scss */
   queue-list-item .actionButton,
   [queue-list-item] .actionButton {
     min-width: 47% !important;
@@ -12931,7 +12394,7 @@ queue-list-item .expected-printing-time,
  *	This code was created for Printr B.V. It is open source under the formide-client package.
  *	Copyright (c) 2017, All rights reserved, http://printr.nl
  */
-/* line 7148, tmp/application.scss */
+/* line 7065, tmp/application.scss */
 printer-controls-fan svg,
 [printer-controls-fan] svg {
   animation-name: spinFan;
@@ -12955,13 +12418,13 @@ printer-controls-fan svg,
  *	This code was created for Printr B.V. It is open source under the formide-client package.
  *	Copyright (c) 2017, All rights reserved, http://printr.nl
  */
-/* line 7173, tmp/application.scss */
+/* line 7090, tmp/application.scss */
 printer-controls-flow-rate,
 [printer-controls-flow-rate] {
   position: relative;
 }
 
-/* line 7177, tmp/application.scss */
+/* line 7094, tmp/application.scss */
 printer-controls-flow-rate .rectangle,
 [printer-controls-flow-rate] .rectangle {
   border-radius: 3px;
@@ -12972,7 +12435,7 @@ printer-controls-flow-rate .rectangle,
   background: #afb0b9;
 }
 
-/* line 7186, tmp/application.scss */
+/* line 7103, tmp/application.scss */
 printer-controls-flow-rate .nozzle,
 [printer-controls-flow-rate] .nozzle {
   border-radius: 4px;
@@ -12983,7 +12446,7 @@ printer-controls-flow-rate .nozzle,
   background: #afb0b9;
 }
 
-/* line 7195, tmp/application.scss */
+/* line 7112, tmp/application.scss */
 printer-controls-flow-rate .flow,
 [printer-controls-flow-rate] .flow {
   animation-name: moveFlow;
@@ -13010,14 +12473,14 @@ printer-controls-flow-rate .flow,
   }
 }
 
-/* line 7224, tmp/application.scss */
+/* line 7141, tmp/application.scss */
 [printer-controls-slider],
 printer-controls-slider {
   display: block;
   margin-bottom: 24px;
 }
 
-/* line 7229, tmp/application.scss */
+/* line 7146, tmp/application.scss */
 [printer-controls-slider] .pretty-value,
 printer-controls-slider .pretty-value {
   font-size: 14px;
@@ -13027,25 +12490,25 @@ printer-controls-slider .pretty-value {
   bottom: -1.5rem;
 }
 
-/* line 7235, tmp/application.scss */
+/* line 7152, tmp/application.scss */
 [printer-controls-slider] .pretty--min,
 printer-controls-slider .pretty--min {
   left: 0;
 }
 
-/* line 7239, tmp/application.scss */
+/* line 7156, tmp/application.scss */
 [printer-controls-slider] .pretty--max,
 printer-controls-slider .pretty--max {
   right: 0;
 }
 
-/* line 7243, tmp/application.scss */
+/* line 7160, tmp/application.scss */
 [printer-controls-slider] .percentage-cur .num,
 printer-controls-slider .percentage-cur .num {
   margin-right: 5px;
 }
 
-/* line 7247, tmp/application.scss */
+/* line 7164, tmp/application.scss */
 [printer-controls-slider] .progress-bar,
 printer-controls-slider .progress-bar {
   width: 100%;
@@ -13085,7 +12548,7 @@ printer-controls-slider .progress-bar:focus {
   color: #161720;
 }
 
-/* line 7256, tmp/application.scss */
+/* line 7173, tmp/application.scss */
 [printer-controls-slider] .progress-bar .inner,
 printer-controls-slider .progress-bar .inner {
   position: relative;
@@ -13124,7 +12587,7 @@ printer-controls-slider .progress-bar .inner:focus {
   color: #fff;
 }
 
-/* line 7264, tmp/application.scss */
+/* line 7181, tmp/application.scss */
 [printer-controls-slider] .inner,
 printer-controls-slider .inner {
   height: 0;
@@ -13132,14 +12595,14 @@ printer-controls-slider .inner {
   transition: all 1s ease-out;
 }
 
-/* line 7270, tmp/application.scss */
+/* line 7187, tmp/application.scss */
 [printer-controls-slider] .progress-bar-slider .inner,
 printer-controls-slider .progress-bar-slider .inner {
   transition: none;
   min-width: 0;
 }
 
-/* line 7275, tmp/application.scss */
+/* line 7192, tmp/application.scss */
 [printer-controls-slider] .progress-bar-slider .inner:after,
 printer-controls-slider .progress-bar-slider .inner:after {
   content: " ";
@@ -13184,7 +12647,7 @@ printer-controls-slider .progress-bar-slider .inner:after:focus {
   color: #161720;
 }
 
-/* line 7290, tmp/application.scss */
+/* line 7207, tmp/application.scss */
 [printer-controls-slider] .progress-slider,
 printer-controls-slider .progress-slider {
   opacity: 0;
@@ -13198,7 +12661,7 @@ printer-controls-slider .progress-slider {
   z-index: 1;
 }
 
-/* line 7302, tmp/application.scss */
+/* line 7219, tmp/application.scss */
 [printer-controls-slider] .input-container,
 printer-controls-slider .input-container {
   position: relative;
@@ -13206,7 +12669,7 @@ printer-controls-slider .input-container {
   padding-right: 16px;
 }
 
-/* line 7308, tmp/application.scss */
+/* line 7225, tmp/application.scss */
 [printer-controls-slider] .symbol,
 printer-controls-slider .symbol {
   position: absolute;
@@ -13218,7 +12681,7 @@ printer-controls-slider .symbol {
  *	This code was created for Printr B.V. It is open source under the formide-client package.
  *	Copyright (c) 2017, All rights reserved, http://printr.nl
  */
-/* line 7320, tmp/application.scss */
+/* line 7237, tmp/application.scss */
 printer-controls-speed,
 [printer-controls-speed] {
   border: 1px solid #afb0b9;
@@ -13226,7 +12689,7 @@ printer-controls-speed,
   position: relative;
 }
 
-/* line 7326, tmp/application.scss */
+/* line 7243, tmp/application.scss */
 printer-controls-speed .rectangle,
 [printer-controls-speed] .rectangle {
   animation-name: moveHead-large;
@@ -13242,7 +12705,7 @@ printer-controls-speed .rectangle,
   background: #afb0b9;
 }
 
-/* line 7343, tmp/application.scss */
+/* line 7260, tmp/application.scss */
 printer-controls-speed .frame,
 [printer-controls-speed] .frame {
   height: 2px;
@@ -13272,14 +12735,14 @@ printer-controls-speed .frame,
  *	This code was created for Printr B.V. It is open source under the formide-client package.
  *	Copyright (c) 2017, All rights reserved, http://printr.nl
  */
-/* line 7374, tmp/application.scss */
+/* line 7291, tmp/application.scss */
 printer-controls,
 [printer-controls] {
   display: block;
   text-align: left;
 }
 
-/* line 7379, tmp/application.scss */
+/* line 7296, tmp/application.scss */
 printer-controls .three-axis,
 printer-controls .extruder,
 [printer-controls] .three-axis,
@@ -13290,7 +12753,7 @@ printer-controls .extruder,
 }
 
 @media only screen and (max-width: 719px) {
-  /* line 7379, tmp/application.scss */
+  /* line 7296, tmp/application.scss */
   printer-controls .three-axis,
   printer-controls .extruder,
   [printer-controls] .three-axis,
@@ -13300,7 +12763,7 @@ printer-controls .extruder,
   }
 }
 
-/* line 7391, tmp/application.scss */
+/* line 7308, tmp/application.scss */
 printer-controls .axis,
 [printer-controls] .axis {
   display: block;
@@ -13311,7 +12774,7 @@ printer-controls .axis,
   top: 0;
 }
 
-/* line 7399, tmp/application.scss */
+/* line 7316, tmp/application.scss */
 printer-controls .axis abbr,
 [printer-controls] .axis abbr {
   position: absolute;
@@ -13320,7 +12783,7 @@ printer-controls .axis abbr,
   border: none;
 }
 
-/* line 7406, tmp/application.scss */
+/* line 7323, tmp/application.scss */
 printer-controls .axis .positive,
 printer-controls .axis .negative,
 [printer-controls] .axis .positive,
@@ -13329,19 +12792,19 @@ printer-controls .axis .negative,
   position: relative;
 }
 
-/* line 7412, tmp/application.scss */
+/* line 7329, tmp/application.scss */
 printer-controls .axis.axis--vertical,
 [printer-controls] .axis.axis--vertical {
   width: 44px;
 }
 
-/* line 7415, tmp/application.scss */
+/* line 7332, tmp/application.scss */
 printer-controls .axis.axis--vertical abbr,
 [printer-controls] .axis.axis--vertical abbr {
   left: 14px;
 }
 
-/* line 7419, tmp/application.scss */
+/* line 7336, tmp/application.scss */
 printer-controls .axis.axis--vertical .positive,
 printer-controls .axis.axis--vertical .negative,
 [printer-controls] .axis.axis--vertical .positive,
@@ -13349,50 +12812,50 @@ printer-controls .axis.axis--vertical .negative,
   width: 44px;
 }
 
-/* line 7424, tmp/application.scss */
+/* line 7341, tmp/application.scss */
 printer-controls .axis.axis--vertical .positive,
 [printer-controls] .axis.axis--vertical .positive {
   margin-bottom: 20px;
 }
 
-/* line 7426, tmp/application.scss */
+/* line 7343, tmp/application.scss */
 printer-controls .axis.axis--vertical .positive abbr,
 [printer-controls] .axis.axis--vertical .positive abbr {
   top: -19px;
 }
 
-/* line 7431, tmp/application.scss */
+/* line 7348, tmp/application.scss */
 printer-controls .axis.axis--vertical .negative,
 [printer-controls] .axis.axis--vertical .negative {
   margin-top: 22px;
 }
 
-/* line 7434, tmp/application.scss */
+/* line 7351, tmp/application.scss */
 printer-controls .axis.axis--vertical .negative abbr,
 [printer-controls] .axis.axis--vertical .negative abbr {
   bottom: -17px;
 }
 
-/* line 7439, tmp/application.scss */
+/* line 7356, tmp/application.scss */
 printer-controls .axis.axis--vertical .control-button,
 [printer-controls] .axis.axis--vertical .control-button {
   width: 44px;
   height: 24px;
 }
 
-/* line 7445, tmp/application.scss */
+/* line 7362, tmp/application.scss */
 printer-controls .axis.axis--horizontal,
 [printer-controls] .axis.axis--horizontal {
   height: 44px;
 }
 
-/* line 7448, tmp/application.scss */
+/* line 7365, tmp/application.scss */
 printer-controls .axis.axis--horizontal abbr,
 [printer-controls] .axis.axis--horizontal abbr {
   top: 14px;
 }
 
-/* line 7452, tmp/application.scss */
+/* line 7369, tmp/application.scss */
 printer-controls .axis.axis--horizontal .positive,
 printer-controls .axis.axis--horizontal .negative,
 [printer-controls] .axis.axis--horizontal .positive,
@@ -13401,37 +12864,37 @@ printer-controls .axis.axis--horizontal .negative,
   margin-right: -5px;
 }
 
-/* line 7458, tmp/application.scss */
+/* line 7375, tmp/application.scss */
 printer-controls .axis.axis--horizontal .positive,
 [printer-controls] .axis.axis--horizontal .positive {
   margin-right: 174px;
 }
 
-/* line 7461, tmp/application.scss */
+/* line 7378, tmp/application.scss */
 printer-controls .axis.axis--horizontal .positive abbr,
 [printer-controls] .axis.axis--horizontal .positive abbr {
   left: -26px;
 }
 
-/* line 7466, tmp/application.scss */
+/* line 7383, tmp/application.scss */
 printer-controls .axis.axis--horizontal .negative,
 [printer-controls] .axis.axis--horizontal .negative {
   margin-left: -134px;
 }
 
-/* line 7469, tmp/application.scss */
+/* line 7386, tmp/application.scss */
 printer-controls .axis.axis--horizontal .negative abbr,
 [printer-controls] .axis.axis--horizontal .negative abbr {
   right: -20px;
 }
 
-/* line 7474, tmp/application.scss */
+/* line 7391, tmp/application.scss */
 printer-controls .axis.axis--horizontal .control-button,
 [printer-controls] .axis.axis--horizontal .control-button {
   text-indent: 9999px;
 }
 
-/* line 7478, tmp/application.scss */
+/* line 7395, tmp/application.scss */
 printer-controls .axis.axis--horizontal .control-button,
 [printer-controls] .axis.axis--horizontal .control-button {
   width: 24px;
@@ -13439,7 +12902,7 @@ printer-controls .axis.axis--horizontal .control-button,
   margin-right: 5px;
 }
 
-/* line 7485, tmp/application.scss */
+/* line 7402, tmp/application.scss */
 printer-controls .axis .control-button,
 [printer-controls] .axis .control-button {
   background-color: #e4e4e4;
@@ -13464,7 +12927,7 @@ printer-controls .axis .control-button,
           user-select: none;
 }
 
-/* line 7502, tmp/application.scss */
+/* line 7419, tmp/application.scss */
 printer-controls .axis .control-button:hover, printer-controls .axis .control-button:focus,
 [printer-controls] .axis .control-button:hover,
 [printer-controls] .axis .control-button:focus {
@@ -13472,20 +12935,20 @@ printer-controls .axis .control-button:hover, printer-controls .axis .control-bu
   color: inherit;
 }
 
-/* line 7508, tmp/application.scss */
+/* line 7425, tmp/application.scss */
 printer-controls .axis .control-button:active,
 [printer-controls] .axis .control-button:active {
   box-shadow: 0 1px 2px rgba(22, 23, 32, 0.1);
 }
 
-/* line 7513, tmp/application.scss */
+/* line 7430, tmp/application.scss */
 printer-controls .axis.x--axis,
 [printer-controls] .axis.x--axis {
   margin-left: 162px;
   margin-right: 162px;
 }
 
-/* line 7518, tmp/application.scss */
+/* line 7435, tmp/application.scss */
 printer-controls .axis.y--axis,
 [printer-controls] .axis.y--axis {
   margin-top: 102px;
@@ -13493,13 +12956,13 @@ printer-controls .axis.y--axis,
   margin-left: 50px;
 }
 
-/* line 7524, tmp/application.scss */
+/* line 7441, tmp/application.scss */
 printer-controls .axis.z--axis,
 [printer-controls] .axis.z--axis {
   margin-left: 368px;
 }
 
-/* line 7531, tmp/application.scss */
+/* line 7448, tmp/application.scss */
 printer-controls .extruder.float,
 [printer-controls] .extruder.float {
   width: auto;
@@ -13507,7 +12970,7 @@ printer-controls .extruder.float,
   padding-left: 0;
 }
 
-/* line 7535, tmp/application.scss */
+/* line 7452, tmp/application.scss */
 printer-controls .extruder .axis,
 [printer-controls] .extruder .axis {
   position: relative;
@@ -13516,20 +12979,20 @@ printer-controls .extruder .axis,
 }
 
 @media only screen and (max-width: 719px) {
-  /* line 7535, tmp/application.scss */
+  /* line 7452, tmp/application.scss */
   printer-controls .extruder .axis,
   [printer-controls] .extruder .axis {
     float: none;
   }
 }
 
-/* line 7544, tmp/application.scss */
+/* line 7461, tmp/application.scss */
 printer-controls .extruder .axis .control-button,
 [printer-controls] .extruder .axis .control-button {
   border: 1px solid #A59B60;
 }
 
-/* line 7549, tmp/application.scss */
+/* line 7466, tmp/application.scss */
 printer-controls .extruder abbr,
 [printer-controls] .extruder abbr {
   text-align: center;
@@ -13537,7 +13000,7 @@ printer-controls .extruder abbr,
   left: 0 !important;
 }
 
-/* line 7555, tmp/application.scss */
+/* line 7472, tmp/application.scss */
 printer-controls .extruder abbr.ext,
 [printer-controls] .extruder abbr.ext {
   font-size: 16px;
@@ -13547,13 +13010,13 @@ printer-controls .extruder abbr.ext,
   width: 46px;
 }
 
-/* line 7566, tmp/application.scss */
+/* line 7483, tmp/application.scss */
 printer-controls .palm-controls .axis,
 [printer-controls] .palm-controls .axis {
   top: 20px;
 }
 
-/* line 7570, tmp/application.scss */
+/* line 7487, tmp/application.scss */
 printer-controls .palm-controls .axis.axis--vertical .control-button,
 [printer-controls] .palm-controls .axis.axis--vertical .control-button {
   width: 44px !important;
@@ -13561,21 +13024,21 @@ printer-controls .palm-controls .axis.axis--vertical .control-button,
   padding: 22px 0;
 }
 
-/* line 7578, tmp/application.scss */
+/* line 7495, tmp/application.scss */
 printer-controls .palm-controls .axis.axis--horizontal .control-button,
 [printer-controls] .palm-controls .axis.axis--horizontal .control-button {
   width: 66px !important;
   height: 44px !important;
 }
 
-/* line 7585, tmp/application.scss */
+/* line 7502, tmp/application.scss */
 printer-controls .palm-controls .axis.x--axis,
 [printer-controls] .palm-controls .axis.x--axis {
   margin-left: 100px;
   margin-right: 100px;
 }
 
-/* line 7590, tmp/application.scss */
+/* line 7507, tmp/application.scss */
 printer-controls .palm-controls .axis.y--axis,
 [printer-controls] .palm-controls .axis.y--axis {
   margin-top: 66px;
@@ -13583,14 +13046,14 @@ printer-controls .palm-controls .axis.y--axis,
   margin-left: 0;
 }
 
-/* line 7596, tmp/application.scss */
+/* line 7513, tmp/application.scss */
 printer-controls .palm-controls .axis.z--axis,
 [printer-controls] .palm-controls .axis.z--axis {
   margin-left: 250px;
 }
 
 @media (max-width: 374px) {
-  /* line 7596, tmp/application.scss */
+  /* line 7513, tmp/application.scss */
   printer-controls .palm-controls .axis.z--axis,
   [printer-controls] .palm-controls .axis.z--axis {
     margin-left: 100px;
@@ -13598,13 +13061,13 @@ printer-controls .palm-controls .axis.z--axis,
   }
 }
 
-/* line 7606, tmp/application.scss */
+/* line 7523, tmp/application.scss */
 printer-controls .palm-controls .extruder .axis,
 [printer-controls] .palm-controls .extruder .axis {
   float: left;
 }
 
-/* line 7611, tmp/application.scss */
+/* line 7528, tmp/application.scss */
 printer-controls .palm-controls .three-axis,
 [printer-controls] .palm-controls .three-axis {
   width: 330px;
@@ -13612,7 +13075,7 @@ printer-controls .palm-controls .three-axis,
 }
 
 @media (max-width: 374px) {
-  /* line 7611, tmp/application.scss */
+  /* line 7528, tmp/application.scss */
   printer-controls .palm-controls .three-axis,
   [printer-controls] .palm-controls .three-axis {
     width: 250px;
@@ -13620,7 +13083,7 @@ printer-controls .palm-controls .three-axis,
   }
 }
 
-/* line 7621, tmp/application.scss */
+/* line 7538, tmp/application.scss */
 printer-controls .palm-controls .extruder,
 [printer-controls] .palm-controls .extruder {
   height: 230px;
@@ -13630,7 +13093,7 @@ printer-controls .palm-controls .extruder,
  *	This code was created for Printr B.V. It is open source under the formide-client package.
  *	Copyright (c) 2017, All rights reserved, http://printr.nl
  */
-/* line 7634, tmp/application.scss */
+/* line 7551, tmp/application.scss */
 printer-fan svg,
 [printer-fan] svg {
   animation-name: spinFan;
@@ -13673,25 +13136,25 @@ printer-fan svg,
   }
 }
 
-/* line 7681, tmp/application.scss */
+/* line 7598, tmp/application.scss */
 .webcam-feed__icon {
   color: rgba(255, 255, 255, 0.8);
   transition: color .4s ease-in-out;
 }
 
-/* line 7685, tmp/application.scss */
+/* line 7602, tmp/application.scss */
 .webcam-feed__icon:hover {
   color: white;
 }
 
-/* line 7690, tmp/application.scss */
+/* line 7607, tmp/application.scss */
 .webcam-feed {
   position: absolute;
   top: 35px;
   left: 5px;
 }
 
-/* line 7696, tmp/application.scss */
+/* line 7613, tmp/application.scss */
 .webcam-feed figure {
   position: relative;
   width: 318px;
@@ -13705,7 +13168,7 @@ printer-fan svg,
   z-index: 100;
 }
 
-/* line 7708, tmp/application.scss */
+/* line 7625, tmp/application.scss */
 .webcam-feed figure figcaption {
   background-color: rgba(0, 0, 0, 0.4);
   border: none;
@@ -13715,7 +13178,7 @@ printer-fan svg,
   z-index: 2;
 }
 
-/* line 7718, tmp/application.scss */
+/* line 7635, tmp/application.scss */
 .webcam-feed .webcam-placeholder {
   position: absolute;
   top: 40%;
@@ -13725,14 +13188,14 @@ printer-fan svg,
   font-size: 1.5rem;
 }
 
-/* line 7727, tmp/application.scss */
+/* line 7644, tmp/application.scss */
 .webcam-feed img[src='./images/connectwebcam.png'] {
   width: 150px;
   position: relative;
   z-index: 1;
 }
 
-/* line 7736, tmp/application.scss */
+/* line 7653, tmp/application.scss */
 printer-list-item,
 [printer-list-item] {
   margin-bottom: 0;
@@ -13741,7 +13204,7 @@ printer-list-item,
 }
 
 @media only screen and (min-width: 720px) {
-  /* line 7736, tmp/application.scss */
+  /* line 7653, tmp/application.scss */
   printer-list-item,
   [printer-list-item] {
     margin-left: -3%;
@@ -13749,27 +13212,27 @@ printer-list-item,
   }
 }
 
-/* line 7747, tmp/application.scss */
+/* line 7664, tmp/application.scss */
 printer-list-item header,
 [printer-list-item] header {
   padding: 1rem .5rem .5rem;
   cursor: pointer;
 }
 
-/* line 7751, tmp/application.scss */
+/* line 7668, tmp/application.scss */
 printer-list-item header:hover,
 [printer-list-item] header:hover {
   background: rgba(255, 255, 255, 0.1);
 }
 
-/* line 7756, tmp/application.scss */
+/* line 7673, tmp/application.scss */
 printer-list-item .printer-details,
 [printer-list-item] .printer-details {
   font-size: 0.95rem;
   padding: 2px 0;
 }
 
-/* line 7761, tmp/application.scss */
+/* line 7678, tmp/application.scss */
 printer-list-item.selected-printer,
 [printer-list-item].selected-printer {
   min-height: 170px;
@@ -13780,14 +13243,14 @@ printer-list-item.selected-printer,
 }
 
 @media only screen and (min-width: 720px) {
-  /* line 7761, tmp/application.scss */
+  /* line 7678, tmp/application.scss */
   printer-list-item.selected-printer,
   [printer-list-item].selected-printer {
     width: 106%;
   }
 }
 
-/* line 7772, tmp/application.scss */
+/* line 7689, tmp/application.scss */
 printer-list-item.selected-printer header,
 [printer-list-item].selected-printer header {
   display: table-cell;
@@ -13795,51 +13258,51 @@ printer-list-item.selected-printer header,
   cursor: default;
 }
 
-/* line 7777, tmp/application.scss */
+/* line 7694, tmp/application.scss */
 printer-list-item.selected-printer header:hover,
 [printer-list-item].selected-printer header:hover {
   background: transparent;
 }
 
-/* line 7783, tmp/application.scss */
+/* line 7700, tmp/application.scss */
 printer-list-item h3,
 [printer-list-item] h3 {
   font-weight: 400;
   color: white;
 }
 
-/* line 7787, tmp/application.scss */
+/* line 7704, tmp/application.scss */
 printer-list-item h3.printer-title,
 [printer-list-item] h3.printer-title {
   width: 280px;
 }
 
-/* line 7791, tmp/application.scss */
+/* line 7708, tmp/application.scss */
 printer-list-item h3 status-icon,
 [printer-list-item] h3 status-icon {
   vertical-align: middle;
   margin-right: .5rem;
 }
 
-/* line 7797, tmp/application.scss */
+/* line 7714, tmp/application.scss */
 printer-list-item h4,
 [printer-list-item] h4 {
   color: rgba(255, 255, 255, 0.6);
 }
 
-/* line 7800, tmp/application.scss */
+/* line 7717, tmp/application.scss */
 printer-list-item h4 a,
 [printer-list-item] h4 a {
   color: inherit;
 }
 
-/* line 7804, tmp/application.scss */
+/* line 7721, tmp/application.scss */
 printer-list-item h4 device-status-icon,
 [printer-list-item] h4 device-status-icon {
   margin-left: .5rem;
 }
 
-/* line 7809, tmp/application.scss */
+/* line 7726, tmp/application.scss */
 printer-list-item .set-active,
 [printer-list-item] .set-active {
   background: white;
@@ -13854,7 +13317,7 @@ printer-list-item .set-active,
   transition: box-shadow .2s ease-in-out, background-color .2s ease-in-out;
 }
 
-/* line 7821, tmp/application.scss */
+/* line 7738, tmp/application.scss */
 printer-list-item .set-active.ng-leave, printer-list-item .set-active.ng-show-remove, printer-list-item .set-active.ng-hide-add,
 [printer-list-item] .set-active.ng-leave,
 [printer-list-item] .set-active.ng-show-remove,
@@ -13862,7 +13325,7 @@ printer-list-item .set-active.ng-leave, printer-list-item .set-active.ng-show-re
   animation: fadeOut .3s;
 }
 
-/* line 7827, tmp/application.scss */
+/* line 7744, tmp/application.scss */
 printer-list-item .set-active.ng-enter, printer-list-item .set-active.ng-show-add, printer-list-item .set-active.ng-hide-remove,
 [printer-list-item] .set-active.ng-enter,
 [printer-list-item] .set-active.ng-show-add,
@@ -13870,7 +13333,7 @@ printer-list-item .set-active.ng-enter, printer-list-item .set-active.ng-show-ad
   animation: bounceIn .3s;
 }
 
-/* line 7833, tmp/application.scss */
+/* line 7750, tmp/application.scss */
 printer-list-item .set-active:hover, printer-list-item .set-active:focus,
 [printer-list-item] .set-active:hover,
 [printer-list-item] .set-active:focus {
@@ -13878,65 +13341,65 @@ printer-list-item .set-active:hover, printer-list-item .set-active:focus,
   color: #161720;
 }
 
-/* line 7839, tmp/application.scss */
+/* line 7756, tmp/application.scss */
 printer-list-item .set-active:active,
 [printer-list-item] .set-active:active {
   background-color: rgba(255, 255, 255, 0.6);
 }
 
-/* line 7845, tmp/application.scss */
+/* line 7762, tmp/application.scss */
 printer-list-item .settings abbr,
 [printer-list-item] .settings abbr {
   margin-right: .5rem;
   font-weight: 600;
 }
 
-/* line 7852, tmp/application.scss */
+/* line 7769, tmp/application.scss */
 printer-list-item .modelfiles span:after,
 [printer-list-item] .modelfiles span:after {
   content: ',';
 }
 
-/* line 7856, tmp/application.scss */
+/* line 7773, tmp/application.scss */
 printer-list-item .modelfiles span:first-child:after,
 [printer-list-item] .modelfiles span:first-child:after {
   content: '';
 }
 
-/* line 7862, tmp/application.scss */
+/* line 7779, tmp/application.scss */
 printer-list-item .progress-container progress-bar,
 [printer-list-item] .progress-container progress-bar {
   margin: 0;
 }
 
-/* line 7865, tmp/application.scss */
+/* line 7782, tmp/application.scss */
 printer-list-item .progress-container h6,
 [printer-list-item] .progress-container h6 {
   margin-left: 0.5rem;
   margin-bottom: 0;
 }
 
-/* line 7871, tmp/application.scss */
+/* line 7788, tmp/application.scss */
 printer-list-item .progressControls,
 [printer-list-item] .progressControls {
   margin-top: 12px;
 }
 
-/* line 7874, tmp/application.scss */
+/* line 7791, tmp/application.scss */
 printer-list-item .progressControls .btn,
 [printer-list-item] .progressControls .btn {
   min-width: 100% !important;
 }
 
 @media only screen and (max-width: 719px) {
-  /* line 7874, tmp/application.scss */
+  /* line 7791, tmp/application.scss */
   printer-list-item .progressControls .btn,
   [printer-list-item] .progressControls .btn {
     padding: .5rem !important;
   }
 }
 
-/* line 7881, tmp/application.scss */
+/* line 7798, tmp/application.scss */
 printer-list-item .progressControls .btn.stop:hover,
 [printer-list-item] .progressControls .btn.stop:hover {
   color: #e64661 !important;
@@ -13946,7 +13409,7 @@ printer-list-item .progressControls .btn.stop:hover,
  *	This code was created for Printr B.V. It is open source under the formide-client package.
  *	Copyright (c) 2017, All rights reserved, http://printr.nl
  */
-/* line 7893, tmp/application.scss */
+/* line 7810, tmp/application.scss */
 printer-list,
 [printer-list] {
   margin: 0 0 1.5rem 0;
@@ -13957,7 +13420,7 @@ printer-list,
  *	This code was created for Printr B.V. It is open source under the formide-client package.
  *	Copyright (c) 2017, All rights reserved, http://printr.nl
  */
-/* line 7905, tmp/application.scss */
+/* line 7822, tmp/application.scss */
 printer-speed,
 [printer-speed] {
   border: 1px solid #afb0b9;
@@ -13965,7 +13428,7 @@ printer-speed,
   position: relative;
 }
 
-/* line 7911, tmp/application.scss */
+/* line 7828, tmp/application.scss */
 printer-speed .rectangle,
 [printer-speed] .rectangle {
   animation-name: moveHead;
@@ -13981,7 +13444,7 @@ printer-speed .rectangle,
   background: #afb0b9;
 }
 
-/* line 7928, tmp/application.scss */
+/* line 7845, tmp/application.scss */
 printer-speed .frame,
 [printer-speed] .frame {
   height: 2px;
@@ -14011,7 +13474,7 @@ printer-speed .frame,
  *	This code was created for Printr B.V. It is open source under the formide-client package.
  *	Copyright (c) 2017, All rights reserved, http://printr.nl
  */
-/* line 7959, tmp/application.scss */
+/* line 7876, tmp/application.scss */
 progress-bar,
 [progress-bar] {
   height: 8px;
@@ -14020,7 +13483,7 @@ progress-bar,
   margin-bottom: 8px;
 }
 
-/* line 7967, tmp/application.scss */
+/* line 7884, tmp/application.scss */
 progress-bar .progress,
 [progress-bar] .progress {
   background-color: #615892;
@@ -14028,8 +13491,8 @@ progress-bar .progress,
   text-align: left;
 }
 
-/* line 7975, tmp/application.scss */
-progress-bar, temperature-bar {
+/* line 7892, tmp/application.scss */
+progress-bar {
   width: 100%;
   position: relative;
   overflow: hidden;
@@ -14037,8 +13500,8 @@ progress-bar, temperature-bar {
   border-radius: 3px;
 }
 
-/* line 7983, tmp/application.scss */
-progress-bar .progress, temperature-bar .progress, temperature-bar .target {
+/* line 7900, tmp/application.scss */
+progress-bar .progress {
   width: 0%;
   height: 100%;
   position: absolute;
@@ -14051,7 +13514,7 @@ progress-bar .progress, temperature-bar .progress, temperature-bar .target {
   border-radius: 3px;
 }
 
-/* line 7998, tmp/application.scss */
+/* line 7915, tmp/application.scss */
 .progress--undefined .progress {
   box-shadow: 0 0 6px 2px rgba(255, 255, 255, 0.2) inset;
   background-image: linear-gradient(-45deg, #dcdcde 25%, rgba(220, 220, 222, 0) 25%, rgba(220, 220, 222, 0) 50%, #dcdcde 50%, #dcdcde 75%, rgba(220, 220, 222, 0) 75%, rgba(220, 220, 222, 0));
@@ -14066,75 +13529,7 @@ progress-bar .progress, temperature-bar .progress, temperature-bar .target {
   }
 }
 
-/*
- *	This code was created for Printr B.V. It is open source under the formide-client package.
- *	Copyright (c) 2017, All rights reserved, http://printr.nl
- */
-/* line 8019, tmp/application.scss */
-selection-block.active .block-selection,
-[selection-block].active .block-selection {
-  /* border-color: $primary-color; */
-  box-shadow: 0 2px 8px rgba(97, 88, 146, 0.3);
-}
-
-/* line 8026, tmp/application.scss */
-.block-selection {
-  /* border: 1px solid; */
-  /* border-color: $secondary-color; */
-  transition: box-shadow .2s ease-in-out, background-color .2s ease-in-out, border-color .5s ease-in-out, opacity .5s ease-in-out;
-  cursor: pointer;
-}
-
-/* line 8033, tmp/application.scss */
-.block-selection input {
-  vertical-align: middle;
-  margin-left: 1px;
-  margin-top: -2px;
-}
-
-/* line 8039, tmp/application.scss */
-.block-selection h6 {
-  margin-bottom: 0;
-}
-
-/* line 8043, tmp/application.scss */
-.block-selection.active {
-  border-color: #615892;
-  box-shadow: 0 2px 8px rgba(97, 88, 146, 0.3);
-}
-
-/*
- *	This code was created for Printr B.V. It is open source under the formide-client package.
- *	Copyright (c) 2017, All rights reserved, http://printr.nl
- */
-/* line 8054, tmp/application.scss */
-selection-list,
-[selection-list] {
-  border: 1px solid #413b62;
-  border-radius: 3px;
-  display: inline-block;
-  margin-bottom: 0;
-  margin-top: 12px;
-  font-size: 12px;
-}
-
-/* line 8064, tmp/application.scss */
-selection-list label,
-[selection-list] label {
-  border-left: 1px solid #413b62;
-  padding: 6px;
-  float: left;
-  color: #4c4572;
-  cursor: pointer;
-}
-
-/* line 8071, tmp/application.scss */
-selection-list label:first-child,
-[selection-list] label:first-child {
-  border-left: 0;
-}
-
-/* line 8077, tmp/application.scss */
+/* line 7928, tmp/application.scss */
 status-icon,
 [status-icon] {
   background-color: #fff;
@@ -14151,7 +13546,7 @@ status-icon,
   font-weight: 400;
 }
 
-/* line 8092, tmp/application.scss */
+/* line 7943, tmp/application.scss */
 status-icon i.fa, status-icon i.icon,
 [status-icon] i.fa,
 [status-icon] i.icon {
@@ -14163,14 +13558,14 @@ status-icon i.fa, status-icon i.icon,
   color: red;
 }
 
-/* line 8104, tmp/application.scss */
+/* line 7955, tmp/application.scss */
 status-icon i.fa.fa-play, status-icon i.fa-play.icon,
 [status-icon] i.fa.fa-play,
 [status-icon] i.fa-play.icon {
   margin: 5px 7px;
 }
 
-/* line 8109, tmp/application.scss */
+/* line 7960, tmp/application.scss */
 status-icon i.fa.ng-leave, status-icon i.ng-leave.icon,
 status-icon i.fa.ng-show-remove,
 status-icon i.ng-show-remove.icon,
@@ -14185,7 +13580,7 @@ status-icon i.ng-hide-add.icon,
   animation: bounceOut .3s;
 }
 
-/* line 8115, tmp/application.scss */
+/* line 7966, tmp/application.scss */
 status-icon i.fa.ng-enter, status-icon i.ng-enter.icon,
 status-icon i.fa.ng-show-add,
 status-icon i.ng-show-add.icon,
@@ -14200,73 +13595,73 @@ status-icon i.ng-hide-remove.icon,
   animation: bounceIn .3s;
 }
 
-/* line 8121, tmp/application.scss */
+/* line 7972, tmp/application.scss */
 status-icon svg,
 [status-icon] svg {
   position: absolute;
   overflow: visible !important;
 }
 
-/* line 8126, tmp/application.scss */
+/* line 7977, tmp/application.scss */
 status-icon .circle-stroke,
 [status-icon] .circle-stroke {
   stroke: #afb0b9;
   transition: all .3s ease-in-out;
 }
 
-/* line 8131, tmp/application.scss */
+/* line 7982, tmp/application.scss */
 status-icon i.fa, status-icon i.icon,
 [status-icon] i.fa,
 [status-icon] i.icon {
   color: #afb0b9;
 }
 
-/* line 8136, tmp/application.scss */
+/* line 7987, tmp/application.scss */
 status-icon .heating .circle-stroke,
 [status-icon] .heating .circle-stroke {
   stroke: #e67b46;
 }
 
-/* line 8140, tmp/application.scss */
+/* line 7991, tmp/application.scss */
 status-icon .heating i.fa, status-icon .heating i.icon,
 [status-icon] .heating i.fa,
 [status-icon] .heating i.icon {
   color: #e67b46;
 }
 
-/* line 8146, tmp/application.scss */
+/* line 7997, tmp/application.scss */
 status-icon .connecting .circle-stroke,
 [status-icon] .connecting .circle-stroke {
   stroke: #fcca00;
 }
 
-/* line 8150, tmp/application.scss */
+/* line 8001, tmp/application.scss */
 status-icon .connecting i.fa, status-icon .connecting i.icon,
 [status-icon] .connecting i.fa,
 [status-icon] .connecting i.icon {
   color: #fcca00;
 }
 
-/* line 8156, tmp/application.scss */
+/* line 8007, tmp/application.scss */
 status-icon .paused .circle-stroke,
 [status-icon] .paused .circle-stroke {
   stroke: #fcca00;
 }
 
-/* line 8160, tmp/application.scss */
+/* line 8011, tmp/application.scss */
 status-icon .paused i.fa, status-icon .paused i.icon,
 [status-icon] .paused i.fa,
 [status-icon] .paused i.icon {
   color: #fcca00;
 }
 
-/* line 8166, tmp/application.scss */
+/* line 8017, tmp/application.scss */
 status-icon .error .circle-stroke,
 [status-icon] .error .circle-stroke {
   stroke: #e64661;
 }
 
-/* line 8170, tmp/application.scss */
+/* line 8021, tmp/application.scss */
 status-icon .error i.fa, status-icon .error i.icon,
 [status-icon] .error i.fa,
 [status-icon] .error i.icon {
@@ -14274,26 +13669,26 @@ status-icon .error i.fa, status-icon .error i.icon,
   margin: 6px 10px;
 }
 
-/* line 8177, tmp/application.scss */
+/* line 8028, tmp/application.scss */
 status-icon .online .circle-stroke,
 [status-icon] .online .circle-stroke {
   stroke: #61e646;
 }
 
-/* line 8181, tmp/application.scss */
+/* line 8032, tmp/application.scss */
 status-icon .online i.fa, status-icon .online i.icon,
 [status-icon] .online i.fa,
 [status-icon] .online i.icon {
   color: #61e646;
 }
 
-/* line 8187, tmp/application.scss */
+/* line 8038, tmp/application.scss */
 status-icon .printing .circle-stroke,
 [status-icon] .printing .circle-stroke {
   stroke: #61e646;
 }
 
-/* line 8191, tmp/application.scss */
+/* line 8042, tmp/application.scss */
 status-icon .printing i.fa, status-icon .printing i.icon,
 [status-icon] .printing i.fa,
 [status-icon] .printing i.icon {
@@ -14304,51 +13699,12 @@ status-icon .printing i.fa, status-icon .printing i.icon,
  *	This code was created for Printr B.V. It is open source under the formide-client package.
  *	Copyright (c) 2017, All rights reserved, http://printr.nl
  */
-/* line 8202, tmp/application.scss */
-temperature-bar,
-[temperature-bar] {
-  font-size: 14px;
-  font-size: 0.875rem;
-  line-height: 1rem;
-  height: 24px;
-  background-color: #e4e4e4;
-  margin-top: 2px;
-  margin-bottom: 8px;
-  padding: .3rem;
-  text-align: right;
-  color: #afb0b9;
-}
-
-/* line 8214, tmp/application.scss */
-temperature-bar .progress,
-[temperature-bar] .progress {
-  font-size: 14px;
-  font-size: 0.875rem;
-  line-height: 1rem;
-  background-color: rgba(97, 88, 146, 0.6);
-  text-align: right;
-  color: white;
-  padding: 5px;
-}
-
-/* line 8223, tmp/application.scss */
-temperature-bar .target,
-[temperature-bar] .target {
-  border-right: 2px solid #4c4572;
-  text-indent: -9999px;
-  text-align: left;
-}
-
-/*
- *	This code was created for Printr B.V. It is open source under the formide-client package.
- *	Copyright (c) 2017, All rights reserved, http://printr.nl
- */
-/* line 8238, tmp/application.scss */
+/* line 8055, tmp/application.scss */
 .login-fields input {
   margin-bottom: 1rem;
 }
 
-/* line 8243, tmp/application.scss */
+/* line 8060, tmp/application.scss */
 .infoBox {
   background: #f1f1f2;
   border: 1px solid #e4e4e4;
@@ -14358,14 +13714,14 @@ temperature-bar .target,
 }
 
 @media only screen and (max-width: 719px) {
-  /* line 8243, tmp/application.scss */
+  /* line 8060, tmp/application.scss */
   .infoBox {
     width: 100%;
     margin-left: 0;
   }
 }
 
-/* line 8255, tmp/application.scss */
+/* line 8072, tmp/application.scss */
 .infoBox .fa-info-circle {
   font-size: 2rem;
   color: #615892;
@@ -14373,7 +13729,7 @@ temperature-bar .target,
   position: absolute;
 }
 
-/* line 8263, tmp/application.scss */
+/* line 8080, tmp/application.scss */
 .infoBox p {
   font-size: 0.9rem;
   margin-bottom: 1rem;
@@ -14384,31 +13740,31 @@ temperature-bar .target,
  *	This code was created for Printr B.V. It is open source under the formide-client package.
  *	Copyright (c) 2017, All rights reserved, http://printr.nl
  */
-/* line 8276, tmp/application.scss */
-#connect .block, #connect .block-selection, #connect #monitor-print .tune-values .tune-block, #monitor-print .tune-values #connect .tune-block {
+/* line 8093, tmp/application.scss */
+#connect .block, #connect #monitor-print .tune-values .tune-block, #monitor-print .tune-values #connect .tune-block {
   max-width: 900px;
   padding: 2.5rem 2rem;
   margin: 0 auto;
 }
 
 @media only screen and (max-width: 719px) {
-  /* line 8276, tmp/application.scss */
-  #connect .block, #connect .block-selection, #connect #monitor-print .tune-values .tune-block, #monitor-print .tune-values #connect .tune-block {
+  /* line 8093, tmp/application.scss */
+  #connect .block, #connect #monitor-print .tune-values .tune-block, #monitor-print .tune-values #connect .tune-block {
     padding: 2rem 1rem;
   }
 }
 
-/* line 8286, tmp/application.scss */
+/* line 8103, tmp/application.scss */
 #connect .logo h1, #connect .anchor__link {
   color: #46b1e6;
 }
 
-/* line 8290, tmp/application.scss */
+/* line 8107, tmp/application.scss */
 #connect .logo {
   margin-top: 0.5rem;
 }
 
-/* line 8294, tmp/application.scss */
+/* line 8111, tmp/application.scss */
 #connect .btn {
   background-color: rgba(70, 177, 230, 0.05);
   box-shadow: 0 1px 2px rgba(22, 23, 32, 0.1);
@@ -14418,57 +13774,57 @@ temperature-bar .target,
   padding: 12px 16px;
 }
 
-/* line 8303, tmp/application.scss */
+/* line 8120, tmp/application.scss */
 #connect .btn:focus, #connect .btn:hover {
   box-shadow: 0 2px 4px rgba(22, 23, 32, 0.3);
 }
 
-/* line 8307, tmp/application.scss */
+/* line 8124, tmp/application.scss */
 #connect .btn:active {
   background-color: rgba(48, 168, 227, 0.05);
   box-shadow: 0 1px 2px rgba(22, 23, 32, 0.1);
 }
 
-/* line 8313, tmp/application.scss */
+/* line 8130, tmp/application.scss */
 #connect .anchor__link::after {
   background: #a3d8f3;
 }
 
-/* line 8317, tmp/application.scss */
+/* line 8134, tmp/application.scss */
 #connect fieldset.settings {
   margin: 0 auto;
   max-width: 450px;
 }
 
-/* line 8322, tmp/application.scss */
+/* line 8139, tmp/application.scss */
 #connect fieldset.settings .advanced-settings li {
   margin-bottom: 0.75rem;
 }
 
-/* line 8327, tmp/application.scss */
+/* line 8144, tmp/application.scss */
 #connect fieldset.settings [add-new] {
   margin-bottom: 0;
   padding: 0.3rem;
 }
 
-/* line 8331, tmp/application.scss */
+/* line 8148, tmp/application.scss */
 #connect fieldset.settings [add-new] .fa, #connect fieldset.settings [add-new] .icon {
   color: #afb0b9;
 }
 
-/* line 8338, tmp/application.scss */
+/* line 8155, tmp/application.scss */
 #connect .faqs .faqTitle {
   margin-bottom: 1rem;
   background: #f3f3f3;
   padding: 0.5rem 1rem;
 }
 
-/* line 8344, tmp/application.scss */
+/* line 8161, tmp/application.scss */
 #connect .faqs .faqBody {
   margin: 0 1rem 1rem;
 }
 
-/* line 8352, tmp/application.scss */
+/* line 8169, tmp/application.scss */
 .figure-container .onboarding-figure {
   width: 250px;
   height: 250px;
@@ -14480,19 +13836,19 @@ temperature-bar .target,
   position: relative;
 }
 
-/* line 8362, tmp/application.scss */
+/* line 8179, tmp/application.scss */
 .figure-container .onboarding-figure img {
   position: absolute;
 }
 
-/* line 8366, tmp/application.scss */
+/* line 8183, tmp/application.scss */
 .figure-container .onboarding-figure .logo-image {
   left: 25px;
   top: 80px;
   animation: fadeInLeft .3s;
 }
 
-/* line 8372, tmp/application.scss */
+/* line 8189, tmp/application.scss */
 .figure-container .onboarding-figure .main-image {
   left: 0;
   right: 0;
@@ -14501,7 +13857,7 @@ temperature-bar .target,
   animation: fadeInLeft .3s;
 }
 
-/* line 8380, tmp/application.scss */
+/* line 8197, tmp/application.scss */
 .figure-container .onboarding-figure:before {
   content: '';
   width: 80%;
@@ -14516,13 +13872,13 @@ temperature-bar .target,
  *	This code was created for Printr B.V. It is open source under the formide-client package.
  *	Copyright (c) 2017, All rights reserved, http://printr.nl
  */
-/* line 8400, tmp/application.scss */
+/* line 8217, tmp/application.scss */
 #printer-controls printer-controls-fan {
   position: relative;
   top: -7px;
 }
 
-/* line 8405, tmp/application.scss */
+/* line 8222, tmp/application.scss */
 #printer-controls printer-controls-speed {
   width: 45px;
   height: 45px;
@@ -14530,7 +13886,7 @@ temperature-bar .target,
   top: -7px;
 }
 
-/* line 8412, tmp/application.scss */
+/* line 8229, tmp/application.scss */
 #printer-controls printer-controls-flow-rate {
   width: 45px;
   height: 45px;
@@ -14538,7 +13894,7 @@ temperature-bar .target,
   top: -7px;
 }
 
-/* line 8419, tmp/application.scss */
+/* line 8236, tmp/application.scss */
 #printer-controls .updateOverlay {
   position: absolute;
   top: 40%;
@@ -14546,35 +13902,35 @@ temperature-bar .target,
   text-align: center;
 }
 
-/* line 8426, tmp/application.scss */
+/* line 8243, tmp/application.scss */
 #printer-controls .block--temperatures {
   min-height: 171px;
 }
 
-/* line 8430, tmp/application.scss */
+/* line 8247, tmp/application.scss */
 #printer-controls .temperature input {
   width: 37%;
   display: inline-block;
 }
 
 @media only screen and (max-width: 719px) {
-  /* line 8430, tmp/application.scss */
+  /* line 8247, tmp/application.scss */
   #printer-controls .temperature input {
     width: 40%;
   }
 }
 
-/* line 8439, tmp/application.scss */
+/* line 8256, tmp/application.scss */
 #printer-controls .tune-container {
   padding: 0.5rem 1rem 0;
 }
 
-/* line 8443, tmp/application.scss */
+/* line 8260, tmp/application.scss */
 #printer-controls .console {
   position: relative;
 }
 
-/* line 8446, tmp/application.scss */
+/* line 8263, tmp/application.scss */
 #printer-controls .console textarea {
   background: #191a1d;
   color: white;
@@ -14583,13 +13939,13 @@ temperature-bar .target,
   line-height: 2;
 }
 
-/* line 8453, tmp/application.scss */
+/* line 8270, tmp/application.scss */
 #printer-controls .console textarea:focus {
   border-color: transparent;
   box-shadow: none;
 }
 
-/* line 8460, tmp/application.scss */
+/* line 8277, tmp/application.scss */
 #printer-controls .console .header {
   color: #afb0b9;
   background: #191a1d;
@@ -14605,69 +13961,69 @@ temperature-bar .target,
  *	This code was created for Printr B.V. It is open source under the formide-client package.
  *	Copyright (c) 2017, All rights reserved, http://printr.nl
  */
-/* line 8482, tmp/application.scss */
+/* line 8299, tmp/application.scss */
 #file-library #files {
   position: relative;
   min-height: 84vh;
 }
 
-/* line 8486, tmp/application.scss */
+/* line 8303, tmp/application.scss */
 #file-library #files .ng-slide-animation {
   overflow: hidden;
 }
 
-/* line 8489, tmp/application.scss */
+/* line 8306, tmp/application.scss */
 #file-library #files .ng-slide-animation > ng-viewport,
 #file-library #files .ng-slide-animation > [ng-viewport] {
   display: block;
 }
 
-/* line 8493, tmp/application.scss */
+/* line 8310, tmp/application.scss */
 #file-library #files .ng-slide-animation > .ng-enter, #file-library #files .ng-slide-animation > .ng-leave {
   animation-duration: .5s;
   animation-fill-mode: both;
 }
 
-/* line 8497, tmp/application.scss */
+/* line 8314, tmp/application.scss */
 #file-library #files .ng-slide-animation > .ng-enter,
 #file-library #files .ng-slide-animation > .ng-leave.ng-leave-active {
   animation-name: fadeOutLeft;
 }
 
-/* line 8501, tmp/application.scss */
+/* line 8318, tmp/application.scss */
 #file-library #files .ng-slide-animation > .ng-leave,
 #file-library #files .ng-slide-animation > .ng-enter.ng-enter-active {
   z-index: 1;
   animation-name: fadeInLeft;
 }
 
-/* line 8506, tmp/application.scss */
+/* line 8323, tmp/application.scss */
 #file-library #files .ng-slide-animation > .ng-leave {
   position: absolute;
   z-index: -1;
 }
 
-/* line 8512, tmp/application.scss */
+/* line 8329, tmp/application.scss */
 #file-library #files figure {
   margin-bottom: 0;
 }
 
-/* line 8518, tmp/application.scss */
+/* line 8335, tmp/application.scss */
 #file-library #listView table {
   width: 100%;
 }
 
-/* line 8523, tmp/application.scss */
+/* line 8340, tmp/application.scss */
 #file-library #listView table th a {
   color: #161720;
 }
 
-/* line 8526, tmp/application.scss */
+/* line 8343, tmp/application.scss */
 #file-library #listView table th a:hover {
   text-decoration: underline;
 }
 
-/* line 8530, tmp/application.scss */
+/* line 8347, tmp/application.scss */
 #file-library #listView table th a i {
   font-size: 0.8rem;
   top: 6px;
@@ -14675,32 +14031,32 @@ temperature-bar .target,
   position: absolute;
 }
 
-/* line 8537, tmp/application.scss */
+/* line 8354, tmp/application.scss */
 #file-library #listView table th.name {
   padding-left: 66px;
 }
 
-/* line 8540, tmp/application.scss */
+/* line 8357, tmp/application.scss */
 #file-library #listView table th.name.local {
   padding-left: 0.5rem;
 }
 
-/* line 8546, tmp/application.scss */
+/* line 8363, tmp/application.scss */
 #file-library #listView table tbody tr {
   cursor: pointer;
 }
 
-/* line 8549, tmp/application.scss */
+/* line 8366, tmp/application.scss */
 #file-library #listView table tbody tr.tr--selected {
   background-color: rgba(175, 176, 185, 0.1);
 }
 
-/* line 8555, tmp/application.scss */
+/* line 8372, tmp/application.scss */
 #file-library #listView table td .icon-container {
   position: relative;
 }
 
-/* line 8558, tmp/application.scss */
+/* line 8375, tmp/application.scss */
 #file-library #listView table td .icon {
   text-align: center;
   padding: 0 8px;
@@ -14709,13 +14065,13 @@ temperature-bar .target,
   top: -4px;
 }
 
-/* line 8565, tmp/application.scss */
+/* line 8382, tmp/application.scss */
 #file-library #listView table td .icon img {
   width: 30px;
   height: 30px;
 }
 
-/* line 8570, tmp/application.scss */
+/* line 8387, tmp/application.scss */
 #file-library #listView table td .icon i.folder {
   background-image: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCAxNzkyIDE3OTIiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZD0iTTE2MDAgMTMxMnYtNzA0cTAtNDAtMjgtNjh0LTY4LTI4aC03MDRxLTQwIDAtNjgtMjh0LTI4LTY4di02NHEwLTQwLTI4LTY4dC02OC0yOGgtMzIwcS00MCAwLTY4IDI4dC0yOCA2OHY5NjBxMCA0MCAyOCA2OHQ2OCAyOGgxMjE2cTQwIDAgNjgtMjh0MjgtNjh6bTEyOC03MDR2NzA0cTAgOTItNjYgMTU4dC0xNTggNjZoLTEyMTZxLTkyIDAtMTU4LTY2dC02Ni0xNTh2LTk2MHEwLTkyIDY2LTE1OHQxNTgtNjZoMzIwcTkyIDAgMTU4IDY2dDY2IDE1OHYzMmg2NzJxOTIgMCAxNTggNjZ0NjYgMTU4eiIvPjwvc3ZnPg==);
   background-repeat: no-repeat;
@@ -14726,12 +14082,12 @@ temperature-bar .target,
   height: 30px;
 }
 
-/* line 8582, tmp/application.scss */
+/* line 8399, tmp/application.scss */
 #file-library #listView table td.actions {
   width: 60px;
 }
 
-/* line 8586, tmp/application.scss */
+/* line 8403, tmp/application.scss */
 #file-library #listView table td .name {
   white-space: normal;
   line-height: 25px;
@@ -14741,27 +14097,27 @@ temperature-bar .target,
 }
 
 @media only screen and (max-width: 719px) {
-  /* line 8586, tmp/application.scss */
+  /* line 8403, tmp/application.scss */
   #file-library #listView table td .name {
     margin-left: 0;
     padding: 0;
   }
 }
 
-/* line 8598, tmp/application.scss */
+/* line 8415, tmp/application.scss */
 #file-library #listView table td .name.local {
   margin-left: 0;
   padding: 0;
 }
 
-/* line 8607, tmp/application.scss */
+/* line 8424, tmp/application.scss */
 #file-library #uploadInvite {
   color: #868895;
   display: inline-block;
   width: 100%;
 }
 
-/* line 8612, tmp/application.scss */
+/* line 8429, tmp/application.scss */
 #file-library #uploadInvite .fa, #file-library #uploadInvite .icon {
   font-size: 1.5rem;
   color: #a1a3ad;
@@ -14769,74 +14125,74 @@ temperature-bar .target,
   position: relative;
 }
 
-/* line 8618, tmp/application.scss */
+/* line 8435, tmp/application.scss */
 #file-library #uploadInvite .icon {
   text-align: right;
   margin: 15px 10px 0 0;
 }
 
 @media only screen and (max-width: 1059px) {
-  /* line 8618, tmp/application.scss */
+  /* line 8435, tmp/application.scss */
   #file-library #uploadInvite .icon {
     margin: 15px 0 0 0;
   }
 }
 
-/* line 8626, tmp/application.scss */
+/* line 8443, tmp/application.scss */
 #file-library #uploadInvite .icon .fa, #file-library #uploadInvite .icon .icon {
   font-size: 6rem;
 }
 
 @media only screen and (max-width: 719px) {
-  /* line 8626, tmp/application.scss */
+  /* line 8443, tmp/application.scss */
   #file-library #uploadInvite .icon .fa, #file-library #uploadInvite .icon .icon {
     font-size: 4rem;
   }
 }
 
-/* line 8634, tmp/application.scss */
+/* line 8451, tmp/application.scss */
 #file-library #uploadInvite .upload-icon .fa, #file-library #uploadInvite .upload-icon .icon {
   cursor: pointer;
 }
 
-/* line 8636, tmp/application.scss */
+/* line 8453, tmp/application.scss */
 #file-library #uploadInvite .upload-icon .fa:hover, #file-library #uploadInvite .upload-icon .icon:hover {
   color: #615892;
 }
 
-/* line 8640, tmp/application.scss */
+/* line 8457, tmp/application.scss */
 #file-library #uploadInvite h2 {
   margin-top: 0.5rem;
 }
 
 @media only screen and (max-width: 719px) {
-  /* line 8640, tmp/application.scss */
+  /* line 8457, tmp/application.scss */
   #file-library #uploadInvite h2 {
     font-size: 1.5rem;
   }
 }
 
-/* line 8649, tmp/application.scss */
+/* line 8466, tmp/application.scss */
 #file-library .animate-show {
   transition: opacity .2s ease-out;
 }
 
-/* line 8654, tmp/application.scss */
+/* line 8471, tmp/application.scss */
 #file-library .animate-show.ng-hide {
   opacity: 0;
 }
 
-/* line 8658, tmp/application.scss */
+/* line 8475, tmp/application.scss */
 #file-library .animate-show-long.ng-hide {
   opacity: 0;
 }
 
-/* line 8662, tmp/application.scss */
+/* line 8479, tmp/application.scss */
 #file-library .drag {
   opacity: 0.75;
 }
 
-/* line 8665, tmp/application.scss */
+/* line 8482, tmp/application.scss */
 #file-library .over {
   border: 2px solid #37c51b !important;
 }
@@ -14845,40 +14201,40 @@ temperature-bar .target,
  *	This code was created for Printr B.V. It is open source under the formide-client package.
  *	Copyright (c) 2017, All rights reserved, http://printr.nl
  */
-/* line 8681, tmp/application.scss */
-#manage-device .block, #manage-device .block-selection, #manage-device #monitor-print .tune-values .tune-block, #monitor-print .tune-values #manage-device .tune-block {
+/* line 8498, tmp/application.scss */
+#manage-device .block, #manage-device #monitor-print .tune-values .tune-block, #monitor-print .tune-values #manage-device .tune-block {
   min-height: 300px;
 }
 
-/* line 8685, tmp/application.scss */
+/* line 8502, tmp/application.scss */
 #manage-device .container {
   position: relative;
   width: 100%;
   height: 230px;
 }
 
-/* line 8691, tmp/application.scss */
+/* line 8508, tmp/application.scss */
 #manage-device .network-table {
   margin: 0.25rem 0 0 0;
 }
 
-/* line 8696, tmp/application.scss */
+/* line 8513, tmp/application.scss */
 #manage-device .advanced-settings li {
   margin-bottom: 0.75rem;
 }
 
-/* line 8701, tmp/application.scss */
+/* line 8518, tmp/application.scss */
 #manage-device .form-fields [add-new] {
   margin-bottom: 0;
   padding: 0.3rem;
 }
 
-/* line 8705, tmp/application.scss */
+/* line 8522, tmp/application.scss */
 #manage-device .form-fields [add-new] .fa, #manage-device .form-fields [add-new] .icon {
   color: #afb0b9;
 }
 
-/* line 8712, tmp/application.scss */
+/* line 8529, tmp/application.scss */
 #manage-device .storageChart .label {
   position: absolute;
   top: 42%;
@@ -14886,19 +14242,19 @@ temperature-bar .target,
   width: 100%;
 }
 
-/* line 8718, tmp/application.scss */
+/* line 8535, tmp/application.scss */
 #manage-device .storageChart .label h3 {
   font-size: 2rem;
   line-height: 0.75;
 }
 
-/* line 8722, tmp/application.scss */
+/* line 8539, tmp/application.scss */
 #manage-device .storageChart .label h3 small, #manage-device .storageChart .label h3 .pill, #manage-device .storageChart .label h3 .loz, #manage-device .storageChart .label h3 .tag, #manage-device .storageChart .label h3 formide-button.btn--pill, #manage-device .storageChart .label h3
 .btn.btn--pill {
   font-size: 1rem;
 }
 
-/* line 8728, tmp/application.scss */
+/* line 8545, tmp/application.scss */
 #manage-device .storageChart .info {
   position: absolute;
   left: 72%;
@@ -14906,29 +14262,29 @@ temperature-bar .target,
   margin-right: -1rem;
 }
 
-/* line 8734, tmp/application.scss */
+/* line 8551, tmp/application.scss */
 #manage-device .storageChart .info h3 {
   font-size: 1.2rem;
 }
 
-/* line 8739, tmp/application.scss */
+/* line 8556, tmp/application.scss */
 #manage-device .storageChart h3 {
   margin: 0;
 }
 
-/* line 8744, tmp/application.scss */
+/* line 8561, tmp/application.scss */
 #manage-device .checkbox {
   margin-left: 0;
   cursor: pointer;
 }
 
-/* line 8747, tmp/application.scss */
+/* line 8564, tmp/application.scss */
 #manage-device .checkbox i {
   padding-left: 0;
 }
 
 @media only screen and (max-width: 719px) {
-  /* line 8754, tmp/application.scss */
+  /* line 8571, tmp/application.scss */
   #manage-device .connect {
     -ms-flex-order: -1;
         order: -1;
@@ -14937,23 +14293,23 @@ temperature-bar .target,
   }
 }
 
-/* line 8761, tmp/application.scss */
+/* line 8578, tmp/application.scss */
 #manage-device .layout__item.u-1\/2-sm.pad {
   padding-top: 1rem;
 }
 
-/* line 8765, tmp/application.scss */
+/* line 8582, tmp/application.scss */
 #manage-device .layout__item.u-1\/2-sm.pad:first-child {
   padding-top: 0;
 }
 
-/* line 8769, tmp/application.scss */
+/* line 8586, tmp/application.scss */
 #manage-device .layout__item.u-1\/2-sm.pad:nth-child(2) {
   padding-top: 0;
 }
 
 @media only screen and (max-width: 719px) {
-  /* line 8774, tmp/application.scss */
+  /* line 8591, tmp/application.scss */
   #manage-device .layout__item.u-1\/2-sm.pad:nth-child(2) {
     padding-top: 1rem;
   }
@@ -14963,56 +14319,56 @@ temperature-bar .target,
  *	This code was created for Printr B.V. It is open source under the formide-client package.
  *	Copyright (c) 2017, All rights reserved, http://printr.nl
  */
-/* line 8789, tmp/application.scss */
+/* line 8606, tmp/application.scss */
 #monitor-print .block--panel {
   height: 362px;
   overflow: auto;
   position: relative;
 }
 
-/* line 8795, tmp/application.scss */
+/* line 8612, tmp/application.scss */
 #monitor-print .webcam-panel .body {
   padding: 0 !important;
   overflow: hidden !important;
 }
 
-/* line 8801, tmp/application.scss */
+/* line 8618, tmp/application.scss */
 #monitor-print .tune-values printer-controls-fan {
   position: relative;
 }
 
-/* line 8805, tmp/application.scss */
+/* line 8622, tmp/application.scss */
 #monitor-print .tune-values printer-controls-speed {
   width: 45px;
   height: 45px;
   position: relative;
 }
 
-/* line 8811, tmp/application.scss */
+/* line 8628, tmp/application.scss */
 #monitor-print .tune-values printer-controls-flow-rate {
   width: 45px;
   height: 45px;
   position: relative;
 }
 
-/* line 8817, tmp/application.scss */
+/* line 8634, tmp/application.scss */
 #monitor-print .tune-values .tune-header {
   text-align: center;
   margin: 0 0 0.75rem;
 }
 
-/* line 8822, tmp/application.scss */
+/* line 8639, tmp/application.scss */
 #monitor-print .tune-values .tune-block {
   margin-bottom: 0;
   padding: 0.75rem 0 0.5rem;
 }
 
-/* line 8829, tmp/application.scss */
+/* line 8646, tmp/application.scss */
 #monitor-print .layout__item.u-1\/2-sm.pad {
   padding-top: 1rem;
 }
 
-/* line 8833, tmp/application.scss */
+/* line 8650, tmp/application.scss */
 #monitor-print .webcam-panel {
   padding: 0 !important;
   overflow: hidden !important;

@@ -10,9 +10,6 @@
 
         window.AUTH                 = window.AUTH || {};
 
-        window.PATH.login           = window.PATH.login || window.PATH.root + '/login';
-        window.PATH.root 		    = window.PATH.root || window.location.protocol + '//' + window.location.hostname + ':' + window.location.port;
-
         var auth_url = window.PATH.api;
 
         factory.login = function (username, password) {

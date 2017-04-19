@@ -47,8 +47,8 @@
 		}
 
 		angular.extend(vm, {
-		  submitForm: submitForm,
-		  user: user
+			submitForm: submitForm,
+			user: user
 		});
 	}
 
@@ -174,14 +174,14 @@
 			var localIp = vm.network.ip;
 
 			if (!localIp && vm.network.isHotspot) {
-			  // if turning off the hotspot and no IP avalible
-			  $notification.addNotification({
-				  title: 'Hotspot Reset',
-				  message: 'You cannot turn off the device hotspot if it is not connected to a network',
-				  channel: 'system',
-				  duration: -1,
-				  type: 'error'
-			  });
+				// if turning off the hotspot and no IP avalible
+				$notification.addNotification({
+					title: 'Hotspot Reset',
+					message: 'You cannot turn off the device hotspot if it is not connected to a network',
+					channel: 'system',
+					duration: -1,
+					type: 'error'
+				});
 
 			}else if (vm.network.isHotspot) {
 			  // if turning off the hotspot

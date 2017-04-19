@@ -11,27 +11,26 @@
 		vm.updateResponse = '';
 
 		// store the interval promise in this variable
-	   var promise;
+		var promise;
 
-	   // starts the interval
-	   var start = function() {
-		 // stops any running interval to avoid two intervals running at the same time
-		 stop();
+		// starts the interval
+		var start = function() {
+			// stops any running interval to avoid two intervals running at the same time
+			stop();
 
-		 promise = $interval(function() {
-			if(vm.valuenow < 99) {
-				 vm.valuenow++;
-			}
-		 }, 6000); //10 minutes in total
-	   };
+			promise = $interval(function() {
+				if(vm.valuenow < 99) {
+					vm.valuenow++;
+				}
+			}, 6000); //10 minutes in total
+		};
 
-	   // stops the interval
-	   var stop = function() {
-		 $interval.cancel(promise);
-	   };
+		// stops the interval
+		var stop = function() {
+			$interval.cancel(promise);
+		};
 
-	   // starting the interval by default
-
+		// starting the interval by default
 		vm.valuenow = 0;
 
 		// public functions
@@ -110,8 +109,8 @@
 	];
 
 	angular
-	  .module('components.manageDeviceUpdate', [
-	  	//
-	  ])
-	  .controller('ManageDeviceUpdateController', MainController)
+	.module('components.manageDeviceUpdate', [
+		//
+	])
+	.controller('ManageDeviceUpdateController', MainController)
 })();

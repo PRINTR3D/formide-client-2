@@ -29,7 +29,6 @@
 		vm.wait = true;
         vm.clicked = false;
         vm.printer = Printer.$active;
-		vm.imagesRootLocation = window.PATH.images;
 
 
 		$timeout(function () {

@@ -6,7 +6,7 @@
 (function () {
 	'use strict';
 
-	function MainController ($timeout, $auth, $location, $rootScope) {
+	function MainController ($timeout, $auth, $location, $rootScope, Sidebar) {
 		var vm = this;
 
 		if (window.localStorage.getItem("formide:setup")) {
@@ -31,7 +31,7 @@
 					window.localStorage.setItem('formide.auth:token', result.token);
 					$timeout(function() {
 						window.location.href = window.location.protocol + '//' + window.location.hostname + ':' + window.location.port;
-						$rootScope.setSidebarShow();
+						Sidebar.setShow();
 					}, 1000);
 
 	            },
@@ -50,7 +50,7 @@
 	}
 
 	MainController.$inject = [
-		'$timeout', '$auth', '$location', '$rootScope'
+		'$timeout', '$auth', '$location', '$rootScope', 'Sidebar'
 	];
 
 	angular

@@ -23,7 +23,7 @@
 	<div class="layout layout--smallGutter progressControls" ng-if="vm.type === 'selected'" >
 
 		<div class="layout__item u-1/4 progressControl u-posRelative">
-			<a ng-click="vm.navigate('/monitor');$root.setSidebarInvisible()" class="btn btn--small btn--white md-hide" id="webcam-feed" title="View Live">
+			<a ng-click="vm.navigate('/monitor');vm.sidebar.setInvisible()" class="btn btn--small btn--white md-hide" id="webcam-feed" title="View Live">
 			   <i class="fa fa-video-camera"></i>
 		   </a>
 		   <a ng-click="vm.navigate('/monitor')" class="btn btn--small btn--white sm-and-down-hide" id="webcam-feed" title="View Live">
@@ -32,7 +32,7 @@
 		</div>
 
 		<div class="layout__item u-1/4 progressControl">
-		     <a title="Controls" ng-click="vm.navigate('/control');$root.setSidebarInvisible()" class="btn btn--white btn--small md-hide"><i class="fa fa-arrows"></i></a>
+		     <a title="Controls" ng-click="vm.navigate('/control');vm.sidebar.setInvisible()" class="btn btn--white btn--small md-hide"><i class="fa fa-arrows"></i></a>
 			 <a title="Controls" ng-click="vm.navigate('/control')" class="btn btn--white btn--small sm-and-down-hide"><i class="fa fa-arrows"></i></a>
 		</div>
 

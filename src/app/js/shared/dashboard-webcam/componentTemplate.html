@@ -4,7 +4,7 @@
 -->
 
 <figure class="layout layout--alignCenter layout--alignMiddle layout--withoutGutter" ng-class="{'webcamLoaded': vm.webcamLoaded, 'webcamError': $root.webcamError}">
-	<div ng-if="vm.showClose" ng-click="$root.floatingWebcam = false; $event.stopPropagation();" class="close">&times;</div>
+	<div ng-if="vm.showClose" ng-click="$event.stopPropagation();" class="close">&times;</div>
 	<div ng-show="!$root.webcamError || !vm.webcamLoaded" class="layout__item webcam-container">
 
 		<figcaption ng-if="!$root.webcamError && vm.webcamLoaded" class="pill pill--small">Live <i class="fa fa-circle text-base-red faa-flash animated"></i></figcaption>

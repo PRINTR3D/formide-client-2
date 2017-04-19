@@ -3,10 +3,6 @@
  *	Copyright (c) 2017, All rights reserved, http://printr.nl
  */
 
-/*
- *  Component for creating a file list item.
- */
-
 (function () {
   function loadingScreen($timeout) {
       return({

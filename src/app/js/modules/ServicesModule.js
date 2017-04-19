@@ -7,5 +7,6 @@ module.services = angular.module('module.services', [
     'service.printer',
     'service.notification',
     'service.socket',
-    'service.file'
+    'service.file',
+	'service.sidebar'
 ]);

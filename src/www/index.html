@@ -41,7 +41,7 @@
 </head>
 <body
 	ng-controller="AppController as app"
-	ng-class="{'sidebar-invisible': app.sidebarInvisible, 'ng-dialog-open--away': app.dialogAway, 'loaded': app.loaded }"
+	ng-class="{'sidebar-invisible': app.sidebar.invisible, 'ng-dialog-open--away': app.dialogAway, 'loaded': app.loaded }"
 	ngf-drop
 	ngf-multiple="true"
 	ng-model="app.droppedFiles"
@@ -53,7 +53,7 @@
 
 	<div class="layout layout--withoutGutter">
 
-		<main id="main" class="layout__item u-fill" ng-class="{'noScroll': $root.bodyNoScroll || app.sidebarInvisible}">
+		<main id="main" class="layout__item u-fill" ng-class="{'noScroll': $root.bodyNoScroll || app.sidebar.invisible}">
 
 			<header
 				role="banner"
@@ -76,9 +76,9 @@
 			id="sidebar"
 			rel="sidebar"
 			class="layout__item u-fit aside"
-			ng-class="{'noScroll': ($root.bodyNoScroll && !app.sidebarInvisible) || !app.sidebarInvisible}"
+			ng-class="{'noScroll': ($root.bodyNoScroll && !app.sidebar.invisible) || !app.sidebar.invisible}"
 			template="sidebar/componentTemplate.html"
-			ng-if="$root.sidebar">
+			ng-if="app.sidebar.sidebar">
 		</aside>
 
 	</div>
@@ -95,14 +95,6 @@
 			link="alert.link">
 		</li>
 	</ul>
-
-	<dashboard-webcam
-		ng-if="$root.floatingWebcam && !$root.webcamError"
-		id="floating-webcam"
-		show-close="true"
-		ng-style="$root.floatingWebcamPosition"
-		drag-webcam>
-	</dashboard-webcam>
 
 </body>
 </html>

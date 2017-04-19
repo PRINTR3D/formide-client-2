@@ -4,21 +4,37 @@
  */
 
 (function () {
-    function MainService($rootScope, $timeout) {
+    function MainService() {
         var factory = {};
 
+		factory.invisible = (window.localStorage.getItem("formide.sidebar:invisible") === 'true');
+
         factory.setSidebar = function(controller, template, width) {
-            $rootScope.sidebar = {
-                width: width || 360,
+            factory.sidebar = {
+                width: width || 340,
                 controller: controller || 'SidebarController',
                 template: template || 'sidebar/componentTemplate.html'
             };
         }
 
+		factory.setInvisible = function () {
+			window.scrollTo(0, 0);
+			factory.invisible = factory.invisible ? false : true;
+			window.localStorage.setItem("formide.sidebar:invisible", factory.invisible);
+		};
+
+		factory.setHide = function () {
+			factory.sidebar = false;
+		};
+
+		factory.setShow = function () {
+			factory.sidebar = true;
+		};
+
         return factory;
     }
 
     angular.module('service.sidebar', [])
-        .factory('$sidebar', ['$rootScope', '$timeout', MainService]);
+        .factory('Sidebar', [MainService]);
 
 })();

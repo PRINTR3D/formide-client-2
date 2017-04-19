@@ -2,11 +2,8 @@ var module = module || {};
 
 module.shared = angular.module('module.shared', [
     'shared.printerFan',
-    'shared.selectionList',
-    'shared.selectionBlock',
     'shared.addNew',
     'shared.progressBar',
-    'shared.temperatureBar',
     'shared.printerControls',
     'shared.printerList',
     'shared.printerListItem',

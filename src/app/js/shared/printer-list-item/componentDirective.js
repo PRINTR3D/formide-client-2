@@ -25,7 +25,7 @@
     return directive;
   }
 
-  function MainController($timeout, $location, $rootScope, Printer, printerCtrl, $notification) {
+  function MainController($timeout, $location, $rootScope, Printer, printerCtrl, $notification, Sidebar) {
       var vm = this;
 
       vm.printer.status = vm.printer.status || 'offline';
@@ -89,13 +89,14 @@
 		resumePrint: resumePrint,
 		stopPrint: stopPrint,
 		navigate: navigate,
-		selectPrinter: selectPrinter
+		selectPrinter: selectPrinter,
+		sidebar: Sidebar
       });
   }
 
 
   MainController.$inject = [
-    '$timeout', '$location', '$rootScope', 'Printer', 'printerCtrl', '$notification'
+    '$timeout', '$location', '$rootScope', 'Printer', 'printerCtrl', '$notification', 'Sidebar'
   ];
 
   angular
