@@ -20,7 +20,10 @@ class UI {
     this.app = express()
     
     // use CORS headers
-    this.app.use(cors())
+    this.app.use(cors({
+	    origin: true,
+	    credentials: true
+    }))
     
     // server
     this.server = require('http').Server(this.app)
