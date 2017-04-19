@@ -138,13 +138,13 @@
 
 			$api.get('/network/status')
 			.then(function(response) {
-				if (!reset && vm.network.isConnected && !vm.network.publicIp) {
+				if (!reset && response.isConnected && !response.publicIp) {
 					// ip info can take longer to come through
 					$timeout(function () {
 						getNetwork();
 					}, 2000);
 				}
-				else if (reset && vm.network.publicIp) {
+				else if (reset && response.publicIp) {
 					// if wifi has been reset, keep fatching until device says it is no longer connected
 					$timeout(function () {
 						getNetwork(true);
@@ -153,7 +153,6 @@
 				else {
 					vm.network = response;
 					vm.networkResolved = true;
-					getSSIDs();
 				}
 			});
 		}
@@ -187,7 +186,7 @@
 			  // if turning off the hotspot
 			  $notification.addNotification({
 					title: 'Hotspot Reset',
-					message: 'Disabling the device hotspot will cause it to no longer emit the Wi-Fi hotspot. Once disabled you will need to connect to it via http://'+localIp+':8080 on the network ' + vm.network.network,
+					message: 'Disabling the device hotspot will cause it to no longer emit the Wi-Fi hotspot',
 					type: 'info',
 					duration: -1,
 					actions: [
@@ -204,23 +203,9 @@
 								vm.hotspotResolved = false;
 
 								if ($location.$$host == '10.20.30.40') {
-									// if connected to device via hotspot, navigate to the deive ip
-									var redirectInterval = $interval(function () {
-										$http.get('http://'+localIp+':8080')
-							    		.then(function(response) {
-							  				if (response.status == 200) {
-							  					window.location = 'http://'+localIp+':8080';
-							  				}
-							  		  	});
-									}, 1000);
-
 									$timeout(function () {
-										//if redirect fails, show prompt
-										$interval.cancel(redirectInterval);
-
 										hotspotRedirectNotification();
-
-									}, 15000);
+									}, 1000);
 								}
 
 								$api.post('/network/hotspot', {enabled: false})
@@ -275,12 +260,6 @@
 									window.location = 'http://'+vm.network.ip+':8080';
 									return true;
 								}
-								else {
-									return true;
-									$timeout(function () {
-										hotspotRedirectNotification();
-									}, 1000);
-								}
 							});
 						}
 					}
@@ -294,7 +273,7 @@
 
 			$notification.addNotification({
 				title: 'Wi-Fi Reset',
-				message: 'Resetting the Wi-Fi will disconnect the device from the network it is connected to.',
+				message: 'Resetting the Wi-Fi will disconnect the device from the network ' + vm.network.network + ', and will cause the device hotspot to be enabled if it is not already',
 				type: 'info',
 				duration: -1,
 				actions: [
@@ -311,7 +290,7 @@
 							$api.post('/network/reset')
 							.then(function(response) {
 
-								if ($location.$$host != '10.20.30.40' && vm.deviceType === 'the_element') {
+								if ($location.$$host != '10.20.30.40') {
 									resetWifiRedirectNotification();
 								}
 								else {
@@ -333,6 +312,11 @@
 									type: 'error'
 								});
 							});
+
+							if (!vm.network.isHotspot) {
+								vm.network.isHotspot = true;
+								$api.post('/network/hotspot', {enabled: true});
+							}
 
 							return true;
 						}
@@ -359,12 +343,6 @@
 								if (response.status == 200) {
 									window.location = 'http://10.20.30.40';
 									return true;
-								}
-								else {
-									return true;
-									$timeout(function () {
-										resetWifiRedirectNotification();
-									}, 1000);
 								}
 							});
 						}
@@ -473,6 +451,7 @@
 			getNetwork();
 			getUsers();
 			getDiskspace();
+			getSSIDs();
 		}
 
 		init();

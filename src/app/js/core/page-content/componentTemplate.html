@@ -3,7 +3,7 @@
  *	Copyright (c) 2017, All rights reserved, http://printr.nl
 -->
 
-<ul class="list-inline nav xs-hide">
+<ul class="list-inline nav is-header xs-hide">
     <li ng-repeat="route in vm.routes" ng-if="route.loggedIn === undefined || (route.loggedIn && $root.isLoggedIn) || (!route.loggedIn && !$root.isLoggedIn)">
         <a  ng-class="{ active: route.nav.active}" ng-click="vm.navigate(route.path)"
             title="{{ ::route.nav.name }}">

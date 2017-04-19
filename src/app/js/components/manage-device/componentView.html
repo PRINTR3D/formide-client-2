@@ -139,7 +139,7 @@
 
 					<div class="layout">
 						<div class="layout__item u-1/2">
-							<button class="btn btn--secondary" ng-click="manageDevice.resetWifi()">Reset Wi-Fi</button>
+							<button class="btn btn--secondary" ng-disabled="manageDevice.deviceType !== 'the_element'" ng-click="manageDevice.resetWifi()">Reset Wi-Fi</button>
 						</div>
 
 						<div class="u-textRight layout__item u-1/2">
