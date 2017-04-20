@@ -1,0 +1,80 @@
+/*------------------------------------*\
+    $RULES
+\*------------------------------------*/
+/**
+ * Horizontal rules, extend `hr`.
+ *
+ * Demo: jsfiddle.net/inuitcss/L6GuZ
+ *
+ */
+.rule{
+    color: $tertiary-color;
+    border:none;
+    border-bottom-width:1px;
+    border-bottom-style:solid;
+    margin-bottom: 1.2rem;
+    text-align: center;
+}
+
+
+.rule--flat {
+    margin-bottom: 0;
+}
+
+
+/**
+ * Dotted rules
+ */
+.rule--dotted{
+    border-bottom-style:dotted;
+}
+
+
+/**
+ * Dashed rules
+ */
+.rule--dashed{
+    border-bottom-style:dashed;
+}
+
+
+/**
+ * Ornamental rules. Places a § over the rule.
+ */
+.rule--ornament{
+    position:relative;
+    &:after{
+        content:"\00A7";
+        position:absolute;
+        top:   0;
+        right: 0;
+        left:  0;
+        line-height:0;
+        text-align:center;
+    }
+
+    /**
+    * Pass in an arbitrary ornament though a data attribute, e.g.:
+    *
+      <hr class="rule  rule--ornament" data-ornament="!">
+    *
+    */
+    &[data-title]:after{
+        content:attr(data-title);
+        display: inline-block;
+        position: relative;
+        top: -8px;
+        line-height: 1;
+        font-size: .8em;
+        text-transform: uppercase;
+        padding: 0 0.25em;
+        background: white;
+        font-weight: 600;
+        left: auto;
+        right: auto;
+
+    }
+    &[data-ornament]:after{
+        content:attr(data-ornament);
+    }
+}

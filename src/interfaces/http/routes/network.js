@@ -21,16 +21,16 @@ module.exports = function (client, http) {
 	  
     co(function*() {
     	
-    	// default all status data to false
-    	let isConnected, isHotspot, ip, publicIp, network, mac = false
+      	// default all status data to false
+      	let isConnected = false, isHotspot = false, ip = false, publicIp = false, network = false, mac = false
 	    
 	    // get available status data
-	    if (client.system.network.status) isConnected = yield client.system.network.status()
-    	if (client.system.network.network) network = yield client.system.network.network()
-	    if (client.system.network.ip) ip = yield client.system.network.ip()
-	    if (client.system.network.publicIp) publicIp = yield client.system.network.publicIp()
-	    if (client.system.network.mac) mac = yield client.system.network.mac()
-	    if (client.system.network.hotspotStatus) isHotspot = yield client.system.network.hotspotStatus()
+	    if (typeof client.system.network.status === 'function') isConnected = yield client.system.network.status()
+    	  if (typeof client.system.network.network === 'function') network = yield client.system.network.network()
+	    if (typeof client.system.network.ip === 'function') ip = yield client.system.network.ip()
+	    if (typeof client.system.network.publicIp === 'function') publicIp = yield client.system.network.publicIp()
+	    if (typeof client.system.network.mac === 'function') mac = yield client.system.network.mac()
+	    if (typeof client.system.network.hotspotStatus === 'function') isHotspot = yield client.system.network.hotspotStatus()
 	    
       return res.ok({ ip, publicIp, mac, isConnected, isHotspot, network })
     }).then(null, res.serverError)
@@ -64,11 +64,7 @@ module.exports = function (client, http) {
 	  if (!client.system.network.connect) return res.notImplemented('Networking is not implemented on this device')
 	  co(function*() {
 	    yield client.system.network.connect(req.body) // will trigger error when incorrect
-      
-      const ip = yield client.system.network.ip()
-      if (!ip) return res.notFound('Could not retrieve IP address')
-      
-      return res.ok({ message: 'Connected to network', ip })
+		  return res.ok({ message: 'Connected to network' })
 	  }).then(null, res.serverError)
   })
 	

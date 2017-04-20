@@ -192,8 +192,8 @@ class Storage {
 	 * Get amount of disk space remaining
 	 * @returns {*}
 	 */
-	diskSpace () {
-		return this.diskSpace().getDiskSpace()
+	getDiskSpace () {
+		return this.diskSpace.getDiskSpace()
 	}
 }
 

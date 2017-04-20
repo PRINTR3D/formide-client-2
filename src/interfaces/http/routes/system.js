@@ -20,6 +20,7 @@ module.exports = function (client, http) {
     return res.ok({
       version: client.config.version,
       drivers: driverVersion,
+      deviceType: client.system.OS_IMPLEMENTATION,
       uptime
     })
   })

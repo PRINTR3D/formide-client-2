@@ -18,6 +18,7 @@ const Www = require('../www')
 
 // other
 const PluginHandler = require('../plugins/pluginHandler')
+const determineDevice = require('./utils/determineDevice')
 
 class Client {
 
@@ -39,10 +40,16 @@ class Client {
     this.env = process.env.NODE_ENV
 
     try {
-      const OS_IMPLEMENTATION = process.env.OS_IMPLEMENTATION || 'the_element'
+      
+      // check if known device, will set OS_IMPLEMENTATION env param if found, otherwise default to The Element
+	    const OS_IMPLEMENTATION = determineDevice() || process.env.OS_IMPLEMENTATION || 'the_element'
       this.logger.log(`Loading native implementation for ${OS_IMPLEMENTATION}...`, 'info')
+      
+      // bind the implementation APIs
+      this.system.OS_IMPLEMENTATION = OS_IMPLEMENTATION
       this.system.network = require(`../implementations/${OS_IMPLEMENTATION}/network`)
       this.system.update = require(`../implementations/${OS_IMPLEMENTATION}/update`)
+      
     } catch (e) {
       this.logger.log(`No native client implementation found: ${e.message}`, 'warning')
     }

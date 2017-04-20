@@ -1,0 +1,92 @@
+/*
+ *	This code was created for Printr B.V. It is open source under the formide-client package.
+ *	Copyright (c) 2017, All rights reserved, http://printr.nl
+ */
+
+ .list-inline--delimited,
+ %list-inline--delimited {
+   > li + li {
+       &:before {
+           content: " |";
+       }
+   }
+}
+
+
+queue-list-item,
+[queue-list-item] {
+
+    div {
+        figure {
+            width: 100%;
+            max-width: 140px;
+            max-height: 140px;
+            height: auto;
+            background: transparent;
+            margin: -16px 0;
+
+            img {
+                width: 100%;
+            }
+        }
+    }
+
+    header {
+        display: inline-block;
+
+        hgroup {
+            margin-bottom: 0;
+        }
+
+		.added{
+			text-align: left;
+
+			@include media-query(sm) {
+				text-align: right;
+			}
+		}
+    }
+
+	.queue-item-name{
+		margin: 0.5rem 0;
+
+		@include media-query(xs) {
+			margin-bottom: 1rem;
+		}
+	}
+
+    footer {
+        p {
+            margin-bottom: 0;
+        }
+    }
+
+    .btn--alignment {
+        display: block;
+        /* width: 100%; */
+
+        @include media-query(sm) {
+            width: 200px;
+            margin: -.5rem 0;
+            float: right;
+        }
+    }
+
+    .expected-printing-time {
+        margin-top: -0.5rem;
+
+        @include media-query(xs) {
+            margin-bottom: .5rem;
+        }
+    }
+
+    .slice-settings {
+
+    }
+
+	.actionButton{
+		@include media-query(xs) {
+            min-width: 47% !important;
+        }
+	}
+}

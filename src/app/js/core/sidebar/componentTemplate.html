@@ -1,0 +1,56 @@
+<!--
+ *	This code was created for Printr B.V. It is open source under the formide-client package.
+ *	Copyright (c) 2017, All rights reserved, http://printr.nl
+-->
+<article class="main-sidebar-content">
+
+	<section class="sm-hide sidebar-header" >
+		<div ng-if="route.loggedIn === undefined || (route.loggedIn && vm.isLoggedIn) || (!route.loggedIn && !vm.isLoggedIn)" class="hide--sidebar" ng-click="vm.sidebar.setInvisible()">
+			<img src="./images/hamburger_expand.svg" alt="">
+		</div>
+
+		<h3 class="title">Printers</h3>
+	</section>
+
+	<section class="fade" id="sidebar-printers">
+		<h3 class="xs-hide title">Printers</h3>
+
+
+		<div ng-if="vm.resolved && vm.printer < 1" class="u-textCenter">
+			<h3>No Printers Connected</h3>
+		</div>
+
+		<div ng-if="vm.resolved && vm.printer.length > 0" >
+
+			<h4>Selected Printer</h4>
+
+			<ul printer-list ng-if="vm.printerActive">
+				<li printer-list-item
+					printer="vm.printerActive"
+					type="selected"
+					class="selected-printer">
+				</li>
+			</ul>
+
+			<p ng-if="!vm.printerActive" class="selected-printer-message">You currently have no selected printer<br/>Click on a printer below to select it</p>
+
+			<br />
+		</div>
+
+		<div ng-if="vm.resolved && vm.printer.length > 0">
+			<h4>Printers</h4>
+
+			<ul printer-list>
+				<li printer-list-item
+					ng-repeat="printer in vm.printer"
+					type="offline"
+					printer="printer">
+				</li>
+			</ul>
+		</div>
+
+		<div ng-if="!vm.resolved" class="u-textCenter">
+			<i class="fa fa-refresh fa-spin fa-3x"></i>
+		</div>
+	</section>
+</article>

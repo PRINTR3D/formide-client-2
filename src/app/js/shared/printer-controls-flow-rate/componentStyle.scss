@@ -1,0 +1,55 @@
+/*
+ *	This code was created for Printr B.V. It is open source under the formide-client package.
+ *	Copyright (c) 2017, All rights reserved, http://printr.nl
+ */
+
+printer-controls-flow-rate,
+[printer-controls-flow-rate] {
+    position: relative;
+
+    .rectangle {
+		border-radius: $border-radius;
+	    width: 80%;
+	    height: 40%;
+	    margin: 5% 10%;
+	    display: block;
+        background: $secondary-color;
+    }
+
+	.nozzle {
+		border-radius: 4px;
+	    width: 28%;
+	    height: 35%;
+	    margin: -10px 36% 0;
+	    display: block;
+        background: $secondary-color;
+    }
+
+    .flow {
+		animation-name: moveFlow;
+        animation-duration: 0.5s;
+        animation-timing-function: linear;
+        animation-iteration-count: infinite;
+
+        transform-origin: 50% 50%;
+
+	    width: 8%;
+	    height: 40%;
+	    margin: -12px 46% 0;
+	    display: block;
+		background: $secondary-color;
+    }
+}
+
+@keyframes moveFlow {
+    0% {
+        transform: translate(0, 0);
+    }
+    50% {
+        transform: translate(0, 10px);
+
+    }
+    100% {
+        transform: translate(0, 0);
+    }
+}

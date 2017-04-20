@@ -1,0 +1,30 @@
+<!--
+ *	This code was created for Printr B.V. It is open source under the formide-client package.
+ *	Copyright (c) 2017, All rights reserved, http://printr.nl
+-->
+
+<div title="Printer is {{vm.status | title}}" ng-class="{'online': vm.status == 'online', 'printing': vm.status == 'printing', 'heating': vm.status == 'heating', 'connecting': vm.status == 'connecting', 'paused': vm.status == 'paused', 'error': vm.status == 'error', 'offline': vm.status == 'offline'}">
+
+    <i ng-if="vm.status == 'connecting'" class="fa fa-refresh fa-spin"></i>
+
+    <i ng-if="vm.status == 'heating'" class="fa fa-fire"></i>
+
+    <i ng-if="vm.status == 'paused'" class="fa fa-pause"></i>
+
+    <i ng-if="vm.status == 'error'" class="fa fa-exclamation"></i>
+
+    <i ng-if="vm.status == 'printing'" class="fa fa-play"></i>
+
+	<svg width="20px" height="20px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+        <defs>
+            <circle id="circle" cx="12" cy="12" r="12"></circle>
+        </defs>
+
+        <mask id="mask" fill="white">
+            <use xlink:href="#circle"></use>
+        </mask>
+        <use id="Mask" class="circle-stroke" stroke-width="2" fill="transparent" xlink:href="#circle" ></use>
+    </svg>
+
+
+</div>

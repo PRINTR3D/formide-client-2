@@ -1,0 +1,19 @@
+<section class="layout">
+
+ 	<div class="layout__item" ng-class="vm.inputField ? 'u-5/6-sm u-2/3' : 'u-1/1'">
+        <div class="progress-bar progress-bar-slider">
+            <input class="progress-slider" type="range" min="{{vm.min}}" max="{{vm.max}}" step="{{vm.step}}" float
+				ng-model="vm.value" ng-change="vm.postTuneGcode()" ng-model-options="{ debounce: 100 }" ng-disabled="vm.disableInput">
+            <div class="inner" ng-style="{ width: ((vm.value - vm.min) / (vm.max - vm.min)) * 100 + '%' || '0%' }"></div>
+
+            <span ng-if="vm.prettyMin" class="pretty-value pretty--min">{{vm.prettyMin | title}}</span>
+            <span ng-if="vm.prettyMax" class="pretty-value pretty--max">{{vm.prettyMax | title}}</span>
+        </div>
+    </div>
+
+	<div class="layout__item u-1/6-sm u-1/3 u-textCenter input-container" ng-if="vm.inputField">
+		<input type="number" class="text-input" min="{{vm.min}}" max="{{vm.max}}"
+			ng-model="vm.value" ng-change="vm.postTuneGcode()" ng-model-options="{ debounce: 500 }" ng-disabled="vm.disableInput"/>
+		<div class="symbol">%</div>
+    </div>
+</section>

@@ -1,0 +1,55 @@
+@mixin alert-style($color) {
+	background-color: tint($color, 50);
+	@include gradient(tint(tint($color, 60), 10), tint($color, 60));
+	color: shade($color, 10);
+	.alert__title {
+		color: shade($color, 50);
+	}
+}
+
+.alert {
+	@include border-radius();
+	@include text-small;
+	margin-bottom: $baseline;
+	padding: 8px 16px;
+	display: block !important;
+	position: relative;
+
+	@include alert-style($secondary-color);
+
+	.alert__title {
+		float: left;
+	}
+
+	&.alert--lighter {
+		@include alert-style($tertiary-color);
+	}
+	&.alert--info {
+		@include alert-style(color(indigo));
+	}
+	&.alert--warning {
+		@include alert-style(color(orange));
+	}
+	&.alert--error {
+		@include alert-style(color(red));
+	}
+	&.alert--success {
+		@include alert-style(color(green));
+	}
+
+	&.ng-hide-remove {
+		-webkit-animation: bounceInUp 1s;
+		animation: bounceInUp 1s;
+	}
+
+	&.ng-hide-add {
+		-webkit-animation: fadeOut 1s;
+		animation: fadeOut 1s;
+	}
+}
+
+.alert__close {
+	position: absolute;
+	top: 20px;
+	right: 20px;
+}

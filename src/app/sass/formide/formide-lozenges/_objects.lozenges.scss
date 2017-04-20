@@ -1,0 +1,155 @@
+@mixin loz-style($color) {
+    border-color: darken($color, 15%);
+    color: darken($color, 10%);
+}
+
+/**
+    =Objects/Lozenges
+*/
+
+/**
+ * Create pill- and lozenge-like runs of text, e.g.:
+ *
+   <p>This <span class=pill>here</span> is a pill!</p>
+ *
+   <p>This <span class=loz>here</span> is also a lozenge!</p>
+ *
+ * Pills have fully rounded ends, lozenges have only their corners rounded.
+ *
+ * Demo: jsfiddle.net/inuitcss/N3pGm
+ *
+ */
+.pill{
+    display:inline-block;
+    @extend small;
+    /**
+     * These numbers set in ems mean that, at its narrowest, a lozenge will be
+     * the same width as the `line-height` set on the `html` element.
+     * This allows us to use the `.loz` in almost any `font-size` we wish.
+     */
+    min-width: 24px;
+    padding: 4px 16px;
+    text-align: center;
+    border: 1px solid $secondary-color;
+    color:#fff; /* Override this color in your theme stylesheet */
+    vertical-align: middle;
+    font-weight: 400;
+    color: $secondary-color;
+
+    cursor: default;
+
+    /**
+     * Normally we’d use border-radius:100%; but instead here we just use an
+     * overly large number; `border-radius:100%;` would create an oval on
+     * non-square elements whereas we just want to round the ends of an element.
+     */
+    border-radius:100px;
+
+	a{
+		color: inherit;
+	}
+
+    &.pill--small {
+        font-size: .6rem;
+        padding: 2px 4px;
+        color: white;
+        background-color:  darken($secondary-color, 10%);
+    }
+
+    &.pill--lighter {
+        @include loz-style($tertiary-color);
+
+        &.pill--small {
+            background-color: darken($tertiary-color, 20%);
+            color: white;
+            &:hover {
+                color: white;
+            }
+        }
+    }
+    &.pill--primary {
+        @include loz-style($primary-color);
+
+        &.pill--small {
+            background-color: darken($primary-color, 5);
+            color: white;
+            &:hover {
+                color: white;
+            }
+        }
+    }
+    &.pill--info {
+		color: $primary-color;
+		border-color: $primary-color;
+		cursor: pointer;
+    	padding: 3px 12px;
+		font-size: 13px;
+		height: 24px;
+
+		.fa fa-external-link{
+			font-size: 12px;
+		}
+    }
+	&.pill--inline{
+		position: relative;
+		top: -3px;
+	}
+    &.pill--warning {
+        @include loz-style(color(yellow));
+
+        &.pill--small {
+            background-color: darken(color(yellow), 20%);
+            color: white;
+            &:hover {
+                color: white;
+            }
+        }
+    }
+    &.pill--error {
+        @include loz-style(color(red));
+
+        &.pill--small {
+            background-color: darken(color(red), 20%);
+            color: white;
+            &:hover {
+                color: white;
+            }
+        }
+    }
+    &.pill--success {
+        @include loz-style(color(green));
+
+        &.pill--small {
+            background-color: darken(color(green), 20%);
+            color: white;
+            &:hover {
+                color: white;
+            }
+        }
+    }
+
+    &.pill--right {
+        float: right;
+    }
+
+    &:after {
+        content: none;
+    }
+}
+
+.loz{
+    @extend .pill;
+    border-radius: $border-radius;
+}
+
+.tag {
+	@extend .loz;
+	font-size: 14px;
+    font-size: .875rem;
+	line-height: 1;
+    padding: 2px 8px 1px;
+    max-width: auto;
+    font-weight: 400;
+    opacity: .5;
+    margin-right: 4px;
+}

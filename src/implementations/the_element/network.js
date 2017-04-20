@@ -8,7 +8,7 @@ const fiw = 'sudo fiw' // custom script on The Element
 /**
  * Filter list of networks to only return valid essids
  * @param stdout
- * @returns {{}}
+ * @returns {[]}
  */
 function getSsids (stdout) {
   const essids = stdout.split('\n').filter(a => a)
@@ -109,20 +109,24 @@ function ip () {
  * @returns {Promise}
  */
 function publicIp () {
-  return new Promise(function (resolve, reject) {
+  return new Promise(function (resolve) {
     const request = http.get('http://bot.whatismyipaddress.com', function (res) {
       res.setEncoding('utf8')
+      
       res.on('data', function (chunk) {
         return resolve(chunk)
       })
+      
       res.on('error', function (err) {
-        return reject(err)
+	      console.error('Error getting public IP', err)
+        return resolve(false)
       })
     })
     
     // handle request error
     request.on('error', function (err) {
-      return reject(err)
+      console.error('Error getting public IP', err)
+      return resolve(false)
     })
   })
 }
@@ -147,7 +151,6 @@ function mac () {
  * @returns {Promise}
  */
 function connect (config) {
-  // check which connection type to use
   if (Object.keys(config).length === 2) {
     return connectSimple(config.ssid, config.password)
   } else {

@@ -1,0 +1,51 @@
+
+ // Utility classes to put specific spacing values onto elements.
+ // The below loop will generate us a suite of classes like:
+ //
+ //    .u-margin-top {}
+ //    .u-padding-left-_5 {}
+ //    .u-margin-right-2 {}
+ //    .u-padding {}
+ //    .u-padding-right-1_5 {}
+
+
+ $spacing-properties: (
+   'padding',
+   'margin'
+ );
+
+$spacing-directions: (
+  null,
+  '-top',
+  '-right',
+  '-bottom',
+  '-left',
+);
+
+$spacing-sizes: (
+  null: 	1rem,
+  '-_5': 	.5rem,
+  '-1':  	1rem,
+  '-1_5':  	1.5rem,
+  '-2':  	2rem,
+  '-3':  	3rem,
+  '-4':  	4rem,
+  '-0': 	0
+);
+
+
+@each $property in $spacing-properties {
+
+  @each $direction in $spacing-directions {
+
+    @each $size, $value in $spacing-sizes {
+
+      .u-#{$property}#{$direction}#{$size} {
+        #{$property}#{$direction}: $value !important;
+      }
+
+    }
+
+  }
+
+}

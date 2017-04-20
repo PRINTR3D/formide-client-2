@@ -49,37 +49,40 @@ class Cloud {
 
     // on connect
     this.cloud.on('connect', function () {
-      co(function*() {
-        const publicIP = yield client.system.network.publicIp()
-        const internalIP = yield client.system.network.ip()
-        const macAddress = yield client.system.network.mac()
-
-        // emit authentication data
-        self.cloud.emit('authenticate', {
-          type: 'client',
-          ip: publicIP,
-          ip_internal: internalIP,
-          mac: macAddress,
-          version: client.version,
-          environment: process.env.NODE_ENV,
-          port: client.config.http.port
-        }, function (response) {
-          if (response.success && response.deviceToken) {
-	          self._deviceToken = response.deviceToken
-            client.logger.log(`Cloud connected with token ${response.deviceToken}`, 'info')
-          } else {
-            client.logger.log(`Cloud not connected: ${response.message}`, 'warn')
-            client.logger.log(`MAC address is ${macAddress}`, 'info')
-          }
-        })
-      }).then(null, console.error)
+	      co(function*() {
+		      const publicIP = yield client.system.network.publicIp()
+		      const internalIP = yield client.system.network.ip()
+		      const macAddress = yield client.system.network.mac()
+		
+		      // log MAC address for debugging
+		      client.logger.log(`Using MAC address ${macAddress}`, 'info')
+		
+		      // emit authentication data
+		      self.cloud.emit('authenticate', {
+			      type: 'client',
+			      ip: publicIP,
+			      ip_internal: internalIP,
+			      mac: macAddress,
+			      version: client.version,
+			      environment: process.env.NODE_ENV,
+			      port: client.config.http.port
+		      }, function (response) {
+			      if (response.success && response.deviceToken) {
+				      self._deviceToken = response.deviceToken
+				      client.logger.log(`Cloud connected with token ${response.deviceToken}`, 'info')
+			      } else {
+				      client.logger.log(`Cloud not connected: ${response.message}`, 'warn')
+				      self.cloud.disconnect()
+			      }
+		      })
+	      }).then(null, console.error)
     })
 
     // HTTP proxy calls are handled by the proxy function
     this.cloud.on('http', function (data) {
       client.logger.log(`Cloud HTTP call: ${data.url}`, 'debug')
       proxy(client, data, function (err, response) {
-      	if (err) return self.cloud.emit('http', getCallbackData(data._callbackId, err, {}))
+      	  if (err) return self.cloud.emit('http', getCallbackData(data._callbackId, err, {}))
         self.cloud.emit('http', getCallbackData(data._callbackId, null, response.body))
       })
     })
@@ -88,19 +91,26 @@ class Cloud {
     this.cloud.on('printQueueItem', function (data) {
 	    downloadGcodeFromCloud(self._client, data.gcode, function (err, stats) {
 		    self._client.drivers.printQueueItem(data.port, stats.path, data.queueItemId, (err, response) => {
-		    	if (err) return self.cloud.emit('printQueueItem', getCallbackData(data._callbackId, err, {}))
+		    	  if (err) return self.cloud.emit('printQueueItem', getCallbackData(data._callbackId, err, {}))
 			    self.cloud.emit('printQueueItem', getCallbackData(data._callbackId, null, response))
 		    })
       })
     })
 
     // on disconnect try reconnecting when server did not ban client
-    this.cloud.on('disconnect', function (data) {
-      if (data !== 'io server disconnect') {
-        client.logger.log('Cloud disconnected, trying to reconnect...', 'warning')
-        self.cloud.io.reconnect()
-      }
+    this.cloud.on('disconnect', function () {
+	    client.logger.log('Cloud disconnected, trying to reconnect...', 'warning')
+	    self.cloud.connect() // re-connect
     })
+	  
+	  // check every 10 seconds if we still have an active connection
+	  setInterval(() => {
+		  if (self.cloud.connected === false) {
+			  self.cloud.connect() // re-connect
+		  } else {
+		  	  client.logger.log('We are still connected', 'info')
+		  }
+	  }, 10000)
   }
 
   getDeviceToken () {
@@ -144,7 +154,7 @@ class Cloud {
 	 * @returns {Promise}
 	 */
 	printGcodeFromCloud (queueItemId, gcode, port) {
-  	const self = this
+  	  const self = this
 		return new Promise((resolve, reject) => {
 			downloadGcodeFromCloud(self._client, gcode, function (err, stats) {
 				if (err) return reject(err)

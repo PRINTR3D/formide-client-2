@@ -1,0 +1,20 @@
+/*
+ *	This code was created for Printr B.V. It is open source under the formide-client package.
+ *	Copyright (c) 2017, All rights reserved, http://printr.nl
+ */
+
+add-new,
+[add-new] {
+	border: 1px dashed $tertiary-color;
+	border-radius: $border-radius;
+	color: inherit;
+    text-align: center;
+    padding: .5rem 2rem;
+	margin-bottom: $baseline;
+    display: block;
+	transition: box-shadow .2s ease-in-out, background-color .2s ease-in-out, border-color .5s ease-in-out, opacity .5s ease-in-out;
+
+	&:hover{
+		text-decoration: underline;
+	}
+}

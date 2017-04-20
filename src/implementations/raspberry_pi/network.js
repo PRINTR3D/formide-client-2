@@ -3,6 +3,35 @@
 const net = require('net')
 const http = require('http')
 const getMac = require('getmac')
+const networkUtils = require('network')
+
+/**
+ * Get current connection status (boolean)
+ * @returns {Promise}
+ */
+function status () {
+  return new Promise(function (resolve) {
+	  networkUtils.get_active_interface(function (err, obj) {
+	    if (err) return resolve(false)
+      if (!obj) return resolve(false)
+      return resolve(true)
+    })
+  })
+}
+
+/**
+ * Get current network info
+ * @returns {Promise}
+ */
+function network () {
+	return new Promise(function (resolve) {
+		networkUtils.get_active_interface(function (err, obj) {
+			if (err) return resolve(false)
+			if (!obj) return resolve(false)
+			return resolve(obj.name)
+		})
+	})
+}
 
 /**
  * Get public IP address
@@ -65,6 +94,8 @@ function mac () {
 }
 
 module.exports = {
+	status,
+  network,
   ip,
   publicIp,
   mac

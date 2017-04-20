@@ -3,7 +3,7 @@
 const fs = require('fs')
 const path = require('path')
 const uuid = require('uuid')
-const bcrypt = require('bcrypt')
+const bcrypt = require('bcryptjs')
 const defaultUser = { username: 'admin@local', password: 'admin' }
 
 /**
@@ -19,16 +19,52 @@ class Auth {
 		if (!fs.existsSync(this.path)) fs.writeFileSync(this.path, JSON.stringify([]))
 		this.store = require(this.path)
 		
-		// create the default admin user
-		this.createUser(defaultUser.username, defaultUser.password).then((newUser) => {
-			if (newUser) client.log(`Created default admin user since it didn't exist yet`, 'info')
-		}).catch((err) => {
-			client.log(`Error creating default admin user: ${err.message}`, 'warning')
-		})
+		// validate existing users
+		this._validateUsers()
+		
+		// check total amount of users, if 0, create default admin user
+		if (this.store.length === 0) {
+			this.resetUsers().then(() => {
+				client.log(`Created default admin user since there were no users`, 'info')
+			}).catch((err) => {
+				client.log(`Error creating default admin user: ${err.message}`, 'warning')
+			})
+		}
 	}
 	
+	/**
+	 * Validate all existing users
+	 * @returns {boolean}
+	 * @private
+	 */
+	_validateUsers () {
+		const self = this
+		this.store.map((user, index) => {
+			if (user === null || typeof user !== 'object' || !user.id || !user.username || !user.password) {
+				self.store.splice(index, 1)
+				fs.writeFileSync(self.path, JSON.stringify(self.store))
+			}
+		})
+		return true
+	}
+	
+	/**
+	 * Get the default user
+	 * @returns {{username: string, password: string}}
+	 */
 	getDefaultUser () {
 		return defaultUser
+	}
+	
+	/**
+	 * Find all users
+	 * @returns []
+	 */
+	findAll () {
+		const users = this.store.map((user) => {
+			return { id: user.id, username: user.username }
+		})
+		return users
 	}
 	
 	/**
@@ -38,7 +74,10 @@ class Auth {
 	 */
 	find (value, field) {
 		field = field || 'username'
-		const user = this.store.find(user => user[field] === value)
+		const user = this.store.find((user) => {
+			if (!user || user === null) return false
+			return user[field] === value
+		})
 		if (user) return user
 		return false
 	}
@@ -107,8 +146,10 @@ class Auth {
 				// update existing user by array index
 				const updatedUser = { id: user.id, username: username, password: hash }
 				const index = self.store.indexOf(user)
-				self.store[index] = updatedUser
-				fs.writeFileSync(self.path, JSON.stringify(self.store))
+				if (index > -1) {
+					self.store[index] = updatedUser
+					fs.writeFileSync(self.path, JSON.stringify(self.store))
+				}
 				
 				// return updated user without password
 				return resolve({ id: updatedUser.id, username: username })
@@ -127,10 +168,13 @@ class Auth {
 			const user = self.find(id, 'id')
 			if (!user) return resolve(false)
 			
+			// get index and remove user
 			const index = self.store.indexOf(user)
-			delete self.store[index]
+			if (index > -1) {
+				self.store.splice(index, 1)
+				fs.writeFileSync(self.path, JSON.stringify(self.store))
+			}
 			
-			fs.writeFileSync(self.path, JSON.stringify(self.store))
 			return resolve(true)
 		})
 	}

@@ -1,0 +1,39 @@
+<!--
+ *	This code was created for Printr B.V. It is open source under the formide-client package.
+ *	Copyright (c) 2017, All rights reserved, http://printr.nl
+-->
+
+<div class="header__content">
+
+	<div class="layout layout--withoutGutter layout--alignMiddle">
+		<ul class="list-inline layout__item u-fill navigation-container">
+
+			<li class="navigation-home">
+				<a class="header__item" ng-click="vm.navigate('/formide')">
+					<img src="./images/logo_small.png" alt="" class="formide-logo"/>
+					<div class="logo_element">
+						Formide Local
+					</div>
+				</a>
+
+			</li>
+		</ul>
+
+		<ul class="list-inline layout__item u-fit" ng-if="$root.isLoggedIn">
+
+			<li class="u-margin-right-1_5 xs-hide">
+				<button class="btn" ng-click="vm.logout()">Log Out</button>
+			</li>
+
+		    <li class="sidebarToggle">
+	            <a class="sm-and-down-hide" ng-click="vm.sidebar.setInvisible(); vm.scrollToTop()">
+					<img ng-src="{{vm.sidebar.invisible ? './images/hamburger_collapse.svg' : './images/hamburger_expand.svg'}}"/>
+	            </a>
+				<a class="md-hide" ng-click="vm.sidebar.setInvisible(); vm.scrollToTop()">
+					<img ng-src="{{vm.sidebar.invisible ? './images/hamburger_expand.svg' : './images/hamburger_collapse.svg'}}"/>
+	            </a>
+		    </li>
+		</ul>
+	</div>
+
+</div>
