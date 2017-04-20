@@ -13,7 +13,7 @@ class FdmPrinter extends Printer {
 	  this.addCommandTemplate('home_x', ['G28 X'])
 	  this.addCommandTemplate('home_y', ['G28 Y'])
 	  this.addCommandTemplate('home_z', ['G28 Z'])
-	  this.addCommandTemplate('jog', ['G91', 'G21', 'G1 F{{#if speed}}{{speed}}{{else}}3000{{/if}} {{axis}}{{dist}}'])
+	  this.addCommandTemplate('jog', ['G91', 'G21', 'G1 F{{#if speed}}{{speed}}{{else}}2500{{/if}} {{axis}}{{dist}}'])
 	  this.addCommandTemplate('extrude', ['T{{extnr}}', 'G91', 'G21', 'G1 F{{#if speed}}{{speed}}{{else}}300{{/if}} E{{dist}}'])
 	  this.addCommandTemplate('retract', ['T{{extnr}}', 'G91', 'G21', 'G1 F{{#if speed}}{{speed}}{{else}}300{{/if}} E-{{dist}}'])
 	  this.addCommandTemplate('lcd_message', ['M117                     {{msg}}']) // spaces are on purpose!
