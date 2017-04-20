@@ -61,13 +61,6 @@
 	 			    position: absolute;
 	 			}
 	 		}
-	 		&.name{
-	 			padding-left: 66px;
-
-	 			&.local{
-	 				padding-left: 0.5rem;
-	 			}
-	 		}
 	 	}
 
 	 	tbody tr{
@@ -93,41 +86,11 @@
 	 				width: 30px;
 	 	    		height: 30px;
 	 			}
-
-	 			i.folder {
-	 				background-image:
-	 					url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCAxNzkyIDE3OTIiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZD0iTTE2MDAgMTMxMnYtNzA0cTAtNDAtMjgtNjh0LTY4LTI4aC03MDRxLTQwIDAtNjgtMjh0LTI4LTY4di02NHEwLTQwLTI4LTY4dC02OC0yOGgtMzIwcS00MCAwLTY4IDI4dC0yOCA2OHY5NjBxMCA0MCAyOCA2OHQ2OCAyOGgxMjE2cTQwIDAgNjgtMjh0MjgtNjh6bTEyOC03MDR2NzA0cTAgOTItNjYgMTU4dC0xNTggNjZoLTEyMTZxLTkyIDAtMTU4LTY2dC02Ni0xNTh2LTk2MHEwLTkyIDY2LTE1OHQxNTgtNjZoMzIwcTkyIDAgMTU4IDY2dDY2IDE1OHYzMmg2NzJxOTIgMCAxNTggNjZ0NjYgMTU4eiIvPjwvc3ZnPg==);
-	 				background-repeat: no-repeat;
-	 				background-size: contain;
-	 				position: absolute;
-	 				margin-left: -15px;
-	 				width: 30px;
-	 				height: 30px;
-	 			}
 	 		}
 
 	 		&.actions {
 	 			width: 60px;
 	 		}
-
-	 		.name {
-	 			white-space: normal;
-	 			line-height: 25px;
-	 	    	padding: 0 0 0 8px;
-	 			margin-left: 50px;
-	 			display: inline-block;
-
-	 			@include media-query(xs) {
-	 	    		margin-left: 0;
-	 				padding: 0;
-	 	    	}
-
-	 			&.local{
-	 				margin-left: 0;
-	 				padding: 0;
-	 			}
-	 		}
-
 	 	}
 	 }
 
