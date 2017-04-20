@@ -1,6 +1,6 @@
 {
   "name": "formide-client-2",
-  "version": "2.0.5",
+  "version": "2.0.7",
   "description": "Client software that connects 3D printers to Formide Cloud Platform",
   "main": "app.js",
   "directories": {
@@ -9,7 +9,7 @@
   "author": "Chris ter Beke <chris@printr.com>",
   "license": "GPL-2.0",
   "scripts": {
-    "docs": "./node_modules/.bin/apidoc -i ./src -e node_modules -i ~/formide/plugins -e node_modules -o ./docs/",
+    "docs": "./node_modules/.bin/apidoc -i ./src/interfaces/http -e node_modules -i ~/formide/plugins -e node_modules -o ./docs/",
     "dev": "NODE_ENV=local nodemon --ignore ./src/app --ignore ./src/www/public --ignore ./tmp --ignore Gruntfile.js app",
     "debug": "NODE_ENV=development DEBUG=app:*,plugin:* node app",
     "test2": "NODE_ENV=test mocha --timeout=10000 test/index.test.js",
