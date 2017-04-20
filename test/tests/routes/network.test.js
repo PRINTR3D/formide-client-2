@@ -13,7 +13,7 @@ module.exports = (client) => {
 		describe('GET /api/network/status', () => {
 			
 			it('should return the network status', (done) => {
-				chai.request(client.http.app).get('/api/network/status').end((req, res) => {
+				chai.request(client.http.app).get('/api/network/status').end((err, res) => {
 					expect(res.status).to.equal(200)
 					expect(res.body.isConnected).to.equal(true)
 					done()
@@ -25,7 +25,7 @@ module.exports = (client) => {
 		describe('GET /api/network/list', () => {
 			
 			it('should return a list of nearby networks', (done) => {
-				chai.request(client.http.app).get('/api/network/list').end((req, res) => {
+				chai.request(client.http.app).get('/api/network/list').end((err, res) => {
 					expect(res.status).to.equal(200)
 					done()
 				})

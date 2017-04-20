@@ -6,7 +6,7 @@
 (function () {
 	'use strict';
 
-	function MainController ($timeout, $auth, $location, $rootScope, Sidebar) {
+	function MainController ($timeout, $auth, $location, Sidebar) {
 		var vm = this;
 
 		if (window.localStorage.getItem("formide:setup")) {
@@ -50,7 +50,7 @@
 	}
 
 	MainController.$inject = [
-		'$timeout', '$auth', '$location', '$rootScope', 'Sidebar'
+		'$timeout', '$auth', '$location', 'Sidebar'
 	];
 
 	angular

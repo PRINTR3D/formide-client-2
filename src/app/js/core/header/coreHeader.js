@@ -20,7 +20,7 @@
 		return directive;
 	}
 
-	function MainController($rootScope, $location, $auth, Sidebar) {
+	function MainController($location, $auth, Sidebar) {
 		var vm = this;
 
 		vm.mobilenavInvisible = true;
@@ -48,7 +48,7 @@
 
 
 	MainController.$inject = [
-		'$rootScope', '$location', '$auth', 'Sidebar'
+		'$location', '$auth', 'Sidebar'
 	];
 
 	angular

@@ -6,7 +6,7 @@
 
  (function () {
 
-   function MainController($api, $location, $timeout, $notification, $rootScope, $http) {
+   function MainController($api, $location, $timeout, $notification, $http) {
 
  	  var vm = this;
 
@@ -128,7 +128,7 @@
    }
 
    MainController.$inject = [
-	   '$api', '$location', '$timeout', '$notification', '$rootScope', '$http'
+	   '$api', '$location', '$timeout', '$notification', '$http'
    ];
 
 

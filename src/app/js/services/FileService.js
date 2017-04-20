@@ -4,7 +4,7 @@
  */
 
 (function () {
-    function MainService($api, $q, $filter) {
+    function MainService($api, $q) {
 
 		var factory = {
 			resource: [],
@@ -148,7 +148,7 @@
     }
 
     angular.module('service.file', [])
-        .factory('File', ['$api', '$q', '$filter',
+        .factory('File', ['$api', '$q',
             MainService]);
 
 })();
