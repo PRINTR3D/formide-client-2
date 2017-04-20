@@ -13,9 +13,9 @@ class FdmPrinter extends Printer {
 	  this.addCommandTemplate('home_x', ['G28 X'])
 	  this.addCommandTemplate('home_y', ['G28 Y'])
 	  this.addCommandTemplate('home_z', ['G28 Z'])
-	  this.addCommandTemplate('jog', ['G91', 'G21', 'G1 {{axis}} {{dist}}'])
-	  this.addCommandTemplate('extrude', ['T{{extnr}}', 'G91', 'G21', 'G1 F300 E{{dist}}'])
-	  this.addCommandTemplate('retract', ['T{{extnr}}', 'G91', 'G21', 'G1 F300 E-{{dist}}'])
+	  this.addCommandTemplate('jog', ['G91', 'G21', 'G1 F{{#if speed}}{{speed}}{{else}}10{{/if}} {{axis}}{{dist}}'])
+	  this.addCommandTemplate('extrude', ['T{{extnr}}', 'G91', 'G21', 'G1 F{{#if speed}}{{speed}}{{else}}300{{/if}} E{{dist}}'])
+	  this.addCommandTemplate('retract', ['T{{extnr}}', 'G91', 'G21', 'G1 F{{#if speed}}{{speed}}{{else}}300{{/if}} E-{{dist}}'])
 	  this.addCommandTemplate('lcd_message', ['M117                     {{msg}}']) // spaces are on purpose!
 	  this.addCommandTemplate('temp_bed', ['M140 S{{temp}}'])
 	  this.addCommandTemplate('temp_extruder', ['T{{extnr}}', 'M104 S{{temp}}'])
