@@ -1,0 +1,295 @@
+/*
+*	This code was created for Printr B.V. It is open source under the formide-client package.
+*	Copyright (c) 2017, All rights reserved, http://printr.nl
+*/
+
+.aside {
+	width: $aside-width;
+	height: auto;
+	z-index: 1;
+    transition: transform .3s ease-in-out;
+    background-color: $primary-color;
+    background-image: linear-gradient(to bottom, $gradient-dark, $gradient-light);
+	right: 0;
+    left: auto;
+    overflow-x: hidden;
+	overflow-y: auto;
+    color: rgba(255,255,255, .8);
+    box-shadow: inset 8px 0 10px -6px rgba(darken($primary-color, 30), .35);
+    padding: 0;
+	position: absolute;
+
+	@include media-query(md) {
+		position: relative;
+		height: 100vh;
+	}
+
+	@include media-query(xs) {
+		width: 100%;
+		min-height: 100vh;
+		height: auto;
+	}
+
+	@include media-query(sm-and-down) {
+		&.noScroll{
+			height: 100vh;
+			overflow-y: hidden;
+		}
+	}
+
+	.main-sidebar-content {
+		position: relative;
+		margin: inherit;
+		padding-bottom: 5rem;
+		padding-top: 1.5rem;
+		padding-left: 1rem;
+		padding-right: 1rem;
+		min-height: 100vh;
+
+		@include media-query(xs) {
+			padding-left: .75rem;
+			padding-right: .75rem;
+		}
+	}
+
+
+
+	@include font-size(14px);
+
+	h3 {
+	    @include font-size(20px);
+	}
+
+	h4 {
+	    @include font-size(16px);
+	}
+
+	h3.title {
+	   font-size: 24px;
+	   font-size: 1.5rem;
+	   line-height: 1;
+	   margin-bottom: 2rem;
+
+	   @include media-query(xs) {
+		   	margin-left: 3rem;
+	   	}
+	}
+
+	h3, p {
+	   margin-bottom: halve($baseline);
+   }
+
+	h4, h6{
+		margin-bottom: 0.5rem;
+	}
+
+	.setup-printer,
+	.slicer-progress {
+		margin: 0 -1rem !important;
+		padding: 1rem 1rem 3rem;
+		background-color: color(orange);
+	    border-bottom: 1px solid darken(color(orange), .2);
+		color: white;
+		display: block;
+		height: 48px;
+		cursor: pointer;
+	}
+
+	.getStarted{
+		padding: 1rem;
+		position: relative;
+		top: -1.5rem;
+		left: -1rem;
+		width: $aside-width;
+		background: $dark-primary-color;
+
+		@include media-query(xs) {
+			width: 110%;
+		}
+	}
+
+	.close{
+		position: absolute;
+		top: 0.25rem;
+		right: 0.5rem;
+		font-size: 22px;
+		cursor: pointer;
+		color: lighten($primary-color, 35%);
+	}
+
+	.sidebar-header{
+		width: 100%;
+		background: $gradient-dark;
+		position: fixed;
+		left: 0;
+		top: 0;
+		z-index: 1000;
+
+		h3.title{
+			margin: 1.25rem 4rem;
+		}
+
+		.hide--sidebar{
+		    padding: 24px 1rem 19px;
+			z-index: 1000;
+			position: absolute;
+			top: 0;
+			left: 0;
+		}
+	}
+
+	#sidebar-printers{
+		@include media-query(xs) {
+			padding-top: 4.5rem;
+		}
+	}
+
+	.slicer-progress {
+	    height: 80px;
+	    position: relative;
+	    cursor: default !important;
+
+	    svg {
+	        position: absolute;
+	        left: 0;
+	        right: 0;
+	        top: 0;
+	        bottom: 0;
+	    }
+
+	    h6 {
+	        font-weight: 600;
+	    }
+
+	    > div {
+	        position: relative;
+	        transition: all 1s;
+
+	        > small {
+	            position: absolute;
+	        }
+	    }
+	}
+
+	@include font-size(14px);
+
+	.btn-container {
+		margin: 0;
+		padding: 0 1rem;
+		display: block;
+		border: 0px solid rgba(255, 255, 255, .3);
+		border-style: solid;
+		width: 100%;
+		z-index: 9999;
+		position: fixed;
+		bottom: 0;
+		width: 340px;
+		right: 0;
+		border-top-width: 1px;
+
+		a {
+			margin-bottom: 1rem;
+		}
+
+		@include media-query(xs) {
+			width: 100%;
+		}
+	}
+
+	.btn.btn--white:hover{
+		color: $primary-color !important;
+	}
+
+	.progress {
+		background-color: white;
+		.progress__bar {
+			background-color: white;
+		}
+	}
+
+	[dropdown-list], dropdown-list {
+	    a{
+			width: 100%;
+		}
+	}
+
+}
+
+.sidebar-handle {
+    z-index: 2147483647;
+}
+
+.sidebar-invisible {
+	.aside {
+		@include media-query(md) {
+			transform: translateX(100%);
+	    	display: none;
+        }
+	}
+
+	main#main{
+		@include media-query(sm-and-down) {
+			transform: translateX(-340px);
+		}
+		@include media-query(xs) {
+			transform: translateX(-100%);
+		}
+	}
+}
+
+.ngdialog-connect{
+	padding-top: 3.5rem;
+}
+
+.ngdialog-connect .ngdialog-content{
+	max-width: 500px;
+	padding: 3rem 2rem;
+}
+
+.ngdialog-info{
+	padding-top: 3.5rem;
+
+	&.no-overlay .ngdialog-overlay{
+		background-color: transparent;
+	}
+}
+
+.ngdialog-info .ngdialog-content{
+
+	max-width: 500px;
+	padding: 3rem 2rem;
+
+	.infoBox{
+		margin-top: 1.5rem;
+	}
+
+	.fa-info-circle{
+		font-size: 2rem;
+		color: $primary-color;
+		margin-right: 1rem;
+		position: absolute;
+
+	}
+
+	ul{
+		list-style-type: circle;
+	    line-height: 1.8;
+	    font-size: 0.9rem;
+		margin-bottom: 1.5rem;
+		margin-left: 5rem;
+	}
+
+	p{
+		margin-left: 3rem;
+	}
+
+	a{
+		font-size: 1rem;
+	}
+}
+
+.selected-printer-message{
+	border-bottom: 1px solid rgba(white, .3);
+	padding-bottom: 16px;
+    margin-bottom: 24px;
+}

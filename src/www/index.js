@@ -1,8 +1,10 @@
 'use strict'
 
+// modules
 const assert = require('assert')
 const path = require('path')
 const express = require('express')
+const cors = require('cors')
 
 class UI {
 
@@ -14,7 +16,16 @@ class UI {
 
     const self = this
 
+    // express app
     this.app = express()
+    
+    // use CORS headers
+    this.app.use(cors({
+	    origin: true,
+	    credentials: true
+    }))
+    
+    // server
     this.server = require('http').Server(this.app)
     this.server.listen(client.config.http.www, function () {
       client.logger.log(`www running on port ${self.server.address().port}`, 'info')
@@ -29,15 +40,15 @@ class UI {
         location: 'local'
       })
     })
-
-    // public assets
-    this.app.get('/public/*', function (req, res) {
-      return res.sendFile(req.params[0], { root: path.join(__dirname, 'public') })
+    
+    // index.html
+    this.app.get('/', function (req, res) {
+	    return res.sendFile(path.join(__dirname, 'index.html'))
     })
 
-    // angular app
+    // public assets
     this.app.get('/*', function (req, res) {
-      return res.sendFile(path.join(__dirname, 'public/index.html'))
+      return res.sendFile(path.join(__dirname, 'public', req.params[0]))
     })
 
     return {

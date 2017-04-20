@@ -1,0 +1,27 @@
+<div
+    class="entry-content layout"
+    id="notification-content-{{vm.alertId}}"
+    title="{{vm.type | title}} Notification"
+    ng-class="{'has-actions': vm.actions.length > 0}">
+    <h5 class="layout__item u-4/5">{{vm.title}}</h5>
+
+	<div class="layout__item u-textRight u-1/5"><a class="icon--close" ng-if="!(vm.actions.length > 0)" ng-click="vm.closeNotification()" title="Close this notification"><i class="fa fa-times"></i></a></div>
+
+	<p class="layout__item u-1/1"><small ng-bind-html="vm.message | trustedHTML"></small></p>
+
+	<p ng-if="vm.link" class="layout__item u-1/1 u-margin-top-_5">
+		<small>
+			<span ng-if="vm.link.pretext">{{vm.link.pretext}}</span>
+			<a href="{{vm.link.href}}" target="_blank" style="color: #46b1e6;">{{vm.link.text}}</a>
+		</small>
+	</p>
+</div>
+
+<ul
+    title="Notification Actions"
+    id="notification-actions-{{vm.alertId}}"
+    class="alert-actions"
+    id="alert-actions"
+    ng-if="vm.actions.length > 0">
+    <li ng-repeat="(name, action) in vm.actions"><a ng-click="vm.executeCallback(action.callback)" ng-attr-title="{{action.title}}">{{action.title}}</a></li>
+</ul>

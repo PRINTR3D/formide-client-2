@@ -28,11 +28,17 @@ module.exports = function (client) {
     
     // find user and set session
 		const user = client.auth.find(token.id, 'id')
+		
+		// check user
+		if (!user) return res.unauthorized('Could not validate user')
+		
+		// set session
 		req.authenticated = true
 		req.user = {
-	  	id: user.id,
+	    	id: user.id,
 			username: user.username
 		}
+		
 		return next()
   }
 

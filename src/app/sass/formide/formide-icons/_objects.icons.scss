@@ -1,0 +1,15 @@
+.icon {
+	@extend .fa;
+
+	&.icon--primary {
+		color: $primary-color;
+	}
+
+	&.icon--secondary {
+		color: $secondary-color;
+	}
+
+	&.icon--tertiary {
+		color: $tertiary-color;
+	}
+}

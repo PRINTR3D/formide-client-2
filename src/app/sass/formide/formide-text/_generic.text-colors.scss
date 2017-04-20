@@ -1,0 +1,54 @@
+@mixin text-colors($color) {
+	color: darken(color($color), 15%);
+
+	&.anchor__link::after {
+		background: darken(color($color), 20%) !important;
+	}
+
+	a {
+		color: darken(color($color), 15%);
+
+		&:hover {
+			color: darken(color($color), 20%);
+		}
+
+		&::after,
+		&.anchor__link::after {
+			background: darken(color($color), 20%) !important;
+		}
+
+	}
+}
+
+@each $name, $value in $global-colors {
+	%text-base-#{$name},
+	.text-base-#{$name} {
+		@include text-colors($name);
+	}
+}
+
+%text--alert,
+.text--alert,
+%text--error,
+.text--error {
+	@extend %text-base-red;
+}
+
+%text--warning,
+.text--warning {
+	@extend %text-base-orange;
+}
+
+%text--info,
+.text--info {
+	@extend %text-base-indigo;
+}
+
+%text--success,
+.text--success {
+	@extend %text-base-green;
+}
+
+.word-wrap{
+	@include word-wrap;
+}

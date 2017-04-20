@@ -1,0 +1,180 @@
+/*
+ *	This code was created for Printr B.V. It is open source under the formide-client package.
+ *	Copyright (c) 2017, All rights reserved, http://printr.nl
+ */
+
+.header,
+.is-header {
+	background-color: white;
+}
+
+.header {
+	transition: margin 0s;
+	border-bottom: none;
+	z-index: 1000;
+	width: 100%;
+}
+
+.is-header {
+	width: 100%;
+	left: 0;
+	margin: 0;
+	z-index: 12;
+	position: relative;
+
+	@include media-query(sm) {
+		position: fixed;
+	}
+
+	@include media-query(md) {
+		position: absolute;
+		top: 64px;
+	}
+}
+
+
+.header__content {
+	margin-top: 0;
+	margin-bottom: 0;
+	max-width: 100%;
+
+	@include media-query(xs) {
+		padding: 0;
+	}
+
+	.formide-logo{
+		height: 40px;
+		width: 40px;
+		margin-left: -3px;
+	}
+
+	@include media-query(sm) {
+
+		padding: 5px 0;
+
+		ul {
+			li {
+				vertical-align: middle;
+			}
+		}
+
+		.navigation-container{
+			box-sizing: border-box;
+		    display: -ms-flexbox;
+		    display: flex;
+		    -ms-flex-flow: row wrap;
+		    flex-flow: row wrap;
+		    margin: 0;
+		    padding: 0;
+			align-items: center;
+			position: relative !important;
+
+			.navigation-home{
+				padding: 0;
+				box-sizing: inherit;
+			    -ms-flex-preferred-size: 100%;
+			    flex-basis: auto;
+			    min-width: 0;
+			}
+		}
+
+		.navigation{
+			box-sizing: inherit;
+		    min-width: 0;
+		    padding: 0;
+			-ms-flex: 1 1 0%;
+			flex: 1 1 0%;
+			-ms-flex-preferred-size: 0%;
+			flex-basis: 0%;
+		}
+	}
+
+	@include media-query(xs) {
+		.list-inline{
+			padding: 10px 1rem 8px;
+		    position: relative;
+		    background: white;
+		}
+
+		ul {
+			li {
+				vertical-align: middle;
+			}
+		}
+
+		.hide--sidebar {
+		    float: right;
+		    padding: 14px 0 10px;
+		}
+
+		.navigation {
+			height: 100vh;
+			position: absolute;
+			width: 100%;
+			padding: 0.5rem 10%;
+			transition: transform .5s ease-in-out;
+			transform: translateY(-115%);
+			top: 64px;
+			left: 0;
+    		z-index: -1;
+			background-color: #fff;
+			background-image: linear-gradient(rgba(255,255,255,.8) 20%,rgba(70,177,230,.5) 250%), url(../images/discover-header-shapes.svg);
+			background-repeat: repeat-x;
+			background-position: bottom;
+
+			&.showMobileNav{
+				transform: translateY(0%);
+			}
+
+			nav {
+				max-width: 100%;
+				width: 100%;
+
+				ul {
+					display: table;
+					width: 100%;
+					border-collapse: collapse;
+
+					li {
+						display: table-row;
+						padding: 0;
+						font-size: 1.2rem;
+						background-color: rgba(255, 255, 255, 0.9);
+						border: none;
+    					border-bottom: solid 4px rgba(236, 248, 252, 0.75) !important;
+
+						a {
+							padding: 0 2rem;
+							display:table-cell;
+							width: 100%;
+							vertical-align : middle;
+							height: 8.5vh;
+
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+.loaded {
+	.header {
+		transition: right .5s ease-in-out;
+	}
+}
+
+.header__mobile .hide--sidebar{
+	float: right;
+	padding: 14px 0 10px;
+}
+
+.logo_element{
+	display: inline-block;
+    color: $primary-color;
+    font-weight: 600;
+    text-transform: uppercase;
+	position: relative;
+    top: -9px;
+    margin-right: 8px;
+}

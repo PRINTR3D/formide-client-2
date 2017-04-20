@@ -1,0 +1,36 @@
+%content,
+.content {
+	max-width: 100%;
+	margin: 0 auto;
+	left: 0;
+	right: 0;
+	padding: halve($baseline);
+
+	@media (min-width: map-get($layout-breakpoints, sm)) {
+        padding: $baseline;
+    }
+
+	&.content--extra-large {
+		max-width: 1120px;
+	}
+
+	&.content--large {
+		max-width: 896px;
+	}
+
+	&.content--medium {
+		max-width: 672px;
+	}
+
+	&.content--small {
+		max-width: 448px;
+		padding: 0.5rem;
+
+		@media (min-width: map-get($layout-breakpoints, sm)) {
+	        padding: 1rem;
+	    }
+
+	}
+
+
+}

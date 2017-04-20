@@ -1,0 +1,204 @@
+/**
+ * Tooltip Styles
+ */
+
+ /* Add this attribute to the element that needs a tooltip */
+ [data-tooltip] {
+   position: relative;
+   z-index: 2;
+   cursor: pointer;
+ }
+
+ /* Hide the tooltip content by default */
+ [data-tooltip]:before,
+ [data-tooltip]:after {
+   visibility: hidden;
+   opacity: 0;
+   pointer-events: none;
+   z-index: 9999;
+
+   @include media-query(xs) {
+	  display: none;
+   }
+ }
+
+ /* Position tooltip above the element */
+ [data-tooltip]:before {
+   position: absolute;
+   bottom: 120%;
+   left: -200px;
+   margin-bottom: 5px;
+   margin-left: -50px;
+   padding: 7px;
+   width: 300px;
+   border-radius: 2px;
+   background-color: #000;
+   background-color: hsla(0, 0%, 20%, 0.9);
+   color: #fff;
+   content: attr(data-tooltip);
+   text-align: center;
+   font-size: 12px;
+   line-height: 1.2;
+ }
+
+ /* Triangle hack to make tooltip look like a speech bubble */
+ [data-tooltip]:after {
+   position: absolute;
+   bottom: 120%;
+   left: 50%;
+   margin-left: -5px;
+   width: 0;
+   border-top: 5px solid #000;
+   border-top: 5px solid hsla(0, 0%, 20%, 0.9);
+   border-right: 5px solid transparent;
+   border-left: 5px solid transparent;
+   content: " ";
+   font-size: 0;
+   line-height: 0;
+ }
+
+ /* Show tooltip content on hover */
+ [data-tooltip]:hover:before,
+ [data-tooltip]:hover:after {
+   visibility: visible;
+   opacity: 1;
+ }
+
+
+ /* Tooltips center */
+ [data-tooltip-center] {
+   position: relative;
+   z-index: 2;
+   cursor: pointer;
+ }
+
+ /* Hide the tooltip content by default */
+ [data-tooltip-center]:before,
+ [data-tooltip-center]:after {
+ 	visibility: hidden;
+ 	opacity: 0;
+ 	pointer-events: none;
+ 	transition: visibility 0s, opacity 1s linear;
+ 	transition-delay: 0s;
+
+ 	@include media-query(xs) {
+ 	   display: none;
+ 	}
+ }
+
+ /* Position tooltip below the element */
+ [data-tooltip-center]:before {
+ 	position: absolute;
+ 	bottom: 120%;
+ 	left: 50%;
+ 	margin-bottom: 5px;
+ 	margin-left: -150px;
+ 	padding: 7px;
+ 	width: 300px;
+ 	-webkit-border-radius: 2px;
+ 	-moz-border-radius: 2px;
+ 	border-radius: 2px;
+ 	background-color: #000;
+ 	background-color: hsla(0, 0%, 20%, 0.9);
+ 	color: #fff;
+ 	content: attr(data-tooltip-center);
+ 	text-align: center;
+ 	font-family: "Open Sans",sans-serif;
+ 	font-size: 13px;
+ 	line-height: 1.2;
+ }
+
+ /* Position Triangle */
+ [data-tooltip-center]:after {
+	 position: absolute;
+     bottom: 120%;
+     left: 50%;
+     margin-left: -5px;
+     width: 0;
+     border-top: 5px solid #000;
+     border-top: 5px solid hsla(0, 0%, 20%, 0.9);
+     border-right: 5px solid transparent;
+     border-left: 5px solid transparent;
+     content: " ";
+     font-size: 0;
+     line-height: 0;
+ }
+
+ /* Show tooltip content on hover */
+ [data-tooltip-center]:hover:before,
+ [data-tooltip-center]:hover:after {
+ 	visibility: visible;
+ 	opacity: 1;
+ 	transition: visibility 0s, opacity 0.5s linear;
+ 	transition-delay: 0.5s;
+ }
+
+
+/* Tooltips on library icons */
+[data-tooltip-bottom] {
+  position: relative;
+  z-index: 2;
+  cursor: pointer;
+}
+
+/* Hide the tooltip content by default */
+[data-tooltip-bottom]:before,
+[data-tooltip-bottom]:after {
+	visibility: hidden;
+	opacity: 0;
+	pointer-events: none;
+	transition: visibility 0s, opacity 0.5s linear;
+	transition-delay: 0s;
+
+	@include media-query(xs) {
+	   display: none;
+	}
+}
+
+/* Position tooltip below the element */
+[data-tooltip-bottom]:before {
+	position: absolute;
+	top: 110%;
+	bottom: auto;
+	left: 50%;
+	margin-bottom: 5px;
+	margin-left: -50px;
+	padding: 7px;
+	width: 100px;
+	-webkit-border-radius: 2px;
+	-moz-border-radius: 2px;
+	border-radius: 2px;
+	background-color: #000;
+	background-color: hsla(0, 0%, 20%, 0.9);
+	color: #fff;
+	content: attr(data-tooltip-bottom);
+	text-align: center;
+	font-family: "Open Sans",sans-serif;
+	font-size: 13px;
+	line-height: 1.2;
+}
+
+/* Position Triangle */
+[data-tooltip-bottom]:after {
+	position: absolute;
+    top: 98%;
+    left: 50%;
+    margin-left: -5px;
+    width: 0;
+    border-bottom: 5px solid #000;
+    border-bottom: 5px solid rgba(51,51,51,.9);
+    border-right: 5px solid transparent;
+    border-left: 5px solid transparent;
+    content: " ";
+    font-size: 0;
+    line-height: 0;
+}
+
+/* Show tooltip content on hover */
+[data-tooltip-bottom]:hover:before,
+[data-tooltip-bottom]:hover:after {
+	visibility: visible;
+	opacity: 1;
+	transition: visibility 0s, opacity 0.5s linear;
+	transition-delay: 0.5s;
+}

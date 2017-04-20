@@ -1,0 +1,112 @@
+body {
+	font-family: $base-font;
+	font-weight: 400;
+	@include font-size($global-font-size);
+}
+
+strong,
+.strong,
+%strong,
+b {
+	font-weight: 600;
+}
+
+em,
+.italic,
+%italic,
+i {
+	font-style: italic;
+}
+
+.lede,
+%lede,
+.lead,
+%lead {
+	@include font-size(18px, false);
+	line-height: 1.8;
+}
+
+small,
+.small,
+%small {
+	 @include text-small;
+}
+
+p,
+.paragraph,
+%paragraph {
+	@include font-size($global-font-size, false);
+	line-height: 1.5;
+	margin-bottom: $baseline;
+}
+
+.f-headline,
+%f-headline,
+.f-subhead,
+%f-subhead,
+.f1,
+%f1,
+h1,
+h2,
+h3 {
+    font-weight: 300;
+    letter-spacing: -0.01em;
+	line-height: 1.5;
+	margin-bottom: $baseline;
+}
+
+.f2,
+%f2,
+.f3,
+%f3,
+.f4,
+%f4,
+h4,
+h5,
+h6 {
+	font-weight: 400;
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	margin-bottom: halve($baseline);
+}
+
+.f-headline,
+%f-headline,
+h1{
+	font-size: 2rem;
+}
+
+.f-subhead,
+%f-subhead,
+h2{
+	font-size: 1.875rem;
+}
+
+.f1,
+%f1,
+h3{
+	font-size: 1.5rem;
+}
+
+.f2,
+%f2,
+h4{
+	font-size: 1.25rem;
+}
+
+.f3,
+%f3,
+h5,
+.f4,
+%f4,
+h6{
+	font-size: 1rem;
+}
+
+hgroup {
+	margin-bottom: $baseline;
+
+	& > * {
+		margin-bottom: halve($baseline);
+	}
+}

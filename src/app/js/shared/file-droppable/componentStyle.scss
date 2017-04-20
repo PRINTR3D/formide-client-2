@@ -1,0 +1,26 @@
+
+.file-dragover {
+    &:before {
+        content: '';
+        width: 100%;
+        height: 100%;
+        position: fixed;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        background-color: rgba(255,255,255,.95);
+        z-index: 999999;
+    }
+    &:after {
+        @extend .f-headline;
+        content: 'Release to upload files to the library';
+        color: black;
+        left: 20%;
+        right: 20%;
+        top: 35%;
+        position: fixed;
+        z-index: 999999;
+        text-align: center;
+    }
+}

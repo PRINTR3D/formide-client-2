@@ -1,0 +1,63 @@
+/*
+ *	This code was created for Printr B.V. It is open source under the formide-client package.
+ *	Copyright (c) 2017, All rights reserved, http://printr.nl
+ */
+
+notification-list-item,
+[notification-list-item] {
+
+	padding-bottom: .5rem;
+	margin-bottom: .5rem;
+	border-bottom: 1px solid rgba(white, .3);
+
+	.title {
+		color: white;
+        margin-bottom: 0;
+		font-size: 1.1rem;
+
+        @extend %text-base-red;
+
+		.time {
+			@include text-small;
+			color: rgba(white, .8);
+			margin-left: .5rem;
+		}
+	}
+
+	.remove {
+		display: block;
+		color: white;
+		opacity: .5;
+		transition: opacity .2s ease-in-out;
+
+		&:hover {
+			opacity: 1;
+		}
+	}
+
+	.count {
+		background: rgba(darken(color(red), 5%), .9);
+		min-width: 1rem;
+		border: 1px solid white;
+		display: inline-block;
+		@include text-small;
+		border-radius: 9999px;
+		padding: .1rem .4rem;
+		top: -1px;
+    	position: relative;
+	}
+
+    .description {
+        color: rgba(white, .8);
+        margin-bottom: 0;
+    }
+
+	small {
+
+		abbr {
+			margin-right: .5rem;
+			font-weight: 600;
+		}
+	}
+
+}

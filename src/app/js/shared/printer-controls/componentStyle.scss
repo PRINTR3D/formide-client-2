@@ -1,0 +1,257 @@
+/*
+ *	This code was created for Printr B.V. It is open source under the formide-client package.
+ *	Copyright (c) 2017, All rights reserved, http://printr.nl
+ */
+
+printer-controls,
+[printer-controls] {
+	display: block;
+    text-align: left;
+
+	.three-axis,
+	.extruder {
+		position: relative;
+		height: 260px;
+		margin-bottom: 2rem;
+
+		@include media-query(xs) {
+			overflow-x: auto;
+			height: 300px;
+		}
+	}
+
+	.axis {
+		display: block;
+		position: absolute;
+		left: auto;
+		right: auto;
+		bottom:0;
+		top: 0;
+
+		abbr {
+			position: absolute;
+			z-index: 10;
+			font-size: 12px;
+			border: none;
+		}
+
+		.positive,
+		.negative {
+			display: inline-block;
+			position: relative;
+		}
+
+		&.axis--vertical {
+			width: 44px;
+
+			abbr {
+				left: 14px;
+			}
+
+			.positive,
+			.negative {
+				width: 44px;
+			}
+
+			.positive {
+				margin-bottom: 20px;
+				abbr {
+					top: -19px;
+				}
+			}
+
+			.negative {
+				margin-top: 22px;
+
+				abbr {
+					bottom: -17px;
+				}
+			}
+
+			.control-button {
+				width: 44px;
+				height: 24px;
+			}
+		}
+
+		&.axis--horizontal {
+			height: 44px;
+
+			abbr {
+				top: 14px;
+			}
+
+			.positive,
+			.negative {
+				height: 44px;
+				margin-right: -5px;
+			}
+
+			.positive {
+				margin-right: 174px;
+
+				abbr {
+					left: -26px;
+				}
+			}
+
+			.negative {
+				margin-left: -134px;
+
+				abbr {
+					right: -20px;
+				}
+			}
+
+			.control-button {
+				text-indent: 9999px;
+			}
+
+			.control-button {
+				width: 24px;
+				height: 44px;
+				margin-right: 5px;
+			}
+		}
+
+		.control-button {
+			background-color: $tertiary-color;
+			border: 1px solid $secondary-color;
+			@include text-small;
+			display: inline-block;
+			overflow: hidden !important;
+			display: inline-block;
+			margin: 1px 0;
+			line-height: 1.5;
+			text-align: center;
+			border-radius: $border-radius;
+			color: inherit;
+			box-shadow: 0 1px 2px rgba($text-color, .1);
+    		transition: box-shadow .2s ease-in-out, background-color .2s ease-in-out;
+    		cursor: pointer;
+			user-select: none;
+
+			&:hover,
+		    &:focus {
+				box-shadow: 0 2px 8px rgba($text-color, .3);
+				color: inherit;
+		    }
+
+		    &:active {
+		        box-shadow: 0 1px 2px rgba($text-color, .1);
+		    }
+		}
+
+		&.x--axis {
+			margin-left: 162px;
+			margin-right: 162px;
+		}
+
+		&.y--axis {
+			margin-top: 102px;
+			margin-bottom: 102px;
+			margin-left: 50px;
+		}
+
+		&.z--axis {
+			margin-left: 368px;
+		}
+	}
+
+	.extruder {
+
+		&.float{
+			width:auto; float:right; padding-left: 0;
+		}
+
+		.axis {
+			position: relative;
+			float: right;
+			margin-right: 20px;
+
+			@include media-query(xs) {
+				float: none;
+			}
+
+			.control-button {
+				border: 1px solid #A59B60;
+			}
+		}
+
+		abbr {
+
+  			text-align: center;
+			right: 0 !important;
+			left: 0 !important;
+
+			&.ext {
+				font-size: 16px;
+				margin-top: -8px;
+				top: 50%;
+				color: #E6CB46;
+				width: 46px;
+			}
+		}
+	}
+
+	.palm-controls {
+		.axis {
+			top: 20px;
+
+			&.axis--vertical {
+				.control-button {
+					width: 44px !important;
+					height: 66px !important;
+					padding: 22px 0;
+				}
+			}
+
+			&.axis--horizontal {
+				.control-button {
+					width: 66px !important;
+					height: 44px !important;
+				}
+			}
+		}
+
+		.axis.x--axis {
+		    margin-left: 100px;
+		    margin-right: 100px;
+		}
+
+		.axis.y--axis {
+		    margin-top: 66px;
+		    margin-bottom: 66px;
+			margin-left: 0;
+		}
+
+		.axis.z--axis {
+		    margin-left: 250px;
+
+			@media(max-width: 374px){
+				margin-left: 100px;
+    			top: 252px;
+			}
+		}
+
+		.extruder {
+			.axis {
+				float: left;
+			}
+		}
+
+		.three-axis{
+			width: 330px;
+			height: 230px;
+
+			@media(max-width: 374px){
+				width: 250px;
+				height: 460px;
+			}
+		}
+
+		.extruder {
+    		height: 230px;
+		}
+	}
+}
