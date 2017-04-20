@@ -59,11 +59,10 @@ main#main {
     }
 
 	.inner-page-content{
-		padding: 0 1.5rem 3rem 1.5rem;
+		padding: 49px 1.5rem 3rem 1.5rem;
 
 		@include media-query(xs) {
-			padding-left: .75rem;
-			padding-right: .75rem;
+			padding: 0 .75rem 3rem .75rem;
         }
 
 		 .inner-page-section{
