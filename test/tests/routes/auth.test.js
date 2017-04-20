@@ -16,7 +16,7 @@ module.exports = (client) => {
 				chai.request(client.http.app).post('/api/auth/login').send({
 					username: 'admin@local',
 					password: 'admin'
-				}).end((req, res) => {
+				}).end((err, res) => {
 					expect(res.status).to.equal(200)
 					expect(res.body.success).to.equal(true)
 					done()
@@ -27,7 +27,7 @@ module.exports = (client) => {
 				chai.request(client.http.app).post('/api/auth/login').send({
 					username: 'admin@local',
 					password: 'adminwrong'
-				}).end((req, res) => {
+				}).end((err, res) => {
 					expect(res.status).to.equal(401)
 					done()
 				})
@@ -36,7 +36,7 @@ module.exports = (client) => {
 			it('should throw a 400 when the username parameter is missing', (done) => {
 				chai.request(client.http.app).post('/api/auth/login').send({
 					password: 'admin'
-				}).end((req, res) => {
+				}).end((err, res) => {
 					expect(res.status).to.equal(400)
 					done()
 				})
@@ -49,7 +49,7 @@ module.exports = (client) => {
 				const user = client.auth.find('admin@local')
 				const token = jwt.sign(user)
 				
-				chai.request(client.http.app).get('/api/auth/validate').set('Authorization', `Bearer ${token}`).end((req, res) => {
+				chai.request(client.http.app).get('/api/auth/validate').set('Authorization', `Bearer ${token}`).end((err, res) => {
 					expect(res.status).to.equal(200)
 					expect(res.body.valid).to.equal(true)
 					expect(res.body.user.id).to.equal(user.id)
@@ -68,7 +68,7 @@ module.exports = (client) => {
 				chai.request(client.http.app).post('/api/auth/users').send({
 					username: 'test@user',
 					password: 'testpassword'
-				}).set('Authorization', `Bearer ${token}`).end((req, res) => {
+				}).set('Authorization', `Bearer ${token}`).end((err, res) => {
 					expect(res.status).to.equal(200)
 					expect(res.body.success).to.equal(true)
 					expect(res.body.user.username).to.equal('test@user')
@@ -87,7 +87,7 @@ module.exports = (client) => {
 				chai.request(client.http.app).put('/api/auth/users/' + user.id).send({
 					username: 'admin2@local',
 					password: 'password'
-				}).set('Authorization', `Bearer ${token}`).end((req, res) => {
+				}).set('Authorization', `Bearer ${token}`).end((err, res) => {
 					expect(res.status).to.equal(200)
 					expect(res.body.success).to.equal(true)
 					expect(res.body.user.username).to.equal('admin2@local')
@@ -104,7 +104,7 @@ module.exports = (client) => {
 					chai.request(client.http.app).put('/api/auth/users/' + userTwo.id).send({
 						username: 'admin3@local',
 						password: 'password'
-					}).set('Authorization', `Bearer ${token}`).end((req, res) => {
+					}).set('Authorization', `Bearer ${token}`).end((err, res) => {
 						expect(res.status).to.equal(401)
 						client.auth.resetUsers().then(() => done()).catch(done)
 					})

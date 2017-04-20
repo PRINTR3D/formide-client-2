@@ -5,7 +5,7 @@ const debug = require('debug')('app:driver')
 const fs = require('fs')
 const path = require('path')
 const assert = require('assert')
-const FdmPrinter = require('./printers/fmdPrinter') // we ship an FDM printer spec by default
+const FdmPrinter = require('./printers/fdmPrinter') // we ship an FDM printer spec by default
 const Driver = require('./comm') // we ship FDM drivers by default
 const PrinterNotConnectedError = require('./printerNotConnectedError')
 
