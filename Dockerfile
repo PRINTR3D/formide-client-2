@@ -10,7 +10,7 @@ RUN npm install -g node-pre-gyp
 # Provides cached layer for node_modules
 ADD package.json /tmp/package.json
 RUN npm install json-stable-stringify
-RUN cd /tmp && npm install
+RUN cd /tmp && npm install --production
 RUN mkdir -p /opt/formide-client && cp -a /tmp/node_modules /opt/formide-client
 
 # Define working directory and add root app dir to it
