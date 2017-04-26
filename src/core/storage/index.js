@@ -4,6 +4,7 @@ const fs = require('fs')
 const fsExtra = require('fs-extra')
 const path = require('path')
 const filesToHide = ['.', '..', '.DS_Store']
+const digestStream = require('digest-stream')
 
 class Storage {
 
@@ -126,10 +127,21 @@ class Storage {
 
         // create write stream and pipe file into it
 				const writeStream = fs.createWriteStream(tmpStoragePath)
-				readStream.pipe(writeStream)
-
+				let md5Local = false
+				let md5Cloud = false
+				
+				readStream.on('response', (response) => {
+					md5Cloud = response.headers['content-md5'] || false
+				}).pipe(digestStream('md5', 'hex', (result, length) => {
+					md5Local = result
+				})).pipe(writeStream)
+				
 				// done uploading
 				writeStream.on('close', () => {
+					
+					if (md5Cloud && md5Local && md5Cloud !== md5Local) {
+						return reject(new Error('MD5 mismatch, please try again'))
+					}
 
           // move the file from /tmp to storage location
           try {

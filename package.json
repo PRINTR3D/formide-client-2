@@ -10,7 +10,7 @@
   "license": "GPL-2.0",
   "scripts": {
     "docs": "./node_modules/.bin/apidoc -i ./src/interfaces/http -e node_modules -i ~/formide/plugins -e node_modules -o ./docs/",
-    "dev": "NODE_ENV=local nodemon --ignore ./src/app --ignore ./src/www/public --ignore ./tmp --ignore Gruntfile.js app",
+    "dev": "nodemon --ignore ./src/app --ignore ./src/www/public --ignore ./tmp --ignore Gruntfile.js app",
     "debug": "NODE_ENV=development DEBUG=app:*,plugin:* node app",
     "test2": "NODE_ENV=test mocha --timeout=10000 test/index.test.js",
     "coverage": "NODE_ENV=test istanbul cover _mocha -- -R spec && open coverage/lcov-report/index.html",
@@ -31,6 +31,7 @@
     "cors": "^2.8.3",
     "debug": "^2.6.0",
     "decache": "^4.1.0",
+    "digest-stream": "^2.0.0",
     "diskspace": "^1.0.3",
     "eventemitter2": "^2.2.2",
     "express": "^4.14.0",

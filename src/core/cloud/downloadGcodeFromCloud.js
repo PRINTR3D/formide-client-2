@@ -29,32 +29,32 @@ function downloadGcodeFromCloud (client, gcode, callback) {
     	downloadStream.on('error', (err) => {
     		client.logger.log(`Cloud G-code (${gcode}) has failed to download`, 'warn')
     		client.events.emit('cloud.downloadError', {
-    			title: `Cloud G-code ${gcode} has failed to download`,
+    			title: `Cloud G-code has failed to download`,
     			message: err.message
     		})
     		if (err && err.code === 'ECONNREFUSED') return callback(new Error('Could not connect to server'))
     		return callback(err)
     	})
-
-    	// write to local storage
-    	client.storage.write(gcodeFileName, downloadStream).then((info) => {
-    		client.logger.log(`Cloud G-code ${gcode} has finished downloading`, 'info')
-    		client.events.emit('cloud.downloadSuccess', {
-    			title: `Cloud G-code ${gcode} has finished downloading`,
-    			message: 'The G-code was downloaded and is now ready to be printed',
-    			data: info
-    		})
-    		return callback(null, info)
-    	}).catch((err) => {
+	
+	    // write to local storage
+	    client.storage.write(gcodeFileName, downloadStream).then((info) => {
+		    client.logger.log(`Cloud G-code ${gcode} has finished downloading`, 'info')
+		    client.events.emit('cloud.downloadSuccess', {
+			    title: `Cloud G-code has finished downloading`,
+			    message: 'The G-code was downloaded and is now ready to be printed',
+			    data: info
+		    })
+		    return callback(null, info)
+	    }).catch((err) => {
 		    console.log('write error', err)
-    		client.logger.log(`Cloud G-code (${gcode}) has failed to store`, 'warn')
-    		client.events.emit('cloud.downloadError', {
-    			title: `Cloud G-code ${gcode} has failed to download`,
-    			message: err.message
-    		})
-    		return callback(err)
-    	})
-
+		    client.logger.log(`Cloud G-code (${gcode}) has failed to store`, 'warn')
+		    client.events.emit('cloud.downloadError', {
+			    title: `Cloud G-code has failed to download`,
+			    message: err.message
+		    })
+		    return callback(err)
+	    })
+	    
     } else {
       return callback(err)
     }
