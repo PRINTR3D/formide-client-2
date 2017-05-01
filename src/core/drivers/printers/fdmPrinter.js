@@ -2,6 +2,9 @@
 
 const Printer = require('./printer')
 
+const defaultPauseSequence = 'M401\nG91\nG1 E-2 Z10\nG90\nG1 X1 Y1\n'
+const defaultResumeSequence = 'G90\nG1 F6000 X5 Y5\nM402\n'
+
 class FdmPrinter extends Printer {
 
   constructor (client, port, driver) {
@@ -75,14 +78,14 @@ class FdmPrinter extends Printer {
 	}
 
   pausePrint (callback) {
-	  this._driver.pausePrint(this._port, (err, response) => {
+	  this._driver.pausePrint(this._port, defaultPauseSequence, (err, response) => {
 		  if (err) return callback(err)
 		  return callback(null, response)
 	  })
   }
 
   resumePrint (callback) {
-    this._driver.resumePrint(this._port, (err, response) => {
+    this._driver.resumePrint(this._port, defaultResumeSequence, (err, response) => {
 	    if (err) return callback(err)
 	    return callback(null, response)
     })
