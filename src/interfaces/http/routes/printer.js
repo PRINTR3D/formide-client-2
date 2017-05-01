@@ -180,6 +180,7 @@ module.exports = function (client, http) {
 	 * @apiVersion 1.0.0
 	 * @apiHeader {String} Authentication Valid Bearer JWT token
 	 * @apiParam {String} port Select one of the ports where a printer is connected to. %2F should be used to encode forward slashes.
+	 * @apiParam {String} pauseGcode A G-code sequence (separated with new lines) to execute after pausing the print.
 	 */
 	router.post('/:port/pause', http.checkAuth.jwt, function (req, res) {
 		client.drivers.pausePrint(req.params.port, req.body.pauseGcode || null, (err, response) => {
@@ -197,6 +198,7 @@ module.exports = function (client, http) {
 	 * @apiVersion 1.0.0
 	 * @apiHeader {String} Authentication Valid Bearer JWT token
 	 * @apiParam {String} port Select one of the ports where a printer is connected to. %2F should be used to encode forward slashes.
+	 * @apiParam {String} resumeGcode A G-code sequence (separated with new lines) to execute before resuming the print.
 	 */
 	router.post('/:port/resume', http.checkAuth.jwt, function (req, res) {
 		client.drivers.resumePrint(req.params.port, req.body.resumeGcode || null, (err, response) => {
@@ -214,6 +216,7 @@ module.exports = function (client, http) {
 	 * @apiVersion 1.0.0
 	 * @apiHeader {String} Authentication Valid Bearer JWT token
 	 * @apiParam {String} port Select one of the ports where a printer is connected to. %2F should be used to encode forward slashes.
+	 * @apiParam {String} stopGcode A G-code sequence (separated with new lines) to execute after stopping the print.
 	 */
 	router.post('/:port/stop', http.checkAuth.jwt, function (req, res) {
 		client.drivers.stopPrint(req.params.port, req.body.stopGcode || null, (err, response) => {
