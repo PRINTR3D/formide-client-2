@@ -256,12 +256,12 @@ class Drivers {
 	 * @param callback
 	 * @returns {PrinterNotConnectedError}
 	 */
-  pausePrint (port, callback) {
+  pausePrint (port, pauseSequence, callback) {
     const self = this
 	  const printer = this.printers[port]
 		if (!printer) return callback(new PrinterNotConnectedError(port))
 
-    printer.pausePrint((err, response) => {
+    printer.pausePrint(pauseSequence, (err, response) => {
       if (err) return callback (err)
 
       // emit event
@@ -283,12 +283,12 @@ class Drivers {
 	 * @param callback
 	 * @returns {PrinterNotConnectedError}
 	 */
-  resumePrint (port, callback) {
+  resumePrint (port, resumeSequence, callback) {
 	  const self = this
 	  const printer = this.printers[port]
 		if (!printer) return callback(new PrinterNotConnectedError(port))
 
-    printer.resumePrint((err, response) => {
+    printer.resumePrint(resumeSequence, (err, response) => {
 	    if (err) return callback (err)
 
       // emit event
@@ -310,12 +310,12 @@ class Drivers {
 	 * @param callback
 	 * @returns {PrinterNotConnectedError}
 	 */
-  stopPrint (port, callback) {
+  stopPrint (port, stopSequence, callback) {
 	  const self = this
 	  const printer = this.printers[port]
 		if (!printer) return callback(new PrinterNotConnectedError(port))
 
-		printer.stopPrint((err, response) => {
+		printer.stopPrint(stopSequence, (err, response) => {
 			if (err) return callback (err)
 
       // emit event

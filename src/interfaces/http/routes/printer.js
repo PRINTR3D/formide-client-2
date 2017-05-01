@@ -182,7 +182,7 @@ module.exports = function (client, http) {
 	 * @apiParam {String} port Select one of the ports where a printer is connected to. %2F should be used to encode forward slashes.
 	 */
 	router.post('/:port/pause', http.checkAuth.jwt, function (req, res) {
-		client.drivers.pausePrint(req.params.port, (err, response) => {
+		client.drivers.pausePrint(req.params.port, req.body.pauseGcode || null, (err, response) => {
 			if (err && err.name === 'printerNotConnectedError') return res.notFound(err.message)
 			else if (err && err.name === 'printerActionNotAllowed') return res.conflict(err.message)
 			else if (err) return res.serverError(err)
@@ -199,7 +199,7 @@ module.exports = function (client, http) {
 	 * @apiParam {String} port Select one of the ports where a printer is connected to. %2F should be used to encode forward slashes.
 	 */
 	router.post('/:port/resume', http.checkAuth.jwt, function (req, res) {
-		client.drivers.resumePrint(req.params.port, (err, response) => {
+		client.drivers.resumePrint(req.params.port, req.body.resumeGcode || null, (err, response) => {
 			if (err && err.name === 'printerNotConnectedError') return res.notFound(err.message)
 			else if (err && err.name === 'printerActionNotAllowed') return res.conflict(err.message)
 			else if (err) return res.serverError(err)
@@ -216,7 +216,7 @@ module.exports = function (client, http) {
 	 * @apiParam {String} port Select one of the ports where a printer is connected to. %2F should be used to encode forward slashes.
 	 */
 	router.post('/:port/stop', http.checkAuth.jwt, function (req, res) {
-		client.drivers.stopPrint(req.params.port, (err, response) => {
+		client.drivers.stopPrint(req.params.port, req.body.stopGcode || null, (err, response) => {
 			if (err && err.name === 'printerNotConnectedError') return res.notFound(err.message)
 			else if (err && err.name === 'printerActionNotAllowed') return res.conflict(err.message)
 			else if (err) return res.serverError(err)
