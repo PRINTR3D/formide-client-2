@@ -14,7 +14,7 @@ function determineDevice () {
 		
 		// check if it's a Raspberry Pi
 		try {
-			const osRelease = fs.readFile('/etc/os-release')
+			const osRelease = fs.readFileSync('/etc/os-release')
 			if (osRelease.indexOf('raspbian') > -1) {
 				process.env.OS_IMPLEMENTATION = 'raspberry_pi'
 			}
