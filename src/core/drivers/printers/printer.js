@@ -144,6 +144,10 @@ class Printer {
 	printFinished () {
 		this._client.logger.log(`Printer.printFinished not implemented for this printer`, 'critical')
 	}
+	
+	getCommunicationLogs () {
+		this._client.logger.log(`Printer.getCommunicationLogs not implemented for this printer`, 'critical')
+	}
 }
 
 module.exports = Printer

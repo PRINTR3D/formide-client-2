@@ -224,5 +224,23 @@ module.exports = function (client, http) {
 		})
 	})
 	
+	/**
+	 * @api {get} /api/printer/:port/logs Printer:logs
+	 * @apiGroup Printer
+	 * @apiDescription Get firmware communication logs for a printer
+	 * @apiVersion: 2.1.0
+	 * @apiParam {String} port Select one of the ports where a printer is connected to. %2F should be used to encode forward slashes.
+	 * @apiParam {Number} skip The amount of log lines to skip (where 0 is the end of the log file, e.g. the most recent communication).
+	 * @apiParam {Number} limit The maximum amount of log lines to get (to speed up endpoint, maximum limit allowed is 1000 lines).
+	 */
+	router.get('/:port/logs', function (req, res) {
+		client.drivers.getCommunicationLogs(req.params.port, req.query.skip, req.query.limit, (err, response) => {
+			if (err && err.name === 'printerNotConnectedError') return res.notFound(err.message)
+			else if (err && err.name === 'printerActionNotAllowed') return res.conflict(err.message)
+			else if (err) return res.serverError(err)
+			return res.ok(response)
+		})
+	})
+	
   return router
 }
