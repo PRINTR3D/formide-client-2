@@ -108,8 +108,8 @@ class FdmPrinter extends Printer {
   }
   
   // get communication logs
-	getCommunicationLogs (skip, limit, callback) {
-  	this._driver.getCommunicationLogs(this._port, skip, limit, callback)
+	getCommunicationLogs (limit, skip, callback) {
+  	this._driver.getCommunicationLogs(this._port, limit, skip, callback)
   }
 }
 

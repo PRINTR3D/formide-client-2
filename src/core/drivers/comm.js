@@ -169,8 +169,8 @@ function comm (client) {
 	 * @param callback
 	 * @returns {*}
 	 */
-  function getCommunicationLogs (serialPortPath, skip, limit, callback) {
-    return _sendWithCallback('getCommunicationLogs', [serialPortPath, skip, limit], callback)
+  function getCommunicationLogs (serialPortPath, limit, skip, callback) {
+    return _sendWithCallback('getCommunicationLogs', [serialPortPath, limit, skip], callback)
   }
 
   // return functions

@@ -449,7 +449,7 @@ class Drivers {
   	const printer = this.printers[port]
 		if (!printer) return callback(new PrinterNotConnectedError(port))
 		
-		printer.getCommunicationLogs(skip, limit, (err, logs) => {
+		printer.getCommunicationLogs(limit, skip, (err, logs) => {
 			if (err) return callback(err)
 			return callback(null, {
 				logs: logs,
