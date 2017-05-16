@@ -160,6 +160,18 @@ function comm (client) {
   function stopPrint (serialPortPath, stopGcode, callback) {
     return _sendWithCallback('stopPrint', [serialPortPath, stopGcode], callback)
   }
+	
+	/**
+   * Get firmware communication logs
+	 * @param serialPortPath
+	 * @param skip
+	 * @param limit
+	 * @param callback
+	 * @returns {*}
+	 */
+  function getCommunicationLogs (serialPortPath, limit, skip, callback) {
+    return _sendWithCallback('getCommunicationLogs', [serialPortPath, limit, skip], callback)
+  }
 
   // return functions
   return {
@@ -171,7 +183,8 @@ function comm (client) {
     getPrinterInfo,
     pausePrint,
     resumePrint,
-    stopPrint
+    stopPrint,
+	  getCommunicationLogs
   }
 }
 

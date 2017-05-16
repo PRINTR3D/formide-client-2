@@ -39,7 +39,9 @@ class Cloud {
 
     // forward all events to cloud
     client.events.onAny(function (eventName, eventData) {
-      self.cloud.emit(eventName, eventData)
+      self.cloud.emit(eventName, eventData, (error) => {
+	      client.logger.log(`Cloud event returned error: ${error.message}`, 'warning')
+      })
     })
 
     // socket events

@@ -110,6 +110,11 @@ class FdmPrinter extends Printer {
 		self._queueItemId = ''
 		return callback(null)
   }
+  
+  // get communication logs
+	getCommunicationLogs (limit, skip, callback) {
+  	this._driver.getCommunicationLogs(this._port, limit, skip, callback)
+  }
 }
 
 module.exports = FdmPrinter
