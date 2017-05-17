@@ -3,9 +3,9 @@
 const Printer = require('./printer')
 
 // default G-code sequences
-const defaultPauseSequence = 'M401\nG91\nG1 E-2 Z10\nG90\nG1 X1 Y1\n'
-const defaultResumeSequence = 'G90\nG1 F6000 X5 Y5\nM402\n'
-const defaultStopSequence = 'G92 E0\nG28 X\nM104 S0\nM104 S0 T0\nM104 S0 T1\n M140 S0\nM84'
+const defaultPauseSequence = 'G91\nG1 E-6\nG1 Z10\nG90\n'
+const defaultResumeSequence = 'G91\nG1 Z-10\nG90\n'
+const defaultStopSequence = 'G92 E0\nG28 X\nM104 S0\nM104 S0 T0\nM104 S0 T1\n M140 S0\nM84\n'
 
 class FdmPrinter extends Printer {
 
