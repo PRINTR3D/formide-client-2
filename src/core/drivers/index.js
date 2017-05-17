@@ -254,14 +254,14 @@ class Drivers {
    * Pause printer
 	 * @param port
 	 * @param callback
-	 * @returns {PrinterNotConnectedError}
+	 * @returns {*}
 	 */
-  pausePrint (port, callback) {
+  pausePrint (port, pauseSequence, callback) {
     const self = this
 	  const printer = this.printers[port]
 		if (!printer) return callback(new PrinterNotConnectedError(port))
 
-    printer.pausePrint((err, response) => {
+    printer.pausePrint(pauseSequence, (err, response) => {
       if (err) return callback (err)
 
       // emit event
@@ -281,14 +281,14 @@ class Drivers {
    * Resume printer
 	 * @param port
 	 * @param callback
-	 * @returns {PrinterNotConnectedError}
+	 * @returns {*}
 	 */
-  resumePrint (port, callback) {
+  resumePrint (port, resumeSequence, callback) {
 	  const self = this
 	  const printer = this.printers[port]
 		if (!printer) return callback(new PrinterNotConnectedError(port))
 
-    printer.resumePrint((err, response) => {
+    printer.resumePrint(resumeSequence, (err, response) => {
 	    if (err) return callback (err)
 
       // emit event
@@ -308,14 +308,14 @@ class Drivers {
    * Stop printer
 	 * @param port
 	 * @param callback
-	 * @returns {PrinterNotConnectedError}
+	 * @returns {*}
 	 */
-  stopPrint (port, callback) {
+  stopPrint (port, stopSequence, callback) {
 	  const self = this
 	  const printer = this.printers[port]
 		if (!printer) return callback(new PrinterNotConnectedError(port))
 
-		printer.stopPrint((err, response) => {
+		printer.stopPrint(stopSequence, (err, response) => {
 			if (err) return callback (err)
 
       // emit event
@@ -361,7 +361,7 @@ class Drivers {
 	 * @param port
 	 * @param data
 	 * @param callback
-	 * @returns {PrinterNotConnectedError}
+	 * @returns {*}
 	 */
 	runCommandTemplate (port, command, parameters, callback) {
 	  const printer = this.printers[port]
@@ -400,7 +400,7 @@ class Drivers {
 	 * @param port
 	 * @param gcode
 	 * @param callback
-	 * @returns {PrinterNotConnectedError}
+	 * @returns {*}
 	 */
   sendCommand (port, gcode, callback) {
 	  const printer = this.printers[port]
@@ -421,7 +421,7 @@ class Drivers {
 	 * @param port
 	 * @param tuneGcode
 	 * @param callback
-	 * @returns {PrinterNotConnectedError}
+	 * @returns {*}
 	 */
   sendTuneCommand (port, tuneGcode, callback) {
 	  const printer = this.printers[port]
@@ -436,6 +436,28 @@ class Drivers {
 			})
 		})
   }
+	
+	/**
+	 * Get communication logs (driver <-> firmware)
+	 * @param port
+	 * @param skip
+	 * @param limit
+	 * @param callback
+	 * @returns {*}
+	 */
+	getCommunicationLogs (port, skip, limit, callback) {
+  	const printer = this.printers[port]
+		if (!printer) return callback(new PrinterNotConnectedError(port))
+		
+		printer.getCommunicationLogs(limit, skip, (err, logs) => {
+			if (err) return callback(err)
+			return callback(null, {
+				logs: logs,
+				success: true,
+				port: port
+			})
+		})
+	}
 }
 
 module.exports = Drivers

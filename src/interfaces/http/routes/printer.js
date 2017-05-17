@@ -180,9 +180,10 @@ module.exports = function (client, http) {
 	 * @apiVersion 1.0.0
 	 * @apiHeader {String} Authentication Valid Bearer JWT token
 	 * @apiParam {String} port Select one of the ports where a printer is connected to. %2F should be used to encode forward slashes.
+	 * @apiParam {String} pauseGcode A G-code sequence (separated with new lines) to execute after pausing the print.
 	 */
 	router.post('/:port/pause', http.checkAuth.jwt, function (req, res) {
-		client.drivers.pausePrint(req.params.port, (err, response) => {
+		client.drivers.pausePrint(req.params.port, req.body.pauseGcode || null, (err, response) => {
 			if (err && err.name === 'printerNotConnectedError') return res.notFound(err.message)
 			else if (err && err.name === 'printerActionNotAllowed') return res.conflict(err.message)
 			else if (err) return res.serverError(err)
@@ -197,9 +198,10 @@ module.exports = function (client, http) {
 	 * @apiVersion 1.0.0
 	 * @apiHeader {String} Authentication Valid Bearer JWT token
 	 * @apiParam {String} port Select one of the ports where a printer is connected to. %2F should be used to encode forward slashes.
+	 * @apiParam {String} resumeGcode A G-code sequence (separated with new lines) to execute before resuming the print.
 	 */
 	router.post('/:port/resume', http.checkAuth.jwt, function (req, res) {
-		client.drivers.resumePrint(req.params.port, (err, response) => {
+		client.drivers.resumePrint(req.params.port, req.body.resumeGcode || null, (err, response) => {
 			if (err && err.name === 'printerNotConnectedError') return res.notFound(err.message)
 			else if (err && err.name === 'printerActionNotAllowed') return res.conflict(err.message)
 			else if (err) return res.serverError(err)
@@ -214,9 +216,28 @@ module.exports = function (client, http) {
 	 * @apiVersion 1.0.0
 	 * @apiHeader {String} Authentication Valid Bearer JWT token
 	 * @apiParam {String} port Select one of the ports where a printer is connected to. %2F should be used to encode forward slashes.
+	 * @apiParam {String} stopGcode A G-code sequence (separated with new lines) to execute after stopping the print.
 	 */
 	router.post('/:port/stop', http.checkAuth.jwt, function (req, res) {
-		client.drivers.stopPrint(req.params.port, (err, response) => {
+		client.drivers.stopPrint(req.params.port, req.body.stopGcode || null, (err, response) => {
+			if (err && err.name === 'printerNotConnectedError') return res.notFound(err.message)
+			else if (err && err.name === 'printerActionNotAllowed') return res.conflict(err.message)
+			else if (err) return res.serverError(err)
+			return res.ok(response)
+		})
+	})
+	
+	/**
+	 * @api {get} /api/printer/:port/logs Printer:logs
+	 * @apiGroup Printer
+	 * @apiDescription Get firmware communication logs for a printer
+	 * @apiVersion: 2.1.0
+	 * @apiParam {String} port Select one of the ports where a printer is connected to. %2F should be used to encode forward slashes.
+	 * @apiParam {Number} skip The amount of log lines to skip (where 0 is the end of the log file, e.g. the most recent communication).
+	 * @apiParam {Number} limit The maximum amount of log lines to get (to speed up endpoint, maximum limit allowed is 1000 lines).
+	 */
+	router.get('/:port/logs', function (req, res) {
+		client.drivers.getCommunicationLogs(req.params.port, req.query.skip, req.query.limit, (err, response) => {
 			if (err && err.name === 'printerNotConnectedError') return res.notFound(err.message)
 			else if (err && err.name === 'printerActionNotAllowed') return res.conflict(err.message)
 			else if (err) return res.serverError(err)

@@ -2,6 +2,11 @@
 
 const Printer = require('./printer')
 
+// default G-code sequences
+const defaultPauseSequence = 'G91\nG1 E-6\nG1 Z10\nG90\n'
+const defaultResumeSequence = 'G91\nG1 Z-10\nG90\n'
+const defaultStopSequence = 'G92 E0\nG28 X\nM104 S0\nM104 S0 T0\nM104 S0 T1\n M140 S0\nM84\n'
+
 class FdmPrinter extends Printer {
 
   constructor (client, port, driver) {
@@ -74,24 +79,23 @@ class FdmPrinter extends Printer {
 		})
 	}
 
-  pausePrint (callback) {
-	  this._driver.pausePrint(this._port, (err, response) => {
+  pausePrint (pauseSequence, callback) {
+	  this._driver.pausePrint(this._port, pauseSequence || defaultPauseSequence, (err, response) => {
 		  if (err) return callback(err)
 		  return callback(null, response)
 	  })
   }
 
-  resumePrint (callback) {
-    this._driver.resumePrint(this._port, (err, response) => {
+  resumePrint (resumeSequence, callback) {
+    this._driver.resumePrint(this._port, resumeSequence || defaultResumeSequence, (err, response) => {
 	    if (err) return callback(err)
 	    return callback(null, response)
     })
   }
 
-  stopPrint (callback) {
+  stopPrint (stopSequence, callback) {
   	const self = this
-    // TODO: 2nd parameter is stop G-code sequence
-	  this._driver.stopPrint(this._port, '', (err, response) => {
+	  this._driver.stopPrint(this._port, stopSequence || defaultStopSequence, (err, response) => {
 		  if (err) return callback(err)
 		  self._currentlyPrinting = ''
 		  self._queueItemId = ''
@@ -105,6 +109,15 @@ class FdmPrinter extends Printer {
 		self._currentlyPrinting = ''
 		self._queueItemId = ''
 		return callback(null)
+  }
+  
+  // get communication logs
+	getCommunicationLogs (limit, skip, callback) {
+		this._driver.getCommunicationLogs(this._port, limit, skip, (err, response) => {
+			if (err) return callback(err)
+			if (!response.communicationLogs) return callback(response)
+			return callback(null, response.communicationLogs)
+		})
   }
 }
 
