@@ -1,6 +1,6 @@
 {
   "name": "formide-client-2",
-  "version": "2.1.1-alpha.1",
+  "version": "2.1.1-alpha.2",
   "description": "Client software that connects 3D printers to Formide Cloud Platform",
   "main": "app.js",
   "directories": {
