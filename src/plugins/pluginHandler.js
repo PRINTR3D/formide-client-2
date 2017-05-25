@@ -36,6 +36,7 @@ class PluginHandler {
         MONGO_ID_FIELD: global.MONGO_ID_FIELD
       }
     })
+
     const plugin = new Plugin(this._client)
     this._plugins[plugin.getName()] = plugin
     this._client.http.loadPluginRoutes(plugin)

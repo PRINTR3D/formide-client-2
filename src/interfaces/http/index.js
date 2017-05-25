@@ -105,16 +105,12 @@ class Http {
       return res.redirect(`http://${req.headers.host.split(':')[0]}:${client.config.http.www}`)
     })
 
-    // catch all 404
-    this.app.use(function (req, res) {
-      return res.notFound('Page not found')
-    })
-
     return this
   }
 
   loadPluginRoutes (plugin) {
     const pluginRootRouter = express.Router()
+
     this.app.use(`/plugins/${plugin.getName()}`, plugin.getApiRoot(pluginRootRouter))
 
     if (typeof plugin.getApi === 'function') {
