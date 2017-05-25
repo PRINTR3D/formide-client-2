@@ -44,5 +44,22 @@ module.exports = function (client, http) {
 		})
 	})
 
+	/**
+	 * @api {delete} /api/queue/:queueItem
+	 * @apiGroup Queue
+	 * @apiDescription Delete a cloud queue item
+	 * @apiVersion 2.0.0
+	 * @apiHeader {String} Authentication Valid Bearer JWT token
+	 * 
+	 * @apiParam {String} queueItemId The cloud ID of the queue item (part of the GET /api/queue response).
+	 */
+	router.delete('/:queueItemId', http.checkAuth.jwt, function (req, res) {
+		client.cloud.removeCloudQueueItem(req.params.queueItemId).then((response) => {
+			return res.ok(response)
+		}).catch((err) => {
+			return res.serverError(err)
+		})
+	})
+
 	return router
 }

@@ -1,13 +1,18 @@
 'use strict'
 
+// packages
 const assert = require('assert')
 const co = require('co')
+
+// lib
 const socket = require('./socket')
 const proxy = require('./proxy')
+const getCallbackData = require('./getCallbackData')
+
+// cloud api lib
+const cloudQueue = require('./cloudQueue')
 const downloadGcodeFromCloud = require('./downloadGcodeFromCloud')
 const generateCloudCode = require('./generateCloudCode')
-const getCloudQueue = require('./getCloudQueue')
-const getCallbackData = require('./getCallbackData')
 
 class Cloud {
 
@@ -142,7 +147,7 @@ class Cloud {
   getCloudQueue (port) {
 	  const self = this
     return new Promise((resolve, reject) => {
-	    getCloudQueue(self._client, port).then((response) => {
+	    cloudQueue.getCloudQueue(self._client, port).then((response) => {
 	      return resolve(response)
       }).catch(reject)
     })
@@ -150,13 +155,13 @@ class Cloud {
 	
 	/**
 	 * Print a G-code from the cloud queue
-	 * @param gcode
-	 * @param port
-	 * @param queueItemId
+	 * @param {String} gcode
+	 * @param {String} port
+	 * @param {String} queueItemId
 	 * @returns {Promise}
 	 */
 	printGcodeFromCloud (queueItemId, gcode, port) {
-  	  const self = this
+		const self = this
 		return new Promise((resolve, reject) => {
 			downloadGcodeFromCloud(self._client, gcode, function (err, stats) {
 				if (err) return reject(err)
@@ -165,6 +170,20 @@ class Cloud {
 					return resolve(response)
 				})
 			})
+		})
+	}
+
+	/**
+	 * Remove an item from the cloud queue as device
+	 * @param {String} queueItemId
+	 * @returns {Promise}
+	 */
+	removeCloudQueueItem (queueItemId) {
+		const self = this
+		return new Promise((resolve, reject) => {
+			cloudQueue.removeQueueItem(self._client, queueItemId).then((response) => {
+				return resolve(response)
+			}).catch(reject)
 		})
 	}
 }
