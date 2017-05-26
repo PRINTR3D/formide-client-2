@@ -1,6 +1,6 @@
 {
   "name": "formide-client-2",
-  "version": "2.1.1-alpha.1",
+  "version": "2.1.1-alpha.2",
   "description": "Client software that connects 3D printers to Formide Cloud Platform",
   "main": "app.js",
   "directories": {
@@ -39,7 +39,7 @@
     "express": "^4.14.0",
     "express-bearer-token": "^2.1.0",
     "express-session": "^1.14.1",
-    "formide-drivers": "printr3d/formide-drivers#v6.6.8",
+    "formide-drivers": "printr3d/formide-drivers#v6.6.9",
     "fs-extra": "^2.1.2",
     "getmac": "^1.2.1",
     "handlebars": "^4.0.6",
