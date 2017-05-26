@@ -10,8 +10,14 @@ class PluginHandler {
   constructor (client) {
     this._client = client
     this._plugins = {}
-    // this.loadPlugins(path.resolve(__dirname, 'bundled')) // bundled plugins, none at the moment
-    this.loadPlugins(path.resolve(client.config.paths.pluginDir)) // installed plugins
+
+    // load system plugins on The Element
+    if (client.system.OS_IMPLEMENTATION === 'the_element') {
+      this.loadPlugins(path.resolve('/opt/plugins'))
+    }
+
+    // load user plugins
+    this.loadPlugins(path.resolve(client.config.paths.pluginDir))
   }
 
   loadPlugins (pluginDir) {
