@@ -99,7 +99,10 @@ class Storage {
 	write (filename, readStream) {
 		const self = this
 		return new Promise((resolve, reject) => {
+
+			// consts
 			const fileExt = path.extname(filename)
+			const basename = path.basename(filename)
 			
 			// check if there is any space left
 			self.diskSpace.hasSpaceLeft().then(() => {
@@ -112,8 +115,8 @@ class Storage {
 				}
 				
 				// get full storage paths
-				let gcodeStoragePath = path.resolve(this.gcodeDir, path.basename(filename))
-				let tmpStoragePath = path.resolve('/tmp', path.basename(filename))
+				let gcodeStoragePath = path.resolve(this.gcodeDir, basename)
+				let tmpStoragePath = path.resolve('/tmp', basename)
 				
 				// check if exists, if so we put the date behind the filename
 				if (fs.existsSync(gcodeStoragePath)) {
