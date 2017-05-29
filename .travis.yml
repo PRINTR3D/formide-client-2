@@ -9,6 +9,12 @@ addons:
     packages:
     - g++-4.8
     - gcc-4.8
+env:
+  global:
+    - CXX=g++-4.8
+    - NODE_ENV=test
+install:
+  - npm install
 deploy:
   provider: npm
   email: chris@printr.nl
