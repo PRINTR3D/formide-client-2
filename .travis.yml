@@ -8,7 +8,7 @@ addons:
     - g++-4.8
     - gcc-4.8
 env:
-  - CXX="g++-4.8"
+  - CXX="g++-4.8" CC="gcc"
 node_js:
   - "4"
   - "6"
