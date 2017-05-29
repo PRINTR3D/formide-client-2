@@ -1,4 +1,5 @@
 language: node_js
+sudo: false
 node_js:
   - "4"
   - "6"
@@ -10,11 +11,8 @@ addons:
     - g++-4.8
     - gcc-4.8
 env:
-  global:
-    - CXX=g++-4.8
-    - NODE_ENV=test
+  - CXX=g++-4.8
 install:
-  - sudo unlink /usr/bin/g++ && sudo ln -s /usr/bin/g++-5 /usr/bin/g++
   - npm install
 deploy:
   provider: npm
