@@ -4,7 +4,10 @@ node_js:
   - "6"
 addons:
   apt:
+    sources:
+    - ubuntu-toolchain-r-test
     packages:
+    - g++-4.8
     - gcc-4.8
 deploy:
   provider: npm
