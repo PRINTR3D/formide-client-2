@@ -13,7 +13,9 @@ class PluginHandler {
 
     // load system plugins on The Element
     if (client.system.OS_IMPLEMENTATION === 'the_element') {
-      this.loadPlugins(path.resolve('/opt/plugins'))
+      if (fs.existsSync(path.resolve('/opt/plugins'))) {
+        this.loadPlugins(path.resolve('/opt/plugins'))
+      }
     }
 
     // load user plugins
