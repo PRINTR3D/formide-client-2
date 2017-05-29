@@ -14,7 +14,7 @@ env:
     - CXX=g++-4.8
     - NODE_ENV=test
 install:
-  - export CXX="g++-4.8"
+  - sudo unlink /usr/bin/g++ && sudo ln -s /usr/bin/g++-5 /usr/bin/g++
   - npm install
 deploy:
   provider: npm
