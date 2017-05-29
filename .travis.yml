@@ -2,6 +2,10 @@ language: node_js
 node_js:
   - "4"
   - "6"
+addons:
+  apt:
+    packages:
+    - gcc-4.8
 deploy:
   provider: npm
   email: chris@printr.nl
