@@ -30,9 +30,15 @@ class Client {
     assert(config, '[core] - config not passed')
     assert(config.version, '[core] - config.version not passed')
 
+    // events
+    this.events = Events
+
     // config & logging
     this.config = config
     this.logger = new Logger(this)
+
+    // start drivers as soon as possible
+    this.drivers = new Drivers(this)
 
     // system
     this.version = config.version
@@ -55,8 +61,6 @@ class Client {
     }
 
     // core
-    this.events = Events
-    this.drivers = new Drivers(this)
     this.storage = new Storage(this)
     this.auth = new Auth(this)
 	  this.cloud = new Cloud(this)

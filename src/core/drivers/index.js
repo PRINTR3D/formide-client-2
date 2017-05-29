@@ -34,14 +34,13 @@ class Drivers {
 
     try {
       debug('forking drivers...')
-      this._version = require('formide-drivers/package.json').version
       this._drivers = new Driver(client)
       debug('drivers loaded')
 
       this._drivers.on(function (err, event) {
+				
         if (err) {
           client.logger.log(err.message, 'error')
-          console.log(err)
         }
 
         if (event) {
@@ -69,13 +68,6 @@ class Drivers {
 
     // all connected printers will be stored in this named array
     this.printers = {}
-  }
-
-  /**
-   * Return the version of drivers binary installed
-   */
-  getVersion () {
-    return this._version
   }
 
   getDefaultDrivers () {
