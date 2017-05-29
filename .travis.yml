@@ -10,8 +10,9 @@ addons:
     - g++-4.8
     - gcc-4.8
 env:
-  - CXX=g++-4.8
-  - NODE_ENV=test
+  global:
+    - CXX=g++-4.8
+    - NODE_ENV=test
 install:
   - export CXX="g++-4.8"
   - npm install
