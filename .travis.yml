@@ -7,6 +7,8 @@ cache:
 node_js:
   - "4"
   - "6"
+env:
+  - OS_IMPLEMENTATION=raspberry_pi
 install:
   - npm install
 deploy:
