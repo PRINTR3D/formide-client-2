@@ -39,7 +39,7 @@
     "express": "^4.14.0",
     "express-bearer-token": "^2.1.0",
     "express-session": "^1.14.1",
-    "formide-drivers": "printr3d/formide-drivers#v6.6.9",
+    "formide-drivers": "printr3d/formide-drivers#feature/node-v6",
     "fs-extra": "^2.1.2",
     "getmac": "^1.2.1",
     "handlebars": "^4.0.6",
