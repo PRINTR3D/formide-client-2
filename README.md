@@ -1,6 +1,12 @@
 # formide-client-2
 Second version of Formide client, an open source 3D printing client software.
 
+[![Gitter](https://img.shields.io/gitter/room/formide-client-2/formide-client-2.svg)](https://gitter.im/formide-client-2/Lobby?utm_source=share-link&utm_medium=link&utm_campaign=share-link)
+
+[![Build Status](https://travis-ci.org/PRINTR3D/formide-client-2.svg?branch=master)](https://travis-ci.org/PRINTR3D/formide-client-2)
+
+[![npm](https://img.shields.io/npm/v/formide-client-2.svg)](https://www.npmjs.com/package/formide-client-2)
+
 ## Introduction
 The Formide client is an IoT client that works as a stand alone local 3D printing server as well as connection to the Formide 3D printing cloud platform.
 It is written in Node.js, making it easy for developers to get started with on their own devices or add functionality.
@@ -9,7 +15,7 @@ It is written in Node.js, making it easy for developers to get started with on t
 Formide client needs the following requirements:
 
 * ARM linux (tailored for The Element, also tested on Raspberry Pi 2 and 3, and Beagle Bone Black) or MacOS (development purposes)
-* NodeJS 4.x (the LTS release) and accompanying NPM version
+* NodeJS 6.x (the LTS release) and accompanying NPM version
 * A working internet connection for [cloud](https://formide.com) functionality
 
 ## Documentation
@@ -55,7 +61,7 @@ Please check the issue list of this repo before adding new ones to see if we're 
 The public roadmap for Printr can be found at [this board](https://github.com/orgs/PRINTR3D/projects/1).
 
 ### Testing
-We advice you to run automated tests before creating a pull request. This can done by simply running `npm test`, or `npm run test:mac`, depending on your platform. All automated test results from pushes and pull requests can be found on [Travis](https://travis-ci.org/PRINTR3D/formide-client-2).
+We advice you to run automated tests before creating a pull request. This can done by simply running `npm test`, or `npm run test:mac`, depending on your platform. All automated test results for branches and pull requests can be found on [Travis](https://travis-ci.org/PRINTR3D/formide-client-2).
 
 ## License
 Please check [LICENSE.md](LICENSE.md) for licensing information.
