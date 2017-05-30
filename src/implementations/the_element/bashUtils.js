@@ -1,12 +1,3 @@
-/**
-* @Author: chris
-* @Date:   2017-01-05T11:43:27+01:00
-* @Filename: bashUtils.js
-* @Last modified by:   chris
-* @Last modified time: 2017-01-05T11:46:15+01:00
-* @Copyright: Copyright (c) 2016, All rights reserved, http://printr.nl
-*/
-
 'use strict'
 
 const safePattern = /^[a-z0-9_\/\-.,?:@#%^+=\[\]]*$/i

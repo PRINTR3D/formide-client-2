@@ -1,25 +1,5 @@
 'use strict'
 
-// packages
-const assert = require('assert')
-
-// core modules
-const Events = require('./events')
-const Drivers = require('./drivers')
-const Logger = require('./utils/logger')
-const Auth = require('./auth')
-const Storage = require('./storage')
-const Cloud = require('./cloud')
-
-// interfaces
-const Http = require('../interfaces/http')
-const Ws = require('../interfaces/ws')
-const Www = require('../www')
-
-// other
-const PluginHandler = require('../plugins/pluginHandler')
-const determineDevice = require('./utils/determineDevice')
-
 class Client {
 
   /**
@@ -27,17 +7,17 @@ class Client {
    * @param config
    */
   constructor (config) {
-    assert(config, '[core] - config not passed')
-    assert(config.version, '[core] - config.version not passed')
 
     // events
-    this.events = Events
+    this.events = require('./events')
 
     // config & logging
     this.config = config
+    const Logger = require('./utils/logger')
     this.logger = new Logger(this)
 
     // start drivers as soon as possible
+    const Drivers = require('./drivers')
     this.drivers = new Drivers(this)
 
     // system
@@ -46,6 +26,8 @@ class Client {
     this.env = process.env.NODE_ENV
 
     try {
+
+      const determineDevice = require('./utils/determineDevice')
       
       // check if known device, will set OS_IMPLEMENTATION env param if found, otherwise default to The Element
 	    const OS_IMPLEMENTATION = determineDevice() || process.env.OS_IMPLEMENTATION || 'the_element'
@@ -60,21 +42,30 @@ class Client {
       this.logger.log(`No native client implementation found: ${e.message}`, 'warning')
     }
 
+    // detect plugins
+    const PluginHandler = require('../plugins/pluginHandler')
+    this.plugins = new PluginHandler(this)
+
     // core
+    const Storage = require('./storage')
     this.storage = new Storage(this)
+    const Auth = require('./auth')
     this.auth = new Auth(this)
+    const Cloud = require('./cloud')
 	  this.cloud = new Cloud(this)
 
     // interfaces
+    const Http = require('../interfaces/http')
     this.http = new Http(this)
+    const Ws = require('../interfaces/ws')
     this.ws = new Ws(this)
+    const Www = require('../www')
     this.www = new Www(this)
 
-    this.logger.log('Initiated new Client', 'info')
+    // plugin init
+    this.plugins.initializePlugins()
 
-    // plugins
-    this.plugins = new PluginHandler(this)
-    this.logger.log('Loaded plugins', 'info')
+    this.logger.log('Initiated new Client', 'info')
 
     return this
   }

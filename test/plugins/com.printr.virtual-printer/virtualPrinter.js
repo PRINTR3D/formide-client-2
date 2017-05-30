@@ -1,5 +1,6 @@
 'use strict'
 
+const Printer = require('../../../src/core/drivers/printers/printer')
 const VirtualDriver = require('./virtualDriver')
 
 class VirtualPrinter extends Printer {
