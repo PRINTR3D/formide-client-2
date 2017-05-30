@@ -14,12 +14,10 @@ module.exports = function (client, http) {
    * @apiVersion 2.0.0
    */
   router.get('/info', function (req, res) {
-    const driverVersion = client.drivers.getVersion()
     const uptime = process.uptime()
 
     return res.ok({
       version: client.config.version,
-      drivers: driverVersion,
       deviceType: client.system.OS_IMPLEMENTATION,
       uptime
     })
