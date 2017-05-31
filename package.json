@@ -1,6 +1,6 @@
 {
   "name": "formide-client-2",
-  "version": "2.1.1-alpha.1",
+  "version": "2.1.1-alpha.2",
   "description": "Client software that connects 3D printers to Formide Cloud Platform",
   "main": "app.js",
   "directories": {
@@ -12,11 +12,11 @@
     "docs": "./node_modules/.bin/apidoc -i ./src/interfaces/http -e node_modules -i ~/formide/plugins -e node_modules -o ./docs/",
     "dev": "nodemon --ignore ./src/app --ignore ./src/www/public --ignore ./tmp --ignore Gruntfile.js app",
     "debug": "NODE_ENV=development DEBUG=app:*,plugin:* node app",
-    "test2": "NODE_ENV=test mocha --timeout=10000 test/index.test.js",
+    "test": "NODE_ENV=test mocha --timeout=10000 test/index.test.js",
     "coverage": "NODE_ENV=test istanbul cover _mocha -- -R spec && open coverage/lcov-report/index.html",
     "dev:mac": "OS_IMPLEMENTATION=mac_os npm run dev",
     "debug:mac": "OS_IMPLEMENTATION=mac_os npm run debug",
-    "test:mac": "OS_IMPLEMENTATION=mac_os npm run test2",
+    "test:mac": "OS_IMPLEMENTATION=mac_os npm run test",
     "coverage:mac": "OS_IMPLEMENTATION=mac_os npm run coverage",
     "start": "NODE_ENV=production node app",
     "snyk-protect": "snyk protect",
@@ -39,7 +39,7 @@
     "express": "^4.14.0",
     "express-bearer-token": "^2.1.0",
     "express-session": "^1.14.1",
-    "formide-drivers": "printr3d/formide-drivers#v6.6.8",
+    "formide-drivers": "printr3d/formide-drivers#feature/node-v6",
     "fs-extra": "^2.1.2",
     "getmac": "^1.2.1",
     "handlebars": "^4.0.6",
@@ -50,12 +50,11 @@
     "network": "^0.3.2",
     "nodejs-websocket": "^1.7.0",
     "request": "^2.75.0",
-    "sandboxed-module": "^2.0.3",
+    "snyk": "^1.30.1",
     "socket.io": "^2.0.0",
     "socket.io-client": "^2.0.0",
     "throttle": "^1.0.3",
-    "uuid": "^3.0.1",
-    "snyk": "^1.30.1"
+    "uuid": "^3.0.1"
   },
   "devDependencies": {
     "angular": "1.4.8",

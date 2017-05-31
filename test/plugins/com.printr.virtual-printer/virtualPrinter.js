@@ -1,5 +1,6 @@
 'use strict'
 
+const Printer = require('../../../src/core/drivers/printers/printer')
 const VirtualDriver = require('./virtualDriver')
 
 class VirtualPrinter extends Printer {
@@ -61,15 +62,15 @@ class VirtualPrinter extends Printer {
 	  this._driver.sendTuneGcode(command, callback)
   }
   
-  pausePrint (callback) {
+  pausePrint (pauseSequence, callback) {
     this._driver.pausePrint(callback)
   }
 	
-	resumePrint (callback) {
+	resumePrint (resumeSequence, callback) {
 		this._driver.resumePrint(callback)
 	}
   
-  stopPrint (callback) {
+  stopPrint (stopSequence, callback) {
   	this._driver.stopPrint(callback)
   }
   

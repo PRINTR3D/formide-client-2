@@ -1,7 +1,15 @@
 language: node_js
+dist: trusty
+sudo: false
+cache:
+  directories:
+    - "node_modules"
 node_js:
-  - "node"
-install: true
+  - "6"
+env:
+  - OS_IMPLEMENTATION=raspberry_pi
+install:
+  - npm install
 deploy:
   provider: npm
   email: chris@printr.nl

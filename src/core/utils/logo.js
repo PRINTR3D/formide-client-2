@@ -1,41 +1,6 @@
-/**
-* @Author: chris
-* @Date:   2016-12-18T17:20:10+01:00
-* @Filename: logo.js
-* @Last modified by:   chris
-* @Last modified time: 2016-12-30T14:34:17+01:00
-* @Copyright: Copyright (c) 2016, All rights reserved, http://printr.nl
-*/
-
 'use strict'
 
 function logLogo (config) {
-  console.log('                                        ')
-  console.log('                   ?                    ')
-  console.log('                 ????                   ')
-  console.log('               7??????                  ')
-  console.log('              ??  ?? ??                 ')
-  console.log('            ++    +   ?+                ')
-  console.log('          ++      +    I+               ')
-  console.log('          +      ++     7+              ')
-  console.log('         7+      +?      ++             ')
-  console.log('         ++      +      ++ +            ')
-  console.log('         +       +      +   +           ')
-  console.log('        ++      ++   7+++    +          ')
-  console.log('        +       +++++  ++     +         ')
-  console.log('       ?+      +?+      +     ++        ')
-  console.log('       +?    ++   +     ++    7+        ')
-  console.log('       +    ++   ++++++  +     +        ')
-  console.log('      ++  ++ +++++   + ++++    ++       ')
-  console.log('      ++++       ++++    I++   ?+       ')
-  console.log('     +=            =        ==  =       ')
-  console.log('      ==           =         =  ==      ')
-  console.log('       ==         ==         ====       ')
-  console.log('        ==       ====        ==         ')
-  console.log('         ==    ==   I==     ==          ')
-  console.log('          =====        ==I7=7           ')
-  console.log('           ================             ')
-  console.log('                                        ')
   console.log(`Starting Formide client...`)
   console.log('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
   console.log(`Version:     ${config.version}`)
