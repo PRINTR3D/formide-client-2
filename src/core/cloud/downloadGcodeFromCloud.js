@@ -20,38 +20,64 @@ function downloadGcodeFromCloud (client, gcode, callback) {
     return callback(null, info)
   }).catch((err) => {
     if (err.name === 'fileNotFound') {
+
+			// log
 	    client.logger.log(`Cloud G-code ${gcodeFileName} was not downloaded before, downloading...`, 'info')
+
+			// emit download start event
+			client.events.emit('cloud.downloadStarted', {
+				title: 'Downloading G-code from cloud',
+				message: `The G-code file ${gcodeFileName} is being downloaded from Formide`
+			})
 
     	// create download stream
       const downloadStream = request.get(`${client.config.cloud.gcodeDownloadURL}/files/download/gcode?hash=${gcode}`, { strictSSL: false })
 
     	// handle download error
     	downloadStream.on('error', (err) => {
+
+				// log
     		client.logger.log(`Cloud G-code (${gcode}) has failed to download`, 'warn')
+
+				// emit downlaod error event
     		client.events.emit('cloud.downloadError', {
     			title: `Cloud G-code has failed to download`,
     			message: err.message
     		})
+
+				// catch offline error
     		if (err && err.code === 'ECONNREFUSED') return callback(new Error('Could not connect to server'))
+
     		return callback(err)
     	})
 	
 	    // write to local storage
 	    client.storage.write(gcodeFileName, downloadStream).then((info) => {
+
+				// log
 		    client.logger.log(`Cloud G-code ${gcode} has finished downloading`, 'info')
+
+				// emit download finished event
 		    client.events.emit('cloud.downloadSuccess', {
 			    title: `Cloud G-code has finished downloading`,
 			    message: 'The G-code was downloaded and is now ready to be printed',
 			    data: info
 		    })
+
 		    return callback(null, info)
+
 	    }).catch((err) => {
-		    console.log('write error', err)
+
+				// log
 		    client.logger.log(`Cloud G-code (${gcode}) has failed to store`, 'warn')
+				console.log('write error', err)
+
+				// emit download error event
 		    client.events.emit('cloud.downloadError', {
 			    title: `Cloud G-code has failed to download`,
 			    message: err.message
 		    })
+				
 		    return callback(err)
 	    })
 	    
