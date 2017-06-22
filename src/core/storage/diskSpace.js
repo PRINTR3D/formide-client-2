@@ -1,15 +1,19 @@
 'use strict'
 
-const diskspace = require('diskspace')
+const diskspace = require('storage-device-info')
 const SPACE_BUFFER = 40000000 // 40MB should be free to store system info
+const MB_TO_BYTES = 1000000
 const StorageFullError = require('./storageFullError')
 
 module.exports = function (client) {
   function getDiskSpace () {
     return new Promise(function (resolve, reject) {
-      diskspace.check(client.config.paths.storageDir, function (err, total, free) {
+      diskspace.getPartitionSpace(client.config.paths.storageDir, function (err, space) {
         if (err) return reject(err)
-        return resolve({ total, free })
+        return resolve({
+          total: space.totalMegaBytes * MB_TO_BYTES,
+          free: space.freeMegaBytes * MB_TO_BYTES
+        })
       })
     })
   }
