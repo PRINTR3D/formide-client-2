@@ -4,7 +4,7 @@
 
 { # this ensures the entire script is downloaded #
 
-NODE_VERSION="v4.7.0"
+NODE_VERSION="v6.11.0"
 
 # STEP 0: UPDATE APT-GET AND INSTALL MONGODB
 sudo apt-get update -y
